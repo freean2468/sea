@@ -1,0 +1,9 @@
+# a comment - Ignore this line.
+# *.a		- Ignore .a extension file
+# !lib.a	- Can't ignore lib.a file
+# /TODO		- Only ignore TODO file in root directory
+# build/	- Ignore all of files in build/ directory
+# doc/*txt	- Ignore somethings like 'doc/notes.txt', but not such as 'doc/server/arch.txt'
+
+LOG/
+
