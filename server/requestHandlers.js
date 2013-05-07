@@ -56,13 +56,12 @@ function jsonTest(response, postData) {
 //	PostRequestHandlers
 //
 
-function registerUser(response, postData) {
+function registerUser(response, data) {
 	var sql = 'SELECT ?? FROM ?? WHERE ?';
-	var data = qs.parse(postData);
 	var where = {k_id: data['k_id']};
 	var escaped = ['k_id', 'user', where];
 
-	var callback = function registerUserCallback(response, results, fields) {
+	var callback = function (response, results, fields) {
 		if (results[0]) {
 			log.addLog('DEBUG', 'Already exsisted account');
 			write(response, 'text/plain', 'false');
@@ -85,24 +84,20 @@ function registerUser(response, postData) {
 	mysql.query(response, sql, escaped, callback);
 }
 
-function getUserInfo(response, postData) {
-	//var sql = 'SELECT ?, ?  FROM ?? WHERE ?';
-	var sql = 'SELECT * FROM ?? WHERE ?';
-	var data = qs.parse(postData);
-	var post = {k_id: data['k_id']};
-	var escaped = ['user', post];
-	//var escaped = ['k_id', 'score', 'user', post];
+function getUserInfo(response, data) {
+	var sql = 'SELECT ??, ?? FROM ?? WHERE ?';
+	var where = {k_id: data['k_id']};
+	var escaped = ['k_id', 'score', 'user', where];
 
 	var callback = function (response, results, fields) {
-		write(response, 'text/plain', qs.stringify(results[0]));
+		write(response, 'application/json', JSON.stringify(results));
 	}
 
-	mysql.query(response, sql, escaped. callback);
+	mysql.query(response, sql, escaped, callback);
 }
 
-function saveUserInfo(response, postData) {
+function saveUserInfo(response, data) {
 	var sql = 'UPDATE ?? SET ? WHERE ?';
-	var data = qs.parse(postData);
 	var set = {score: data['score']}; 
 	var where = {k_id: data['k_id']};
 	var escaped = ['user', set, where];
@@ -114,7 +109,7 @@ function saveUserInfo(response, postData) {
 	mysql.query(response, sql, escaped, callback);
 }
 
-function getRanking(response, postData) {
+function getRanking(response, data) {
 	var sql = 'SELECT ??, ?? FROM ?? ORDER BY ?? DESC';
 	var escaped = ['k_id', 'score', 'user', 'score'];
 

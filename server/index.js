@@ -8,9 +8,9 @@ handle['/start'] = requestHandlers.start;
 handle['/upload'] = requestHandlers.upload;
 handle['/jsonTest'] = requestHandlers.jsonTest;
 
-handle[0] = requestHandlers.registerUser;
-handle[1] = requestHandlers.getUserInfo;
-handle[2] = requestHandlers.saveUserInfo;
-handle[3] = requestHandlers.getRanking;
+handle[505000412] = requestHandlers.registerUser;
+handle[339976] = requestHandlers.getUserInfo;
+handle[4117019] = requestHandlers.saveUserInfo;
+handle[2021104] = requestHandlers.getRanking;
 
-server.start(router.route, handle);
+server.start(router.route, handle)
