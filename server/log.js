@@ -18,11 +18,11 @@ Date.prototype.timeNow = function() {
 };
 
 var start = getDateTime();
-var file = './Log/'+start+'_log';
+var file = './LOG/'+start+'_LOG';
 
 function mkdirLog() {
-	if (!fs.existsSync('./Log')) {
-		fs.mkdirSync('./Log');
+	if (!fs.existsSync('./LOG')) {
+		fs.mkdirSync('./LOG');
 	}
 }
 

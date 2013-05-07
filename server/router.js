@@ -1,4 +1,3 @@
-var qs = require('querystring');
 var log = require('./log');
 
 function route(handle, pathname, response, postData) {
@@ -12,9 +11,9 @@ function route(handle, pathname, response, postData) {
 	else if (postData)
 	{
 		console.log('POST methods routing');
-		var data = qs.parse(postData);
-
-		handle[data['reqType']](response, postData);
+		var data = JSON.parse(postData);
+		
+		handle[data['reqType']](response, data);
 	}	
 	else
 	{
