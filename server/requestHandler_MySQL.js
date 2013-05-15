@@ -1,62 +1,28 @@
-var qs = require("querystring");
 var mysql = require('./mysql');
 var log = require('./log');
 
+var resTrue = {res: 'true'};
+var resFalse = {res: 'false'};
+
 function write(res, type, str) {
-	res.writeHead(200, {"Content-Type": type, 'Content-Length':str.length});
+	res.writeHead(200, {'Content-Type': type, 'Content-Length':str.length});
 	res.write(str);
 	res.end();
 }
 
-//
-//	GetRequestHandlers
-//
-
-function start(response, postData) {
-	//exec("ls -lah", function(eror, stdout, stderr) {
-	//	action(response, stdout);
-	//});
-	
-	var body = '<html>' +
-		'<head>' +
-		'<meta http-equiv="Content-Type" content="text/html; ' +
-		'charset=UTF-8" />' +
-		'</head>' +
-		'<body>' +
-		'<form action="/upload" method="post">' +
-		'<textarea name="text" rows="20" cols="60"></textarea>' +
-		'<input type="submit" value="Submit text" />' +
-		'</form>' +
-		'</body>' +
-		'</html>';
-
-	write(response, "text/html", body);
+function writeTrue(res) {
+	write(res, 'application/json', JSON.stringify(resTrue));
 }
 
-function upload(response, postData) {
-	write(response, "text/plain", "You've sent: " + 
-		qs.parse(postData).text);	
+function writeFalse(res) {
+	write(res, 'application/json', JSON.stringify(resFalse));
 }
-
-function jsonTest(response, postData) {
-	var test = {
-		username: 'Test Hi there',
-		nestedData: {
-			first:1,
-			second:2,
-			third:3,			
-		},
-		body: 'good or bed',
-	};
-
-	write(response, 'application/json', JSON.stringify(test));
-}
-
-//
-//	PostRequestHandlers
-//
-
 function registerUser(response, data) {
+	if (!data['k_id']){
+		log.addLog('ERROR', '[registerUser] doesn\'t have any data');
+		return;
+	}
+
 	var sql = 'SELECT ?? FROM ?? WHERE ?';
 	var where = {k_id: data['k_id']};
 	var escaped = ['k_id', 'user', where];
@@ -64,17 +30,16 @@ function registerUser(response, data) {
 	var callback = function (response, results, fields) {
 		if (results[0]) {
 			log.addLog('DEBUG', 'Already exsisted account');
-			write(response, 'text/plain', 'false');
+			writeFalse(response);
 		}
 		else {
 			sql = 'INSERT INTO ?? SET ?';
-			data = qs.parse(postData);
 			post = {k_id: data['k_id']};
 			escaped = ['user', post];
 
 			// could be a problem.
 			callback = function (response, results, fields) {
-				write(response, 'text/plain', 'true');
+				writeTrue(response);
 			}
 
 			mysql.query(response, sql, escaped, callback);
@@ -82,9 +47,13 @@ function registerUser(response, data) {
 	}
 
 	mysql.query(response, sql, escaped, callback);
-}
+} // end registerUser
 
 function getUserInfo(response, data) {
+	if (!data['k_id']) {
+		log.addLog('ERROR', '[getUserInfo] doesn\'t have any data');
+		return;
+	}
 	var sql = 'SELECT ??, ?? FROM ?? WHERE ?';
 	var where = {k_id: data['k_id']};
 	var escaped = ['k_id', 'score', 'user', where];
@@ -94,20 +63,24 @@ function getUserInfo(response, data) {
 	}
 
 	mysql.query(response, sql, escaped, callback);
-}
+} // end getUserInfo
 
 function saveUserInfo(response, data) {
+	if (!data['k_id'] || !data['score']) {
+		log.addLog('ERROR', '[saveUserInfo] doesn\'t have any data');
+		return;
+	}
 	var sql = 'UPDATE ?? SET ? WHERE ?';
 	var set = {score: data['score']}; 
 	var where = {k_id: data['k_id']};
 	var escaped = ['user', set, where];
 
 	var callback =  function (response, results, fields) {
-		write(response, 'text/plain', 'true');
+		writeTrue(response);
 	}
 
 	mysql.query(response, sql, escaped, callback);
-}
+} // end saveUserInfo
 
 function getRanking(response, data) {
 	var sql = 'SELECT ??, ?? FROM ?? ORDER BY ?? DESC';
@@ -118,11 +91,7 @@ function getRanking(response, data) {
 	}
 
 	mysql.query(response, sql, escaped, callback);
-}
-
-exports.start = start;
-exports.upload = upload;
-exports.jsonTest = jsonTest;
+} // end getRanking
 
 exports.registerUser = registerUser;
 exports.getUserInfo = getUserInfo;

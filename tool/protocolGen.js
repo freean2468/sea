@@ -1,5 +1,5 @@
 var fs = require('fs');
-var list = './protocolList.dat';
+var list = './protocolList.js';
 var listOutput = '';
 var output = '';
 var chunks = '';
@@ -25,21 +25,21 @@ function parse(list) {
 				}
 			}
 
-			listOutput += '\t\'' + chunk + '\',' + '\r\n';
+			listOutput += '\t\'' + chunk + '\',' + '\n';
 			chunks += '\t' + chunk	+ ': ';
 			chunks += hash(asciiSerial) + ',';
-			chunks += '\r\n';
+			chunks += '\n';
 		}
 	}
 
-	output += 'var version = 1;' + '\r\n'
-			+ 'var list = [' + '\r\n'
+	output += 'var version = 1;' + '\n'
+			+ 'var list = [' + '\n'
 			+ listOutput
-			+ '];' + '\r\n\r\n'
-			+ 'var protocol = {' + '\r\n'
+			+ '];' + '\n\n'
+			+ 'var protocol = {' + '\n'
 			+ chunks
-			+ '};' + '\r\n\r\n'
-			+ 'exports.list = list;' + '\r\n'
+			+ '};' + '\n\n'
+			+ 'exports.list = list;' + '\n'
 			+ 'exports.protocol = protocol;';
 
 	fs.writeFile('protocol.js', output, function (err) {
@@ -58,7 +58,7 @@ function hash(serial) {
 				newSerial += String(serial.charCodeAt(i) ^ serial.charCodeAt(serial.length-i-1));
 //				console.log(newSerial);
 			}			
-
+			
 			if (newSerial.length < 14) {
 				break;
 			}
@@ -66,6 +66,8 @@ function hash(serial) {
 			serial = serial.slice(0, serial.length / 2);
 		}
 	}
+
+	serial |= 0xf000;
 
 	return serial;
 }

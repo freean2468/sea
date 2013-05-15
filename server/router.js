@@ -2,18 +2,17 @@ var log = require('./log');
 
 function route(handle, pathname, response, postData) {
 	console.log('About to route a request for ' + pathname);
+	var data = JSON.parse(postData);
 
 	if (typeof handle[pathname] === 'function')
 	{
 		console.log('GET methods routing');
 		handle[pathname](response, postData);
 	}
-	else if (postData)
+	else if (postData && typeof handle[data['id']] === 'function')
 	{
 		console.log('POST methods routing');
-		var data = JSON.parse(postData);
-		
-		handle[data['reqType']](response, data);
+		handle[data['id']](response, data);
 	}	
 	else
 	{

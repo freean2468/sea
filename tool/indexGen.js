@@ -5,22 +5,22 @@ var handlers = '';
 
 for (var i = 0; i < protocol.list.length; ++i) {
 	//handle[protocol['registerUser']] = requestHandlers.registerUser;
-	handlers += 'handle[' + protocol.protocol[protocol.list[i]] + '] = requestHandlers.' + protocol.list[i]  + ';\r\n';
+	handlers += 'handle[' + protocol.protocol[protocol.list[i]] + '] = requestHandler.' + protocol.list[i]  + ';\n';
 }
 
 var output = '';
 
-output += "var server = require('./server');" + '\r\n'
-		+ "var router = require('./router');" + '\r\n'
-		+ "var requestHandlers = require('./requestHandlers');" + '\r\n'
-		+ '\r\n'
-		+ "var handle = {}" + '\r\n'
-		+ '\r\n'
-		+ "handle['/start'] = requestHandlers.start;" + '\r\n'
-		+ "handle['/upload'] = requestHandlers.upload;" + '\r\n'
-		+ "handle['/jsonTest'] = requestHandlers.jsonTest;" + '\r\n'
-		+ '\r\n'
-		+ handlers + '\r\n'
+output += "var server = require('./server');" + '\n'
+		+ "var router = require('./router');" + '\n'
+		+ "var requestHandler = require('./requestHandler');" + '\n'
+		+ '\n'
+		+ "var handle = {}" + '\n'
+		+ '\n'
+		+ "//handle['/start'] = requestHandler.start;" + '\n'
+		+ "//handle['/upload'] = requestHandler.upload;" + '\n'
+		+ "//handle['/jsonTest'] = requestHandler.jsonTest;" + '\n'
+		+ '\n'
+		+ handlers + '\n'
 		+ "server.start(router.route, handle)"
 		;
 
