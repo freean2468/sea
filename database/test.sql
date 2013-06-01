@@ -1,0 +1,11 @@
+USE sea;
+
+DELIMITER $$
+
+CREATE PROCEDURE test()
+	BEGIN
+		SELECT 1+1;
+	END
+$$
+
+DELIMITER ;

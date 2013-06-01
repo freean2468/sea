@@ -1,9 +1,12 @@
 var mysql = require('./mysql');
-var protocol = require('./protocol');
+var verProtocol = require('./verProtocol');
+var c2sProtocol = require('./c2sProtocol');
+var s2cProtocol = require('./s2cProtocol');
+var r2gProtocol = require('./r2gProtocol');
+var g2rProtocol = require('./g2rProtocol');
 var element = require('./protocolElement');
 var assert = require('assert');
 var toRank = require('./request');
-var route = require('./router');
 var log = require('./log');
 
 function write(res, type, str) {
@@ -13,19 +16,19 @@ function write(res, type, str) {
 }
 
 function versionInfoHandler(response, data){
-	var versionInfo = protocol.versionInfo;
-	assert.notEqual(data['version'], 0.4);
+	var versionInfo = verProtocol.versionInfo;
+	assert.notEqual(data['version'], []);
 	versionInfo['version'] = data['version'];
 } // end versionInfoHandler
 
 function clientVersionInfoHandler(response, data){
-	var clientVersionInfo = protocol.clientVersionInfo;
-	assert.notEqual(data['version'], 0.1);
+	var clientVersionInfo = verProtocol.clientVersionInfo;
+	assert.notEqual(data['version'], []);
 	clientVersionInfo['version'] = data['version'];
 } // end clientVersionInfoHandler
 
 function registerAccountHandler(response, data){
-	var registerAccount = protocol.registerAccount;
+	var registerAccount = c2sProtocol.registerAccount;
 	assert.notEqual(data['k_id'], '');
 	registerAccount['k_id'] = data['k_id'];
 	
@@ -34,10 +37,10 @@ function registerAccountHandler(response, data){
 	var procedure = 'sea_CreateUser';
 	var params = "'" + registerAccount['k_id'] + "', " + now + "";
 
-	var res = protocol.registerAccountReply;
+	var res = s2cProtocol.registerAccountReply;
 	res['k_id'] = registerAccount['k_id'];
 
-	var callback = function (response, results, fields) {
+	var callback = function (results, fields) {
 		if (results[0] === 0) {
 			log.addLog('DEBUG', 'Already exsisted account');
 			res['result'] = false;
@@ -48,21 +51,21 @@ function registerAccountHandler(response, data){
 		write(response, 'application/json', JSON.stringify(res));
 	}
 
-	mysql.call(response, procedure, params, callback);
+	mysql.call(procedure, params, callback);
 } // end registerAccountHandler
 
 function unregisterAccountHandler(response, data){
-	var unregisterAccount = protocol.unregisterAccount;
+	var unregisterAccount = c2sProtocol.unregisterAccount;
 	assert.notEqual(data['k_id'], '');
 	unregisterAccount['k_id'] = data['k_id'];
 
 	var procedure = 'sea_LoadUser';
 	var params = "'" + unregisterAccount['k_id'] + "'";
 
-	var res = protocol.unregisterAccountReply;
+	var res = s2cProtocol.unregisterAccountReply;
 	res['k_id'] = unregisterAccount['k_id'];
 
-	var callback = function (response, results, fields) {
+	var callback = function (results, fields) {
 		if (results[0] === 0) {
 			log.addLog('DEBUG', 'Invalid account');
 			res['result'] = false;
@@ -72,30 +75,30 @@ function unregisterAccountHandler(response, data){
 			procedure = 'sea_DeleteUser';
 			params = results[0][0]['id'];
 
-			var unregisterAccountCallback = function (response, results, fields) {
+			var unregisterAccountCallback = function (results, fields) {
 				res['result'] = true;
 				write(response, 'application/json', JSON.stringify(res));
 			};
 
-			mysql.call(response, procedure, params, unregisterAccountCallback);
+			mysql.call(procedure, params, unregisterAccountCallback);
 		}
 	};
 
-	mysql.call(response, procedure, params, callback);
+	mysql.call(procedure, params, callback);
 } // end unregisterAccountHandler
 
 function loadUserInfoHandler(response, data){
-	var loadUserInfo = protocol.loadUserInfo;
+	var loadUserInfo = c2sProtocol.loadUserInfo;
 	assert.notEqual(data['k_id'], '');
 	loadUserInfo['k_id'] = data['k_id'];
 	
 	var procedure = 'sea_LoadUser';
 	var params = "'" + loadUserInfo['k_id'] + "'";
 
-	var res = protocol.accountInfo;
+	var res = s2cProtocol.accountInfo;
 	res['k_id'] = loadUserInfo['k_id'];
 
-	var callback = function (response, results, fields) {
+	var callback = function (results, fields) {
 		if (results[0] === 0) {
 			log.addLog('DEBUG', 'Invalid account');
 			res['result'] = false;
@@ -106,7 +109,7 @@ function loadUserInfoHandler(response, data){
 			//console.log(results[0][0]['id']);
 			params = results[0][0]['id'];
 
-			var loadUserInfoCallback = function (response, results, fields) {
+			var loadUserInfoCallback = function (results, fields) {
 				for (var val in results[0][0]) {
 					if (res[''+val] === 0 || res[''+val] === '') {
 						res[''+val] = results[0][0][''+val];
@@ -117,25 +120,25 @@ function loadUserInfoHandler(response, data){
 				write(response, 'application/json', JSON.stringify(res));
 			}
 
-			mysql.call(response, procedure, params, loadUserInfoCallback);
+			mysql.call(procedure, params, loadUserInfoCallback);
 		}
 	}
 
-	mysql.call(response, procedure, params, callback);
+	mysql.call(procedure, params, callback);
 } // end loadUserInfoHandler
 
 function checkInChargeHandler(response, data){
-	var checkInCharge = protocol.checkInCharge;
+	var checkInCharge = c2sProtocol.checkInCharge;
 	assert.notEqual(data['k_id'], '');
 	checkInCharge['k_id'] = data['k_id'];
 
 	var procedure = 'sea_LoadUser';
 	var params = "'" + checkInCharge['k_id'] + "'";
 
-	var res = protocol.chargeInfo;
+	var res = s2cProtocol.chargeInfo;
 	res['k_id'] = checkInCharge['k_id'];
 
-	var callback = function (response, results, fields) {
+	var callback = function (results, fields) {
 		if (results[0] === 0) {
 			log.addLog('DEBUG', 'Invalid account');
 			res['result'] = false;
@@ -147,7 +150,7 @@ function checkInChargeHandler(response, data){
 			params = id;
 			res['result'] = true;
 
-			var checkInChargeCallback = function (response, results, fields) {
+			var checkInChargeCallback = function (results, fields) {
 				var last = results[0][0]['last_charged_time'];
 				var heart = results[0][0]['heart'];
 				var heartMax = 99;
@@ -159,7 +162,7 @@ function checkInChargeHandler(response, data){
 					res['heart'] = heartMax;
 					res['last_charged_time'] = now;
 
-					mysql.call(response, procedure, params, function (response, results, fields) {
+					mysql.call(procedure, params, function (results, fields) {
 						write(response, 'application/json', JSON.stringify(res));
 					});
 				}
@@ -178,11 +181,11 @@ function checkInChargeHandler(response, data){
 						res['heart'] = heartMax;
 						res['last_charged_time'] = uptodate;
 					
-						mysql.call(response, procedure, params, function (response, results, fields) {
+						mysql.call(procedure, params, function (results, fields) {
 							procedure = 'sea_UpdateHeart';
 							params = id + ', ' + heart;
 
-							mysql.call(response, procedure, params, function (response, results, fields) {
+							mysql.call(procedure, params, function (results, fields) {
 								write(response, 'application/json', JSON.stringify(res));
 							});
 						});
@@ -194,15 +197,15 @@ function checkInChargeHandler(response, data){
 					} // end else
 				} // end else
 			} // checkInChargeCallback
-			mysql.call(response, procedure, params, checkInChargeCallback);
+			mysql.call(procedure, params, checkInChargeCallback);
 		} // end else
 	} // sea_LoadUser
 
-	mysql.call(response, procedure, params, callback);
+	mysql.call(procedure, params, callback);
 } // end checkInChargeHandler
 
 function startGameHandler(response, data){
-	var startGame = protocol.startGame;
+	var startGame = c2sProtocol.startGame;
 	assert.notEqual(data['k_id'], '');
 	startGame['k_id'] = data['k_id'];
 	assert.notEqual(data['selected_character'], 0);
@@ -213,12 +216,12 @@ function startGameHandler(response, data){
 	var procedure = 'sea_LoadUser';
 	var params = "'" + startGame['k_id'] + "'";
 
-	var res = protocol.startGameReply;
+	var res = s2cProtocol.startGameReply;
 	res['k_id'] = startGame['k_id'];
 
 	var heartMax = 99;
 
-	var callback = function (response, results, fields) {
+	var callback = function (results, fields) {
 		if (results[0] === 0) {
 			log.addLog('DEBUG', 'Invalid account');
 			res['result'] = false;
@@ -229,7 +232,7 @@ function startGameHandler(response, data){
 			procedure = 'sea_StartGame';
 			params = id;
 
-			var startGameCallback = function (response, results, fields) {
+			var startGameCallback = function (results, fields) {
 				var character = results[0][0]['selected_character'];
 				var assistant = results[0][0]['selected_assistant'];
 				var heart = results[0][0]['heart'];
@@ -261,25 +264,25 @@ function startGameHandler(response, data){
 					res['heart'] = heart;
 					res['last_charged_time'] = last;
 				
-					mysql.call(response, procedure, params, function (response, results, fields) {
+					mysql.call(procedure, params, function (results, fields) {
 						procedure = 'sea_UpdateHeart';
 						params = id + ', ' + heart;
 
-						mysql.call(response, procedure, params, function (response, results, fields) {
+						mysql.call(procedure, params, function (results, fields) {
 							write(response, 'application/json', JSON.stringify(res));
 						});
 					});
 				}
 			}
-			mysql.call(response, procedure, params, startGameCallback);
+			mysql.call(procedure, params, startGameCallback);
 		} // end else
 	}; // end sea_LoadUser
 
-	mysql.call(response, procedure, params, callback);
+	mysql.call(procedure, params, callback);
 } // end startGameHandler
 
 function endGameHandler(response, data){
-	var endGame = protocol.endGame;
+	var endGame = c2sProtocol.endGame;
 	assert.notEqual(data['k_id'], '');
 	endGame['k_id'] = data['k_id'];
 	assert.notEqual(data['dist'], 0);
@@ -292,10 +295,10 @@ function endGameHandler(response, data){
 	var procedure = 'sea_LoadUser';
 	var params = "'" + endGame['k_id'] + "'";
 
-	var res = protocol.gameResult;
+	var res = s2cProtocol.gameResult;
 	res['k_id'] = endGame['k_id'];
 
-	var callback = function (response, results, fields) {
+	var callback = function (results, fields) {
 		if (results[0] === 0) {
 			log.addLog('DEBUG', 'Invalid account');
 			res['result'] = false;
@@ -309,42 +312,43 @@ function endGameHandler(response, data){
 			params = id + ', ' + score + ', ' + endGame['dist'] + ', ' + endGame['kill'];
 			res['result'] = true;
 
-			var updateUserLogCallback = function (response, results, fields) {
+			var updateUserLogCallback = function (results, fields) {
 				res['k_id'] = endGame['k_id'];
 				res['score'] = score;
 
 				write(response, 'application/json', JSON.stringify(res));
 			};
 
-			mysql.call(response, procedure, params, updateUserLogCallback);
+			mysql.call(procedure, params, updateUserLogCallback);
 
 			if (endGame['usedItem'] > 0) {
 				procedure = 'sea_AddUserItem';
 				params = "'" + id + ', ' + 1 + "'";
 
-				mysql.call(response, procedure, params, function (response, results, fields) {
+				mysql.call(procedure, params, function (results, fields) {
 					
 				});
 			}
 		}
 	};
 
-	mysql.call(response, procedure, params, callback);
+	mysql.call(procedure, params, callback);
 } // end endGameHandler
 
 function loadRankInfoHandler(response, data){
-	var loadRankInfo = protocol.loadRankInfo;
+	var loadRankInfo = c2sProtocol.loadRankInfo;
 	assert.notEqual(data['k_id'], '');
 	loadRankInfo['k_id'] = data['k_id'];
 
-	var requestRanking = protocol.requestRanking;
+	var requestRanking = g2rProtocol.requestRanking;
 	requestRanking['k_id'] = loadRankInfo['k_id'];
-	
-	toRank.request(response, requestRanking, route.reqRoute);
+	requestRanking['result'] = true;
+
+	toRank.request(response, requestRanking, requestRankingReplyHandler);
 } // end loadRankInfoHandler
 
 function requestPointRewardHandler(response, data){
-	var requestPointReward = protocol.requestPointReward;
+	var requestPointReward = c2sProtocol.requestPointReward;
 	assert.notEqual(data['k_id'], '');
 	requestPointReward['k_id'] = data['k_id'];
 	assert.notEqual(data['point'], 0);
@@ -353,190 +357,40 @@ function requestPointRewardHandler(response, data){
 	// TODO
 } // end requestPointRewardHandler
 
-function registerAccountReplyHandler(response, data){
-	var registerAccountReply = protocol.registerAccountReply;
-	assert.notEqual(data['k_id'], '');
-	registerAccountReply['k_id'] = data['k_id'];
-	assert.notEqual(data['result'], 0);
-	registerAccountReply['result'] = data['result'];
-} // end registerAccountReplyHandler
-
-function unregisterAccountReplyHandler(response, data){
-	var unregisterAccountReply = protocol.unregisterAccountReply;
-	assert.notEqual(data['k_id'], '');
-	unregisterAccountReply['k_id'] = data['k_id'];
-	assert.notEqual(data['result'], 0);
-	unregisterAccountReply['result'] = data['result'];
-} // end unregisterAccountReplyHandler
-
-function startGameReplyHandler(response, data){
-	var startGameReply = protocol.startGameReply;
-	assert.notEqual(data['k_id'], '');
-	startGameReply['k_id'] = data['k_id'];
-	assert.notEqual(data['result'], 0);
-	startGameReply['result'] = data['result'];
-	assert.notEqual(data['heart'], 0);
-	startGameReply['heart'] = data['heart'];
-	assert.notEqual(data['last_charged_time'], 0);
-	startGameReply['last_charged_time'] = data['last_charged_time'];
-} // end startGameReplyHandler
-
-function accountInfoHandler(response, data){
-	var accountInfo = protocol.accountInfo;
-	assert.notEqual(data['k_id'], '');
-	accountInfo['k_id'] = data['k_id'];
-	assert.notEqual(data['coin'], 0);
-	accountInfo['coin'] = data['coin'];
-	assert.notEqual(data['mineral'], 0);
-	accountInfo['mineral'] = data['mineral'];
-	assert.notEqual(data['lv'], 0);
-	accountInfo['lv'] = data['lv'];
-	assert.notEqual(data['exp'], 0);
-	accountInfo['exp'] = data['exp'];
-	assert.notEqual(data['point'], 0);
-	accountInfo['point'] = data['point'];
-	assert.notEqual(data['heart'], 0);
-	accountInfo['heart'] = data['heart'];
-	assert.notEqual(data['last_charged_time'], 0);
-	accountInfo['last_charged_time'] = data['last_charged_time'];
-	assert.notEqual(data['selected_character'], 0);
-	accountInfo['selected_character'] = data['selected_character'];
-	assert.notEqual(data['selected_assistant'], 0);
-	accountInfo['selected_assistant'] = data['selected_assistant'];
-	assert.notEqual(data['characters'], 0);
-	accountInfo['characters'] = data['characters'];
-	assert.notEqual(data['basic_charac_lv'], 0);
-	accountInfo['basic_charac_lv'] = data['basic_charac_lv'];
-	assert.notEqual(data['assistants'], 0);
-	accountInfo['assistants'] = data['assistants'];
-	assert.notEqual(data['basic_assist_lv'], 0);
-	accountInfo['basic_assist_lv'] = data['basic_assist_lv'];
-	assert.notEqual(data['items'], 0);
-	accountInfo['items'] = data['items'];
-	assert.notEqual(data['count'], 0);
-	accountInfo['count'] = data['count'];
-} // end accountInfoHandler
-
-function chargeInfoHandler(response, data){
-	var chargeInfo = protocol.chargeInfo;
-	assert.notEqual(data['k_id'], '');
-	chargeInfo['k_id'] = data['k_id'];
-	assert.notEqual(data['heart'], 0);
-	chargeInfo['heart'] = data['heart'];
-	assert.notEqual(data['last_charged_time'], 0);
-	chargeInfo['last_charged_time'] = data['last_charged_time'];
-} // end chargeInfoHandler
-
-function rankInfoHandler(response, data){
-	var rankInfo = protocol.rankInfo;
-	assert.notEqual(data['k_id'], '');
-	rankInfo['k_id'] = data['k_id'];
-	assert.notEqual(data['overall_ranking'], 0);
-	rankInfo['overall_ranking'] = data['overall_ranking'];
-	assert.notEqual(data['rank_list'], []);
-	rankInfo['rank_list'] = data['rank_list'];
-} // end rankInfoHandler
-
-function gameResultHandler(response, data){
-	var gameResult = protocol.gameResult;
-	assert.notEqual(data['k_id'], '');
-	gameResult['k_id'] = data['k_id'];
-	assert.notEqual(data['score'], 0);
-	gameResult['score'] = data['score'];
-} // end gameResultHandler
-
-function versionInfoReplyHandler(response, data){
-	var versionInfoReply = protocol.versionInfoReply;
-	assert.notEqual(data['result'], 0);
-	versionInfoReply['result'] = data['result'];
-} // end versionInfoReplyHandler
-
-function clientVerionInfoReplyHandler(response, data){
-	var clientVerionInfoReply = protocol.clientVerionInfoReply;
-	assert.notEqual(data['result'], 0);
-	clientVerionInfoReply['result'] = data['result'];
-} // end clientVerionInfoReplyHandler
-
 function requestRankingReplyHandler(response, data){
-	var requestRankingReply = protocol.requestRankingReply;
+	var requestRankingReply = r2gProtocol.requestRankingReply;
 	assert.notEqual(data['k_id'], '');
 	requestRankingReply['k_id'] = data['k_id'];
+	assert.notEqual(data['result'], 0);
+	requestRankingReply['result'] = data['result'];
 	assert.notEqual(data['overall_ranking'], 0);
 	requestRankingReply['overall_ranking'] = data['overall_ranking'];
+	assert.notEqual(data['ranking_list'], []);
+	requestRankingReply['ranking_list'] = data['ranking_list'];
 
 	var procedure = 'sea_LoadUser';
 	var params = "'" + requestRankingReply['k_id'] + "'";
 
-	var res = protocol.rankInfo;
+	var res = s2cProtocol.rankInfo;
 	res['k_id'] = requestRankingReply['k_id'];
 	res['overall_ranking'] = requestRankingReply['overall_ranking'];
 
-	var callback = function (response, results, fields) {
+	var callback = function (results, fields) {
 		if (results[0] === 0) {
 			log.addLog('DEBUG', 'Invalid account');
 			res['result'] = false;
 			write(response, 'application/json', JSON.stringify(res));
 		}
 		else {
-			var id = results[0][0]['id'];
-			procedure = 'sea_RankingList';
-			params = '';
 			res['result'] = true;
+			res['ranking_list'] = requestRankingReply['ranking_list'];
 
-			var rankingListCallback = function (response, results, fields) {
-				for (var i = 0; i < results[0].length; ++i) {
-					var k_id = results[0][i]['k_id'];
-					var highest_score = results[0][i]['highest_score'];
-
-					res.rank_list.push({'k_id':k_id, 'highest_score':highest_score});
-				}
-
-				write(response, 'application/json', JSON.stringify(res));
-			};
-
-			mysql.call(response, procedure, params, rankingListCallback);
+			write(response, 'application/json', JSON.stringify(res));
 		}
 	};
 
-	mysql.call(response, procedure, params, callback);
+	mysql.call(procedure, params, callback);
 } // end requestRankingReplyHandler
-
-function requestRankingHandler(response, data){
-	var requestRanking = protocol.requestRanking;
-	assert.notEqual(data['k_id'], '');
-	requestRanking['k_id'] = data['k_id'];
-
-	var procedure = 'sea_LoadUser';
-	var params = "'" + requestRanking['k_id'] + "'";
-
-	var res = protocol.requestRankingReply;
-	res['k_id'] = requestRanking['k_id'];
-
-	var callback = function (response, results, fields) {
-		if (results[0] === 0) {
-			log.addLog('DEBUG', 'Invalid account');
-			res['result'] = false;
-			write(response, 'application/json', JSON.stringify(res));
-		}
-		else {
-			var id = results[0][0]['id'];
-			procedure = 'sea_Ranking';
-			params = id;
-			res['result'] = true;
-
-			var rankingCallback = function (response, results, fields) {
-				res['overall_ranking'] = results[0][0]['rank'];
-
-				write(response, 'application/json', JSON.stringify(res));
-			};
-
-			mysql.call(response, procedure, params, rankingCallback);
-		}
-	};
-
-	mysql.call(response, procedure, params, callback);
-
-} // end requestRankingHandler
 
 exports.versionInfoHandler = versionInfoHandler;
 exports.clientVersionInfoHandler = clientVersionInfoHandler;
@@ -548,14 +402,4 @@ exports.startGameHandler = startGameHandler;
 exports.endGameHandler = endGameHandler;
 exports.loadRankInfoHandler = loadRankInfoHandler;
 exports.requestPointRewardHandler = requestPointRewardHandler;
-exports.registerAccountReplyHandler = registerAccountReplyHandler;
-exports.unregisterAccountReplyHandler = unregisterAccountReplyHandler;
-exports.startGameReplyHandler = startGameReplyHandler;
-exports.accountInfoHandler = accountInfoHandler;
-exports.chargeInfoHandler = chargeInfoHandler;
-exports.rankInfoHandler = rankInfoHandler;
-exports.gameResultHandler = gameResultHandler;
-exports.versionInfoReplyHandler = versionInfoReplyHandler;
-exports.clientVerionInfoReplyHandler = clientVerionInfoReplyHandler;
 exports.requestRankingReplyHandler = requestRankingReplyHandler;
-exports.requestRankingHandler = requestRankingHandler;

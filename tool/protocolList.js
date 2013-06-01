@@ -1,6 +1,0 @@
-{
-	registerUser,
-	getUserInfo,
-	saveUserInfo,
-	getRanking,
-}
