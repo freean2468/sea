@@ -1,0 +1,47 @@
+package C2S;
+
+message RegisterAccount {
+	required int64 id = 1 [default=1415117601];
+	required string k_id = 2;
+} // end
+
+message UnregisterAccount {
+	required int64 id = 1 [default=1296626420];
+	required string k_id = 2;
+} // end
+
+message LoadUserInfo {
+	required int64 id = 1 [default=67040062];
+	required string k_id = 2;
+} // end
+
+message CheckInCharge {
+	required int64 id = 1 [default=770373176];
+	required string k_id = 2;
+} // end
+
+message StartGame {
+	required int64 id = 1 [default=285274112];
+	required string k_id = 2;
+	required int32 selected_character = 3 [default=0];
+	required int32 selected_assistant = 4 [default=0];
+} // end
+
+message EndGame {
+	required int64 id = 1 [default=1441135488];
+	required string k_id = 2;
+	required int32 dist = 3 [default=0];
+	required int32 kill = 4 [default=0];
+	required int32 usedItem = 5 [default=0];
+} // end
+
+message LoadRankInfo {
+	required int64 id = 1 [default=67040062];
+	required string k_id = 2;
+} // end
+
+message RequestPointReward {
+	required int64 id = 1 [default=618593180];
+	required string k_id = 2;
+	required int32 point = 3 [default=0];
+} // end

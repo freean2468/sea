@@ -1,0 +1,371 @@
+var mysql = require('./mysql');
+var pb = require('protobufjs');
+var required = pb.protoFromFile('./required.proto');
+var ver = pb.protoFromFile('./ver.proto');
+var c2s = pb.protoFromFile('./c2s.proto');
+var v2s = pb.protoFromFile('./v2s.proto');
+var assert = require('assert');
+var log = require('./log');
+
+function write(res, type, str) {
+	res.writeHead(200, {'Content-Type': type, 'Content-Length':str.length});
+	res.write(str);
+	res.end();
+}
+
+function VersionInfoHandler(response, data){
+	var VersionInfo = ver.build('VER').VersionInfo;
+	var msg = VersionInfo.decode(data);
+} // end VersionInfoHandler
+
+function ClientVersionInfoHandler(response, data){
+	var ClientVersionInfo = ver.build('VER').ClientVersionInfo;
+	var msg = ClientVersionInfo.decode(data);
+} // end ClientVersionInfoHandler
+
+function RegisterAccountHandler(response, data){
+	var RegisterAccount = c2s.build('C2S').RegisterAccount;
+	var msg = RegisterAccount.decode(data);
+
+	var now = new Date().getTime();
+
+	var procedure = 'sea_CreateUser';
+	var params = "'" + registerAccount['k_id'] + "', " + now + "";
+
+	var res = s2cProtocol.registerAccountReply;
+	res['k_id'] = registerAccount['k_id'];
+
+	var callback = function (results, fields) {
+		if (results[0] === 0) {
+			log.addLog('DEBUG', 'Already exsisted account');
+			res['result'] = false;
+		}
+		else {
+			res['result'] = true;
+		}
+		write(response, 'application/json', JSON.stringify(res));
+	}
+
+	mysql.call(procedure, params, callback);
+} // end RegisterAccountHandler
+
+function UnreigsterAccountHandler(response, data){
+	var UnreigsterAccount = c2s.build('C2S').UnreigsterAccount;
+	var msg = UnreigsterAccount.decode(data);
+	
+	var procedure = 'sea_LoadUser';
+	var params = "'" + unregisterAccount['k_id'] + "'";
+
+	var res = s2cProtocol.unregisterAccountReply;
+	res['k_id'] = unregisterAccount['k_id'];
+
+	var callback = function (results, fields) {
+		if (results[0] === 0) {
+			log.addLog('DEBUG', 'Invalid account');
+			res['result'] = false;
+			write(response, 'application/json', JSON.stringify(res));
+		}
+		else {
+			procedure = 'sea_DeleteUser';
+			params = results[0][0]['id'];
+
+			var unregisterAccountCallback = function (results, fields) {
+				res['result'] = true;
+				write(response, 'application/json', JSON.stringify(res));
+			};
+
+			mysql.call(procedure, params, unregisterAccountCallback);
+		}
+	};
+
+	mysql.call(procedure, params, callback);
+} // end UnreigsterAccountHandler
+
+function LoadUserInfoHandler(response, data){
+	var LoadUserInfo = c2s.build('C2S').LoadUserInfo;
+	var msg = LoadUserInfo.decode(data);
+
+	var procedure = 'sea_LoadUser';
+	var params = "'" + loadUserInfo['k_id'] + "'";
+
+	var res = s2cProtocol.accountInfo;
+	res['k_id'] = loadUserInfo['k_id'];
+
+	var callback = function (results, fields) {
+		if (results[0] === 0) {
+			log.addLog('DEBUG', 'Invalid account');
+			res['result'] = false;
+			write(response, 'application/json', JSON.stringify(res));
+		}
+		else {
+			procedure = 'sea_LoadUserInfo';
+			//console.log(results[0][0]['id']);
+			params = results[0][0]['id'];
+
+			var loadUserInfoCallback = function (results, fields) {
+				for (var val in results[0][0]) {
+					if (res[''+val] === 0 || res[''+val] === '') {
+						res[''+val] = results[0][0][''+val];
+					}
+				}
+				res['result'] = true;
+
+				write(response, 'application/json', JSON.stringify(res));
+			}
+
+			mysql.call(procedure, params, loadUserInfoCallback);
+		}
+	}
+
+	mysql.call(procedure, params, callback);
+} // end LoadUserInfoHandler
+
+function CheckInChargeHandler(response, data){
+	var CheckInCharge = c2s.build('C2S').CheckInCharge;
+	var msg = CheckInCharge.decode(data);
+
+	var procedure = 'sea_LoadUser';
+	var params = "'" + checkInCharge['k_id'] + "'";
+
+	var res = s2cProtocol.chargeInfo;
+	res['k_id'] = checkInCharge['k_id'];
+
+	var callback = function (results, fields) {
+		if (results[0] === 0) {
+			log.addLog('DEBUG', 'Invalid account');
+			res['result'] = false;
+			write(response, 'application/json', JSON.stringify(res));
+		}
+		else {
+			var id = results[0][0]['id'];
+			procedure = 'sea_CheckInCharge';
+			params = id;
+			res['result'] = true;
+
+			var checkInChargeCallback = function (results, fields) {
+				var last = results[0][0]['last_charged_time'];
+				var heart = results[0][0]['heart'];
+				var heartMax = 99;
+				var now = new Date().getTime();
+
+				if (heartMax === heart) {
+					procedure = 'sea_UpdateLastChargeTime';
+					params = id + ', ' + now;
+					res['heart'] = heartMax;
+					res['last_charged_time'] = now;
+
+					mysql.call(procedure, params, function (results, fields) {
+						write(response, 'application/json', JSON.stringify(res));
+					});
+				}
+				else {
+					var diff = now - last;
+					var quotient = diff / 600;
+					var uptodate = last + (600 * quotient);
+
+					if (quotient) {
+						heart += quotient;
+						if (heart >= heartMax) {
+							heart = heartMax;
+						}						
+						procedure = 'sea_UpdateLastChargeTime';
+						params = id + ', ' + uptodate;
+						res['heart'] = heartMax;
+						res['last_charged_time'] = uptodate;
+					
+						mysql.call(procedure, params, function (results, fields) {
+							procedure = 'sea_UpdateHeart';
+							params = id + ', ' + heart;
+
+							mysql.call(procedure, params, function (results, fields) {
+								write(response, 'application/json', JSON.stringify(res));
+							});
+						});
+					}
+					else {
+						chargeInfo['heart'] = heart;
+						chargeInfo['last_charged_time'] = last;
+						write(response, 'application/json', JSON.stringify(res));
+					} // end else
+				} // end else
+			} // checkInChargeCallback
+			mysql.call(procedure, params, checkInChargeCallback);
+		} // end else
+	} // sea_LoadUser
+
+	mysql.call(procedure, params, callback);
+} // end CheckInChargeHandler
+
+function StartGameHandler(response, data){
+	var StartGame = c2s.build('C2S').StartGame;
+	var msg = StartGame.decode(data);
+
+	var procedure = 'sea_LoadUser';
+	var params = "'" + startGame['k_id'] + "'";
+
+	var res = s2cProtocol.startGameReply;
+	res['k_id'] = startGame['k_id'];
+
+	var heartMax = 99;
+
+	var callback = function (results, fields) {
+		if (results[0] === 0) {
+			log.addLog('DEBUG', 'Invalid account');
+			res['result'] = false;
+			write(response, 'application/json', JSON.stringify(res));
+		}
+		else {
+			var id = results[0][0]['id'];
+			procedure = 'sea_StartGame';
+			params = id;
+
+			var startGameCallback = function (results, fields) {
+				var character = results[0][0]['selected_character'];
+				var assistant = results[0][0]['selected_assistant'];
+				var heart = results[0][0]['heart'];
+				var last = results[0][0]['last_charged_time'];
+
+				if (heart < 1) {
+					log.addLog('DEBUG', 'Not enough heart');
+					// FIXME
+					res['result'] = false;
+					write(response, 'application/json', JSON.stringify(res));
+				}
+				else if (character != startGame['selected_character'] 
+						|| assistant != startGame['selected_assistant']) {
+					log.addLog('ERROR', 'doesn\'t match with DB'); 
+					// FIXME
+					res['result'] = false;
+					write(response, 'application/json', JSON.stringify(res));
+				}
+				else {
+					res['result'] = true;
+					
+					if (heart == heartMax) {
+						last = new Date().getTime();	
+					}
+					heart -= 1;
+
+					procedure = 'sea_UpdateLastChargeTime';
+					params = id + ', ' + last;
+					res['heart'] = heart;
+					res['last_charged_time'] = last;
+				
+					mysql.call(procedure, params, function (results, fields) {
+						procedure = 'sea_UpdateHeart';
+						params = id + ', ' + heart;
+
+						mysql.call(procedure, params, function (results, fields) {
+							write(response, 'application/json', JSON.stringify(res));
+						});
+					});
+				}
+			}
+			mysql.call(procedure, params, startGameCallback);
+		} // end else
+	}; // end sea_LoadUser
+
+	mysql.call(procedure, params, callback);
+} // end StartGameHandler
+
+function EndGameHandler(response, data){
+	var EndGame = c2s.build('C2S').EndGame;
+	var msg = EndGame.decode(data);
+
+	var procedure = 'sea_LoadUser';
+	var params = "'" + endGame['k_id'] + "'";
+
+	var res = s2cProtocol.gameResult;
+	res['k_id'] = endGame['k_id'];
+
+	var callback = function (results, fields) {
+		if (results[0] === 0) {
+			log.addLog('DEBUG', 'Invalid account');
+			res['result'] = false;
+			write(response, 'application/json', JSON.stringify(res));
+		}
+		else {
+			// FIXME
+			var id = results[0][0]['id'];
+			var score = 10*(1+endGame['dist']) * (1+endGame['kill']);
+			procedure = 'sea_UpdateUserLog';
+			params = id + ', ' + score + ', ' + endGame['dist'] + ', ' + endGame['kill'];
+			res['result'] = true;
+
+			var updateUserLogCallback = function (results, fields) {
+				res['k_id'] = endGame['k_id'];
+				res['score'] = score;
+
+				write(response, 'application/json', JSON.stringify(res));
+			};
+
+			mysql.call(procedure, params, updateUserLogCallback);
+
+			if (endGame['usedItem'] > 0) {
+				procedure = 'sea_AddUserItem';
+				params = "'" + id + ', ' + 1 + "'";
+
+				mysql.call(procedure, params, function (results, fields) {
+					
+				});
+			}
+		}
+	};
+
+	mysql.call(procedure, params, callback);
+} // end EndGameHandler
+
+function LoadRankInfoHandler(response, data){
+	var LoadRankInfo = c2s.build('C2S').LoadRankInfo;
+	var msg = LoadRankInfo.decode(data);
+	
+	var procedure = 'sea_LoadUser';
+	var params = "'" + requestRanking['k_id'] + "'";
+
+	var res = r2gProtocol.rankInfo;
+	res['k_id'] = rankInfo['k_id'];
+
+	var callback = function (results, fields) {
+		if (results[0] === 0) {
+			log.addLog('DEBUG', 'Invalid account');
+			res['result'] = false;
+			write(response, 'application/json', JSON.stringify(res));
+		}
+		else {
+			var rankingList = require('./server').rankingList;
+			res['result'] = true;
+			// FIXME
+			res['ranking_list'] = []; 
+
+			for (var i = 0; i < rankingList.length; ++i) {
+				var friendRankInfo = r2gProtocol.friendRankInfo;
+
+				res['ranking_list'].push(rankingList[i]['k_id'], rankingList[i]['highest_score']);
+
+				if (rankingList[i]['k_id'] === res['k_id']) {
+					res['overall_ranking'] = i+1;
+				}
+			}
+
+			write(response, 'application/json', JSON.stringify(res));
+		}
+	};
+
+	mysql.call(procedure, params, callback);
+} // end LoadRankInfoHandler
+
+function RequestPointRewardHandler(response, data){
+	var RequestPointReward = c2s.build('C2S').RequestPointReward;
+	var msg = RequestPointReward.decode(data);
+} // end RequestPointRewardHandler
+
+exports.VersionInfoHandler = VersionInfoHandler;
+exports.ClientVersionInfoHandler = ClientVersionInfoHandler;
+exports.RegisterAccountHandler = RegisterAccountHandler;
+exports.UnreigsterAccountHandler = UnreigsterAccountHandler;
+exports.LoadUserInfoHandler = LoadUserInfoHandler;
+exports.CheckInChargeHandler = CheckInChargeHandler;
+exports.StartGameHandler = StartGameHandler;
+exports.EndGameHandler = EndGameHandler;
+exports.LoadRankInfoHandler = LoadRankInfoHandler;
+exports.RequestPointRewardHandler = RequestPointRewardHandler;

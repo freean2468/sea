@@ -13,7 +13,7 @@ var pool = mysql.createPool({
 	connectionLimit: 10,
 });
 
-function query(response, sql, escaped, callback) {
+function query(sql, escaped, callback) {
 	pool.getConnection(function(err, connection) {
 		handleDisconnect(connection);
 	
@@ -24,7 +24,7 @@ function query(response, sql, escaped, callback) {
 			
 			console.log(results);
 
-			callback(response, results, fields);
+			callback(results, fields);
 		});
 /*
 	var sql = 'SELECT * FROM ?? WHERE id = ?';
@@ -41,7 +41,7 @@ function query(response, sql, escaped, callback) {
 	});
 }
 
-function call(response, procedure, params, callback) {
+function call(procedure, params, callback) {
 	pool.getConnection(function(err, connection) {
 //		handleDisconnect(connection);
 
@@ -53,7 +53,7 @@ function call(response, procedure, params, callback) {
 
 			connection.end();
 
-			callback(response, results, fields);
+			callback(results, fields);
 		});
 	});
 }

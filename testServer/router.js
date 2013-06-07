@@ -1,14 +1,53 @@
 var log = require('./log');
 
-function resRoute(handle, pathname, response, postData) {
-	var data = JSON.parse(postData);
+function toArrBuf(buffer) {
+	var ab = new ArrayBuffer(buffer.length);
+	
+	for (i = 0; i < buffer.length; ++i) {
+		ab[i] = buffer[i];
+	}
 
-	if (postData && typeof handle[data['id']] === 'function')
-	{
-		console.log('POST methods routing in resRoute');
-		console.log(data);
-		handle[data['id']](response, data);
-	}	
+	return ab;
+}
+
+function fetchId(ab) {
+	var id = 0;
+	var arr = [];
+	var base = 1 << 7;
+	var exp = 0;
+
+	for (i = 1; i < ab.byteLength; ++i) {
+		if (ab[i] < base) {
+			exp = ab[i];
+			break;
+		}
+		
+		arr.push(ab[i]);		
+	}
+
+	var j = 0;
+	for (; j < arr.length; ++j) {
+		id += ((arr[j]-base) * (1 << (7*j))); 
+	}
+	id += (exp * (1 << (7*j)));
+
+	return id;
+}
+
+function resRoute(handle, pathname, response, postData) {
+	var data = toArrBuf(new Buffer(postData, 'hex'));
+
+	id = fetchId(data);
+
+	if (typeof handle[id] === 'function') {
+		handle[id](response, data);
+	}
+//	else if (postData && typeof handle[data['id']] === 'function')
+//	{
+//		console.log('POST methods routing in resRoute');
+//		console.log(data);
+//		handle[data['id']](response, data);
+//	}	
 	else
 	{
 		log.addLog('ERROR', 'No request handler found for ' + pathname);
@@ -25,6 +64,7 @@ function reqRoute(response, resData) {
 
 	if (resData && typeof reqHandle[data['id']] === 'function')
 	{
+		
 		console.log('POST methods routing in reqRoute');
 		reqHandle[data['id']](response, data);
 	}	
@@ -34,6 +74,3 @@ function reqRoute(response, resData) {
 }
 
 exports.resRoute = resRoute;
-exports.reqRoute = reqRoute;
-
-

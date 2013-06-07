@@ -1,0 +1,11 @@
+package VER;
+
+message VersionInfo {
+	required int64 id = 1 [default=97057879];
+	required float version = 2 [default=0.5];
+} // end
+
+message ClientVersionInfo {
+	required int64 id = 1 [default=70841257];
+	required float version = 2 [default=0.1];
+} // end

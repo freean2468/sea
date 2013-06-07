@@ -27,10 +27,8 @@ function request(response, data, handle) {
 		});
 
 		res.on('end', function() {
-			console.log('----in reuqest callback----');
-			console.log(res_data);
-			
-			handle(response, res_data);
+			var data = JSON.parse(res_data);
+			handle(response, data);
 		});
 	};
 
