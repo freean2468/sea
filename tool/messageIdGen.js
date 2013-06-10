@@ -101,7 +101,7 @@ function parse(stream, index) {
 		protoFile += line + '\n';
 
 		if (line.search('message') != -1 && filter === false) {
-			var idLine = '\t' + 'required int64 id = 1 [default=' + msgWithIdList[messageCount++].id + '];' + '\n';
+			var idLine = '\t' + 'optional int64 id = 1 [default=' + msgWithIdList[messageCount++].id + '];' + '\n';
 			protoFile += idLine;
 			filter = true;
 		}

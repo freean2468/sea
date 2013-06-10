@@ -23,9 +23,17 @@ function VersionInfoHandler(response, data){
 	var msg = build.VersionInfo.decode(data);
 } // end VersionInfoHandler
 
+function VersionInfoReplyHandler(response, data){
+	var msg = build.VersionInfoReply.decode(data);
+} // end VersionInfoReplyHandler
+
 function ClientVersionInfoHandler(response, data){
 	var msg = build.ClientVersionInfo.decode(data);
 } // end ClientVersionInfoHandler
+
+function ClientVersionInfoReplyHandler(response, data){
+	var msg = build.ClientVersionInfoReply.decode(data);
+} // end ClientVersionInfoReplyHandler
 
 function RegisterAccountHandler(response, data){
 	var msg = build.RegisterAccount.decode(data);
@@ -328,7 +336,9 @@ function RequestPointRewardHandler(response, data){
 } // end RequestPointRewardHandler
 
 exports.VersionInfoHandler = VersionInfoHandler;
+exports.VersionInfoReplyHandler = VersionInfoReplyHandler;
 exports.ClientVersionInfoHandler = ClientVersionInfoHandler;
+exports.ClientVersionInfoReplyHandler = ClientVersionInfoReplyHandler;
 exports.RegisterAccountHandler = RegisterAccountHandler;
 exports.UnregisterAccountHandler = UnregisterAccountHandler;
 exports.LoadUserInfoHandler = LoadUserInfoHandler;

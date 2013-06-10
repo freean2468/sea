@@ -1,11 +1,31 @@
 package VER;
 
 message VersionInfo {
-	required int64 id = 1 [default=97057879];
-	required float version = 2 [default=0.5];
+	optional int64 id = 1 [default=97057879];
+	optional float version = 2 [default=0.5];
+} // end
+
+message VersionInfoReply {
+	optional int64 id = 1 [default=212532706];
+	optional Result res = 2 [default=FALSE];
+
+	enum Result {
+		FALSE	= 0;
+		TRUE	= 1;
+	}
 } // end
 
 message ClientVersionInfo {
-	required int64 id = 1 [default=70841257];
-	required float version = 2 [default=0.1];
+	optional int64 id = 1 [default=70841257];
+	optional float version = 2 [default=0.1];
+} // end
+
+message ClientVersionInfoReply {
+	optional int64 id = 1 [default=1271857080];
+	optional Result res = 2 [default = FALSE];
+
+	enum Result {
+		FALSE	= 0;
+		TRUE	= 1;
+	}
 } // end

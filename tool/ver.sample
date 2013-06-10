@@ -1,9 +1,27 @@
 package VER;
 
 message VersionInfo {
-	required float version = 2 [default=0.5];
+	optional float version = 2 [default=0.5];
+} // end
+
+message VersionInfoReply {
+	optional Result res = 2 [default=FALSE];
+
+	enum Result {
+		FALSE	= 0;
+		TRUE	= 1;
+	}
 } // end
 
 message ClientVersionInfo {
-	required float version = 2 [default=0.1];
+	optional float version = 2 [default=0.1];
+} // end
+
+message ClientVersionInfoReply {
+	optional Result res = 2 [default = FALSE];
+
+	enum Result {
+		FALSE	= 0;
+		TRUE	= 1;
+	}
 } // end

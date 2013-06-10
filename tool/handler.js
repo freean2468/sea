@@ -8,9 +8,19 @@ function VersionInfoHandler(response, data) {
 	if (flags & options['MONGODB']) mongodb.VersionInfoHandler(response, data);
 }
 
+function VersionInfoReplyHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.VersionInfoReplyHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.VersionInfoReplyHandler(response, data);
+}
+
 function ClientVersionInfoHandler(response, data) {
 	if (flags & options['MYSQL']) mysql.ClientVersionInfoHandler(response, data);
 	if (flags & options['MONGODB']) mongodb.ClientVersionInfoHandler(response, data);
+}
+
+function ClientVersionInfoReplyHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.ClientVersionInfoReplyHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.ClientVersionInfoReplyHandler(response, data);
 }
 
 function RegisterAccountHandler(response, data) {
@@ -88,18 +98,10 @@ function GameResultHandler(response, data) {
 	if (flags & options['MONGODB']) mongodb.GameResultHandler(response, data);
 }
 
-function VersionInfoReplyHandler(response, data) {
-	if (flags & options['MYSQL']) mysql.VersionInfoReplyHandler(response, data);
-	if (flags & options['MONGODB']) mongodb.VersionInfoReplyHandler(response, data);
-}
-
-function ClientVersionInfoReplyHandler(response, data) {
-	if (flags & options['MYSQL']) mysql.ClientVersionInfoReplyHandler(response, data);
-	if (flags & options['MONGODB']) mongodb.ClientVersionInfoReplyHandler(response, data);
-}
-
 exports.VersionInfoHandler = VersionInfoHandler;
+exports.VersionInfoReplyHandler = VersionInfoReplyHandler;
 exports.ClientVersionInfoHandler = ClientVersionInfoHandler;
+exports.ClientVersionInfoReplyHandler = ClientVersionInfoReplyHandler;
 exports.RegisterAccountHandler = RegisterAccountHandler;
 exports.UnregisterAccountHandler = UnregisterAccountHandler;
 exports.LoadUserInfoHandler = LoadUserInfoHandler;
@@ -115,5 +117,3 @@ exports.AccountInfoHandler = AccountInfoHandler;
 exports.ChargeInfoHandler = ChargeInfoHandler;
 exports.RankInfoHandler = RankInfoHandler;
 exports.GameResultHandler = GameResultHandler;
-exports.VersionInfoReplyHandler = VersionInfoReplyHandler;
-exports.ClientVersionInfoReplyHandler = ClientVersionInfoReplyHandler;

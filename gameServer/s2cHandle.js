@@ -8,8 +8,6 @@ var handle = {
 	'7663927': handler.ChargeInfoHandler,
 	'25751552': handler.RankInfoHandler,
 	'10876551': handler.GameResultHandler,
-	'212532706': handler.VersionInfoReplyHandler,
-	'1271857080': handler.ClientVersionInfoReplyHandler,
 };
 
 exports.handle = handle;

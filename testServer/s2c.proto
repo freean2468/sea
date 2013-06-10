@@ -1,9 +1,9 @@
 package S2C;
 
 message RegisterAccountReply {
-	required int64 id = 1 [default=1622018505];
+	optional int64 id = 1 [default=1622018505];
 	required string k_id = 2;
-	required Result res = 3 [default=FALSE];
+	optional Result res = 3 [default=FALSE];
 
 	enum Result {
 		FALSE	= 0;
@@ -12,9 +12,9 @@ message RegisterAccountReply {
 } // end
 
 message UnregisterAccountReply {
-	required int64 id = 1 [default=1477441904];
+	optional int64 id = 1 [default=1477441904];
 	required string k_id = 2;
-	required Result res = 3 [default = FALSE];
+	optional Result res = 3 [default = FALSE];
 
 	enum Result {
 		FALSE	= 0;
@@ -23,11 +23,11 @@ message UnregisterAccountReply {
 } // end
 
 message StartGameReply {
-	required int64 id = 1 [default=519762701];
+	optional int64 id = 1 [default=519762701];
 	required string k_id = 2;
-	required Result res = 3 [default=FALSE];
-	required int32 heart = 4 [default=0];
-	required int64 last_charged_time = 5 [default=0];
+	optional Result res = 3 [default=FALSE];
+	optional int32 heart = 4 [default=0];
+	optional int64 last_charged_time = 5 [default=0];
 	
 	enum Result {
 		FALSE	= 0;
@@ -36,24 +36,24 @@ message StartGameReply {
 } // end
 
 message AccountInfo {
-	required int64 id = 1 [default=74840653];
+	optional int64 id = 1 [default=74840653];
 	required string k_id = 2;
-	required Result res = 3 [default=FALSE];
-	required int32 coin = 4 [default=0];
-	required int32 mineral = 5 [default=0];
-	required int32 lv = 6 [default=0];
-	required int32 exp = 7 [default=0];
-	required int32 point = 8 [default=0];
-	required int32 heart = 9 [default=0];
-	required int64 last_charged_time = 10 [default=0];
-	required int32 selected_character = 11 [default=0];
-	required int32 selected_assistant = 12 [default=0];
-	required int32 characters = 13 [default=0];
-	required int32 basic_charac_lv = 14 [default=0];
-	required int32 assistants = 15 [default=0];
-	required int32 basic_assist_lv = 16 [default=0];
-	required int32 items = 17 [default=0];
-	required int32 count = 18 [default=0];
+	optional Result res = 3 [default=FALSE];
+	optional int32 coin = 4 [default=0];
+	optional int32 mineral = 5 [default=0];
+	optional int32 lv = 6 [default=0];
+	optional int32 exp = 7 [default=0];
+	optional int32 point = 8 [default=0];
+	optional int32 heart = 9 [default=0];
+	optional int64 last_charged_time = 10 [default=0];
+	optional int32 selected_character = 11 [default=0];
+	optional int32 selected_assistant = 12 [default=0];
+	optional int32 characters = 13 [default=0];
+	optional int32 basic_charac_lv = 14 [default=0];
+	optional int32 assistants = 15 [default=0];
+	optional int32 basic_assist_lv = 16 [default=0];
+	optional int32 items = 17 [default=0];
+	optional int32 count = 18 [default=0];
 	
 	enum Result {
 		FALSE	= 0;
@@ -62,11 +62,11 @@ message AccountInfo {
 } // end
 
 message ChargeInfo {
-	required int64 id = 1 [default=7663927];
+	optional int64 id = 1 [default=7663927];
 	required string k_id = 2;
-	required Result res = 3 [default = FALSE];
-	required int32 heart = 4 [default=0];
-	required int64 last_charged_time = 5 [default=0];
+	optional Result res = 3 [default = FALSE];
+	optional int32 heart = 4 [default=0];
+	optional int64 last_charged_time = 5 [default=0];
 
 	enum Result {
 		FALSE	= 0;
@@ -75,10 +75,10 @@ message ChargeInfo {
 } // end
 
 message RankInfo {
-	required int64 id = 1 [default=25751552];
+	optional int64 id = 1 [default=25751552];
 	required string k_id = 2;
-	required Result res = 3 [default=FALSE];
-	required int64 overall_ranking = 4 [default=0];
+	optional Result res = 3 [default=FALSE];
+	optional int64 overall_ranking = 4 [default=0];
 	repeated FriendRankInfo ranking_list = 5;
 	
 	message FriendRankInfo {
@@ -93,31 +93,11 @@ message RankInfo {
 } // end
 
 message GameResult {
-	required int64 id = 1 [default=10876551];
+	optional int64 id = 1 [default=10876551];
 	required string k_id = 2;
-	required Result res = 3 [default = FALSE];
-	required int32 score = 4 [default=0];
+	optional Result res = 3 [default = FALSE];
+	optional int32 score = 4 [default=0];
 	
-	enum Result {
-		FALSE	= 0;
-		TRUE	= 1;
-	}
-} // end
-
-message VersionInfoReply {
-	required int64 id = 1 [default=212532706];
-	required Result res = 2 [default = FALSE];
-
-	enum Result {
-		FALSE	= 0;
-		TRUE	= 1;
-	}
-} // end
-
-message ClientVersionInfoReply {
-	required int64 id = 1 [default=1271857080];
-	required Result res = 2 [default = FALSE];
-
 	enum Result {
 		FALSE	= 0;
 		TRUE	= 1;

@@ -2,7 +2,9 @@ var handler = require('./handler');
 
 var handle = {
 	'97057879': handler.VersionInfoHandler,
+	'212532706': handler.VersionInfoReplyHandler,
 	'70841257': handler.ClientVersionInfoHandler,
+	'1271857080': handler.ClientVersionInfoReplyHandler,
 	'1415117601': handler.RegisterAccountHandler,
 	'1296626420': handler.UnregisterAccountHandler,
 	'67040062': handler.LoadUserInfoHandler,
@@ -18,8 +20,6 @@ var handle = {
 	'7663927': handler.ChargeInfoHandler,
 	'25751552': handler.RankInfoHandler,
 	'10876551': handler.GameResultHandler,
-	'212532706': handler.VersionInfoReplyHandler,
-	'1271857080': handler.ClientVersionInfoReplyHandler,
 };
 
 exports.handle = handle;

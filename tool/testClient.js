@@ -27,6 +27,8 @@ function UUID() {
 
 registerAccount['k_id'] = UUID();
 
+console.log(registerAccount);
+
 request(registerAccount);
 
 function fetchId(ab) {

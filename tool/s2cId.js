@@ -6,8 +6,6 @@ var list = [
 	'ChargeInfo',
 	'RankInfo',
 	'GameResult',
-	'VersionInfoReply',
-	'ClientVersionInfoReply',
 ];
 
 var messageId = {
@@ -18,8 +16,6 @@ var messageId = {
 	ChargeInfo: 7663927,
 	RankInfo: 25751552,
 	GameResult: 10876551,
-	VersionInfoReply: 212532706,
-	ClientVersionInfoReply: 1271857080,
 };
 
 exports.list = list;
