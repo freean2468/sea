@@ -1,6 +1,15 @@
 var http = require('http');
 var url = require('url');
 var log = require('./log');
+var cp = require('child_process');
+var rank = cp.fork('./rank.js');
+
+var rankingList = [];
+
+rank.on('message', function(m) {
+	rankingList = m;
+	exports.rankingList = rankingList;
+});
 
 function start(route, handle) {
 	function onRequest(request, response) {
@@ -20,14 +29,6 @@ function start(route, handle) {
 		request.addListener('end', function end() {
 			route(handle, pathname, response, postData);
 		});
-		
-//		console.log(request);
-
-//		request.connection.addListener('close', function (err) {
-//			console.log(err);
-//
-//			console.log('a client closed');
-//		});
 	}
 	
 	log.mkdirLog();
@@ -35,6 +36,8 @@ function start(route, handle) {
 	http.createServer(onRequest).listen(8888);
 
 	console.log('game server has started.');
+	console.log('rank calc has started.');
 }
 
 exports.start = start;
+exports.rankingList = rankingList;
