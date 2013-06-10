@@ -157,6 +157,8 @@ function request(data) {
 
 	var req = http.request(opts, callback);
 
+	console.log(data.toArrayBuffer());
+
 	req.on('error', function(e) {
 		console.log("Got error: " + e.message);
 	});

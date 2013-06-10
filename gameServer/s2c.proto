@@ -1,7 +1,7 @@
 package S2C;
 
 message RegisterAccountReply {
-	optional int64 id = 1 [default=1622018505];
+	optional uint64 id = 1 [default=1622018505];
 	required string k_id = 2;
 	optional Result res = 3 [default=FALSE];
 
@@ -12,7 +12,7 @@ message RegisterAccountReply {
 } // end
 
 message UnregisterAccountReply {
-	optional int64 id = 1 [default=1477441904];
+	optional uint64 id = 1 [default=1477441904];
 	required string k_id = 2;
 	optional Result res = 3 [default = FALSE];
 
@@ -23,7 +23,7 @@ message UnregisterAccountReply {
 } // end
 
 message StartGameReply {
-	optional int64 id = 1 [default=519762701];
+	optional uint64 id = 1 [default=519762701];
 	required string k_id = 2;
 	optional Result res = 3 [default=FALSE];
 	optional int32 heart = 4 [default=0];
@@ -36,7 +36,7 @@ message StartGameReply {
 } // end
 
 message AccountInfo {
-	optional int64 id = 1 [default=74840653];
+	optional uint64 id = 1 [default=74840653];
 	required string k_id = 2;
 	optional Result res = 3 [default=FALSE];
 	optional int32 coin = 4 [default=0];
@@ -62,7 +62,7 @@ message AccountInfo {
 } // end
 
 message ChargeInfo {
-	optional int64 id = 1 [default=7663927];
+	optional uint64 id = 1 [default=7663927];
 	required string k_id = 2;
 	optional Result res = 3 [default = FALSE];
 	optional int32 heart = 4 [default=0];
@@ -75,7 +75,7 @@ message ChargeInfo {
 } // end
 
 message RankInfo {
-	optional int64 id = 1 [default=25751552];
+	optional uint64 id = 1 [default=25751552];
 	required string k_id = 2;
 	optional Result res = 3 [default=FALSE];
 	optional int64 overall_ranking = 4 [default=0];
@@ -93,7 +93,7 @@ message RankInfo {
 } // end
 
 message GameResult {
-	optional int64 id = 1 [default=10876551];
+	optional uint64 id = 1 [default=10876551];
 	required string k_id = 2;
 	optional Result res = 3 [default = FALSE];
 	optional int32 score = 4 [default=0];

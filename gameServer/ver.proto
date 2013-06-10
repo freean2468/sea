@@ -1,12 +1,12 @@
 package VER;
 
 message VersionInfo {
-	optional int64 id = 1 [default=97057879];
+	optional uint64 id = 1 [default=97057879];
 	optional float version = 2 [default=0.5];
 } // end
 
 message VersionInfoReply {
-	optional int64 id = 1 [default=212532706];
+	optional uint64 id = 1 [default=212532706];
 	optional Result res = 2 [default=FALSE];
 
 	enum Result {
@@ -16,12 +16,12 @@ message VersionInfoReply {
 } // end
 
 message ClientVersionInfo {
-	optional int64 id = 1 [default=70841257];
+	optional uint64 id = 1 [default=70841257];
 	optional float version = 2 [default=0.1];
 } // end
 
 message ClientVersionInfoReply {
-	optional int64 id = 1 [default=1271857080];
+	optional uint64 id = 1 [default=1271857080];
 	optional Result res = 2 [default = FALSE];
 
 	enum Result {

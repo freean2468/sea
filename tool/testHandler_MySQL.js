@@ -76,7 +76,7 @@ function LoadUserInfoHandler(response, data){
 		var rMsg = new AccountInfo();
 		rMsg['k_id'] = msg['k_id'];
 		rMsg['res'] = msg['res'];
-		
+
 		if (res === 0) {
 			log.addLog('DEBUG', 'Invalid account');
 			rMsg['res'] = false;

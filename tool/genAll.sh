@@ -38,3 +38,5 @@ cd ${0%/*} 2>/dev/null
 # echo ${PWD}/$0
 
 echo 'done'
+
+bash gen2Test.sh
