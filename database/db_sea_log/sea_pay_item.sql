@@ -29,7 +29,7 @@ CREATE PROCEDURE sea_AddLogPayItem(IN p_k_id VARCHAR (40) CHARACTER SET utf8, IN
 		INSERT sea_pay_item(k_id, w_date, w_time, paid_item, rest_coin)
 		VALUES (p_k_id, CURDATE(), CURTIME(), p_paid_item, p_rest_coin);
 
-		SELECT LAST_INSERT_ID();
+		SELECT LAST_INSERT_ID() AS res;
 	END
 $$
 

@@ -1,0 +1,69 @@
+package G2L;
+
+message AccountLogin {
+	optional uint64 id = 1 [default=64812982];
+	required string k_id = 2;
+} // end
+
+message PayAssistant {
+	optional uint64 id = 1 [default=141882649];
+	required string k_id = 2;
+	required int32 paid_assistant = 3;
+	required int32 rest_coin = 4;
+} // end
+
+message PayCharacter {
+	optional uint64 id = 1 [default=12186137];
+	required string k_id = 2;
+	required int32 paid_character = 3;
+	required int32 rest_coin = 4;
+} // end
+
+message PayCoin {
+	optional uint64 id = 1 [default=184089216];
+	required string k_id = 2;
+	required int32 paid_coin = 3;
+	required int32 rest_money = 4;
+} // end
+
+message PayHeart {
+	optional uint64 id = 1 [default=2093740032];
+	required string k_id = 2;
+	required int32 paid_heart = 3;
+	required int32 rest_coin = 4;
+} // end
+
+message PayItem {
+	optional uint64 id = 1 [default=1894117888];
+	required string k_id = 2;
+	required int32 paid_item = 3;
+	required int32 rest_coin = 4;
+} // end
+
+message PayMoney {
+	optional uint64 id = 1 [default=669446144];
+	required string k_id = 2;
+	required int32 paid_money = 3;
+	required int32 rest_money =4;
+} // end
+
+message UserGamePlay {
+	optional uint64 id = 1 [default=97122730];
+	required string k_id = 2;
+	required int32 selected_character = 3;
+	required int32 selected_assistant = 4;
+	required int32 score = 5;
+	required int32 enemy_kill = 6;
+	required int32 dist = 7;
+	required int32 play_time = 8;
+} // end
+
+message UserRegister {
+	optional uint64 id = 1 [default=124058308];
+	required string k_id = 2;
+} // end
+
+message UserUnregister {
+	optional uint64 id = 1 [default=1240071080];
+	required string k_id = 2;
+} // end

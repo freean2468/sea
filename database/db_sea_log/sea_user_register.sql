@@ -27,7 +27,7 @@ CREATE PROCEDURE sea_AddLogRegister(IN p_k_id VARCHAR (40) CHARACTER SET utf8)
 		INSERT sea_user_register(k_id, w_date, w_time)
 		VALUES (p_k_id, CURDATE(), CURTIME());
 
-		SELECT LAST_INSERT_ID();
+		SELECT LAST_INSERT_ID() AS res;
 	END
 $$
 

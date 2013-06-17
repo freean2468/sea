@@ -1,34 +1,55 @@
-node messageIdGen.js ver s2c c2s
+node messageIdGen.js ver s2c c2s g2l
 
-node protoBuildGen.js ver s2c c2s
-cp -a protoBuild.js ../gameServer/
-echo 'protoBuild.js has been copied to ../gameServer/'
+node protoBuildGen.js game ver s2c c2s g2l
+cp -a gameProtoBuild.js ../gameServer/protoBuild.js
 
-node handleGen.js 'ver' 'c2s' 's2c'
+node protoBuildGen.js log g2l
+cp -a logProtoBuild.js ../logServer/protoBuild.js
+echo 'gameProtoBuild.js and logProtoBuild.js have been copied to ../gameServer/ and ../logServer as protoBuild.js'
+
+node handleGen.js 'ver' 'c2s' 's2c' 'g2l'
 
 cp -a handle.js ../gameServer/
-echo 'handle.js has been copied to ../gameServer/'
+cp -a handle.js ../logServer/
+echo 'handle.js has been copied to ../gameServer/ and ../logServer'
 
-node handlerGen.js 'ver' 'c2s' 's2c'
-node handlerImplGen.js 'test' 'ver' 'c2s'
+node handlerGen.js 'ver' 'c2s' 's2c' 'g2l'
+node handlerImplGen.js 'game' 'ver' 'c2s' '-request'
 
-cp -a testHandler_MySQL.js ../gameServer/handler_MySQL.js
-cp -a testHandler_MongoDB.js ../gameServer/handler_MongoDB.js
-echo 'testHandler_MongoDB and testHandler_MySQL have been copied to ../gameServer/ as handler_MongoDB and handler_MySQL'
+cp -a gameHandler_MySQL.js ../gameServer/handler_MySQL.js
+cp -a gameHandler_MongoDB.js ../gameServer/handler_MongoDB.js
+echo 'gameHandler_MongoDB and gameHandler_MySQL have been copied to ../gameServer/ as handler_MongoDB and handler_MySQL'
+
+node handlerImplGen.js 'log' 'g2l'
+
+cp -a logHandler_MySQL.js ../logServer/handler_MySQL.js
+cp -a logHandler_MongoDB.js ../logServer/handler_MongoDB.js
+echo 'logHandler_MongoDB and logHandler_MySQL have been copied to ../logServer/ as handler_MongoDB and handler_MySQL'
 
 cp -a c2s.proto ../gameServer/
 cp -a s2c.proto ../gameServer/
 cp -a ver.proto ../gameServer/
-echo 'all of proto files have been copied to ../gameServer'
+cp -a g2l.proto ../gameServer
+echo 'c2s, s2c, ver and g2l proto files have been copied to ../gameServer'
 
-cp -a handle.js ../gameServer/
+cp -a g2l.proto ../logServer/
+echo 'g2l file has been copied to ../logServer'
+
 cp -a handler.js ../gameServer/
-echo 'handle.js and handler.js have been copied to ../gameServer'
+cp -a handler.js ../logServer/
+echo 'handler.js has been copied to ../gameServer and ../logServer'
 
 cp -a c2sHandle.js ../gameServer/
 cp -a s2cHandle.js ../gameServer/
 cp -a verHandle.js ../gameServer/
-echo 'perspective *Handle.js files have been copied to ../gameServer'
+echo 'c2sHandle.js, s2cHandle.js and verHandler.js files have been copied to ../gameServer'
+
+cp -a g2lHandle.js ../logServer/
+echo 'g2lHandle.js has been copied to ../logServer'
+
+cp -a util.js ../gameServer/
+cp -a util.js ../logServer/
+echo 'util.js has been copied to ../gameServer and ../logServer'
 
 cd ${0%/*} 2>/dev/null
 #echo $PWD/${0##*/}
@@ -38,5 +59,3 @@ cd ${0%/*} 2>/dev/null
 # echo ${PWD}/$0
 
 echo 'done'
-
-bash gen2Test.sh

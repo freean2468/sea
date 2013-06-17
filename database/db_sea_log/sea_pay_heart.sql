@@ -29,7 +29,7 @@ CREATE PROCEDURE sea_AddLogPayHeart(IN p_k_id VARCHAR (40) CHARACTER SET utf8, I
 		INSERT sea_pay_heart(k_id, w_date, w_time, paid_heart, rest_coin)
 		VALUES (p_k_id, CURDATE(), CURTIME(), p_paid_heart, p_rest_coin);
 
-		SELECT LAST_INSERT_ID();
+		SELECT LAST_INSERT_ID() AS res;
 	END
 $$
 

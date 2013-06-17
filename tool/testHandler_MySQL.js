@@ -1,11 +1,24 @@
 var mysql = require('./mysql');
 var build = require('./protoBuild');
 var assert = require('assert');
+var request = require('./request');
 var log = require('./log');
 
-function write(res, str) {
-	res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':str.length});
-	res.write(str);
+function encrypt(msg) {
+	var encrypted = new Array(msg.length);
+	var flag = 0xff;
+
+	for (i = 0; i < msg.length; ++i) {
+		encrypted[i] = msg[i*2] ^ flag;
+		encrypted[i+msg.length/2] = msg[i*2+1] ^ flag;
+	}
+
+	return encrypted;
+}
+
+function write(res, stream) {
+	res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':stream.length});
+	res.write(stream);
 	res.end();
 }
 
@@ -16,7 +29,8 @@ function toStream(msg) {
 	for (i = 0; i < buf.length; ++i) {
 		buf[i] = ab[i];
 	}
-	return buf.toString('hex');
+	//return buf.toString('hex');
+	return encrypt(buf.toString('hex'));
 }
 
 function VersionInfoHandler(response, data){

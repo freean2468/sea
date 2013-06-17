@@ -8,7 +8,7 @@ CREATE TABLE sea_log.sea_pay_money(
 	w_date DATE NOT NULL,
 	w_time TIME NOT NULL,
 	paid_money SMALLINT NOT NULL,
-	rest_coin MEDIUMINT NOT NULL,
+	rest_money MEDIUMINT NOT NULL,
 	PRIMARY KEY (id, w_date)
 )ENGINE=ARCHIVE
 PARTITION BY RANGE (to_days(w_date)) (
@@ -24,12 +24,12 @@ PARTITION BY RANGE (to_days(w_date)) (
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sea_AddLogPayMoney $$
-CREATE PROCEDURE sea_AddLogPayMoney(IN p_k_id VARCHAR (40) CHARACTER SET utf8, IN p_paid_money SMALLINT, IN p_rest_coin MEDIUMINT)
+CREATE PROCEDURE sea_AddLogPayMoney(IN p_k_id VARCHAR (40) CHARACTER SET utf8, IN p_paid_money SMALLINT, IN p_rest_money MEDIUMINT)
 	BEGIN
-		INSERT sea_pay_money(k_id, w_date, w_time, paid_character, rest_coin)
-		VALUES (p_k_id, CURDATE(), CURTIME(), p_paid_money, p_rest_coin);
+		INSERT sea_pay_money(k_id, w_date, w_time, paid_character, rest_money)
+		VALUES (p_k_id, CURDATE(), CURTIME(), p_paid_money, p_rest_money);
 
-		SELECT LAST_INSERT_ID();
+		SELECT LAST_INSERT_ID() AS res;
 	END
 $$
 

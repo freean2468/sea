@@ -29,7 +29,7 @@ CREATE PROCEDURE sea_AddLogPayCharacter(IN p_k_id VARCHAR (40) CHARACTER SET utf
 		INSERT sea_pay_character(k_id, w_date, w_time, paid_character, rest_coin)
 		VALUES (p_k_id, CURDATE(), CURTIME(), p_paid_character, p_rest_coin);
 
-		SELECT LAST_INSERT_ID();
+		SELECT LAST_INSERT_ID() AS res;
 	END
 $$
 

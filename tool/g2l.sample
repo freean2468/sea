@@ -1,0 +1,59 @@
+package G2L;
+
+message AccountLogin {
+	required string k_id = 2;
+} // end
+
+message PayAssistant {
+	required string k_id = 2;
+	required int32 paid_assistant = 3;
+	required int32 rest_coin = 4;
+} // end
+
+message PayCharacter {
+	required string k_id = 2;
+	required int32 paid_character = 3;
+	required int32 rest_coin = 4;
+} // end
+
+message PayCoin {
+	required string k_id = 2;
+	required int32 paid_coin = 3;
+	required int32 rest_money = 4;
+} // end
+
+message PayHeart {
+	required string k_id = 2;
+	required int32 paid_heart = 3;
+	required int32 rest_coin = 4;
+} // end
+
+message PayItem {
+	required string k_id = 2;
+	required int32 paid_item = 3;
+	required int32 rest_coin = 4;
+} // end
+
+message PayMoney {
+	required string k_id = 2;
+	required int32 paid_money = 3;
+	required int32 rest_money =4;
+} // end
+
+message UserGamePlay {
+	required string k_id = 2;
+	required int32 selected_character = 3;
+	required int32 selected_assistant = 4;
+	required int32 score = 5;
+	required int32 enemy_kill = 6;
+	required int32 dist = 7;
+	required int32 play_time = 8;
+} // end
+
+message UserRegister {
+	required string k_id = 2;
+} // end
+
+message UserUnregister {
+	required string k_id = 2;
+} // end

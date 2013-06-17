@@ -34,7 +34,7 @@ CREATE PROCEDURE sea_AddLogPlay(IN p_k_id VARCHAR (40) CHARACTER SET utf8, IN p_
 		INSERT sea_user_play(k_id, w_date, w_time, selected_character, selected_assistant, score, enemy_kill, dist, play_time)
 		VALUES (p_k_id, CURDATE(), CURTIME(), p_selected_character, p_selected_assistant, p_score, p_enemy_kill, p_dist, p_play_time);
 
-		SELECT LAST_INSERT_ID();
+		SELECT LAST_INSERT_ID() AS res;
 	END
 $$
 

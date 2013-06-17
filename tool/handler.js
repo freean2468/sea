@@ -98,6 +98,56 @@ function GameResultHandler(response, data) {
 	if (flags & options['MONGODB']) mongodb.GameResultHandler(response, data);
 }
 
+function AccountLoginHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.AccountLoginHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.AccountLoginHandler(response, data);
+}
+
+function PayAssistantHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.PayAssistantHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.PayAssistantHandler(response, data);
+}
+
+function PayCharacterHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.PayCharacterHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.PayCharacterHandler(response, data);
+}
+
+function PayCoinHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.PayCoinHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.PayCoinHandler(response, data);
+}
+
+function PayHeartHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.PayHeartHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.PayHeartHandler(response, data);
+}
+
+function PayItemHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.PayItemHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.PayItemHandler(response, data);
+}
+
+function PayMoneyHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.PayMoneyHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.PayMoneyHandler(response, data);
+}
+
+function UserGamePlayHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.UserGamePlayHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.UserGamePlayHandler(response, data);
+}
+
+function UserRegisterHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.UserRegisterHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.UserRegisterHandler(response, data);
+}
+
+function UserUnregisterHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.UserUnregisterHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.UserUnregisterHandler(response, data);
+}
+
 exports.VersionInfoHandler = VersionInfoHandler;
 exports.VersionInfoReplyHandler = VersionInfoReplyHandler;
 exports.ClientVersionInfoHandler = ClientVersionInfoHandler;
@@ -117,3 +167,13 @@ exports.AccountInfoHandler = AccountInfoHandler;
 exports.ChargeInfoHandler = ChargeInfoHandler;
 exports.RankInfoHandler = RankInfoHandler;
 exports.GameResultHandler = GameResultHandler;
+exports.AccountLoginHandler = AccountLoginHandler;
+exports.PayAssistantHandler = PayAssistantHandler;
+exports.PayCharacterHandler = PayCharacterHandler;
+exports.PayCoinHandler = PayCoinHandler;
+exports.PayHeartHandler = PayHeartHandler;
+exports.PayItemHandler = PayItemHandler;
+exports.PayMoneyHandler = PayMoneyHandler;
+exports.UserGamePlayHandler = UserGamePlayHandler;
+exports.UserRegisterHandler = UserRegisterHandler;
+exports.UserUnregisterHandler = UserUnregisterHandler;

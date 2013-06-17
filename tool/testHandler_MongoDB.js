@@ -1,6 +1,7 @@
 var mongodb = require('./mongodb');
 var build = require('./protoBuild');
 var assert = require('assert');
+var request = require('./request');
 var log = require('./log');
 
 function write(res, str) {

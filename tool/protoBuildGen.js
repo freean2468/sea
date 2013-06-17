@@ -1,9 +1,16 @@
 var fs = require('fs');
 var protoList = [];
 
+var subject = '';
+
 process.argv.forEach(function(val, index, array) {
-	if (index > 1) {
+	if (index == 2) {
+		subject = val;
+	}
+
+	if (index > 2) {
 		protoList.push(val);
+		console.log(val);
 	}
 });
 
@@ -32,7 +39,7 @@ for (var i = 0; i < protoList.length; ++i) {
 
 body += '\n';
 
-var file = 'protoBuild.js';
+var file = subject + 'ProtoBuild.js';
 
 fs.writeFile(file, head + body + tail, function (err) {
 	if (err) {

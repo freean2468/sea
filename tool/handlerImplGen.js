@@ -2,6 +2,7 @@ var fs = require('fs');
 var protoList = [];
 
 var whatFor = '';
+var option = '';
 
 process.argv.forEach(function(val, index, array) {
 	if (index == 2) {
@@ -9,7 +10,13 @@ process.argv.forEach(function(val, index, array) {
 	}
 	
 	if (index > 2) {
-		protoList.push(val);
+		if (val[0] != '-') {
+			protoList.push(val);
+		}
+	}
+
+	if (val === '-request') {
+		option += "var request = require('./request').request;" + '\n';
 	}
 });
 
@@ -36,7 +43,10 @@ var mongodb = {
 
 var headCommon = "var build = require('./protoBuild');" + '\n'
 				+ "var assert = require('assert');" + '\n'
+				+ "var encrypt = require('./util').encrypt;" + '\n'
+				+ "var toStream = require('./util').toStream;" + '\n'
 //				+ "var toRank = require('./request');" + '\n'
+				+ option
 				;
 
 var tailCommon = '';
@@ -48,20 +58,10 @@ mongodb['head'] += "var mongodb = require('./mongodb');" + '\n'
 
 headCommon += "var log = require('./log');" + '\n'
 				+ '\n'
-				+ "function write(res, str) {" + '\n'
-				+ '\t' + "res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':str.length});" + '\n'
-				+ '\t' + "res.write(str);" + '\n'
+				+ "function write(res, stream) {" + '\n'
+				+ '\t' + "res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':stream.length});" + '\n'
+				+ '\t' + "res.write(stream);" + '\n'
 				+ '\t' + "res.end();" + '\n'
-				+ "}" + '\n'
-				+ '\n'
-				+ "function toStream(msg) {" + '\n'
-				+ '\t' + "var ab = msg.toArrayBuffer();" + '\n'
-				+ '\t' + "var buf = new Buffer(ab.byteLength);" + '\n'
-				+ '\n'
-				+ '\t' + "for (i = 0; i < buf.length; ++i) {" + '\n'
-				+ '\t\t' + "buf[i] = ab[i];" + '\n'
-				+ '\t' + "}" + '\n'
-				+ '\t' + "return buf.toString('hex');" + '\n'
 				+ "}" + '\n'
 				+ '\n'
 				;
