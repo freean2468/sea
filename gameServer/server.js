@@ -36,7 +36,7 @@ function start(route, handle) {
 	http.createServer(onRequest).listen(8888);
 
 	console.log('game server has started.');
-	console.log('rank calc has started.');
+	console.log('rank calc has started.');	
 }
 
 exports.start = start;

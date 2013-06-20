@@ -83,8 +83,8 @@ function LoadUserInfoHandler(response, data){
 		}
 		else {
 			procedure = 'sea_LoadUserInfo';
-			//console.log(results[0][0]['id']);
-			params = results[0][0]['id'];
+			id = results[0][0]['id'];
+			params = id;
 
 			var loadUserInfoCallback = function (results, fields) {
 				for (var val in results[0][0]) {
@@ -94,6 +94,11 @@ function LoadUserInfoHandler(response, data){
 				}
 
 				write(response, toStream(rMsg));
+
+				procedure = 'sea_UpdateUvOn';
+				params = id;
+
+				mysql.call(procedure, params, function (results, fields) {});
 			}
 
 			mysql.call(procedure, params, loadUserInfoCallback);

@@ -18,7 +18,7 @@ function calc () {
 
 	var callback = function (results, fields) {
 		if (results[0] === 0) {
-			log.addLog('DEBUG', 'Something wrong happened');
+			log.addLog('DEBUG', 'Something wrong happened in rank calc');
 		}
 		else {
 			sort(results[0]);

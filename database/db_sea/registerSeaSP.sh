@@ -6,5 +6,6 @@ mysql -u root --password=xmongames < ./sea_user_assistants.sql
 mysql -u root --password=xmongames < ./sea_user_items.sql
 mysql -u root --password=xmongames < ./sea_user_characters.sql
 mysql -u root --password=xmongames < ./sea_user_log.sql
+mysql -u root --password=xmongames < ./sea_user_metric.sql
 
 echo 'done.'

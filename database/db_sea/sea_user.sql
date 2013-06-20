@@ -47,6 +47,9 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8, IN p_t
 			INSERT sea_user_log(total_score, highest_score, last_dist, total_dist, total_kill, play_time)
 			VALUES (0, 0, 0, 0, 0, 0);
 
+			INSERT sea_user_metric(uv, dau, pu)
+			VALUES (1, 1, 0, 1, 0);
+
 			SELECT last_id;			
 		ELSE
 			SELECT 0;
