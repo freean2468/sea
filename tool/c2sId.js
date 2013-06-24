@@ -1,7 +1,8 @@
 var list = [
 	'RegisterAccount',
 	'UnregisterAccount',
-	'LoadUserInfo',
+	'Login',
+	'Logout',
 	'CheckInCharge',
 	'StartGame',
 	'EndGame',
@@ -12,7 +13,8 @@ var list = [
 var messageId = {
 	RegisterAccount: 1415117601,
 	UnregisterAccount: 1296626420,
-	LoadUserInfo: 67040062,
+	Login: 12322730,
+	Logout: 543619392,
 	CheckInCharge: 770373176,
 	StartGame: 285274112,
 	EndGame: 1441135488,

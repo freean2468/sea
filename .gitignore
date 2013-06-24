@@ -6,4 +6,4 @@
 # doc/*txt	- Ignore somethings like 'doc/notes.txt', but not such as 'doc/server/arch.txt'
 
 LOG/
-
+tool/*.bak

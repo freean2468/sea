@@ -4,6 +4,21 @@ message AccountLogin {
 	required string k_id = 2;
 } // end
 
+message ConcurrentUser {
+	required uint32 ccu = 2;
+} // end
+
+message PeakConcurrentUser {
+} // end
+
+message UniqueVisitor {
+	required uint32 uv = 2;
+} // end
+
+message RetentionRate {
+	required uint32 rr = 2;
+} // end
+
 message PayAssistant {
 	required string k_id = 2;
 	required int32 paid_assistant = 3;

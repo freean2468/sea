@@ -3,6 +3,7 @@ var build = require('./protoBuild');
 var assert = require('assert');
 var encrypt = require('./util').encrypt;
 var toStream = require('./util').toStream;
+var UUID = require('./util').UUID;
 var log = require('./log');
 
 function write(res, stream) {
@@ -24,6 +25,78 @@ function AccountLoginHandler(response, data){
 
 	mysql.call(procedure, params, callback);
 } // end AccountLoginHandler
+
+function ConcurrentUserHandler(response, data){
+	var msg = build.ConcurrentUser.decode(data);
+
+	var ccu = msg['ccu'];
+	var procedure = 'sea_AddConcurrentUser';
+	var params = ccu;
+	
+	var callback = function (results, fields) {
+		if (results[0][0]['res'] !== 0) {
+			console.log("CCU : " + ccu);
+		}
+	};
+
+	mysql.call(procedure, params, callback);
+} // end ConcurrentUserHandler
+
+function PeakConcurrentUserHandler(response, data){
+	var msg = build.PeakConcurrentUser.decode(data);
+
+	var procedure = 'sea_PeakConcurrentUser';
+	var params = '';
+	
+	var callback = function (results, fields) {
+		var pccu = results[0][0]['res'];
+			
+		procedure = 'sea_AddPeakConcurrentUser';
+		params = pccu;
+
+		var addPccuCallback = function (results, fields) {
+			if (results[0][0]['res'] !== 0) {
+				console.log("PCCU : " + pccu);
+			}
+		};
+
+		mysql.call(procedure, params, addPccuCallback);
+	};
+
+	mysql.call(procedure, params, callback);
+} // end PeakConcurrentUserHandler
+
+function UniqueVisitorHandler(response, data){
+	var msg = build.UniqueVisitor.decode(data);
+
+	var uv = msg['uv'];
+	var procedure = 'sea_AddUniqueVisitor';
+	var params = uv;
+
+	var callback = function (results, fields) {
+		if (results[0][0]['res'] !== 0) {
+			console.log("UV : " + uv);
+		}
+	};
+
+	mysql.call(procedure, params, callback);
+} // end UniqueVisitorHandler
+
+function RetentionRateHandler(response, data){
+	var msg = build.RetentionRate.decode(data);
+
+	var rr = msg['rr'];
+	var procedure = 'sea_AddRetentionRate';
+	var params = rr;
+
+	var callback = function (results, fields) {
+		if (results[0][0]['res'] !== 0) {
+			console.log("RR : " + rr);
+		}
+	};
+
+	mysql.call(procedure, params, callback);
+} // end RetentionRateHandler
 
 function PayAssistantHandler(response, data){
 	var msg = build.PayAssistant.decode(data);
@@ -153,6 +226,10 @@ function UserUnregisterHandler(response, data){
 } // end UserUnregisterHandler
 
 exports.AccountLoginHandler = AccountLoginHandler;
+exports.ConcurrentUserHandler = ConcurrentUserHandler;
+exports.PeakConcurrentUserHandler = PeakConcurrentUserHandler;
+exports.UniqueVisitorHandler = UniqueVisitorHandler;
+exports.RetentionRateHandler = RetentionRateHandler;
 exports.PayAssistantHandler = PayAssistantHandler;
 exports.PayCharacterHandler = PayCharacterHandler;
 exports.PayCoinHandler = PayCoinHandler;

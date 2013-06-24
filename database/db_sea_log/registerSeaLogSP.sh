@@ -2,6 +2,9 @@
 
 mysql -u root --password=xmongames < ./sea_log_account_login.sql
 mysql -u root --password=xmongames < ./sea_log_concurrent_user.sql
+mysql -u root --password=xmongames < ./sea_log_peak_concurrent_user.sql
+mysql -u root --password=xmongames < ./sea_log_retention_rate.sql
+mysql -u root --password=xmongames < ./sea_log_unique_visitor.sql
 mysql -u root --password=xmongames < ./sea_log_pay_assistant.sql
 mysql -u root --password=xmongames < ./sea_log_pay_character.sql
 mysql -u root --password=xmongames < ./sea_log_pay_coin.sql

@@ -2,6 +2,10 @@ var handler = require('./handler');
 
 var handle = {
 	'64812982': handler.AccountLoginHandler,
+	'1694830347': handler.ConcurrentUserHandler,
+	'1062535298': handler.PeakConcurrentUserHandler,
+	'1240072080': handler.UniqueVisitorHandler,
+	'920645671': handler.RetentionRateHandler,
 	'141882649': handler.PayAssistantHandler,
 	'12186137': handler.PayCharacterHandler,
 	'184089216': handler.PayCoinHandler,

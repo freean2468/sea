@@ -14,6 +14,19 @@ CREATE TABLE sea.sea_user_metric(
 
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS sea_RetentionRate $$
+CREATE PROCEDURE sea_RetentionRate()
+	BEGIN
+		DECLARE intersection int;
+		DECLARE last int;
+
+		SELECT COUNT(*) into last FROM sea.sea_user_metric WHERE last_week_uv = 1;
+		SELECT COUNT(*) into intersection FROM sea.sea_user_metric WHERE last_week_uv = 1 AND this_week_uv = 1;
+
+		SELECT (intersection / last) AS res;
+	END
+$$
+
 DROP PROCEDURE IF EXISTS sea_UpdateWeekly $$
 CREATE PROCEDURE sea_UpdateWeekly(IN p_id INT)
 	BEGIN
@@ -23,8 +36,8 @@ CREATE PROCEDURE sea_UpdateWeekly(IN p_id INT)
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_TodayUv $$
-CREATE PROCEDURE sea_TodayUv()
+DROP PROCEDURE IF EXISTS sea_LastUv $$
+CREATE PROCEDURE sea_LastUv()
 	BEGIN
 		SELECT COUNT(*) AS res FROM sea_user_metric WHERE uv = 1;
 	END
@@ -33,13 +46,7 @@ $$
 DROP PROCEDURE IF EXISTS sea_UpdateUvOn $$
 CREATE PROCEDURE sea_UpdateUvOn(IN p_id INT)
 	BEGIN
-		DECLARE user_uv TINYINT(1);
-
-		SELECT uv INTO user_uv FROM sea_user_metric WHERE id = p_id;
-
-		IF user_uv = 0 THEN
-			UPDATE sea.sea_user_metric SET uv = 1, this_week_uv = 1 WHERE id = p_id;
-		END IF;
+		UPDATE sea.sea_user_metric SET uv = 1, this_week_uv = 1 WHERE id = p_id;
 	END
 $$
 
@@ -50,6 +57,9 @@ CREATE PROCEDURE sea_UpdateUvOff()
 	END
 $$
 
+#####
+## PayingUser(PU)
+#####
 DROP PROCEDURE IF EXISTS sea_UpdatePuOn $$
 CREATE PROCEDURE sea_UpdatePuOn(IN p_id INT)
 	BEGIN

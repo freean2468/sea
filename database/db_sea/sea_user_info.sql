@@ -26,12 +26,13 @@ CREATE PROCEDURE sea_LoadUserInfo(IN p_id INT)
 	BEGIN
 		SELECT U.k_id, I.coin, I.mineral, I.lv, I.exp, I.point, I.heart, I.last_charged_time, 
 				I.selected_character, I.selected_assistant, C.characters, C.basic_charac_lv,
-				A.assistants, A.basic_assist_lv, IT.items, IT.count
+				A.assistants, A.basic_assist_lv, IT.items, IT.count, M.uv
 		FROM sea.sea_user_info AS I
 		INNER JOIN sea.sea_user AS U ON I.id = U.id
 		INNER JOIN sea.sea_user_characters AS C ON I.id = C.id
 		INNER JOIN sea.sea_user_assistants AS A ON I.id = A.id
 		INNER JOIN sea.sea_user_items AS IT ON I.id = IT.id
+		INNER JOIN sea.sea_user_metric AS M ON I.id = M.id
 		WHERE I.id = p_id;
 	END
 $$

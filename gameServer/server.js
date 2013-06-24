@@ -1,8 +1,11 @@
 var http = require('http');
 var url = require('url');
+var build = require('./protoBuild');
 var log = require('./log');
 var cp = require('child_process');
 var rank = cp.fork('./rank.js');
+var metric = require('./metric').metric;
+var request = require('./request').request;
 
 var rankingList = [];
 
@@ -27,7 +30,7 @@ function start(route, handle) {
 		});
 
 		request.addListener('end', function end() {
-			route(handle, pathname, response, postData);
+			route(request, handle, pathname, response, postData);
 		});
 	}
 	
@@ -37,6 +40,8 @@ function start(route, handle) {
 
 	console.log('game server has started.');
 	console.log('rank calc has started.');	
+	
+	metric();	
 }
 
 exports.start = start;

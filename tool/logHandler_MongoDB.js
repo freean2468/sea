@@ -3,6 +3,7 @@ var build = require('./protoBuild');
 var assert = require('assert');
 var encrypt = require('./util').encrypt;
 var toStream = require('./util').toStream;
+var UUID = require('./util').UUID;
 var log = require('./log');
 
 function write(res, stream) {
@@ -14,6 +15,22 @@ function write(res, stream) {
 function AccountLoginHandler(response, data){
 	var msg = build.AccountLogin.decode(data);
 } // end AccountLoginHandler
+
+function ConcurrentUserHandler(response, data){
+	var msg = build.ConcurrentUser.decode(data);
+} // end ConcurrentUserHandler
+
+function PeakConcurrentUserHandler(response, data){
+	var msg = build.PeakConcurrentUser.decode(data);
+} // end PeakConcurrentUserHandler
+
+function UniqueVisitorHandler(response, data){
+	var msg = build.UniqueVisitor.decode(data);
+} // end UniqueVisitorHandler
+
+function RetentionRateHandler(response, data){
+	var msg = build.RetentionRate.decode(data);
+} // end RetentionRateHandler
 
 function PayAssistantHandler(response, data){
 	var msg = build.PayAssistant.decode(data);
@@ -52,6 +69,10 @@ function UserUnregisterHandler(response, data){
 } // end UserUnregisterHandler
 
 exports.AccountLoginHandler = AccountLoginHandler;
+exports.ConcurrentUserHandler = ConcurrentUserHandler;
+exports.PeakConcurrentUserHandler = PeakConcurrentUserHandler;
+exports.UniqueVisitorHandler = UniqueVisitorHandler;
+exports.RetentionRateHandler = RetentionRateHandler;
 exports.PayAssistantHandler = PayAssistantHandler;
 exports.PayCharacterHandler = PayCharacterHandler;
 exports.PayCoinHandler = PayCoinHandler;

@@ -2,7 +2,7 @@ var build = require('./gameProtoBuild');
 
 var registerAccount = new build.RegisterAccount();
 var registerAccountReply = new build.RegisterAccountReply();
-var loadUserInfo = new build.LoadUserInfo();
+var login = new build.Login();
 var loadRankInfo = new build.LoadRankInfo();
 var accountInfo = new build.AccountInfo();
 var rankInfo = new build.RankInfo();
@@ -23,11 +23,22 @@ var UUID = require('./util').UUID;
 var toBuf = require('./util').toBuf;
 var toArrBuf = require('./util').toArrBuf;
 
+var piece = "";
+
 registerAccount['k_id'] = UUID();
 
 console.log(registerAccount);
 
 request(registerAccount);
+
+function fetchCookie(res) {
+	var cookies = {};
+	var part = res.headers['set-cookie'] && res.headers['set-cookie'][0].split('=');
+
+	cookies[part[0].trim()] = (part[1] || '').trim();
+
+	return cookies;
+}
 
 // data is a proto message object.
 function request(data) {
@@ -53,8 +64,8 @@ function request(data) {
 
 			if (id === registerAccountReply['id']['low']) {
 				console.log('registerAccountReply \n');
-				loadUserInfo['k_id'] = registerAccount['k_id'];
-				request(loadUserInfo);
+				login['k_id'] = registerAccount['k_id'];
+				request(login);
 
 //				unregisterAccount['k_id'] = res['k_id'];
 //				request(unregisterAccount);
@@ -64,6 +75,10 @@ function request(data) {
 			} 
 			else if (id === accountInfo['id']['low']) {
 				console.log('accountInfo \n');
+				var cookies = fetchCookie(response);
+				piece = cookies['piece'];
+
+				console.log("piece : " + piece);
 
 				loadRankInfo['k_id'] = registerAccount['k_id'];
 				request(loadRankInfo);
@@ -112,7 +127,8 @@ function request(data) {
 		path: '/',
 		headers: {
 			'Content-Type': 'application/octet-stream',
-			'Content-length': stream.length
+			'Content-length': stream.length,
+			'Cookie': 'piece=' + piece
 		}
 	};
 

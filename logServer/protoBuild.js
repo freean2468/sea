@@ -2,6 +2,10 @@ var pb = require('protobufjs');
 var g2l = pb.protoFromFile('./g2l.proto');
 
 var AccountLogin = g2l.build('G2L').AccountLogin;
+var ConcurrentUser = g2l.build('G2L').ConcurrentUser;
+var PeakConcurrentUser = g2l.build('G2L').PeakConcurrentUser;
+var UniqueVisitor = g2l.build('G2L').UniqueVisitor;
+var RetentionRate = g2l.build('G2L').RetentionRate;
 var PayAssistant = g2l.build('G2L').PayAssistant;
 var PayCharacter = g2l.build('G2L').PayCharacter;
 var PayCoin = g2l.build('G2L').PayCoin;
@@ -13,6 +17,10 @@ var UserRegister = g2l.build('G2L').UserRegister;
 var UserUnregister = g2l.build('G2L').UserUnregister;
 
 exports.AccountLogin = AccountLogin;
+exports.ConcurrentUser = ConcurrentUser;
+exports.PeakConcurrentUser = PeakConcurrentUser;
+exports.UniqueVisitor = UniqueVisitor;
+exports.RetentionRate = RetentionRate;
 exports.PayAssistant = PayAssistant;
 exports.PayCharacter = PayCharacter;
 exports.PayCoin = PayCoin;

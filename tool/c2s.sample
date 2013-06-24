@@ -8,7 +8,11 @@ message UnregisterAccount {
 	required string k_id = 2;
 } // end
 
-message LoadUserInfo {
+message Login {
+	required string k_id = 2;
+} // end
+
+message Logout {
 	required string k_id = 2;
 } // end
 

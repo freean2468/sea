@@ -1,9 +1,5 @@
 var fs = require('fs');
 
-var start = getDateTime();
-var path = './LOG/';
-var file = start+'_LOG';
-
 Date.prototype.today = function() {
 	return ((this.getDate() < 10)?'0':'') + this.getDate() + '_'
 		+ (((this.getMonth()+1) < 10)?'0':'') + (this.getMonth()+1) + '_'
@@ -17,6 +13,9 @@ Date.prototype.timeNow = function() {
 };
 
 var currentDate = new Date();
+var start = getDateTime();
+var path = './LOG/';
+var file = start+'_LOG';
 
 function mkdirLog() {
 	if (!fs.existsSync(path)) {

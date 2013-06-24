@@ -33,9 +33,14 @@ function UnregisterAccountHandler(response, data) {
 	if (flags & options['MONGODB']) mongodb.UnregisterAccountHandler(response, data);
 }
 
-function LoadUserInfoHandler(response, data) {
-	if (flags & options['MYSQL']) mysql.LoadUserInfoHandler(response, data);
-	if (flags & options['MONGODB']) mongodb.LoadUserInfoHandler(response, data);
+function LoginHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.LoginHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.LoginHandler(response, data);
+}
+
+function LogoutHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.LogoutHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.LogoutHandler(response, data);
 }
 
 function CheckInChargeHandler(response, data) {
@@ -103,6 +108,26 @@ function AccountLoginHandler(response, data) {
 	if (flags & options['MONGODB']) mongodb.AccountLoginHandler(response, data);
 }
 
+function ConcurrentUserHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.ConcurrentUserHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.ConcurrentUserHandler(response, data);
+}
+
+function PeakConcurrentUserHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.PeakConcurrentUserHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.PeakConcurrentUserHandler(response, data);
+}
+
+function UniqueVisitorHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.UniqueVisitorHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.UniqueVisitorHandler(response, data);
+}
+
+function RetentionRateHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.RetentionRateHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.RetentionRateHandler(response, data);
+}
+
 function PayAssistantHandler(response, data) {
 	if (flags & options['MYSQL']) mysql.PayAssistantHandler(response, data);
 	if (flags & options['MONGODB']) mongodb.PayAssistantHandler(response, data);
@@ -154,7 +179,8 @@ exports.ClientVersionInfoHandler = ClientVersionInfoHandler;
 exports.ClientVersionInfoReplyHandler = ClientVersionInfoReplyHandler;
 exports.RegisterAccountHandler = RegisterAccountHandler;
 exports.UnregisterAccountHandler = UnregisterAccountHandler;
-exports.LoadUserInfoHandler = LoadUserInfoHandler;
+exports.LoginHandler = LoginHandler;
+exports.LogoutHandler = LogoutHandler;
 exports.CheckInChargeHandler = CheckInChargeHandler;
 exports.StartGameHandler = StartGameHandler;
 exports.EndGameHandler = EndGameHandler;
@@ -168,6 +194,10 @@ exports.ChargeInfoHandler = ChargeInfoHandler;
 exports.RankInfoHandler = RankInfoHandler;
 exports.GameResultHandler = GameResultHandler;
 exports.AccountLoginHandler = AccountLoginHandler;
+exports.ConcurrentUserHandler = ConcurrentUserHandler;
+exports.PeakConcurrentUserHandler = PeakConcurrentUserHandler;
+exports.UniqueVisitorHandler = UniqueVisitorHandler;
+exports.RetentionRateHandler = RetentionRateHandler;
 exports.PayAssistantHandler = PayAssistantHandler;
 exports.PayCharacterHandler = PayCharacterHandler;
 exports.PayCoinHandler = PayCoinHandler;

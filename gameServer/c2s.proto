@@ -10,8 +10,13 @@ message UnregisterAccount {
 	required string k_id = 2;
 } // end
 
-message LoadUserInfo {
-	optional uint64 id = 1 [default=67040062];
+message Login {
+	optional uint64 id = 1 [default=12322730];
+	required string k_id = 2;
+} // end
+
+message Logout {
+	optional uint64 id = 1 [default=543619392];
 	required string k_id = 2;
 } // end
 

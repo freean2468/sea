@@ -3,7 +3,9 @@ var build = require('./protoBuild');
 var assert = require('assert');
 var encrypt = require('./util').encrypt;
 var toStream = require('./util').toStream;
+var UUID = require('./util').UUID;
 var request = require('./request').request;
+var registerSession = require('./session').registerSession;
 var log = require('./log');
 
 function write(res, stream) {
@@ -39,10 +41,13 @@ function UnregisterAccountHandler(response, data){
 	var msg = build.UnregisterAccount.decode(data);
 } // end UnregisterAccountHandler
 
-function LoadUserInfoHandler(response, data){
-	var LoadUserInfo = c2s.build('C2S').LoadUserInfo;
-	var msg = LoadUserInfo.decode(data);
-} // end LoadUserInfoHandler
+function LoginHandler(response, data){
+	var msg = build.Login.decode(data);
+} // end LoginHandler
+
+function LogoutHandler(response, data){
+	var msg = build.Logout.decode(data);
+} // end LogoutHandler
 
 function CheckInChargeHandler(response, data){
 	var CheckInCharge = c2s.build('C2S').CheckInCharge;
@@ -75,7 +80,8 @@ exports.ClientVersionInfoHandler = ClientVersionInfoHandler;
 exports.ClientVersionInfoReplyHandler = ClientVersionInfoReplyHandler;
 exports.RegisterAccountHandler = RegisterAccountHandler;
 exports.UnregisterAccountHandler = UnregisterAccountHandler;
-exports.LoadUserInfoHandler = LoadUserInfoHandler;
+exports.LoginHandler = LoginHandler;
+exports.LogoutHandler = LogoutHandler;
 exports.CheckInChargeHandler = CheckInChargeHandler;
 exports.StartGameHandler = StartGameHandler;
 exports.EndGameHandler = EndGameHandler;

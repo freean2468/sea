@@ -14,15 +14,19 @@ cp -a handle.js ../logServer/
 echo 'handle.js has been copied to ../gameServer/ and ../logServer'
 
 node handlerGen.js 'ver' 'c2s' 's2c' 'g2l'
-node handlerImplGen.js 'game' 'ver' 'c2s' '-request'
+node handlerImplGen.js 'game' 'ver' 'c2s' '-request' '-session'
 
+cp -a gameHandler_MySQL.js gameHandler_MySQL.js.bak
 cp -a gameHandler_MySQL.js ../gameServer/handler_MySQL.js
+cp -a gameHandler_MongoDB.js gameHandler_MongoDB.js.bak
 cp -a gameHandler_MongoDB.js ../gameServer/handler_MongoDB.js
 echo 'gameHandler_MongoDB and gameHandler_MySQL have been copied to ../gameServer/ as handler_MongoDB and handler_MySQL'
 
 node handlerImplGen.js 'log' 'g2l'
 
+cp -a logHandler_MySQL.js logHandler_MySQL.js.bak
 cp -a logHandler_MySQL.js ../logServer/handler_MySQL.js
+cp -a logHandler_MongoDB.js logHandler_MySQL.js.bak
 cp -a logHandler_MongoDB.js ../logServer/handler_MongoDB.js
 echo 'logHandler_MongoDB and logHandler_MySQL have been copied to ../logServer/ as handler_MongoDB and handler_MySQL'
 

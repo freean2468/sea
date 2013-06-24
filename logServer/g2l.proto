@@ -5,6 +5,25 @@ message AccountLogin {
 	required string k_id = 2;
 } // end
 
+message ConcurrentUser {
+	optional uint64 id = 1 [default=1694830347];
+	required uint32 ccu = 2;
+} // end
+
+message PeakConcurrentUser {
+	optional uint64 id = 1 [default=1062535298];
+} // end
+
+message UniqueVisitor {
+	optional uint64 id = 1 [default=1240072080];
+	required uint32 uv = 2;
+} // end
+
+message RetentionRate {
+	optional uint64 id = 1 [default=920645671];
+	required uint32 rr = 2;
+} // end
+
 message PayAssistant {
 	optional uint64 id = 1 [default=141882649];
 	required string k_id = 2;

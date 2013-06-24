@@ -18,6 +18,10 @@ process.argv.forEach(function(val, index, array) {
 	if (val === '-request') {
 		option += "var request = require('./request').request;" + '\n';
 	}
+
+	if (val === '-session') {
+		option += "var registerSession = require('./session').registerSession;" + '\n';
+	}
 });
 
 var protoIdList = [];
@@ -45,6 +49,7 @@ var headCommon = "var build = require('./protoBuild');" + '\n'
 				+ "var assert = require('assert');" + '\n'
 				+ "var encrypt = require('./util').encrypt;" + '\n'
 				+ "var toStream = require('./util').toStream;" + '\n'
+				+ "var UUID = require('./util').UUID;" + '\n'
 //				+ "var toRank = require('./request');" + '\n'
 				+ option
 				;

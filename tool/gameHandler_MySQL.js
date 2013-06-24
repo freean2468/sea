@@ -3,7 +3,9 @@ var build = require('./protoBuild');
 var assert = require('assert');
 var encrypt = require('./util').encrypt;
 var toStream = require('./util').toStream;
+var UUID = require('./util').UUID;
 var request = require('./request').request;
+var registerSession = require('./session').registerSession;
 var log = require('./log');
 
 function write(res, stream) {
@@ -36,11 +38,20 @@ function RegisterAccountHandler(response, data){
 	var params = "'" + msg['k_id'] + "', " + now + "";
 	
 	var callback = function (results, fields) {
-		var res = true;
+		var res = results[0][0]['last_id'];
 
-		if (res === 0) {
+		if (res !== 0) {
 			log.addLog('DEBUG', 'Already exsisted account');
 			res = false;
+		}
+		else {
+			res = true;
+
+			var UserRegister = build.UserRegister;
+			var req = new UserRegister();
+			req['k_id'] = msg['k_id'];
+
+			request(req);
 		}
 
 		var RegisterAccountReply = build.RegisterAccountReply;
@@ -48,13 +59,7 @@ function RegisterAccountHandler(response, data){
 		rMsg['k_id'] = msg['k_id'];
 		rMsg['res'] = res;
 
-		write(response, toStream(rMsg));
-
-		var UserRegister = build.UserRegister;
-		var req = new UserRegister();
-		req['k_id'] = msg['k_id'];
-
-		request(req);
+		write(response, toStream(rMsg));		
 	};
 
 	mysql.call(procedure, params, callback);
@@ -64,49 +69,64 @@ function UnregisterAccountHandler(response, data){
 	var msg = build.UnregisterAccount.decode(data);
 } // end UnregisterAccountHandler
 
-function LoadUserInfoHandler(response, data){
-	var msg = build.LoadUserInfo.decode(data);
+function LoginHandler(response, data){
+	var msg = build.Login.decode(data);
 	var procedure = 'sea_LoadUser';
 	var params = "'" + msg['k_id'] + "'";
 
 	var callback = function (results, fields) {
-		var res = true;
+		var id = results[0][0]['id']
 		var AccountInfo = build.AccountInfo;
 		var rMsg = new AccountInfo();
 		rMsg['k_id'] = msg['k_id'];
-		rMsg['res'] = msg['res'];
 
-		if (res === 0) {
+		if (id === 0) {
 			log.addLog('DEBUG', 'Invalid account');
 			rMsg['res'] = false;
 			write(response, toStream(rMsg));
 		}
 		else {
+			rMsg['res'] = true;
 			procedure = 'sea_LoadUserInfo';
-			id = results[0][0]['id'];
-			params = id;
+			//console.log(results[0][0]['id']);
+			params = results[0][0]['id'];
 
 			var loadUserInfoCallback = function (results, fields) {
 				for (var val in results[0][0]) {
-					if (rMsg[''+val] === 0 || rMsg[''+val] === '') {
+					if (rMsg[''+val] === 0) {
 						rMsg[''+val] = results[0][0][''+val];
 					}
 				}
 
-				write(response, toStream(rMsg));
+				var piece = UUID();
 
-				procedure = 'sea_UpdateUvOn';
-				params = id;
+				registerSession(piece);
+				var stream = toStream(rMsg);
 
-				mysql.call(procedure, params, function (results, fields) {});
-			}
+				response.writeHead(200, {'Set-Cookie' : 'piece='+piece,
+					'Content-Type': 'application/octet-stream',
+					'Content-Length': stream.length});
+				response.write(stream);
+				response.end();
+
+				if (results[0][0]['uv'] === 0) {
+					procedure = 'sea_UpdateUvOn';
+					params = id;
+
+					mysql.call(procedure, params, function (results, fields) {});
+				}
+			};
 
 			mysql.call(procedure, params, loadUserInfoCallback);
 		}
-	}
+	};
 
 	mysql.call(procedure, params, callback);
-} // end LoadUserInfoHandler
+} // end LoginHandler
+
+function LogoutHandler(response, data){
+//	var msg = build.Logout.decode(data);
+} // end LogoutHandler
 
 function CheckInChargeHandler(response, data){
 	var msg = build.CheckInCharge.decode(data);
@@ -176,10 +196,11 @@ function CheckInChargeHandler(response, data){
 						write(response, toStream(rMsg));
 					} // end else
 				} // end else
-			} // checkInChargeCallback
+			}; // checkInChargeCallback
+
 			mysql.call(procedure, params, checkInChargeCallback);
 		} // end else
-	} // sea_LoadUser
+	}; // sea_LoadUser
 
 	mysql.call(procedure, params, callback);
 } // end CheckInChargeHandler
@@ -245,7 +266,8 @@ function StartGameHandler(response, data){
 						});
 					});
 				}
-			}
+			};
+
 			mysql.call(procedure, params, startGameCallback);
 		} // end else
 	}; // end sea_LoadUser
@@ -345,7 +367,8 @@ exports.ClientVersionInfoHandler = ClientVersionInfoHandler;
 exports.ClientVersionInfoReplyHandler = ClientVersionInfoReplyHandler;
 exports.RegisterAccountHandler = RegisterAccountHandler;
 exports.UnregisterAccountHandler = UnregisterAccountHandler;
-exports.LoadUserInfoHandler = LoadUserInfoHandler;
+exports.LoginHandler = LoginHandler;
+exports.LogoutHandler = LogoutHandler;
 exports.CheckInChargeHandler = CheckInChargeHandler;
 exports.StartGameHandler = StartGameHandler;
 exports.EndGameHandler = EndGameHandler;

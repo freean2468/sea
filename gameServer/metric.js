@@ -1,27 +1,78 @@
 var log = require('./log');
+var CCU = require('./session').CCU;
+var MINUTE = require('./define').MINUTE;
+var weekday = require('./define').weekday;
+var lastDay = weekday[new Date().getDay()];
+var build = require('./protoBuild');
+var request = require('./request').request;
 
-var METRICDELAY = 50000;
+function UvOff() {
+	procedure = 'sea_UpdateUvOff';
+	params = '';
 
-var metricCallback = function () {
-		var currentDate = new Date();
-	
-		var hours = currentDate.getHours();
-		var minutes = currentDate.getMinutes();
-		var seconds = currentDate.getSeconds();
+	mysql.call(procedure, params, function (results, fields) {});
+}
 
-		console.log(hours + "-" + minutes + "-" + seconds);
+function metric() {
+	var callback = function () {
+		var curDate = new Date();
+		var day = weekday[curDate.getDay()];
 
-		if (hours === 0) {
-			if (minutes <= 5) {
-				console.log("Date is changed, start to save daily metric.");
-			}
+		var ConcurrentUser = build.ConcurrentUser;
+		var req = new ConcurrentUser();
+		req['ccu'] = CCU();
+
+		request(req);
+
+		// daily
+		if (lastDay !== day) {
+			lastDay = day;
+
+			var procedure = 'sea_LastUv';
+			var params = '';
+			
+			var lastUvCallback = function (results, fields) {
+				var uv = results[0][0]['res'];
+
+				var UniqueVisitor = build.UniqueVisitor;
+				var req = new UniqueVisitor();
+				req['uv'] = uv;
+
+				request(req);
+
+				// weekly
+				var weekly = day === "Mon";
+
+				if (weekly) {
+					procedure = 'sea_RetentionRage;'
+					params = '';
+
+					var rrCallback = function (results, fields) {
+						var rr = results[0][0]['res'];
+						
+						var RetentionRate = build.RetentionRate;
+						var req = new RetentionRate();
+						req['rr'] = rr;
+						
+						request(req);
+
+						UvOff();
+					};
+				} else {
+					UvOff();
+				}
+			};
+
+			mysql.call(procedure, params, lastUvCallback);
+
+			var PeakConcurrentUser = build.PeakConcurrentUser;
+			var req = new PeakConcurrentUser();
+
+			request(req);
 		}
 	};
 
-var doMetric = function () {
-	setInterval(metricCallback, METRICDELAY);
+	setInterval(callback, MINUTE * 5);
+}
 
-	Console.log('metricInterval has started.');
-};
-
-exports.doMetric = doMetric;
+exports.metric = metric;

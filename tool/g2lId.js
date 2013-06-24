@@ -1,5 +1,9 @@
 var list = [
 	'AccountLogin',
+	'ConcurrentUser',
+	'PeakConcurrentUser',
+	'UniqueVisitor',
+	'RetentionRate',
 	'PayAssistant',
 	'PayCharacter',
 	'PayCoin',
@@ -13,6 +17,10 @@ var list = [
 
 var messageId = {
 	AccountLogin: 64812982,
+	ConcurrentUser: 1694830347,
+	PeakConcurrentUser: 1062535298,
+	UniqueVisitor: 1240072080,
+	RetentionRate: 920645671,
 	PayAssistant: 141882649,
 	PayCharacter: 12186137,
 	PayCoin: 184089216,
