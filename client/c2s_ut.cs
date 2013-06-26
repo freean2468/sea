@@ -18,6 +18,7 @@ namespace C2S
 
     private ulong _id = (ulong)1415117601;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue((ulong)1415117601)]
     public ulong id
     {
       get { return _id; }
@@ -43,6 +44,7 @@ namespace C2S
 
     private ulong _id = (ulong)1296626420;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue((ulong)1296626420)]
     public ulong id
     {
       get { return _id; }
@@ -68,6 +70,7 @@ namespace C2S
 
     private ulong _id = (ulong)12322730;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue((ulong)12322730)]
     public ulong id
     {
       get { return _id; }
@@ -93,6 +96,7 @@ namespace C2S
 
     private ulong _id = (ulong)543619392;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue((ulong)543619392)]
     public ulong id
     {
       get { return _id; }
@@ -118,6 +122,7 @@ namespace C2S
 
     private ulong _id = (ulong)770373176;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue((ulong)770373176)]
     public ulong id
     {
       get { return _id; }
@@ -143,6 +148,7 @@ namespace C2S
 
     private ulong _id = (ulong)285274112;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue((ulong)285274112)]
     public ulong id
     {
       get { return _id; }
@@ -182,6 +188,7 @@ namespace C2S
 
     private ulong _id = (ulong)1441135488;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue((ulong)1441135488)]
     public ulong id
     {
       get { return _id; }
@@ -228,6 +235,7 @@ namespace C2S
 
     private ulong _id = (ulong)67040062;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue((ulong)67040062)]
     public ulong id
     {
       get { return _id; }
@@ -253,6 +261,7 @@ namespace C2S
 
     private ulong _id = (ulong)618593180;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue((ulong)618593180)]
     public ulong id
     {
       get { return _id; }
@@ -277,3 +286,4 @@ namespace C2S
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+}
