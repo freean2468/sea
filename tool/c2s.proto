@@ -28,16 +28,16 @@ message CheckInCharge {
 message StartGame {
 	optional uint64 id = 1 [default=285274112];
 	required string k_id = 2;
-	optional int32 selected_character = 3 [default=0];
-	optional int32 selected_assistant = 4 [default=0];
+	required int32 selected_character = 3;
+	required int32 selected_assistant = 4;
 } // end
 
 message EndGame {
 	optional uint64 id = 1 [default=1441135488];
 	required string k_id = 2;
-	optional int32 dist = 3 [default=0];
-	optional int32 kill = 4 [default=0];
-	optional int32 usedItem = 5 [default=0];
+	required int32 dist = 3;
+	required int32 kill = 4;
+	required int32 usedItem = 5;
 } // end
 
 message LoadRankInfo {
@@ -48,5 +48,5 @@ message LoadRankInfo {
 message RequestPointReward {
 	optional uint64 id = 1 [default=618593180];
 	required string k_id = 2;
-	optional int32 point = 3 [default=0];
+	required int32 point = 3;
 } // end

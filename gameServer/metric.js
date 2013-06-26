@@ -5,6 +5,7 @@ var weekday = require('./define').weekday;
 var lastDay = weekday[new Date().getDay()];
 var build = require('./protoBuild');
 var request = require('./request').request;
+var mysql = require('./mysql');
 
 function UvOff() {
 	procedure = 'sea_UpdateUvOff';

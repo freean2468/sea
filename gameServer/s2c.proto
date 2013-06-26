@@ -3,7 +3,7 @@ package S2C;
 message RegisterAccountReply {
 	optional uint64 id = 1 [default=1622018505];
 	required string k_id = 2;
-	optional Result res = 3 [default=FALSE];
+	required Result res = 3;
 
 	enum Result {
 		FALSE	= 0;
@@ -14,7 +14,7 @@ message RegisterAccountReply {
 message UnregisterAccountReply {
 	optional uint64 id = 1 [default=1477441904];
 	required string k_id = 2;
-	optional Result res = 3 [default = FALSE];
+	required Result res = 3;
 
 	enum Result {
 		FALSE	= 0;
@@ -25,9 +25,9 @@ message UnregisterAccountReply {
 message StartGameReply {
 	optional uint64 id = 1 [default=519762701];
 	required string k_id = 2;
-	optional Result res = 3 [default=FALSE];
-	optional int32 heart = 4 [default=0];
-	optional int64 last_charged_time = 5 [default=0];
+	required Result res = 3;
+	required int32 heart = 4;
+	required int64 last_charged_time = 5;
 	
 	enum Result {
 		FALSE	= 0;
@@ -38,22 +38,22 @@ message StartGameReply {
 message AccountInfo {
 	optional uint64 id = 1 [default=74840653];
 	required string k_id = 2;
-	optional Result res = 3 [default=FALSE];
-	optional int32 coin = 4 [default=0];
-	optional int32 mineral = 5 [default=0];
-	optional int32 lv = 6 [default=0];
-	optional int32 exp = 7 [default=0];
-	optional int32 point = 8 [default=0];
-	optional int32 heart = 9 [default=0];
-	optional int64 last_charged_time = 10 [default=0];
-	optional int32 selected_character = 11 [default=0];
-	optional int32 selected_assistant = 12 [default=0];
-	optional int32 characters = 13 [default=0];
-	optional int32 basic_charac_lv = 14 [default=0];
-	optional int32 assistants = 15 [default=0];
-	optional int32 basic_assist_lv = 16 [default=0];
-	optional int32 items = 17 [default=0];
-	optional int32 count = 18 [default=0];
+	required Result res = 3;
+	required int32 coin = 4;
+	required int32 mineral = 5;
+	required int32 lv = 6;
+	required int32 exp = 7;
+	required int32 point = 8;
+	required int32 heart = 9;
+	required int64 last_charged_time = 10;
+	required int32 selected_character = 11;
+	required int32 selected_assistant = 12;
+	required int32 characters = 13;
+	required int32 basic_charac_lv = 14;
+	required int32 assistants = 15;
+	required int32 basic_assist_lv = 16;
+	required int32 items = 17;
+	required int32 count = 18;
 	
 	enum Result {
 		FALSE	= 0;
@@ -64,9 +64,9 @@ message AccountInfo {
 message ChargeInfo {
 	optional uint64 id = 1 [default=7663927];
 	required string k_id = 2;
-	optional Result res = 3 [default = FALSE];
-	optional int32 heart = 4 [default=0];
-	optional int64 last_charged_time = 5 [default=0];
+	required Result res = 3;
+	required int32 heart = 4;
+	required int64 last_charged_time = 5;
 
 	enum Result {
 		FALSE	= 0;
@@ -77,8 +77,8 @@ message ChargeInfo {
 message RankInfo {
 	optional uint64 id = 1 [default=25751552];
 	required string k_id = 2;
-	optional Result res = 3 [default=FALSE];
-	optional int64 overall_ranking = 4 [default=0];
+	required Result res = 3;
+	required int64 overall_ranking = 4;
 	repeated FriendRankInfo ranking_list = 5;
 	
 	message FriendRankInfo {
@@ -95,8 +95,8 @@ message RankInfo {
 message GameResult {
 	optional uint64 id = 1 [default=10876551];
 	required string k_id = 2;
-	optional Result res = 3 [default = FALSE];
-	optional int32 score = 4 [default=0];
+	required Result res = 3;
+	required int32 score = 4;
 	
 	enum Result {
 		FALSE	= 0;

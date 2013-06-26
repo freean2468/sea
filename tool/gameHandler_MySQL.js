@@ -40,7 +40,7 @@ function RegisterAccountHandler(response, data){
 	var callback = function (results, fields) {
 		var res = results[0][0]['last_id'];
 
-		if (res !== 0) {
+		if (res === 0) {
 			log.addLog('DEBUG', 'Already exsisted account');
 			res = false;
 		}
@@ -88,13 +88,14 @@ function LoginHandler(response, data){
 		else {
 			rMsg['res'] = true;
 			procedure = 'sea_LoadUserInfo';
-			//console.log(results[0][0]['id']);
-			params = results[0][0]['id'];
+			params = id;
 
 			var loadUserInfoCallback = function (results, fields) {
-				for (var val in results[0][0]) {
-					if (rMsg[''+val] === 0) {
-						rMsg[''+val] = results[0][0][''+val];
+				var res = results[0][0];
+
+				for (var val in res) {
+					if (rMsg[''+val] === null) {
+						rMsg[''+val] = res[''+val];
 					}
 				}
 
@@ -109,7 +110,7 @@ function LoginHandler(response, data){
 				response.write(stream);
 				response.end();
 
-				if (results[0][0]['uv'] === 0) {
+				if (rMsg['uv'] === 0) {
 					procedure = 'sea_UpdateUvOn';
 					params = id;
 
@@ -134,13 +135,13 @@ function CheckInChargeHandler(response, data){
 	var params = "'" + msg['k_id'] + "'";
 
 	var callback = function (results, fields) {
-		var res = true;
+		var id = results[0][0]['id'];
 		var ChargeInfo = build.ChargeInfo;
 		var rMsg = new ChargeInfo();
-		rMsg['res'] = res;
+		rMsg['res'] = true;
 		rMsg['k_id'] = msg['k_id'];
 
-		if (res === 0) {
+		if (id === 0) {
 			log.addLog('DEBUG', 'Invalid account');
 			rMsg['res'] = false;
 			write(response, toStream(rMsg));
@@ -151,8 +152,9 @@ function CheckInChargeHandler(response, data){
 			params = id;
 
 			var checkInChargeCallback = function (results, fields) {
-				var last = results[0][0]['last_charged_time'];
-				var heart = results[0][0]['heart'];
+				var res = results[0][0]
+				var last = res['last_charged_time'];
+				var heart = res['heart'];
 				var heartMax = 99;
 				var now = new Date().getTime();
 
@@ -213,27 +215,27 @@ function StartGameHandler(response, data){
 	var heartMax = 99;
 
 	var callback = function (results, fields) {
-		var res = true;;
+		var id = results[0][0]['id'];
 		var StartGameReply = build.StartGameReply;
 		var rMsg = new StartGameReply();
-		rMsg['res'] = res;
+		rMsg['res'] = true;
 		rMsg['k_id'] = msg['k_id'];
 
-		if (res === 0) {
+		if (id === 0) {
 			log.addLog('DEBUG', 'Invalid account');
 			rMsg['res'] = false;
 			write(response, toStream(rMsg));
 		}
-		else {
-			var id = results[0][0]['id'];
+		else {			
 			procedure = 'sea_StartGame';
 			params = id;
 
 			var startGameCallback = function (results, fields) {
-				var character = results[0][0]['selected_character'];
-				var assistant = results[0][0]['selected_assistant'];
-				var heart = results[0][0]['heart'];
-				var last = results[0][0]['last_charged_time'];
+				var res = results[0][0];
+				var character = res['selected_character'];
+				var assistant = res['selected_assistant'];
+				var heart = res['heart'];
+				var last = res['last_charged_time'];
 
 				if (heart < 1) {
 					log.addLog('DEBUG', 'Not enough heart');
@@ -281,20 +283,19 @@ function EndGameHandler(response, data){
 	var params = "'" + msg['k_id'] + "'";
 
 	var callback = function (results, fields) {
-		var res = true;
+		var id = results[0][0]['id'];
 		var GameResult = build.GameResult;
 		var rMsg = new GameResult();
 		rMsg['k_id'] = msg['k_id'];
-		rMsg['res'] = res;
+		rMsg['res'] = true;
 
-		if (res === 0) {
+		if (id === 0) {
 			log.addLog('DEBUG', 'Invalid account');
 			rMsg['res'] = false;
 			write(response, toStream(rMsg));
 		}
 		else {
 			// FIXME
-			var id = results[0][0]['id'];
 			var score = 10*(1+msg['dist']) * (1+msg['kill']);
 			procedure = 'sea_UpdateUserLog';
 			params = id + ', ' + score + ', ' + msg['dist'] + ', ' + msg['kill'];
@@ -327,13 +328,13 @@ function LoadRankInfoHandler(response, data){
 	var params = "'" + msg['k_id'] + "'";
 
 	var callback = function (results, fields) {
-		var res = true;
+		var id = results[0][0];
 		var RankInfo = build.RankInfo;
 		var rMsg = new RankInfo();
-		rMsg['res'] = res;
+		rMsg['res'] = true;
 		rMsg['k_id'] = msg['k_id'];
 
-		if (res === 0) {
+		if (id === 0) {
 			log.addLog('DEBUG', 'Invalid account');
 			rMsg['res'] = false;
 			write(response, toStream(rMsg));
@@ -345,7 +346,7 @@ function LoadRankInfoHandler(response, data){
 			for (var i = 0; i < rankingList.length; ++i) {
 				rMsg['ranking_list'].push({'k_id': rankingList[i]['k_id'], 'score': rankingList[i]['highest_score']});
 
-				if (rankingList[i]['k_id'] === res['k_id']) {
+				if (rankingList[i]['k_id'] === rMsg['k_id']) {
 					rMsg['overall_ranking'] = i+1;
 				}
 			}

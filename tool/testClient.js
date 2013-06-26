@@ -27,6 +27,8 @@ var piece = "";
 
 registerAccount['k_id'] = UUID();
 
+registerAccount['k_id'] = 9223372;
+
 console.log(registerAccount);
 
 request(registerAccount);
@@ -116,6 +118,8 @@ function request(data) {
 			}
 		});
 	};
+
+	console.log(data.toArrayBuffer());
 
 	var buf = toBuf(data.toArrayBuffer()).toString('hex');
 	var stream = encrypt(buf);

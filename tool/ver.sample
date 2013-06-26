@@ -1,11 +1,11 @@
 package VER;
 
 message VersionInfo {
-	optional float version = 2 [default=0.5];
+	required float version = 2;
 } // end
 
 message VersionInfoReply {
-	optional Result res = 2 [default=FALSE];
+	required Result res = 2;
 
 	enum Result {
 		FALSE	= 0;
@@ -14,11 +14,11 @@ message VersionInfoReply {
 } // end
 
 message ClientVersionInfo {
-	optional float version = 2 [default=0.1];
+	required float version = 2;
 } // end
 
 message ClientVersionInfoReply {
-	optional Result res = 2 [default = FALSE];
+	required Result res = 2;
 
 	enum Result {
 		FALSE	= 0;

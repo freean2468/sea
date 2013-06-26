@@ -23,7 +23,7 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS sea_AddUniqueVisitor $$
 CREATE PROCEDURE sea_AddUniqueVisitor(IN p_uv INT UNSIGNED)
 	BEGIN
-		INSERT sea_unique_visitor(w_date, w_time, uv)
+		INSERT sea_unique_visitor(w_date, uv)
 		VALUES (subdate(CURDATE(), 1), p_uv);
 
 		SELECT LAST_INSERT_ID() AS res;

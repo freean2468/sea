@@ -24,7 +24,7 @@ DROP PROCEDURE IF EXISTS sea_AddPeakConcurrentUser $$
 CREATE PROCEDURE sea_AddPeakConcurrentUser(IN p_pccu INT UNSIGNED)
 	BEGIN
 		INSERT sea_peak_concurrent_user(w_date, pccu)
-		VALUES (CURDATE(), p_pccu);
+		VALUES (subdate(CURDATE(), 1), p_pccu);
 
 		SELECT LAST_INSERT_ID() AS res;
 	END
