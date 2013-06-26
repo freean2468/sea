@@ -16,16 +16,16 @@ for (i = 0; i < arg.length; ++i) {
 	while (1) {
 		var pos = 0;
 		var EOL = input.slice(pos).search('\n');
-
-		if (EOL === -1) {
-			break;
-		}
-
 		var line = input.slice(pos, EOL) + '\n';
 		
 		if (line.search("ponentModel.DefaultValue") === -1 ) {
 			output += line;
 		}
+
+		if (EOL === -1) {
+			break;
+		}
+
 		pos = EOL+1;
 
 		input = input.slice(pos);		

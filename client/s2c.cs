@@ -489,3 +489,4 @@ namespace S2C
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+
