@@ -31,5 +31,7 @@ for (i = 0; i < arg.length; ++i) {
 		input = input.slice(pos);		
 	}
 
+	output += '}';
+
 	fs.writeFileSync(path + arg[i] + ".cs", output);
 }
