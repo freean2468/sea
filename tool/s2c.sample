@@ -1,23 +1,23 @@
 package S2C;
 
+enum Result {
+	FALSE	= 289347723478;
+	TRUE	= 1;
+}
+
 message RegisterAccountReply {
 	required string k_id = 2;
 	required Result res = 3;
-
-	enum Result {
-		FALSE	= 0;
-		TRUE	= 1;
-	}
 } // end
 
-message UnregisterAccountReply {
+message SelectCharacterReply {
 	required string k_id = 2;
 	required Result res = 3;
+} // end
 
-	enum Result {
-		FALSE	= 0;
-		TRUE	= 1;
-	}
+message SelectAssistantReply {
+	required string k_id = 2;
+	required Result res = 3;
 } // end
 
 message StartGameReply {
@@ -25,10 +25,9 @@ message StartGameReply {
 	required Result res = 3;
 	required int32 heart = 4;
 	required int64 last_charged_time = 5;
-	
-	enum Result {
-		FALSE	= 0;
-		TRUE	= 1;
+
+	enum Pack {
+		ZERO	= 192357239376;
 	}
 } // end
 
@@ -51,9 +50,8 @@ message AccountInfo {
 	required int32 items = 17;
 	required int32 count = 18;
 	
-	enum Result {
-		FALSE	= 0;
-		TRUE	= 1;
+	enum Pack {
+		ZERO	= 1034756284;
 	}
 } // end
 
@@ -63,9 +61,8 @@ message ChargeInfo {
 	required int32 heart = 4;
 	required int64 last_charged_time = 5;
 
-	enum Result {
-		FALSE	= 0;
-		TRUE	= 1;
+	enum Pack {
+		ZERO	= 3954728947;
 	}
 } // end
 
@@ -78,11 +75,10 @@ message RankInfo {
 	message FriendRankInfo {
 		required string k_id = 1;
 		required int32 score = 2;
-	}
-	
-	enum Result {
-		FALSE	= 0;
-		TRUE	= 1;
+
+		enum Pack {
+			ZERO	= 204767616169;
+		}
 	}
 } // end
 
@@ -91,8 +87,7 @@ message GameResult {
 	required Result res = 3;
 	required int32 score = 4;
 	
-	enum Result {
-		FALSE	= 0;
-		TRUE	= 1;
+	enum Pack {
+		ZERO	= 19237650378;
 	}
 } // end

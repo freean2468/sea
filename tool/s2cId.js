@@ -1,6 +1,13 @@
+var enumList = [
+	'Result',
+];
+
+exports.enumList = enumList;
+
 var list = [
 	'RegisterAccountReply',
-	'UnregisterAccountReply',
+	'SelectCharacterReply',
+	'SelectAssistantReply',
 	'StartGameReply',
 	'AccountInfo',
 	'ChargeInfo',
@@ -10,7 +17,8 @@ var list = [
 
 var messageId = {
 	RegisterAccountReply: 1622018505,
-	UnregisterAccountReply: 1477441904,
+	SelectCharacterReply: 1952577891,
+	SelectAssistantReply: 1952577891,
 	StartGameReply: 519762701,
 	AccountInfo: 74840653,
 	ChargeInfo: 7663927,

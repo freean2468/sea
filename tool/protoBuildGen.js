@@ -29,6 +29,13 @@ var protoIdList = [];
 for (var i = 0; i < protoList.length; ++i) {
 	protoIdList.push(require('./' + protoList[i] + 'Id.js'));
 
+	for (var j = 0; j < protoIdList[i].enumList.length; ++j) {
+		var obj = protoIdList[i].enumList[j];
+
+		body += 'var ' + obj + ' = ' + protoList[i] + ".build('" + protoList[i].toUpperCase() + "')." + obj + ';' + '\n';
+		tail += 'exports.' + obj + ' = ' + obj + ';' + '\n';
+	}
+
 	for (var j = 0; j < protoIdList[i].list.length; ++j) {
 		var obj = protoIdList[i].list[j];
 

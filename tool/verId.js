@@ -1,3 +1,8 @@
+var enumList = [
+];
+
+exports.enumList = enumList;
+
 var list = [
 	'VersionInfo',
 	'VersionInfoReply',

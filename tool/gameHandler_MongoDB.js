@@ -54,6 +54,14 @@ function CheckInChargeHandler(response, data){
 	var msg = CheckInCharge.decode(data);
 } // end CheckInChargeHandler
 
+function SelectCharacterHandler(response, data){
+	var msg = build.SelectCharacter.decode(data);
+} // end SelectCharacterHandler
+
+function SelectAssistantHandler(response, data){
+	var msg = build.SelectAssistant.decode(data);
+} // end SelectAssistantHandler
+
 function StartGameHandler(response, data){
 	var StartGame = c2s.build('C2S').StartGame;
 	var msg = StartGame.decode(data);
@@ -83,6 +91,8 @@ exports.UnregisterAccountHandler = UnregisterAccountHandler;
 exports.LoginHandler = LoginHandler;
 exports.LogoutHandler = LogoutHandler;
 exports.CheckInChargeHandler = CheckInChargeHandler;
+exports.SelectCharacterHandler = SelectCharacterHandler;
+exports.SelectAssistantHandler = SelectAssistantHandler;
 exports.StartGameHandler = StartGameHandler;
 exports.EndGameHandler = EndGameHandler;
 exports.LoadRankInfoHandler = LoadRankInfoHandler;

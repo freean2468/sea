@@ -119,7 +119,7 @@ function request(data) {
 		});
 	};
 
-	console.log(data.toArrayBuffer());
+//	console.log(data.toArrayBuffer());
 
 	var buf = toBuf(data.toArrayBuffer()).toString('hex');
 	var stream = encrypt(buf);

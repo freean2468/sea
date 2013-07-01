@@ -48,6 +48,16 @@ function CheckInChargeHandler(response, data) {
 	if (flags & options['MONGODB']) mongodb.CheckInChargeHandler(response, data);
 }
 
+function SelectCharacterHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.SelectCharacterHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.SelectCharacterHandler(response, data);
+}
+
+function SelectAssistantHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.SelectAssistantHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.SelectAssistantHandler(response, data);
+}
+
 function StartGameHandler(response, data) {
 	if (flags & options['MYSQL']) mysql.StartGameHandler(response, data);
 	if (flags & options['MONGODB']) mongodb.StartGameHandler(response, data);
@@ -73,9 +83,14 @@ function RegisterAccountReplyHandler(response, data) {
 	if (flags & options['MONGODB']) mongodb.RegisterAccountReplyHandler(response, data);
 }
 
-function UnregisterAccountReplyHandler(response, data) {
-	if (flags & options['MYSQL']) mysql.UnregisterAccountReplyHandler(response, data);
-	if (flags & options['MONGODB']) mongodb.UnregisterAccountReplyHandler(response, data);
+function SelectCharacterReplyHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.SelectCharacterReplyHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.SelectCharacterReplyHandler(response, data);
+}
+
+function SelectAssistantReplyHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.SelectAssistantReplyHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.SelectAssistantReplyHandler(response, data);
 }
 
 function StartGameReplyHandler(response, data) {
@@ -182,12 +197,15 @@ exports.UnregisterAccountHandler = UnregisterAccountHandler;
 exports.LoginHandler = LoginHandler;
 exports.LogoutHandler = LogoutHandler;
 exports.CheckInChargeHandler = CheckInChargeHandler;
+exports.SelectCharacterHandler = SelectCharacterHandler;
+exports.SelectAssistantHandler = SelectAssistantHandler;
 exports.StartGameHandler = StartGameHandler;
 exports.EndGameHandler = EndGameHandler;
 exports.LoadRankInfoHandler = LoadRankInfoHandler;
 exports.RequestPointRewardHandler = RequestPointRewardHandler;
 exports.RegisterAccountReplyHandler = RegisterAccountReplyHandler;
-exports.UnregisterAccountReplyHandler = UnregisterAccountReplyHandler;
+exports.SelectCharacterReplyHandler = SelectCharacterReplyHandler;
+exports.SelectAssistantReplyHandler = SelectAssistantReplyHandler;
 exports.StartGameReplyHandler = StartGameReplyHandler;
 exports.AccountInfoHandler = AccountInfoHandler;
 exports.ChargeInfoHandler = ChargeInfoHandler;

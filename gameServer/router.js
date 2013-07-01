@@ -28,7 +28,7 @@ function resRoute(request, handle, pathname, response, postData) {
 
 	if (typeof handle[id] === 'function') {	
 		var cookies = fetchCookie(request);
-		
+
 		if (authenticateSession(id, cookies['piece'])) {
 			handle[id](response, data);
 		}

@@ -72,10 +72,12 @@ function authenticateSession(msgId, piece) {
 		// There is a possibility to execute unregisterSession by timer on before explicitly.
 		if (res === true) {			
 			if (msgId === unregisterMsg) {
+				console.log("unregisterSession");
 				unregisterSession(index, piece);	
 				clearTimeout(timerList[index]);
 			}
 			else {
+				console.log("updateExpiration");
 				updateExpiration(index, piece);
 			}
 		}

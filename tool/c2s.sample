@@ -20,17 +20,41 @@ message CheckInCharge {
 	required string k_id = 2;
 } // end
 
+message SelectCharacter {
+	required string k_id = 2;
+	required int32 selected_character = 3;
+} // end
+
+message SelectAssistant {
+	required string k_id = 2;
+	required int32 selected_assistant = 4;
+} // end
+
 message StartGame {
 	required string k_id = 2;
 	required int32 selected_character = 3;
 	required int32 selected_assistant = 4;
+
+	enum Pack {
+		ZERO	= 190384095693;
+		BASIC	= 3857762452;		
+	}
 } // end
 
 message EndGame {
 	required string k_id = 2;
-	required int32 dist = 3;
-	required int32 kill = 4;
-	required int32 usedItem = 5;
+	required int32 selected_character = 3;
+	required int32 selected_assistant = 4;
+	required int32 score = 5;
+	required int32 dist = 6;
+	required int32 kill = 7;
+	required int32 usedItem = 8;
+	required int32 playTime = 9;
+
+	enum Pack {
+		ZERO	= 9728473;
+		BASIC	= 28876832;
+	}
 } // end
 
 message LoadRankInfo {

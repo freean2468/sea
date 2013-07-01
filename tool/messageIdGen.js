@@ -14,7 +14,54 @@ function findSth(stream, start, find) {
 	return sth;
 }
 
-function parse(stream, index) {
+function fetchEnum(stream) {
+	var enumeration = 'enum';
+	var message = 'message';
+	var end = '// end';
+	var listOutput = '';
+	var enumPos = 0;
+	var pos = 0;
+	var streamCp = stream;
+
+	var i = 0;
+
+	while (1) {
+		enumPos = findSth(stream, 0, enumeration);
+		pos = findSth(stream, 0, message);
+
+		if (enumPos >= pos || enumPos === -1) {
+			break;
+		}
+
+		var next = enumPos + enumeration.length;
+		enumPos = findSth(stream, next, '{');
+
+		var chunk = stream.slice(next+1, next+enumPos-1);
+		var asciiSerial = '';
+		
+		listOutput += '\t\'' + chunk + '\',' + '\n';
+		
+		stream = stream.slice(enumPos);
+
+		enumPos = findSth(stream, 0, end);
+		
+		stream = stream.slice(enumPos + end.length);		
+	}
+
+	var listVar = 'enumList';
+
+	var output = 'var ' + listVar + ' = [' + '\n'
+				+ listOutput
+				+ '];' + '\n'
+				+ '\n'
+				+ 'exports.' + listVar + ' = ' + listVar + ';' + '\n'
+				;
+
+	return output;
+}
+
+function fetchMessage(stream, index) {
+	var enumOutput = fetchEnum(stream);
 	var message = 'message';
 	var end = '// end';
 	var listOutput = '';
@@ -36,9 +83,9 @@ function parse(stream, index) {
 		}
 
 		var next = pos + message.length;
-		pos = findSth(stream, 0, '{');
+		pos = findSth(stream, next, '{');
 
-		var chunk = stream.slice(next+1, pos-1);
+		var chunk = stream.slice(next+1, next+pos-1);
 		var asciiSerial = '';
 		
 		for (var j = 0; j < chunk.length; ++j) {
@@ -69,7 +116,8 @@ function parse(stream, index) {
 	var listVar = 'list';
 	var protocolVar = 'messageId';
 
-	output += 'var ' + listVar + ' = [' + '\n'
+	output += enumOutput + '\n'
+			+ 'var ' + listVar + ' = [' + '\n'
 			+ listOutput
 			+ '];' + '\n'
 			+ '\n'
@@ -78,7 +126,8 @@ function parse(stream, index) {
 			+ '};' + '\n'
 			+ '\n'
 			+ 'exports.' + listVar + ' = ' + listVar + ';' + '\n'
-			+ 'exports.' + protocolVar + ' = ' + protocolVar + ';';
+			+ 'exports.' + protocolVar + ' = ' + protocolVar + ';'
+			;
 
 	var outputFile = protoFileList[index] + 'Id.js';
 
@@ -151,7 +200,7 @@ for (var i = 0; i < protoFileList.length; ++i) {
 			flag: 'r',
 		};
 
-		parse(fs.readFileSync(protoFileList[i]+'.sample', opt), i);
+		fetchMessage(fs.readFileSync(protoFileList[i]+'.sample', opt), i);
 	}
 	else {
 		if (!exists) {
