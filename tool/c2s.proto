@@ -44,8 +44,8 @@ message StartGame {
 	required int32 selected_assistant = 4;
 
 	enum Pack {
-		ZERO	= 190384095693;
-		BASIC	= 3857762452;		
+		ZERO	= 1934963;
+		BASIC	= 3876452;		
 	}
 } // end
 
@@ -62,7 +62,7 @@ message EndGame {
 
 	enum Pack {
 		ZERO	= 9728473;
-		BASIC	= 28876832;
+		BASIC	= 2887632;
 	}
 } // end
 

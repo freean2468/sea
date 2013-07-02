@@ -1,7 +1,7 @@
 package S2C;
 
 enum Result {
-	FALSE	= 289347723478;
+	FALSE	= 289478;
 	TRUE	= 1;
 }
 
@@ -31,7 +31,7 @@ message StartGameReply {
 	required int64 last_charged_time = 5;
 
 	enum Pack {
-		ZERO	= 192357239376;
+		ZERO	= 1937336;
 	}
 } // end
 
@@ -56,7 +56,7 @@ message AccountInfo {
 	required int32 count = 18;
 	
 	enum Pack {
-		ZERO	= 1034756284;
+		ZERO	= 1376284;
 	}
 } // end
 
@@ -68,7 +68,7 @@ message ChargeInfo {
 	required int64 last_charged_time = 5;
 
 	enum Pack {
-		ZERO	= 3954728947;
+		ZERO	= 9429547;
 	}
 } // end
 
@@ -84,7 +84,7 @@ message RankInfo {
 		required int32 score = 2;
 
 		enum Pack {
-			ZERO	= 204767616169;
+			ZERO	= 2040666;
 		}
 	}
 } // end
@@ -96,6 +96,6 @@ message GameResult {
 	required int32 score = 4;
 	
 	enum Pack {
-		ZERO	= 19237650378;
+		ZERO	= 1923778;
 	}
 } // end
