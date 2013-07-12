@@ -1,9 +1,17 @@
 package S2C;
 
 enum Result {
-	FALSE	= 289478;
+	FALSE	= 2893471;
+	BLOCK	= 9279127;
+	DUPLE	= 6749824;
+	NOT_ENOUGH = 1937823;
 	TRUE	= 1;
 }
+
+message VersionInfoReply {
+	optional uint64 id = 1 [default=212532706];
+	required string version = 2;
+} // end
 
 message RegisterAccountReply {
 	optional uint64 id = 1 [default=1622018505];
@@ -27,11 +35,11 @@ message StartGameReply {
 	optional uint64 id = 1 [default=519762701];
 	required string k_id = 2;
 	required Result res = 3;
-	required int32 heart = 4;
+	required int32 honey = 4;
 	required int64 last_charged_time = 5;
 
 	enum Pack {
-		ZERO	= 1937336;
+		ZERO	= 1929376;
 	}
 } // end
 
@@ -44,7 +52,7 @@ message AccountInfo {
 	required int32 lv = 6;
 	required int32 exp = 7;
 	required int32 point = 8;
-	required int32 heart = 9;
+	required int32 honey = 9;
 	required int64 last_charged_time = 10;
 	required int32 selected_character = 11;
 	required int32 selected_assistant = 12;
@@ -52,23 +60,34 @@ message AccountInfo {
 	required int32 basic_charac_lv = 14;
 	required int32 assistants = 15;
 	required int32 basic_assist_lv = 16;
-	required int32 items = 17;
-	required int32 count = 18;
+	required int32 honey_score = 19;
+	required int32 honey_time = 20;
+	required int32 cool_down = 21;
+	required int32 exp_boost = 22;
+	required int32 item_last = 23;
+	required int32 max_attack = 24;
+	required int32 random = 25;
 	
 	enum Pack {
-		ZERO	= 1376284;
+		ZERO	= 1034724;
 	}
+} // end
+
+message LogoutReply {
+	optional uint64 id = 1 [default=64091022];
+	required string k_id = 2;
+	required Result res = 3;
 } // end
 
 message ChargeInfo {
 	optional uint64 id = 1 [default=7663927];
 	required string k_id = 2;
 	required Result res = 3;
-	required int32 heart = 4;
+	required int32 honey = 4;
 	required int64 last_charged_time = 5;
 
 	enum Pack {
-		ZERO	= 9429547;
+		ZERO	= 3954747;
 	}
 } // end
 
@@ -82,10 +101,50 @@ message RankInfo {
 	message FriendRankInfo {
 		required string k_id = 1;
 		required int32 score = 2;
+		required int32 honey_sended = 3;
 
 		enum Pack {
-			ZERO	= 2040666;
+			ZERO	= 2046169;
 		}
+	}
+} // end
+
+message PostedHoney {
+	optional uint64 id = 1 [default=92009206];
+	required string k_id = 2;
+	required Result res = 3;
+	repeated Honey honey = 4;
+
+	message Honey {
+		required string sender_k_id = 1;
+		required int64 sended_time = 2;
+	}
+} // end
+
+message PostedBaton {
+	optional uint64 id = 1 [default=81000074];
+	required string k_id = 2;
+	required Result res = 3;
+	repeated Baton baton = 4;
+
+	message Baton {
+		required string sender_k_id = 1;
+		required string map_name = 2;
+		required int32 last_score = 3;
+		required int64 sended_time = 4;
+	}
+} // end
+
+message PostedBatonResult {
+	optional uint64 id = 1 [default=642844433];
+	required string k_id = 2;
+	required Result res = 3;
+	repeated BatonResult baton_result = 4;
+	
+	message BatonResult {
+		required string sender_k_id = 1;
+		required int32 acquisition_score = 2;
+		required int64 sended_time = 3;
 	}
 } // end
 
@@ -94,8 +153,98 @@ message GameResult {
 	required string k_id = 2;
 	required Result res = 3;
 	required int32 score = 4;
+	required int32 coin = 5;
+	required int32 bonus_score = 6;
+	required int32 total_score = 7;
+	required int32 level = 8;
+	required int32 exp = 9;
+	required int32 total_coin = 10;
 	
 	enum Pack {
 		ZERO	= 1923778;
+	}
+} // end
+
+message BuyItemReply {
+	optional uint64 id = 1 [default=74117480];
+	required string k_id = 2;
+	required Result res = 3;
+	required Item item = 4;
+
+	enum Item {
+		NONE = 19037;
+		EXP_BOOST = 1;
+		LAST_ITEM = 2;
+		MAX_ATTACK = 3;
+
+		MAGNET = 4;
+		COIN_TIME = 5;
+		SCORE_BONUS = 6;
+		HEALTH = 7;
+		IMMORTAL = 8;
+		COOL_DOWN = 9;
+		HONEY_SCORE = 10;
+		LAST_ACTION = 11;
+		MAX = 12;
+	}
+} // end 
+
+message SendHoneyReply {
+	optional uint64 id = 1 [default=518193085];
+	required string k_id = 2;
+	required Result res = 3;
+} // end
+
+message RequestBatonReply {
+	optional uint64 id = 1 [default=1132791610];
+	required string k_id = 2;
+	required Result res = 3;
+	required int32 coin = 4;
+} // end
+
+message AcceptHoneyReply {
+	optional uint64 id = 1 [default=510456537];
+	required string k_id = 2;
+	required Result res = 3;
+} // end
+
+message AcceptBatonReply {
+	optional uint64 id = 1 [default=807931012];
+	required string k_id = 2;
+	required Result res = 3;
+} // end
+
+message BatonResult {
+	optional uint64 id = 1 [default=7864253];
+	required string k_id = 2;
+	required Result res = 3;
+	required int32 coin = 4;
+	required int32 total_coin = 5;	
+	required Update update = 6;
+
+	enum Update {
+		SUCCESS = 1;
+		FAIL = 2;
+	}
+
+	enum Pack {
+		ZERO	= 1923778;
+	}
+} // end
+
+message AcceptBatonResultReply {
+	optional uint64 id = 1 [default=1775630798];
+	required string k_id = 2;
+	required Result res = 3;
+	required Update update = 4;
+	required int32 score = 5;
+
+	enum Update {
+		SUCCESS = 1;
+		FAIL = 2;
+	}
+
+	enum Pack {
+		ZERO	= 9272187;
 	}
 } // end

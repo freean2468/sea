@@ -18,7 +18,6 @@ namespace S2C
 
     private ulong _id = (ulong)1622018505;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue((ulong)1622018505)]
     public ulong id
     {
       get { return _id; }
@@ -51,7 +50,6 @@ namespace S2C
 
     private ulong _id = (ulong)1952577891;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue((ulong)1952577891)]
     public ulong id
     {
       get { return _id; }
@@ -84,7 +82,6 @@ namespace S2C
 
     private ulong _id = (ulong)1952577891;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue((ulong)1952577891)]
     public ulong id
     {
       get { return _id; }
@@ -117,7 +114,6 @@ namespace S2C
 
     private ulong _id = (ulong)519762701;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue((ulong)519762701)]
     public ulong id
     {
       get { return _id; }
@@ -172,7 +168,6 @@ namespace S2C
 
     private ulong _id = (ulong)74840653;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue((ulong)74840653)]
     public ulong id
     {
       get { return _id; }
@@ -318,7 +313,6 @@ namespace S2C
 
     private ulong _id = (ulong)7663927;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue((ulong)7663927)]
     public ulong id
     {
       get { return _id; }
@@ -373,7 +367,6 @@ namespace S2C
 
     private ulong _id = (ulong)25751552;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue((ulong)25751552)]
     public ulong id
     {
       get { return _id; }
@@ -452,7 +445,6 @@ namespace S2C
 
     private ulong _id = (ulong)10876551;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue((ulong)10876551)]
     public ulong id
     {
       get { return _id; }
@@ -503,4 +495,5 @@ namespace S2C
       TRUE = 1
     }
   
+
 }

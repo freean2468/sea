@@ -4,10 +4,10 @@ DROP TABLE IF EXISTS sea_user_metric;
 
 CREATE TABLE sea.sea_user_metric(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	uv TINYINT(1) NOT NULL,
-	last_week_uv TINYINT(1) NOT NULL,
-	this_week_uv TINYINT(1) NOT NULL,
-	pu TINYINT(1) NOT NULL,
+	uv TINYINT NOT NULL,
+	last_week_uv TINYINT NOT NULL,
+	this_week_uv TINYINT NOT NULL,
+	pu TINYINT NOT NULL,
 
 	INDEX idx_user_metric_1 (id)
 );

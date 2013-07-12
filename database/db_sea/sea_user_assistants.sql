@@ -21,4 +21,11 @@ CREATE PROCEDURE sea_AddUserAssistant(IN p_id INT, IN p_assistant SMALLINT)
 	END
 $$
 
+DROP PROCEDURE IF EXISTS sea_IsUserAssistant $$
+CREATE PROCEDURE sea_IsUserAssistant(IN p_id INT)
+	BEGIN
+		SELECT assistants AS res FROM sea.sea_user_assistants WHERE id = p_id;
+	END
+$$
+
 DELIMITER ;

@@ -12,7 +12,7 @@ CREATE TABLE sea.sea_user_info(
 	lv TINYINT NOT NULL,
 	exp MEDIUMINT NOT NULL,
 	point TINYINT NOT NULL,
-	heart TINYINT NOT NULL,
+	honey TINYINT NOT NULL,
 	last_charged_time BIGINT NOT NULL,
 	selected_character SMALLINT NOT NULL,
 	selected_assistant SMALLINT NOT NULL,
@@ -21,33 +21,57 @@ CREATE TABLE sea.sea_user_info(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DELIMITER $$
+
 DROP PROCEDURE IF EXISTS sea_LoadUserInfo $$
 CREATE PROCEDURE sea_LoadUserInfo(IN p_id INT)
 	BEGIN
-		SELECT U.k_id, I.coin, I.mineral, I.lv, I.exp, I.point, I.heart, I.last_charged_time, 
+		SELECT U.k_id, I.coin, I.mineral, I.lv, I.exp, I.point, I.honey, I.last_charged_time, 
 				I.selected_character, I.selected_assistant, C.characters, C.basic_charac_lv,
-				A.assistants, A.basic_assist_lv, IT.items, IT.count, M.uv
+				A.assistants, A.basic_assist_lv, IT.exp_boost, IT.item_last, IT.max_attack, 
+				IT.random, M.uv, UG.honey_score, UG.honey_time, UG.cool_down
 		FROM sea.sea_user_info AS I
 		INNER JOIN sea.sea_user AS U ON I.id = U.id
 		INNER JOIN sea.sea_user_characters AS C ON I.id = C.id
 		INNER JOIN sea.sea_user_assistants AS A ON I.id = A.id
 		INNER JOIN sea.sea_user_items AS IT ON I.id = IT.id
 		INNER JOIN sea.sea_user_metric AS M ON I.id = M.id
+		INNER JOIN sea.sea_user_upgrade AS UG ON I.id = UG.id
 		WHERE I.id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_LoadHoney $$
+CREATE PROCEDURE sea_LoadHoney(IN p_id INT)
+	BEGIN
+		SELECT honey AS res FROM sea.sea_user_info WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_LoadCoin $$
+CREATE PROCEDURE sea_LoadCoin(IN p_id INT)
+	BEGIN
+		SELECT coin FROM sea.sea_user_info WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_LoadUserBriefInfo $$
+CREATE PROCEDURE sea_LoadUserBriefInfo(IN p_id INT)
+	BEGIN
+		SELECT coin, lv, exp FROM sea.sea_user_info WHERE id = p_id;
 	END
 $$
 
 DROP PROCEDURE IF EXISTS sea_CheckInCharge $$
 CREATE PROCEDURE sea_CheckInCharge(IN p_id INT)
 	BEGIN
-		SELECT last_charged_time, heart FROM sea.sea_user_info WHERE id = p_id;
+		SELECT last_charged_time, honey FROM sea.sea_user_info WHERE id = p_id;
 	END
 $$
 
 DROP PROCEDURE IF EXISTS sea_StartGame $$
 CREATE PROCEDURE sea_StartGame(IN p_id INT)
 	BEGIN
-		SELECT selected_character, selected_assistant, heart, last_charged_time
+		SELECT selected_character, selected_assistant, honey, last_charged_time
 		FROM sea.sea_user_info
 		WHERE id = p_id;
 	END
@@ -81,10 +105,10 @@ CREATE PROCEDURE sea_UpdatePoint(IN p_id INT, IN p_point TINYINT)
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_UpdateHeart $$
-CREATE PROCEDURE sea_UpdateHeart(IN p_id INT, IN p_heart TINYINT)
+DROP PROCEDURE IF EXISTS sea_UpdateHoney $$
+CREATE PROCEDURE sea_UpdateHoney(IN p_id INT, IN p_honey TINYINT)
 	BEGIN
-		UPDATE sea_user_info SET heart = p_heart WHERE id = p_id;
+		UPDATE sea_user_info SET honey = p_honey WHERE id = p_id;
 	END
 $$
 

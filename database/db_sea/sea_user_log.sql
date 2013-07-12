@@ -16,6 +16,13 @@ CREATE TABLE sea.sea_user_log(
 
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS sea_LoadHighestScore $$
+CREATE PROCEDURE sea_LoadHighestScore(IN p_id INT)
+	BEGIN
+		SELECT highest_score AS res FROM sea.sea_user_log WHERE id = p_id;
+	END
+$$
+
 DROP PROCEDURE IF EXISTS sea_UpdateUserLog $$
 CREATE PROCEDURE sea_UpdateUserLog(IN p_id INT, IN p_score INT, IN p_dist INT, IN p_kill INT)
 	BEGIN

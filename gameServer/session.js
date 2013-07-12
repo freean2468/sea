@@ -5,6 +5,7 @@ var unmanagedAreaMsg = [12322730, 97057879, 212532706, 70841257, 1271857080, 141
 var unregisterMsg = 543619392;
 var sessionList = [];
 var emptyList = [];
+var k_idList = [];
 var timerList = []; // Don't need to manage this list.
 
 var TIMER_ON_UNREGISTER = 1;
@@ -38,22 +39,31 @@ function unregisterSession(index, piece) {
 		}
 
 		delete sessionList[index];
+		delete k_idList[index];
 	}
 	else {
 		throw console.log("exception happened in unregisterSession");
 	}
 }
 
-function registerSession(piece) {
+function registerSession(piece, k_id) {
 	var emptyIndex = sessionList.indexOf(undefined);
 	var index;
 
+	for (i = 0; i < k_idList.length; ++i) {
+		if(k_idList[i] === k_id) {
+			return 0;
+		}
+	}
+
 	if (emptyIndex === -1) {
 		index = sessionList.push(piece) - 1;
+		k_idList.push(k_id);
 	}
 	else {
 		index = emptyIndex;
 		sessionList[index] = piece;
+		k_idList[index] = k_id;
 	}
 
 	setExpiration(index, piece);

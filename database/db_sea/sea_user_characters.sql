@@ -14,10 +14,18 @@ CREATE TABLE sea.sea_user_characters(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DELIMITER $$
+
 DROP PROCEDURE IF EXISTS sea_AddUserCharacter $$
 CREATE PROCEDURE sea_AddUserCharacter(IN p_id INT, IN p_character SMALLINT)
 	BEGIN
 		UPDATE sea_user_characters SET characters = characters | p_character  WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_IsUserCharacter $$
+CREATE PROCEDURE sea_IsUserCharacter(IN p_id INT)
+	BEGIN
+		SELECT characters AS res FROM sea_user_characters WHERE id = p_id;
 	END
 $$
 

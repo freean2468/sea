@@ -45,7 +45,7 @@ output += tail;
 fs.writeFile('handler.js', output, function (err) {
 	if (err) throw err;
 
-	console.log('handler.js file has generated');
+	console.log('handler.js file has been generated');
 });
 
 

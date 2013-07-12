@@ -19,19 +19,6 @@ function VersionInfoHandler(response, data){
 	var msg = VersionInfo.decode(data);
 } // end VersionInfoHandler
 
-function VersionInfoReplyHandler(response, data){
-	var msg = build.VersionInfoReply.decode(data);
-} // end VersionInfoReplyHandler
-
-function ClientVersionInfoHandler(response, data){
-	var ClientVersionInfo = ver.build('VER').ClientVersionInfo;
-	var msg = ClientVersionInfo.decode(data);
-} // end ClientVersionInfoHandler
-
-function ClientVersionInfoReplyHandler(response, data){
-	var msg = build.ClientVersionInfoReply.decode(data);
-} // end ClientVersionInfoReplyHandler
-
 function RegisterAccountHandler(response, data){
 	var RegisterAccount = c2s.build('C2S').RegisterAccount;
 	var msg = RegisterAccount.decode(data);
@@ -77,15 +64,52 @@ function LoadRankInfoHandler(response, data){
 	var msg = LoadRankInfo.decode(data);
 } // end LoadRankInfoHandler
 
+function LoadPostedHoneyHandler(response, data){
+	var msg = build.LoadPostedHoney.decode(data);
+} // end LoadPostedHoneyHandler
+
+function LoadPostedBatonHandler(response, data){
+	var msg = build.LoadPostedBaton.decode(data);
+} // end LoadPostedBatonHandler
+
+function LoadPostedBatonResultHandler(response, data){
+	var msg = build.LoadPostedBatonResult.decode(data);
+} // end LoadPostedBatonResultHandler
+
 function RequestPointRewardHandler(response, data){
 	var RequestPointReward = c2s.build('C2S').RequestPointReward;
 	var msg = RequestPointReward.decode(data);
 } // end RequestPointRewardHandler
 
+function BuyItemHandler(response, data){
+	var msg = build.BuyItem.decode(data);
+} // end BuyItemHandler
+
+function SendHoneyHandler(response, data){
+	var msg = build.SendHoney.decode(data);
+} // end SendHoneyHandler
+
+function AcceptHoneyHandler(response, data){
+	var msg = build.AcceptHoney.decode(data);
+} // end AcceptHoneyHandler
+
+function RequestBatonHandler(response, data){
+	var msg = build.RequestBaton.decode(data);
+} // end RequestBatonHandler
+
+function AcceptBatonHandler(response, data){
+	var msg = build.AcceptBaton.decode(data);
+} // end AcceptBatonHandler
+
+function EndBatonHandler(response, data){
+	var msg = build.EndBaton.decode(data);
+} // end EndBatonHandler
+
+function AcceptBatonResultHandler(response, data){
+	var msg = build.AcceptBatonResult.decode(data);
+} // end AcceptBatonResultHandler
+
 exports.VersionInfoHandler = VersionInfoHandler;
-exports.VersionInfoReplyHandler = VersionInfoReplyHandler;
-exports.ClientVersionInfoHandler = ClientVersionInfoHandler;
-exports.ClientVersionInfoReplyHandler = ClientVersionInfoReplyHandler;
 exports.RegisterAccountHandler = RegisterAccountHandler;
 exports.UnregisterAccountHandler = UnregisterAccountHandler;
 exports.LoginHandler = LoginHandler;
@@ -96,4 +120,14 @@ exports.SelectAssistantHandler = SelectAssistantHandler;
 exports.StartGameHandler = StartGameHandler;
 exports.EndGameHandler = EndGameHandler;
 exports.LoadRankInfoHandler = LoadRankInfoHandler;
+exports.LoadPostedHoneyHandler = LoadPostedHoneyHandler;
+exports.LoadPostedBatonHandler = LoadPostedBatonHandler;
+exports.LoadPostedBatonResultHandler = LoadPostedBatonResultHandler;
 exports.RequestPointRewardHandler = RequestPointRewardHandler;
+exports.BuyItemHandler = BuyItemHandler;
+exports.SendHoneyHandler = SendHoneyHandler;
+exports.AcceptHoneyHandler = AcceptHoneyHandler;
+exports.RequestBatonHandler = RequestBatonHandler;
+exports.AcceptBatonHandler = AcceptBatonHandler;
+exports.EndBatonHandler = EndBatonHandler;
+exports.AcceptBatonResultHandler = AcceptBatonResultHandler;

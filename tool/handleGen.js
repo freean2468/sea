@@ -63,5 +63,5 @@ output += '};' + '\n'
 
 fs.writeFileSync(file, output);
 
-console.log(file + ' file has generated.');
+console.log(file + ' file has been generated.');
 
