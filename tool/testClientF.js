@@ -37,7 +37,6 @@ var endBaton = new build.EndBaton();
 var acceptBatonResult = new build.AcceptBatonResult();
 var acceptBatonResultReply = new build.AcceptBatonResultReply();
 var batonResult = new build.BatonResult();
-var systemMessage = new build.SystemMessage();
 
 var http = require('http');
 var encrypt = require('./util').encrypt;
@@ -48,15 +47,11 @@ var toBuf = require('./util').toBuf;
 var toArrBuf = require('./util').toArrBuf;
 
 console.log("---------- commands ---------------");
-console.log("'accept_honey'");
-console.log("'accept_baton'");
 console.log("-----------------------------------");
 
 var piece = "";
 
-registerAccount['k_id'] = UUID();
-
-registerAccount['k_id'] = 9223371;
+registerAccount['k_id'] = 0;
 
 console.log(registerAccount);
 
@@ -72,7 +67,6 @@ function fetchCookie(res) {
 }
 
 var msg;
-var honey;
 
 // data is a proto message object.
 function request(data) {
@@ -111,16 +105,20 @@ function request(data) {
 				console.log(build.AccountInfo.decode(res));
 
 				msg = build.AccountInfo.decode(res);
-				var cookies = fetchCookie(response);
-				piece = cookies['piece'];
+				if (msg['res'] === build.Result['BLOCK']) {
+					console.log("BLOCKED");
+				} else {
+					var cookies = fetchCookie(response);
+					piece = cookies['piece'];
 
-				console.log("piece : " + piece);
+					console.log("piece : " + piece);
 
-				loadRankInfo['k_id'] = registerAccount['k_id'];
+					loadRankInfo['k_id'] = registerAccount['k_id'];
 
-				console.log('SEND : loadRankInfo');
+					console.log('SEND : loadRankInfo');
 
-				request(loadRankInfo);
+					request(loadRankInfo);
+				}
 			} else if (id === rankInfo['id']['low']) {
 				console.log('RECEIVE : rankInfo \n');
 				console.log(build.RankInfo.decode(res));
@@ -130,8 +128,7 @@ function request(data) {
 				request(loadPostedHoney);
 			} else if (id === postedHoney['id']['low']) {
 				console.log('RECEIVE : postedHoney \n');
-				honey = build.PostedHoney.decode(res);
-				console.log(honey);
+				console.log(build.PostedHoney.decode(res));
 
 				loadPostedBaton['k_id'] = registerAccount['k_id'];
 				console.log('SEND : loadPostedBaton');
@@ -155,8 +152,7 @@ function request(data) {
 				for (i = 0; i < arg.length; ++i) {					
 					if (arg[i] === 'accept_honey') {
 						acceptHoney['k_id'] = registerAccount['k_id'];
-						acceptHoney['sender_k_id'] = honey['honey'][0]['sender_k_id'];
-						acceptHoney['sended_time'] = honey['honey'][0]['sended_time'];
+						acceptHoney['sender_k_id'] = 9223372;
 						console.log('SEND : acceptHoney');
 						request(acceptHoney);
 					}
@@ -171,14 +167,16 @@ function request(data) {
 						request(acceptBaton);
 					}
 				}
-			} else if (id === acceptHoneyReply['id']['low']) {
+			}
+			else if (id === acceptHoneyReply['id']['low']) {
 				console.log('RECEIVE : acceptHoneyReply \n');
 				console.log(build.AcceptHoneyReply.decode(res));
 
-//				logout['k_id'] = registerAccount['k_id'];
-//				console.log('SEND : logout');
-//				request(logout);
-			} else if (id === acceptBatonReply['id']['low']) {
+				logout['k_id'] = registerAccount['k_id'];
+				console.log('SEND : logout');
+				request(logout);
+			}
+			else if (id === acceptBatonReply['id']['low']) {
 				console.log('RECEIVE : acceptBatonReply \n');
 				console.log(build.AcceptBatonReply.decode(res));
 				
@@ -189,17 +187,19 @@ function request(data) {
 				endBaton['selected_assistant'] = acceptBaton['selected_assistant'];
 				endBaton['score'] = Math.floor(Math.random() * 1000) + 1;
 				endBaton['dist'] = Math.floor(Math.random() * 10) + 1;
-				endBaton['enemy_kill'] = Math.floor(Math.random() * 10) + 1;
-				endBaton['used_item'] = 0;
-				endBaton['play_time'] = Math.floor(Math.random() * 1000) + 1; 
+				endBaton['kill'] = Math.floor(Math.random() * 10) + 1;
+				endBaton['usedItem'] = 0;
+				endBaton['playTime'] = Math.floor(Math.random() * 1000) + 1; 
 				endBaton['coin'] = Math.floor(Math.random() * 1000) + 1;
 
 				console.log('SEND : EndBaton');
 				request(endBaton);
-			} else if (id === batonResult['id']['low']) {
+			}
+			else if (id === batonResult['id']['low']) {
 				console.log('RECEIVE : batonRegult \n');
 				console.log(build.BatonResult.decode(res));
-			} else if (id === chargeInfo['id']['low']) {
+			}
+			else if (id === chargeInfo['id']['low']) {
 				console.log('RECEIVE : chargeInfo \n');
 				console.log(build.ChargeInfo.decode(res));
 
@@ -207,7 +207,8 @@ function request(data) {
 				buyItem['item'] = Math.floor(Math.random() * build.BuyItem.Item['RANDOM']) + 1;
 				console.log('SEND : buyItem');
 				request(buyItem);
-			} else if (id === buyItemReply['id']['low']){
+			}
+			else if (id === buyItemReply['id']['low']){
 				console.log('RECEIVE : buyItemReply \n');
 				console.log(build.BuyItemReply.decode(res));
 
@@ -216,7 +217,8 @@ function request(data) {
 				startGame['selected_assistant'] = build.StartGame.Pack['ZERO'];
 				console.log('SEND : stargGame');
 				request(startGame);
-			} else if (id === startGameReply['id']['low']) {
+			}
+			else if (id === startGameReply['id']['low']) {
 				console.log('RECEIVE : startGameReply \n');
 				console.log(build.StartGameReply.decode(res));
 
@@ -230,25 +232,18 @@ function request(data) {
 				endGame['play_time'] = Math.floor(Math.random() * 1000) + 1;
 				endGame['coin'] = Math.floor(Math.random() * 1000) + 1;
 				console.log('SEND : endGame');
+				console.log(endGame);
 				request(endGame);
-			} else if (id === gameResult['id']['low']) {
+			}
+			else if (id === gameResult['id']['low']) {
 				console.log('RECEIVE : gameResult \n');
 				console.log(build.GameResult.decode(res));
 
 				logout['k_id'] = registerAccount['k_id'];
 				console.log('SEND : logout');
 				request(logout);
-			} else if (id === systemMessage['id']['low']) {
-				console.log('RECEIVE : systemMessage \n');
-				var sysMsg = build.SystemMessage.decode(res);
-				console.log(sysMsg);
-
-				if (sysMsg['res'] === build.Result['EXISTED_ACCOUNT']) {
-					login['k_id'] = registerAccount['k_id'];
-					console.log('SEND : login');
-					request(login);
-				}
-			} else {
+			}
+			else {
 
 			}
 		});

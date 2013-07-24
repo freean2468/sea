@@ -62,8 +62,11 @@ message UserGamePlay {
 	required int32 score = 5;
 	required int32 enemy_kill = 6;
 	required int32 dist = 7;
-	required int32 used_item = 8;
-	required int32 play_time = 9;
+	required int32 play_time = 8;
+	required int32 exp_boost = 9;
+	required int32 last_item = 10;
+	required int32 max_attack = 11;
+	required int32 random = 12;
 } // end
 
 message UserRegister {

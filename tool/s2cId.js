@@ -1,10 +1,12 @@
 var enumList = [
 	'Result',
+	'Update',
 ];
 
 exports.enumList = enumList;
 
 var list = [
+	'SystemMessage',
 	'VersionInfoReply',
 	'RegisterAccountReply',
 	'SelectCharacterReply',
@@ -19,15 +21,19 @@ var list = [
 	'PostedBatonResult',
 	'GameResult',
 	'BuyItemReply',
+	'BuyCharacterReply',
+	'BuyAssistantReply',
 	'SendHoneyReply',
 	'RequestBatonReply',
 	'AcceptHoneyReply',
 	'AcceptBatonReply',
 	'BatonResult',
 	'AcceptBatonResultReply',
+	'UpgradeReply',
 ];
 
 var messageId = {
+	SystemMessage: 930151572,
 	VersionInfoReply: 212532706,
 	RegisterAccountReply: 1622018505,
 	SelectCharacterReply: 1952577891,
@@ -42,12 +48,15 @@ var messageId = {
 	PostedBatonResult: 642844433,
 	GameResult: 10876551,
 	BuyItemReply: 74117480,
+	BuyCharacterReply: 2059273157,
+	BuyAssistantReply: 2059273358,
 	SendHoneyReply: 518193085,
 	RequestBatonReply: 1132791610,
 	AcceptHoneyReply: 510456537,
 	AcceptBatonReply: 807931012,
 	BatonResult: 7864253,
 	AcceptBatonResultReply: 1775630798,
+	UpgradeReply: 97120694,
 };
 
 exports.list = list;

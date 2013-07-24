@@ -20,7 +20,7 @@ CREATE PROCEDURE sea_GetUserCount()
 $$
 
 DROP PROCEDURE IF EXISTS sea_CreateUser$$
-CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8, IN p_time BIGINT)
+CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 	BEGIN
 		DECLARE last_id INT;
 		DECLARE isExist INT;
@@ -31,15 +31,14 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8, IN p_t
 			INSERT sea_user(k_id) VALUES (p_k_id);
 			SET last_id = LAST_INSERT_ID();
 
-			INSERT sea_user_info(coin, mineral, lv, exp, point, honey, last_charged_time, 
-								selected_character, selected_assistant)
-			VALUES (99999, 9999, 1, 0, 0, 99, p_time, 1, 0);
+			INSERT sea_user_info(coin, mineral, lv, exp, point, honey, last_charged_time, selected_character, selected_assistant)
+			VALUES (99999, 9999, 1, 0, 0, 99, UNIX_TIMESTAMP(NOW()), 1, 0);
 
-			INSERT sea_user_characters(characters, basic_charac_lv)
-			VALUES (1, 1);
+			INSERT sea_user_characters(character_one, character_two, character_three, character_four, character_five, character_six, character_seven, character_eight, character_nine, character_ten)
+			VALUES (1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-			INSERT sea_user_assistants(assistants, basic_assist_lv)
-			VALUES (1, 1);
+			INSERT sea_user_assistants(assistant_one, assistant_two, assistant_three, assistant_four, assistant_five, assistant_six, assistant_seven, assistant_eight, assistant_nine, assistant_ten)
+			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 			INSERT sea_user_items(exp_boost, item_last, max_attack, random)
 			VALUES (0, 0, 0, 0);
@@ -50,7 +49,7 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8, IN p_t
 			INSERT sea_user_metric(uv, last_week_uv, this_week_uv, pu)
 			VALUES (1, 0, 1, 0);
 
-			INSERT sea_user_upgrade(honey_score, honey_time, cool_down)
+			INSERT sea_user_upgrade(honey_score, honey_time, cooldown)
 			VALUES (0, 0, 0);
 
 			SELECT last_id AS res;			

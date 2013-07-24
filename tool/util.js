@@ -89,6 +89,10 @@ function UUID() {
 	 });
 }
 
+function convertMS2S(ms) {
+	return Math.floor(ms / 1000);
+}
+
 exports.encrypt = encrypt;
 exports.decrypt = decrypt;
 exports.fetchId = fetchId;
@@ -96,3 +100,4 @@ exports.toStream = toStream;
 exports.toBuf = toBuf;
 exports.toArrBuf = toArrBuf;
 exports.UUID = UUID;
+exports.convertMS2S = convertMS2S;

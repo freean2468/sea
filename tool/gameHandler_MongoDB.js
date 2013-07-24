@@ -4,14 +4,25 @@ var assert = require('assert');
 var encrypt = require('./util').encrypt;
 var toStream = require('./util').toStream;
 var UUID = require('./util').UUID;
+var convertMS2S = require('./util').convertMS2S;
 var request = require('./request').request;
 var registerSession = require('./session').registerSession;
+var upgradeTable = require('./data').upgrade;
 var log = require('./log');
 
 function write(res, stream) {
 	res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':stream.length});
 	res.write(stream);
 	res.end();
+}
+
+function inspectField(msg) {
+	for (var val in msg) {
+		if (msg[val + ''] === undefined) {
+			return false;
+		}
+	}
+	return true;
 }
 
 function VersionInfoHandler(response, data){
@@ -85,6 +96,14 @@ function BuyItemHandler(response, data){
 	var msg = build.BuyItem.decode(data);
 } // end BuyItemHandler
 
+function BuyCharacterHandler(response, data){
+	var msg = build.BuyCharacter.decode(data);
+} // end BuyCharacterHandler
+
+function BuyAssistantHandler(response, data){
+	var msg = build.BuyAssistant.decode(data);
+} // end BuyAssistantHandler
+
 function SendHoneyHandler(response, data){
 	var msg = build.SendHoney.decode(data);
 } // end SendHoneyHandler
@@ -109,6 +128,26 @@ function AcceptBatonResultHandler(response, data){
 	var msg = build.AcceptBatonResult.decode(data);
 } // end AcceptBatonResultHandler
 
+function UpgradeHoneyScoreHandler(response, data){
+	var msg = build.UpgradeHoneyScore.decode(data);
+} // end UpgradeHoneyScoreHandler
+
+function UpgradeHoneyTimeHandler(response, data){
+	var msg = build.UpgradeHoneyTime.decode(data);
+} // end UpgradeHoneyTimeHandler
+
+function UpgradeCooldownHandler(response, data){
+	var msg = build.UpgradeCooldown.decode(data);
+} // end UpgradeCooldownHandler
+
+function UpgradeMaxAttackHandler(response, data){
+	var msg = build.UpgradeMaxAttack.decode(data);
+} // end UpgradeMaxAttackHandler
+
+function UpgradePetHandler(response, data){
+	var msg = build.UpgradePet.decode(data);
+} // end UpgradePetHandler
+
 exports.VersionInfoHandler = VersionInfoHandler;
 exports.RegisterAccountHandler = RegisterAccountHandler;
 exports.UnregisterAccountHandler = UnregisterAccountHandler;
@@ -125,9 +164,16 @@ exports.LoadPostedBatonHandler = LoadPostedBatonHandler;
 exports.LoadPostedBatonResultHandler = LoadPostedBatonResultHandler;
 exports.RequestPointRewardHandler = RequestPointRewardHandler;
 exports.BuyItemHandler = BuyItemHandler;
+exports.BuyCharacterHandler = BuyCharacterHandler;
+exports.BuyAssistantHandler = BuyAssistantHandler;
 exports.SendHoneyHandler = SendHoneyHandler;
 exports.AcceptHoneyHandler = AcceptHoneyHandler;
 exports.RequestBatonHandler = RequestBatonHandler;
 exports.AcceptBatonHandler = AcceptBatonHandler;
 exports.EndBatonHandler = EndBatonHandler;
 exports.AcceptBatonResultHandler = AcceptBatonResultHandler;
+exports.UpgradeHoneyScoreHandler = UpgradeHoneyScoreHandler;
+exports.UpgradeHoneyTimeHandler = UpgradeHoneyTimeHandler;
+exports.UpgradeCooldownHandler = UpgradeCooldownHandler;
+exports.UpgradeMaxAttackHandler = UpgradeMaxAttackHandler;
+exports.UpgradePetHandler = UpgradePetHandler;

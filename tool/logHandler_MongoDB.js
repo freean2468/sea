@@ -4,12 +4,22 @@ var assert = require('assert');
 var encrypt = require('./util').encrypt;
 var toStream = require('./util').toStream;
 var UUID = require('./util').UUID;
+var convertMS2S = require('./util').convertMS2S;
 var log = require('./log');
 
 function write(res, stream) {
 	res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':stream.length});
 	res.write(stream);
 	res.end();
+}
+
+function inspectField(msg) {
+	for (var val in msg) {
+		if (msg[val + ''] === undefined) {
+			return false;
+		}
+	}
+	return true;
 }
 
 function AccountLoginHandler(response, data){

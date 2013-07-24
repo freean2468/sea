@@ -4,6 +4,12 @@ var decrypt = require('./util').decrypt;
 var fetchId = require('./util').fetchId;
 var authenticateSession = require('./session').authenticateSession;
 
+function notFound(response) {
+	response.writeHead(404, {'Content-Type': 'text/plain'});
+	response.write('404 Not found');
+	response.end();
+}
+
 function fetchCookie(request) {
 	var cookies = {};
 	var cookie = request.headers['cookie'];
@@ -23,25 +29,25 @@ function fetchCookie(request) {
 function resRoute(request, handle, pathname, response, postData) {
 	var stream = decrypt(postData);
 	var data = toArrBuf(new Buffer(stream, 'hex'));
+	var cookies;
 
 	id = fetchId(data);
 
 	if (typeof handle[id] === 'function') {	
-		var cookies = fetchCookie(request);
+		cookies = fetchCookie(request);
 
 		if (authenticateSession(id, cookies['piece'])) {
 			handle[id](response, data);
 		}
 		else {
 			// TODO
-			console.log("unauthenticated client accessed");
+			log.addLog('ERROR', 'unauthenticated client accessed : ' + cookies['piece']);
+			notFound(response);
 		}
 	}
 	else {
 		log.addLog('ERROR', 'No request handler found for ' + pathname);
-		response.writeHead(404, {'Content-Type': 'text/plain'});
-		response.write('404 Not found');
-		response.end();
+		notFound(response);	
 	}
 }
 

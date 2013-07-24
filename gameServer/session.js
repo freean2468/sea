@@ -2,7 +2,7 @@ var UUID = require('./util').UUID;
 var MINUTE = require('./define').MINUTE;
 var EXPIRATION = MINUTE * 15;
 var unmanagedAreaMsg = [12322730, 97057879, 212532706, 70841257, 1271857080, 1415117601];
-var unregisterMsg = 543619392;
+var unregisterMsg = [543619392, 1296626420];
 var sessionList = [];
 var emptyList = [];
 var k_idList = [];
@@ -71,6 +71,15 @@ function registerSession(piece, k_id) {
 	return piece;
 }
 
+function isUnregisterMsg(id) {
+	for (i = 0; i < unregisterMsg.length; ++i) {
+		if (unregisterMsg[i] === id) {
+			return true;
+		}
+	}
+	return false;
+}
+
 function authenticateSession(msgId, piece) {
 	if (unmanagedAreaMsg.indexOf(msgId) !== -1) {
 		return true;
@@ -81,7 +90,7 @@ function authenticateSession(msgId, piece) {
 
 		// There is a possibility to execute unregisterSession by timer on before explicitly.
 		if (res === true) {			
-			if (msgId === unregisterMsg) {
+			if (isUnregisterMsg(msgId)) {
 				console.log("unregisterSession");
 				unregisterSession(index, piece);	
 				clearTimeout(timerList[index]);

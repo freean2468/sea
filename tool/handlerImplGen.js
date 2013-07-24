@@ -22,6 +22,10 @@ process.argv.forEach(function(val, index, array) {
 	if (val === '-session') {
 		option += "var registerSession = require('./session').registerSession;" + '\n';
 	}
+
+	if (val === '-data') {
+		option += "var upgradeTable = require('./data').upgrade;" + '\n';
+	}
 });
 
 var protoIdList = [];
@@ -43,13 +47,14 @@ var mysql = {
 var mongodb = {
 	head: '',
 	body: '',
-};
+	};
 
 var headCommon = "var build = require('./protoBuild');" + '\n'
 				+ "var assert = require('assert');" + '\n'
 				+ "var encrypt = require('./util').encrypt;" + '\n'
 				+ "var toStream = require('./util').toStream;" + '\n'
 				+ "var UUID = require('./util').UUID;" + '\n'
+				+ "var convertMS2S = require('./util').convertMS2S;" + '\n'
 //				+ "var toRank = require('./request');" + '\n'
 				+ option
 				;
@@ -69,8 +74,17 @@ headCommon += "var log = require('./log');" + '\n'
 				+ '\t' + "res.end();" + '\n'
 				+ "}" + '\n'
 				+ '\n'
+				+ "function inspectField(msg) {" + '\n'
+				+ '\t' + "for (var val in msg) {" + '\n'
+				+ '\t\t' + "if (msg[val + ''] === undefined) {" + '\n'
+				+ '\t\t\t' + "return false;" + '\n'
+				+ '\t\t' + "}" + '\n'
+				+ '\t' + "}" + '\n'
+				+ '\t' + "return true;" + '\n'
+				+ "}" + '\n'
+				+ '\n'
 				;
-
+				
 function getDataByDelimiter(stream, delimiter) {
 	var start = stream.search(delimiter);
 	var restStream = stream.slice(start+1);

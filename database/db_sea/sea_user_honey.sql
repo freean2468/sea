@@ -47,7 +47,7 @@ CREATE PROCEDURE sea_LoadHoneyByReceiver(IN p_receiver_id INT)
 
 		IF count > 0 THEN
 			SELECT sender_id, sended_time  FROM sea_user_honey WHERE receiver_id = p_receiver_id;
-		else
+		ELSE
 			SELECT 0 AS sender_id;
 		END IF;
 	END
@@ -56,8 +56,15 @@ $$
 DROP PROCEDURE IF EXISTS sea_AcceptHoney $$
 CREATE PROCEDURE sea_AcceptHoney(IN p_sender_id INT, IN p_receiver_id INT, IN p_sended_time BIGINT)
 	BEGIN
-		DELETE FROM sea_user_honey WHERE p_sender_id = sender_id AND p_receiver_id = receiver_id AND p_sended_time = sended_time;
-		CALL sea_LoadHoney(p_receiver_id);
+		DECLARE count TINYINT;
+		SELECT COUNT(*) INTO count FROM sea_user_honey WHERE sender_id = p_sender_id AND receiver_id = p_receiver_id AND sended_time = p_sended_time;
+
+		IF count > 0 THEN
+			DELETE FROM sea_user_honey WHERE p_sender_id = sender_id AND p_receiver_id = receiver_id AND p_sended_time = sended_time;
+			CALL sea_LoadHoney(p_receiver_id);
+		ELSE
+			SELECT -1 AS res;
+		END IF;
 	END
 $$
 

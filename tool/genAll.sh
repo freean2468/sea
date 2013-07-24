@@ -14,7 +14,7 @@ cp -a handle.js ../logServer/
 echo 'handle.js has been copied to ../gameServer/ and ../logServer'
 
 node handlerGen.js 'c2s' 's2c' 'g2l'
-node handlerImplGen.js 'game' 'c2s' '-request' '-session'
+node handlerImplGen.js 'game' 'c2s' '-request' '-session' '-data'
 
 cp -a gameHandler_MySQL.js ../gameServer/handler_MySQL.js
 cp -a gameHandler_MongoDB.js ../gameServer/handler_MongoDB.js

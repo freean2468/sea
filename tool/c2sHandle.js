@@ -17,12 +17,19 @@ var handle = {
 	'221908254': handler.LoadPostedBatonResultHandler,
 	'618593180': handler.RequestPointRewardHandler,
 	'340332544': handler.BuyItemHandler,
+	'270070407': handler.BuyCharacterHandler,
+	'7077498': handler.BuyAssistantHandler,
 	'1073803264': handler.SendHoneyHandler,
 	'7797173': handler.AcceptHoneyHandler,
 	'830141680': handler.RequestBatonHandler,
 	'6550327': handler.AcceptBatonHandler,
 	'544665600': handler.EndBatonHandler,
 	'954007011': handler.AcceptBatonResultHandler,
+	'538639427': handler.UpgradeHoneyScoreHandler,
+	'592772539': handler.UpgradeHoneyTimeHandler,
+	'1816333906': handler.UpgradeCooldownHandler,
+	'462355036': handler.UpgradeMaxAttackHandler,
+	'14416584': handler.UpgradePetHandler,
 };
 
 exports.handle = handle;

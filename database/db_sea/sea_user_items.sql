@@ -1,8 +1,5 @@
 USE sea;
 
-########################
-##
-########################
 DROP TABLE IF EXISTS sea_user_items;
 
 CREATE TABLE sea.sea_user_items(

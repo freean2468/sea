@@ -1,4 +1,6 @@
 var enumList = [
+	'Pack',
+	'ID',
 ];
 
 exports.enumList = enumList;
@@ -20,12 +22,19 @@ var list = [
 	'LoadPostedBatonResult',
 	'RequestPointReward',
 	'BuyItem',
+	'BuyCharacter',
+	'BuyAssistant',
 	'SendHoney',
 	'AcceptHoney',
 	'RequestBaton',
 	'AcceptBaton',
 	'EndBaton',
 	'AcceptBatonResult',
+	'UpgradeHoneyScore',
+	'UpgradeHoneyTime',
+	'UpgradeCooldown',
+	'UpgradeMaxAttack',
+	'UpgradePet',
 ];
 
 var messageId = {
@@ -45,12 +54,19 @@ var messageId = {
 	LoadPostedBatonResult: 221908254,
 	RequestPointReward: 618593180,
 	BuyItem: 340332544,
+	BuyCharacter: 270070407,
+	BuyAssistant: 7077498,
 	SendHoney: 1073803264,
 	AcceptHoney: 7797173,
 	RequestBaton: 830141680,
 	AcceptBaton: 6550327,
 	EndBaton: 544665600,
 	AcceptBatonResult: 954007011,
+	UpgradeHoneyScore: 538639427,
+	UpgradeHoneyTime: 592772539,
+	UpgradeCooldown: 1816333906,
+	UpgradeMaxAttack: 462355036,
+	UpgradePet: 14416584,
 };
 
 exports.list = list;

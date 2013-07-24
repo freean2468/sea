@@ -1,5 +1,22 @@
 package C2S;
 
+enum Pack {
+	BASIC	= 1;
+}
+
+enum ID {
+	ONE	= 1;
+	TWO = 2;
+	THREE = 3;
+	FOUR = 4;
+	FIVE = 5;
+	SIX = 6;
+	SEVEN = 7;
+	EIGHT = 8;
+	NINE = 9;
+	TEN = 10;
+}
+
 message VersionInfo {
 	required string version = 2;
 } // end
@@ -31,18 +48,13 @@ message SelectCharacter {
 
 message SelectAssistant {
 	required string k_id = 2;
-	required int32 selected_assistant = 4;
+	required int32 selected_assistant = 3;
 } // end
 
 message StartGame {
 	required string k_id = 2;
 	required int32 selected_character = 3;
 	required int32 selected_assistant = 4;
-
-	enum Pack {
-		ZERO	= 1934963;
-		BASIC	= 1;		
-	}
 } // end
 
 message EndGame {
@@ -51,15 +63,9 @@ message EndGame {
 	required int32 selected_assistant = 4;
 	required int32 score = 5;
 	required int32 dist = 6;
-	required int32 kill = 7;
-	required int32 usedItem = 8;
-	required int32 playTime = 9;
-	required int32 coin = 10;
-
-	enum Pack {
-		ZERO	= 9728473;
-		BASIC	= 1;
-	}
+	required int32 enemy_kill = 7;
+	required int32 play_time = 8;
+	required int32 coin = 9;
 } // end
 
 message LoadRankInfo {
@@ -95,6 +101,42 @@ message BuyItem {
 	}
 } // end
 
+message BuyCharacter {
+	required string k_id = 2;
+	required Character character = 3;
+
+	enum Character {
+		ONE = 1;
+		TWO = 2;
+		THREE = 3;
+		FOUR = 4;
+		FIVE = 5;
+		SIX = 6;
+		SEVEN = 7;
+		EIGHT = 8;
+		NINE = 9;
+		TEN = 10;
+	}
+} // end
+
+message BuyAssistant {
+	required string k_id = 2;
+	required Assistant assistant = 3;
+
+	enum Assistant {
+		ONE = 1;
+		TWO = 2;
+		THREE = 3;
+		FOUR = 4;
+		FIVE = 5;
+		SIX = 6;
+		SEVEN = 7;
+		EIGHT = 8;
+		NINE = 9;
+		TEN = 10;
+	}
+} // end
+
 message SendHoney {
 	required string k_id = 2;
 	required string receiver_k_id = 3;
@@ -103,6 +145,7 @@ message SendHoney {
 message AcceptHoney {
 	required string k_id = 2;
 	required string sender_k_id = 3;
+	required int64 sended_time = 4;
 } // end
 
 message RequestBaton {
@@ -118,11 +161,6 @@ message AcceptBaton {
 	required int64 sended_time = 4;
 	required int32 selected_character = 5;
 	required int32 selected_assistant = 6;
-
-	enum Pack {
-		ZERO	= 1934963;
-		BASIC	= 1;		
-	}
 } // end
 
 message EndBaton {
@@ -133,15 +171,9 @@ message EndBaton {
 	required int32 selected_assistant = 6;
 	required int32 score = 7;
 	required int32 dist = 8;
-	required int32 kill = 9;
-	required int32 usedItem = 10;
-	required int32 playTime = 11;
-	required int32 coin = 12;
-
-	enum Pack {
-		ZERO	= 9728473;
-		BASIC	= 1;
-	}
+	required int32 enemy_kill = 9;
+	required int32 play_time = 10;
+	required int32 coin = 11;
 } // end
 
 message AcceptBatonResult {
@@ -149,3 +181,26 @@ message AcceptBatonResult {
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
 } // end
+
+message UpgradeHoneyScore {
+	required string k_id = 2;
+} // end
+
+message UpgradeHoneyTime {
+	required string k_id = 2;
+} // end
+
+message UpgradeCooldown {
+	required string k_id = 2;
+} // end
+
+message UpgradeMaxAttack {
+	required string k_id = 2;
+	required ID character_id = 3;
+} // end
+
+message UpgradePet {
+	required string k_id = 2;
+	required ID pet_id = 3;
+} // end
+

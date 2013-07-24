@@ -17,7 +17,7 @@ function findSth(stream, start, find) {
 function fetchEnum(stream) {
 	var enumeration = 'enum';
 	var message = 'message';
-	var end = '// end';
+	var end = '}';
 	var listOutput = '';
 	var enumPos = 0;
 	var pos = 0;

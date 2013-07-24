@@ -83,6 +83,16 @@ function BuyItemHandler(response, data) {
 	if (flags & options['MONGODB']) mongodb.BuyItemHandler(response, data);
 }
 
+function BuyCharacterHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.BuyCharacterHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.BuyCharacterHandler(response, data);
+}
+
+function BuyAssistantHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.BuyAssistantHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.BuyAssistantHandler(response, data);
+}
+
 function SendHoneyHandler(response, data) {
 	if (flags & options['MYSQL']) mysql.SendHoneyHandler(response, data);
 	if (flags & options['MONGODB']) mongodb.SendHoneyHandler(response, data);
@@ -111,6 +121,36 @@ function EndBatonHandler(response, data) {
 function AcceptBatonResultHandler(response, data) {
 	if (flags & options['MYSQL']) mysql.AcceptBatonResultHandler(response, data);
 	if (flags & options['MONGODB']) mongodb.AcceptBatonResultHandler(response, data);
+}
+
+function UpgradeHoneyScoreHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.UpgradeHoneyScoreHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.UpgradeHoneyScoreHandler(response, data);
+}
+
+function UpgradeHoneyTimeHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.UpgradeHoneyTimeHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.UpgradeHoneyTimeHandler(response, data);
+}
+
+function UpgradeCooldownHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.UpgradeCooldownHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.UpgradeCooldownHandler(response, data);
+}
+
+function UpgradeMaxAttackHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.UpgradeMaxAttackHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.UpgradeMaxAttackHandler(response, data);
+}
+
+function UpgradePetHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.UpgradePetHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.UpgradePetHandler(response, data);
+}
+
+function SystemMessageHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.SystemMessageHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.SystemMessageHandler(response, data);
 }
 
 function VersionInfoReplyHandler(response, data) {
@@ -183,6 +223,16 @@ function BuyItemReplyHandler(response, data) {
 	if (flags & options['MONGODB']) mongodb.BuyItemReplyHandler(response, data);
 }
 
+function BuyCharacterReplyHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.BuyCharacterReplyHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.BuyCharacterReplyHandler(response, data);
+}
+
+function BuyAssistantReplyHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.BuyAssistantReplyHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.BuyAssistantReplyHandler(response, data);
+}
+
 function SendHoneyReplyHandler(response, data) {
 	if (flags & options['MYSQL']) mysql.SendHoneyReplyHandler(response, data);
 	if (flags & options['MONGODB']) mongodb.SendHoneyReplyHandler(response, data);
@@ -211,6 +261,11 @@ function BatonResultHandler(response, data) {
 function AcceptBatonResultReplyHandler(response, data) {
 	if (flags & options['MYSQL']) mysql.AcceptBatonResultReplyHandler(response, data);
 	if (flags & options['MONGODB']) mongodb.AcceptBatonResultReplyHandler(response, data);
+}
+
+function UpgradeReplyHandler(response, data) {
+	if (flags & options['MYSQL']) mysql.UpgradeReplyHandler(response, data);
+	if (flags & options['MONGODB']) mongodb.UpgradeReplyHandler(response, data);
 }
 
 function AccountLoginHandler(response, data) {
@@ -299,12 +354,20 @@ exports.LoadPostedBatonHandler = LoadPostedBatonHandler;
 exports.LoadPostedBatonResultHandler = LoadPostedBatonResultHandler;
 exports.RequestPointRewardHandler = RequestPointRewardHandler;
 exports.BuyItemHandler = BuyItemHandler;
+exports.BuyCharacterHandler = BuyCharacterHandler;
+exports.BuyAssistantHandler = BuyAssistantHandler;
 exports.SendHoneyHandler = SendHoneyHandler;
 exports.AcceptHoneyHandler = AcceptHoneyHandler;
 exports.RequestBatonHandler = RequestBatonHandler;
 exports.AcceptBatonHandler = AcceptBatonHandler;
 exports.EndBatonHandler = EndBatonHandler;
 exports.AcceptBatonResultHandler = AcceptBatonResultHandler;
+exports.UpgradeHoneyScoreHandler = UpgradeHoneyScoreHandler;
+exports.UpgradeHoneyTimeHandler = UpgradeHoneyTimeHandler;
+exports.UpgradeCooldownHandler = UpgradeCooldownHandler;
+exports.UpgradeMaxAttackHandler = UpgradeMaxAttackHandler;
+exports.UpgradePetHandler = UpgradePetHandler;
+exports.SystemMessageHandler = SystemMessageHandler;
 exports.VersionInfoReplyHandler = VersionInfoReplyHandler;
 exports.RegisterAccountReplyHandler = RegisterAccountReplyHandler;
 exports.SelectCharacterReplyHandler = SelectCharacterReplyHandler;
@@ -319,12 +382,15 @@ exports.PostedBatonHandler = PostedBatonHandler;
 exports.PostedBatonResultHandler = PostedBatonResultHandler;
 exports.GameResultHandler = GameResultHandler;
 exports.BuyItemReplyHandler = BuyItemReplyHandler;
+exports.BuyCharacterReplyHandler = BuyCharacterReplyHandler;
+exports.BuyAssistantReplyHandler = BuyAssistantReplyHandler;
 exports.SendHoneyReplyHandler = SendHoneyReplyHandler;
 exports.RequestBatonReplyHandler = RequestBatonReplyHandler;
 exports.AcceptHoneyReplyHandler = AcceptHoneyReplyHandler;
 exports.AcceptBatonReplyHandler = AcceptBatonReplyHandler;
 exports.BatonResultHandler = BatonResultHandler;
 exports.AcceptBatonResultReplyHandler = AcceptBatonResultReplyHandler;
+exports.UpgradeReplyHandler = UpgradeReplyHandler;
 exports.AccountLoginHandler = AccountLoginHandler;
 exports.ConcurrentUserHandler = ConcurrentUserHandler;
 exports.PeakConcurrentUserHandler = PeakConcurrentUserHandler;
