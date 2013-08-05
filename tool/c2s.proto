@@ -2,6 +2,7 @@ package C2S;
 
 enum Pack {
 	BASIC	= 1;
+	MAX	= 2;
 }
 
 enum ID {
@@ -15,20 +16,21 @@ enum ID {
 	EIGHT = 8;
 	NINE = 9;
 	TEN = 10;
+	MAX = 11;
 }
 
 message VersionInfo {
-	optional uint64 id = 1 [default=97057879];
+	optional uint64 id = 1 [default=4324427];
 	required string version = 2;
 } // end
 
 message RegisterAccount {
-	optional uint64 id = 1 [default=1415117601];
+	optional uint64 id = 1 [default=1177254];
 	required string k_id = 2;
 } // end
 
 message UnregisterAccount {
-	optional uint64 id = 1 [default=1296626420];
+	optional uint64 id = 1 [default=10351738];
 	required string k_id = 2;
 } // end
 
@@ -38,36 +40,36 @@ message Login {
 } // end
 
 message Logout {
-	optional uint64 id = 1 [default=543619392];
+	optional uint64 id = 1 [default=323783];
 	required string k_id = 2;
 } // end
 
 message CheckInCharge {
-	optional uint64 id = 1 [default=770373176];
+	optional uint64 id = 1 [default=6355369];
 	required string k_id = 2;
 } // end
 
 message SelectCharacter {
-	optional uint64 id = 1 [default=683737635];
+	optional uint64 id = 1 [default=324419];
 	required string k_id = 2;
 	required int32 selected_character = 3;
 } // end
 
 message SelectAssistant {
-	optional uint64 id = 1 [default=1315109379];
+	optional uint64 id = 1 [default=2359002];
 	required string k_id = 2;
 	required int32 selected_assistant = 3;
 } // end
 
 message StartGame {
-	optional uint64 id = 1 [default=285274112];
+	optional uint64 id = 1 [default=1373111];
 	required string k_id = 2;
 	required int32 selected_character = 3;
 	required int32 selected_assistant = 4;
 } // end
 
 message EndGame {
-	optional uint64 id = 1 [default=1441135488];
+	optional uint64 id = 1 [default=6356356];
 	required string k_id = 2;
 	required int32 selected_character = 3;
 	required int32 selected_assistant = 4;
@@ -79,33 +81,33 @@ message EndGame {
 } // end
 
 message LoadRankInfo {
-	optional uint64 id = 1 [default=67040062];
+	optional uint64 id = 1 [default=389941];
 	required string k_id = 2;
 } // end
 
 message LoadPostedHoney {
-	optional uint64 id = 1 [default=2105277059];
+	optional uint64 id = 1 [default=3407142];
 	required string k_id = 2;
 } // end
 
 message LoadPostedBaton {
-	optional uint64 id = 1 [default=889849479];
+	optional uint64 id = 1 [default=23854771];
 	required string k_id = 2;
 } // end
 
 message LoadPostedBatonResult {
-	optional uint64 id = 1 [default=221908254];
+	optional uint64 id = 1 [default=1175967];
 	required string k_id = 2;
 } // end
 
 message RequestPointReward {
-	optional uint64 id = 1 [default=618593180];
+	optional uint64 id = 1 [default=1441362];
 	required string k_id = 2;
 	required int32 point = 3;
 } // end
 
 message BuyItem {
-	optional uint64 id = 1 [default=340332544];
+	optional uint64 id = 1 [default=5439087];
 	required string k_id = 2;
 	required Item item = 3;
 
@@ -114,11 +116,12 @@ message BuyItem {
 		LAST_ITEM = 2;
 		MAX_ATTACK = 3;
 		RANDOM = 4;
+		MAX = 5;
 	}
 } // end
 
-message BuyCharacter {
-	optional uint64 id = 1 [default=270070407];
+message BuyOrUpgradeCharacter {
+	optional uint64 id = 1 [default=7469576];
 	required string k_id = 2;
 	required Character character = 3;
 
@@ -133,11 +136,12 @@ message BuyCharacter {
 		EIGHT = 8;
 		NINE = 9;
 		TEN = 10;
+		MAX = 11;
 	}
 } // end
 
-message BuyAssistant {
-	optional uint64 id = 1 [default=7077498];
+message BuyOrUpgradeAssistant {
+	optional uint64 id = 1 [default=7467298];
 	required string k_id = 2;
 	required Assistant assistant = 3;
 
@@ -152,24 +156,25 @@ message BuyAssistant {
 		EIGHT = 8;
 		NINE = 9;
 		TEN = 10;
+		MAX = 11;
 	}
 } // end
 
 message SendHoney {
-	optional uint64 id = 1 [default=1073803264];
+	optional uint64 id = 1 [default=1440444];
 	required string k_id = 2;
 	required string receiver_k_id = 3;
 } // end
 
 message AcceptHoney {
-	optional uint64 id = 1 [default=7797173];
+	optional uint64 id = 1 [default=7470930];
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
 } // end
 
 message RequestBaton {
-	optional uint64 id = 1 [default=830141680];
+	optional uint64 id = 1 [default=3472750];
 	required string k_id = 2;
 	required string receiver_k_id = 3;
 	required string map = 4;
@@ -177,7 +182,7 @@ message RequestBaton {
 } // end
 
 message AcceptBaton {
-	optional uint64 id = 1 [default=6550327];
+	optional uint64 id = 1 [default=3534913];
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
@@ -186,7 +191,7 @@ message AcceptBaton {
 } // end
 
 message EndBaton {
-	optional uint64 id = 1 [default=544665600];
+	optional uint64 id = 1 [default=1505624];
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
@@ -200,36 +205,41 @@ message EndBaton {
 } // end
 
 message AcceptBatonResult {
-	optional uint64 id = 1 [default=954007011];
+	optional uint64 id = 1 [default=1569529];
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
 } // end
 
 message UpgradeHoneyScore {
-	optional uint64 id = 1 [default=538639427];
+	optional uint64 id = 1 [default=9500500];
 	required string k_id = 2;
 } // end
 
 message UpgradeHoneyTime {
-	optional uint64 id = 1 [default=592772539];
+	optional uint64 id = 1 [default=1571955];
 	required string k_id = 2;
 } // end
 
 message UpgradeCooldown {
-	optional uint64 id = 1 [default=1816333906];
+	optional uint64 id = 1 [default=1569677];
 	required string k_id = 2;
 } // end
 
-message UpgradeMaxAttack {
-	optional uint64 id = 1 [default=462355036];
+message InviteFriend {
+	optional uint64 id = 1 [default=4583783];
 	required string k_id = 2;
-	required ID character_id = 3;
+	required string friend_k_id = 3;
 } // end
 
-message UpgradePet {
-	optional uint64 id = 1 [default=14416584];
-	required string k_id = 2;
-	required ID pet_id = 3;
-} // end
+message LoadReward {
+	optional uint64 id = 1 [default=2552832];
+	required Reward reward = 2;
 
+	enum Reward {
+		INVITE_10_REWARD = 1;
+		INVITE_15_REWARD = 2;
+		INVITE_30_REWARD = 3;
+		MAX = 4;
+	}
+} // end

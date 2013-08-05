@@ -3,7 +3,22 @@ var toStream = require('./util').toStream;
 
 // data is a proto message object.
 function request(data) {
-	var callback = function(req, res) {
+	var stream = toStream(data);
+
+	var option = {
+		host: 'localhost',
+		port: 8889,
+		method: 'POST',
+		path: '/',
+		headers: {
+			'content-type': 'application/octet-stream',
+			'content-length': stream.length,
+			'connection': 'close',
+		},
+		agent: false,
+	};
+
+	var req = http.request(option, function(res) {
 //		var res_data = '';
 //
 //		console.log('STATUS: ' + res.statusCode);
@@ -19,26 +34,11 @@ function request(data) {
 //			var data = JSON.parse(res_data);
 //			handle(response, data);
 //		});
-		res.end();
-	};
-
-	var stream = toStream(data);
-
-	var toLog = {
-		host: 'localhost',
-		port: 8889,
-		method: 'POST',
-		path: '/',
-		headers: {
-			'Content-Type': 'application/octet-stream',
-			'Content-length': stream.length
-		}
-	};
-
-	var req = http.request(toLog, callback);
+//		res.end();
+	});
 
 	req.on('error', function(e) {
-		console.log("Got error: " + e.message);
+		console.log('Problem with request: ' + e.message);
 	});
 
 	// write the data

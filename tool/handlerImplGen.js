@@ -22,10 +22,6 @@ process.argv.forEach(function(val, index, array) {
 	if (val === '-session') {
 		option += "var registerSession = require('./session').registerSession;" + '\n';
 	}
-
-	if (val === '-data') {
-		option += "var upgradeTable = require('./data').upgrade;" + '\n';
-	}
 });
 
 var protoIdList = [];

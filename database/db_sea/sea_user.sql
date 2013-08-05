@@ -1,6 +1,10 @@
 USE sea;
 
+SET foreign_key_checks = 0;
+
 DROP TABLE IF EXISTS sea_user;
+
+SET foreign_key_checks = 1;
 
 CREATE TABLE sea.sea_user(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -31,8 +35,10 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 			INSERT sea_user(k_id) VALUES (p_k_id);
 			SET last_id = LAST_INSERT_ID();
 
-			INSERT sea_user_info(coin, mineral, lv, exp, point, honey, last_charged_time, selected_character, selected_assistant)
-			VALUES (99999, 9999, 1, 0, 0, 99, UNIX_TIMESTAMP(NOW()), 1, 0);
+			INSERT sea_user_info(coin, mineral, lv, exp, point, honey, last_charged_time, 
+									selected_character, selected_assistant, invite_count, mileage, draw)
+			VALUES (99999, 9999, 1, 0, 0, 99, UNIX_TIMESTAMP(NOW()), 
+					1, 0, 0, 0, 0);
 
 			INSERT sea_user_characters(character_one, character_two, character_three, character_four, character_five, character_six, character_seven, character_eight, character_nine, character_ten)
 			VALUES (1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -84,14 +90,21 @@ $$
 DROP PROCEDURE IF EXISTS sea_DeleteUser $$
 CREATE PROCEDURE sea_DeleteUser(IN p_id INT)
 	BEGIN
+		DECLARE k_id_copy varchar(40);
+
+		SELECT k_id INTO k_id_copy FROM sea_user WHERE id = p_id;
+
+		DELETE FROM sea_user_black WHERE k_id = k_id_copy;
+
+		DELETE FROM sea_user_info WHERE id = p_id;
+		DELETE FROM sea_user_characters WHERE id = p_id;
+		DELETE FROM sea_user_assistants WHERE id = p_id;
+		DELETE FROM sea_user_items WHERE id = p_id;
+		DELETE FROM sea_user_log WHERE id = p_id;
+		DELETE FROM sea_user_metric WHERE id = p_id;
+		DELETE FROM sea_user_upgrade WHERE id = p_id;
+
 		DELETE FROM sea_user WHERE id = p_id;
-##		DELETE FROM sea_user_info WHERE id = p_id;
-##		DELETE FROM sea_user_characters WHERE id = p_id;
-##		DELETE FROM sea_user_assistants WHERE id = p_id;
-##		DELETE FROM sea_items WHERE id = p_id;
-##		DELETE FROM sea_user_log WHERE id = p_id;
-##		DELETE FROM sea_user_metric WHERE id = p_id;
-##		DELETE FROM sea_user_upgrade WHERE id = p_id;
 	END
 $$
 

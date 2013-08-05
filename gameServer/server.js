@@ -36,7 +36,9 @@ function start(route, handle) {
 	
 	log.mkdirLog();
 
-	http.createServer(onRequest).listen(8888);
+	server = http.createServer(onRequest);
+	server.timeout = 0;
+	server.listen(8888);
 
 	console.log('game server has started.');
 	console.log('rank calc has started.');	
@@ -44,5 +46,7 @@ function start(route, handle) {
 	metric();	
 }
 
-exports.start = start;
-exports.rankingList = rankingList;
+module.exports = {
+	'start': start,
+	'rankingList': rankingList
+};

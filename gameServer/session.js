@@ -1,8 +1,8 @@
 var UUID = require('./util').UUID;
 var MINUTE = require('./define').MINUTE;
 var EXPIRATION = MINUTE * 15;
-var unmanagedAreaMsg = [12322730, 97057879, 212532706, 70841257, 1271857080, 1415117601];
-var unregisterMsg = [543619392, 1296626420];
+var unmanagedAreaMsg = require('./sessionInfo').unmanaged;
+var unregisterMsg = require('./sessionInfo').unregister;
 var sessionList = [];
 var emptyList = [];
 var k_idList = [];

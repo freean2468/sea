@@ -168,15 +168,18 @@ function fetchMessage(stream, index) {
 	console.log(outputFile + ' file has been generated');
 }
 
+var idx = 0;
+
 function hash(serial) {
 //	console.log(serial);
 
 	if (16 < serial.length) {
+		++idx;
 		while (1) {
 			var newSerial = '';
 
 			for (var i = 0; i < serial.length / 2; ++i) {
-				newSerial += String(serial.charCodeAt(i) ^ serial.charCodeAt(serial.length-i-1));
+				newSerial += String(serial.charCodeAt(i) ^ serial.charCodeAt(serial.length-i-1)) + idx;
 //				console.log(newSerial);
 			}			
 			

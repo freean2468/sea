@@ -7,7 +7,6 @@ var UUID = require('./util').UUID;
 var convertMS2S = require('./util').convertMS2S;
 var request = require('./request').request;
 var registerSession = require('./session').registerSession;
-var upgradeTable = require('./data').upgrade;
 var log = require('./log');
 
 function write(res, stream) {
@@ -96,13 +95,13 @@ function BuyItemHandler(response, data){
 	var msg = build.BuyItem.decode(data);
 } // end BuyItemHandler
 
-function BuyCharacterHandler(response, data){
-	var msg = build.BuyCharacter.decode(data);
-} // end BuyCharacterHandler
+function BuyOrUpgradeCharacterHandler(response, data){
+	var msg = build.BuyOrUpgradeCharacter.decode(data);
+} // end BuyOrUpgradeCharacterHandler
 
-function BuyAssistantHandler(response, data){
-	var msg = build.BuyAssistant.decode(data);
-} // end BuyAssistantHandler
+function BuyOrUpgradeAssistantHandler(response, data){
+	var msg = build.BuyOrUpgradeAssistant.decode(data);
+} // end BuyOrUpgradeAssistantHandler
 
 function SendHoneyHandler(response, data){
 	var msg = build.SendHoney.decode(data);
@@ -140,13 +139,13 @@ function UpgradeCooldownHandler(response, data){
 	var msg = build.UpgradeCooldown.decode(data);
 } // end UpgradeCooldownHandler
 
-function UpgradeMaxAttackHandler(response, data){
-	var msg = build.UpgradeMaxAttack.decode(data);
-} // end UpgradeMaxAttackHandler
+function InviteFriendHandler(response, data){
+	var msg = build.InviteFriend.decode(data);
+} // end InviteFriendHandler
 
-function UpgradePetHandler(response, data){
-	var msg = build.UpgradePet.decode(data);
-} // end UpgradePetHandler
+function LoadRewardHandler(response, data){
+	var msg = build.LoadReward.decode(data);
+} // end LoadRewardHandler
 
 exports.VersionInfoHandler = VersionInfoHandler;
 exports.RegisterAccountHandler = RegisterAccountHandler;
@@ -164,8 +163,8 @@ exports.LoadPostedBatonHandler = LoadPostedBatonHandler;
 exports.LoadPostedBatonResultHandler = LoadPostedBatonResultHandler;
 exports.RequestPointRewardHandler = RequestPointRewardHandler;
 exports.BuyItemHandler = BuyItemHandler;
-exports.BuyCharacterHandler = BuyCharacterHandler;
-exports.BuyAssistantHandler = BuyAssistantHandler;
+exports.BuyOrUpgradeCharacterHandler = BuyOrUpgradeCharacterHandler;
+exports.BuyOrUpgradeAssistantHandler = BuyOrUpgradeAssistantHandler;
 exports.SendHoneyHandler = SendHoneyHandler;
 exports.AcceptHoneyHandler = AcceptHoneyHandler;
 exports.RequestBatonHandler = RequestBatonHandler;
@@ -175,5 +174,5 @@ exports.AcceptBatonResultHandler = AcceptBatonResultHandler;
 exports.UpgradeHoneyScoreHandler = UpgradeHoneyScoreHandler;
 exports.UpgradeHoneyTimeHandler = UpgradeHoneyTimeHandler;
 exports.UpgradeCooldownHandler = UpgradeCooldownHandler;
-exports.UpgradeMaxAttackHandler = UpgradeMaxAttackHandler;
-exports.UpgradePetHandler = UpgradePetHandler;
+exports.InviteFriendHandler = InviteFriendHandler;
+exports.LoadRewardHandler = LoadRewardHandler;

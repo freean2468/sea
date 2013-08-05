@@ -27,7 +27,6 @@ function AccountLoginHandler(response, data){
 
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in AccountLoginHandler");
-		response.end();
 	} else {
 		var procedure = 'sea_AddLogLogin';
 		var params = "'" + msg['k_id'] + "'";
@@ -37,6 +36,8 @@ function AccountLoginHandler(response, data){
 			console.log(procedure + ': ' + res);
 		});
 	}
+
+	response.end();
 } // end AccountLoginHandler
 
 function ConcurrentUserHandler(response, data){
@@ -44,7 +45,6 @@ function ConcurrentUserHandler(response, data){
 	
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in ConcurrentUserHandler");
-		response.end();
 	} else {
 		var ccu = msg['ccu'];
 		var procedure = 'sea_AddConcurrentUser';
@@ -56,6 +56,7 @@ function ConcurrentUserHandler(response, data){
 			}
 		});
 	}
+	response.end();
 } // end ConcurrentUserHandler
 
 function PeakConcurrentUserHandler(response, data){
@@ -63,7 +64,6 @@ function PeakConcurrentUserHandler(response, data){
 	
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in PeakConcurrentUserHandler");
-		response.end();
 	} else {
 		var procedure = 'sea_PeakConcurrentUser';
 		var params = '';
@@ -81,6 +81,7 @@ function PeakConcurrentUserHandler(response, data){
 			});
 		});
 	}
+	response.end();
 } // end PeakConcurrentUserHandler
 
 function UniqueVisitorHandler(response, data){
@@ -88,7 +89,6 @@ function UniqueVisitorHandler(response, data){
 
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in UniqueVisitorHandler");
-		response.end();
 	} else {
 		var uv = msg['uv'];
 		var procedure = 'sea_AddUniqueVisitor';
@@ -100,6 +100,7 @@ function UniqueVisitorHandler(response, data){
 			}
 		});
 	}
+	response.end();
 } // end UniqueVisitorHandler
 
 function RetentionRateHandler(response, data){
@@ -107,7 +108,6 @@ function RetentionRateHandler(response, data){
 
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in RetentionRateHandler");
-		response.end();
 	} else {
 		var rr = msg['rr'];
 		var procedure = 'sea_AddRetentionRate';
@@ -119,6 +119,7 @@ function RetentionRateHandler(response, data){
 			}
 		});
 	}
+	response.end();
 } // end RetentionRateHandler
 
 function PayAssistantHandler(response, data){
@@ -126,7 +127,6 @@ function PayAssistantHandler(response, data){
 	
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in PayAssistantHandler");
-		response.end();
 	} else {
 		var procedure = 'sea_AddLogPayAssistant';
 		var params = "'" + msg['k_id'] + "', " + msg['paid_assistant'] + ", " + msg['rest_coin'];
@@ -136,6 +136,7 @@ function PayAssistantHandler(response, data){
 			console.log(procedure + ': ' + res);
 		});
 	}
+	response.end();
 } // end PayAssistantHandler
 
 function PayCharacterHandler(response, data){
@@ -143,7 +144,6 @@ function PayCharacterHandler(response, data){
 	
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in PayCharacterHandler");
-		response.end();
 	} else {
 		var procedure = 'sea_AddLogPayCharacter';
 		var params = "'" + msg['k_id'] + "', " + msg['paid_character'] + ", " + msg['rest_coin'];
@@ -153,6 +153,7 @@ function PayCharacterHandler(response, data){
 			console.log(procedure + ': ' + res);
 		});
 	}
+	response.end();
 } // end PayCharacterHandler
 
 function PayCoinHandler(response, data){
@@ -160,7 +161,6 @@ function PayCoinHandler(response, data){
 
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in PayCoinHandler");
-		response.end();
 	} else {
 		var procedure = 'sea_AddLogPayCoin';
 		var params = "'" + msg['k_id'] + "', " + msg['paid_coin'] + ", " + msg['rest_money'];
@@ -170,6 +170,7 @@ function PayCoinHandler(response, data){
 			console.log(procedure + ': ' + res);
 		});
 	}
+	response.end();
 } // end PayCoinHandler
 
 function PayHeartHandler(response, data){
@@ -177,7 +178,6 @@ function PayHeartHandler(response, data){
 
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in PayHeartHandler");
-		response.end();
 	} else {
 		var procedure = 'sea_AddLogPayHeart';
 		var params = "'" + msg['k_id'] + "', " + msg['paid_heart'] + ", " + msg['rest_coin'];
@@ -187,6 +187,7 @@ function PayHeartHandler(response, data){
 			console.log(procedure + ': ' + res);
 		});
 	}
+	response.end();
 } // end PayHeartHandler
 
 function PayItemHandler(response, data){
@@ -194,7 +195,6 @@ function PayItemHandler(response, data){
 	
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in PayItemHandler");
-		response.end();
 	} else {
 		var procedure = 'sea_AddLogPayItem';
 		var params = "'" + msg['k_id'] + "', " + msg['paid_item'] + ", " + msg['rest_coin'];
@@ -204,6 +204,7 @@ function PayItemHandler(response, data){
 			console.log(procedure + ': ' + res);
 		});
 	}
+	response.end();
 } // end PayItemHandler
 
 function PayMoneyHandler(response, data){
@@ -211,7 +212,6 @@ function PayMoneyHandler(response, data){
 	
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in PayMoneyHandler");
-		response.end();
 	} else {
 		var procedure = 'sea_AddLogPayMoney';
 		var params = "'" + msg['k_id'] + "', " + msg['paid_money'] + ", " + msg['rest_money'];
@@ -221,6 +221,7 @@ function PayMoneyHandler(response, data){
 			console.log(procedure + ': ' + res);
 		});
 	}
+	response.end();
 } // end PayMoneyHandler
 
 function UserGamePlayHandler(response, data){
@@ -228,7 +229,6 @@ function UserGamePlayHandler(response, data){
 
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in UserGamePlayHandler");
-		response.end();
 	} else {
 		var procedure = 'sea_AddLogPlay';
 		var params = "'" + msg['k_id'] + "', " + msg['selected_character'] + ", " + msg['selected_assistant'] + ", " + msg['score'] + ", " + msg['enemy_kill'] + ", " + msg['dist'] + ", " + msg['play_time'] + ", " + msg['exp_boost'] + ", " + msg['last_item'] + ", " + msg['max_attack'] + ", " + msg['random'];
@@ -238,6 +238,7 @@ function UserGamePlayHandler(response, data){
 			console.log(procedure + ': ' + res);
 		});
 	}
+	response.end();
 } // end UserGamePlayHandler
 
 function UserRegisterHandler(response, data){
@@ -245,7 +246,6 @@ function UserRegisterHandler(response, data){
 
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in UserRegisterHandler");
-		response.end();
 	} else {
 		var procedure = 'sea_AddLogRegister';
 		var params = "'" + msg['k_id'] + "'";
@@ -255,6 +255,7 @@ function UserRegisterHandler(response, data){
 			console.log(procedure + ': ' + res);		
 		});
 	}
+	response.end();
 } // end UserRegisterHandler
 
 function UserUnregisterHandler(response, data){
@@ -262,7 +263,6 @@ function UserUnregisterHandler(response, data){
 
 	if (inspectField(msg) === false) {
 		log.addLog('ERROR', "Undefined field is detected in UserUnregisterHandler");
-		response.end();
 	} else {
 		var procedure = 'sea_AddLogUnregister';
 		var params = "'" + msg['k_id'] + "'";
@@ -272,6 +272,7 @@ function UserUnregisterHandler(response, data){
 			console.log(procedure + ': ' + res);
 		});
 	}
+	response.end();
 } // end UserUnregisterHandler
 
 exports.AccountLoginHandler = AccountLoginHandler;

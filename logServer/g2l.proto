@@ -1,73 +1,73 @@
 package G2L;
 
 message AccountLogin {
-	optional uint64 id = 1 [default=64812982];
+	optional uint64 id = 1 [default=7599707];
 	required string k_id = 2;
 } // end
 
 message ConcurrentUser {
-	optional uint64 id = 1 [default=1694830347];
+	optional uint64 id = 1 [default=4584043];
 	required uint32 ccu = 2;
 } // end
 
 message PeakConcurrentUser {
-	optional uint64 id = 1 [default=1062535298];
+	optional uint64 id = 1 [default=3603338];
 } // end
 
 message UniqueVisitor {
-	optional uint64 id = 1 [default=1240072080];
+	optional uint64 id = 1 [default=8585154];
 	required uint32 uv = 2;
 } // end
 
 message RetentionRate {
-	optional uint64 id = 1 [default=920645671];
+	optional uint64 id = 1 [default=10615070];
 	required uint32 rr = 2;
 } // end
 
 message PayAssistant {
-	optional uint64 id = 1 [default=141882649];
+	optional uint64 id = 1 [default=1637470];
 	required string k_id = 2;
 	required int32 paid_assistant = 3;
 	required int32 rest_coin = 4;
 } // end
 
 message PayCharacter {
-	optional uint64 id = 1 [default=12186137];
+	optional uint64 id = 1 [default=5634001];
 	required string k_id = 2;
 	required int32 paid_character = 3;
 	required int32 rest_coin = 4;
 } // end
 
 message PayCoin {
-	optional uint64 id = 1 [default=184089216];
+	optional uint64 id = 1 [default=10681968];
 	required string k_id = 2;
 	required int32 paid_coin = 3;
 	required int32 rest_money = 4;
 } // end
 
 message PayHeart {
-	optional uint64 id = 1 [default=2093740032];
+	optional uint64 id = 1 [default=2683878];
 	required string k_id = 2;
 	required int32 paid_heart = 3;
 	required int32 rest_coin = 4;
 } // end
 
 message PayItem {
-	optional uint64 id = 1 [default=1894117888];
+	optional uint64 id = 1 [default=6683602];
 	required string k_id = 2;
 	required int32 paid_item = 3;
 	required int32 rest_coin = 4;
 } // end
 
 message PayMoney {
-	optional uint64 id = 1 [default=669446144];
+	optional uint64 id = 1 [default=4715093];
 	required string k_id = 2;
 	required int32 paid_money = 3;
 	required int32 rest_money =4;
 } // end
 
 message UserGamePlay {
-	optional uint64 id = 1 [default=97122730];
+	optional uint64 id = 1 [default=1701625];
 	required string k_id = 2;
 	required int32 selected_character = 3;
 	required int32 selected_assistant = 4;
@@ -82,11 +82,11 @@ message UserGamePlay {
 } // end
 
 message UserRegister {
-	optional uint64 id = 1 [default=124058308];
+	optional uint64 id = 1 [default=7732116];
 	required string k_id = 2;
 } // end
 
 message UserUnregister {
-	optional uint64 id = 1 [default=1240071080];
+	optional uint64 id = 1 [default=1701548];
 	required string k_id = 2;
 } // end

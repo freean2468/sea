@@ -1,0 +1,173 @@
+var msgs = require('./QTestMsgs').msgs,
+	http = require('http'),
+	assert = require('assert'),
+	encrypt = require('../tool/util').encrypt,
+	decrypt = require('../tool/util').decrypt,
+	toBuf = require('../tool/util').toBuf,
+	fetchId = require('../tool/util').fetchId,
+	toArrBuf = require('../tool/util').toArrBuf,
+	cookie = 0;
+
+module.exports = {
+	'VersionInfo works!' : function() {
+		
+	}
+	,
+	"'One' user's RegisterAccount works!" : function() {
+		var msg = getMsg('RegisterAccount');
+		msg['k_id'] = 'One';
+		request(msg, function (response, data) {
+			var stream = decrypt(data),
+				res = toArrBuf(new Buffer(stream, 'hex')),
+				id = fetchId(res);
+
+			for (var i = 0; i < msgs.length; ++i) {
+				var instance = msgs[i]['instance'];
+				if (id === instance['id']['low']) {
+					var name = msgs[i]['msg'];
+					assert.equal(name, 'RegisterAccountReply');
+				}
+			}
+			assert.notEqual(obj, undefined);			
+		} );
+	}
+	,
+	"'Other' user's RegisterAccount works!" : function() {
+		var msg = getMsg('RegisterAccount');
+		msg['k_id'] = 'Other';
+		request(msg, function (response, data) {
+			var stream = decrypt(data),
+				res = toArrBuf(new Buffer(stream, 'hex')),
+				id = fetchId(res);
+
+			for (var i = 0; i < msgs.length; ++i) {
+				var instance = msgs[i]['instance'];
+				if (id === instance['id']['low']) {
+					var name = msgs[i]['msg'];
+					assert.equal(name, 'RegisterAccountReply');
+				}
+			}
+			assert.notEqual(obj, undefined);		
+		} );
+	}
+	,
+	"'One' user's Login works!" : function() {
+		var msg = getMsg('Login');
+		msg['k_id'] = 'One';
+		request(msg, function (response, data) {
+			var stream = decrypt(data),
+				res = toArrBuf(new Buffer(stream, 'hex')),
+				id = fetchId(res),
+				obj;
+
+			for (var i = 0; i < msgs.length; ++i) {
+				var instance = msgs[i]['instance'];
+				if (id === instance['id']['low']) {
+					var name = msgs[i]['msg'];
+					var build = msgs[i]['build'];
+					assert.equal(name, 'AccountInfo');
+					obj = build.decode(res);
+				}
+			}
+			assert.notEqual(obj, undefined);
+
+			fetchCookie(response);
+
+			assert.notEqual(cookie, undefiend);
+		} );
+	}
+	,
+	"'One' user's UnregisterAccount works!" : function() {
+		var msg = getMsg('UnregisterAccount');
+		msg['k_id'] = 'One';
+		request(msg, function (response, data) {} );
+	}
+	,
+	"'Other' user's UnregisterAccount works!" : function() {
+		var msg = getMsg('UnregisterAccount');
+		msg['k_id'] = 'Other';
+		request(msg, function (response, data) {} );
+	}
+	,
+};
+
+function getMsg(name) {
+	for (var i = 0; i < msgs.length; ++i) {
+		if (msgs[i]['msg'] === name) {
+			var instance = msgs[i]['instance'];
+			return instance;			
+		}
+	}
+	return undefined;
+}
+
+function received(data) {
+	var stream = decrypt(data);
+
+	var res = toArrBuf(new Buffer(stream, 'hex'));
+	var id = fetchId(res);
+
+	for (var i = 0; i < msgs.length; ++i) {
+		var instance = msgs[i]['instance'];
+		var build = msgs[i]['build'];
+		if (id === instance['id']['low']) {
+			var name = msgs[i]['msg'];
+			var obj = build.decode(res);
+			return obj;
+		}
+	}
+	return undefined;
+}
+
+function request(data, process) {
+	var callback = function(response) {
+		var res_data = '';
+
+		response.setEncoding('utf8');
+
+		response.on('data', function(chunk) {
+			res_data += chunk;
+		});
+
+		response.on('end', function() {
+			process(response, res_data);
+		});
+	};
+
+	var buf = toBuf(data.toArrayBuffer()).toString('hex');
+	var stream = encrypt(buf);
+
+	var opts = {
+		host: 'localhost',
+		port: 8888,
+		method: 'POST',
+		path: '/',
+		headers: {
+			'Content-Type': 'application/octet-stream',
+			'Content-length': stream.length,
+			'Cookie': 'piece=' + cookie['piece']
+		}
+	};
+
+	var req = http.request(opts, callback);
+
+	req.on('error', function(e) {
+		console.log("Got error: " + e.message);
+	});
+	
+	// write the data
+	req.write(stream);
+	req.end();
+}
+
+function fetchCookie(res) {
+	var cookies = {};
+	var part = res.headers['set-cookie'] && res.headers['set-cookie'][0].split('=');
+
+	if (part !== undefined) {
+		cookies[part[0].trim()] = (part[1] || '').trim();
+		cookie = cookies;
+	}
+}
+
+

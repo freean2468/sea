@@ -24,6 +24,7 @@ DROP PROCEDURE IF EXISTS sea_AddCharacterOne $$
 CREATE PROCEDURE sea_AddCharacterOne(IN p_id INT)
 	BEGIN
 		UPDATE sea_user_characters SET character_one = character_one + 1 WHERE id = p_id;
+		SELECT character_one AS res FROM sea_user_characters where id = p_id;
 	END
 $$
 
@@ -31,6 +32,7 @@ DROP PROCEDURE IF EXISTS sea_AddCharacterTwo $$
 CREATE PROCEDURE sea_AddCharacterTwo(IN p_id INT)
 	BEGIN
 		UPDATE sea_user_characters SET character_two = character_two + 1 WHERE id = p_id;
+		SELECT character_two AS res FROM sea_user_characters where id = p_id;
 	END
 $$
 
@@ -38,6 +40,7 @@ DROP PROCEDURE IF EXISTS sea_AddCharacterThree $$
 CREATE PROCEDURE sea_AddCharacterThree(IN p_id INT)
 	BEGIN
 		UPDATE sea_user_characters SET character_three = character_three + 1 WHERE id = p_id;
+		SELECT character_three AS res FROM sea_user_characters where id = p_id;
 	END
 $$
 
@@ -45,6 +48,7 @@ DROP PROCEDURE IF EXISTS sea_AddCharacterFour $$
 CREATE PROCEDURE sea_AddCharacterFour(IN p_id INT)
 	BEGIN
 		UPDATE sea_user_characters SET character_four = character_four + 1 WHERE id = p_id;
+		SELECT character_four AS res FROM sea_user_characters where id = p_id;
 	END
 $$
 
@@ -52,6 +56,7 @@ DROP PROCEDURE IF EXISTS sea_AddCharacterFive $$
 CREATE PROCEDURE sea_AddCharacterFive(IN p_id INT)
 	BEGIN
 		UPDATE sea_user_characters SET character_five = character_five + 1 WHERE id = p_id;
+		SELECT character_five AS res FROM sea_user_characters where id = p_id;
 	END
 $$
 
@@ -59,6 +64,7 @@ DROP PROCEDURE IF EXISTS sea_AddCharacterSix $$
 CREATE PROCEDURE sea_AddCharacterSix(IN p_id INT)
 	BEGIN
 		UPDATE sea_user_characters SET character_six = character_six + 1 WHERE id = p_id;
+		SELECT character_six AS res FROM sea_user_characters where id = p_id;
 	END
 $$
 
@@ -66,6 +72,7 @@ DROP PROCEDURE IF EXISTS sea_AddCharacterSeven $$
 CREATE PROCEDURE sea_AddCharacterSeven(IN p_id INT)
 	BEGIN
 		UPDATE sea_user_characters SET character_seven = character_seven + 1 WHERE id = p_id;
+		SELECT character_seven AS res FROM sea_user_characters where id = p_id;
 	END
 $$
 
@@ -73,6 +80,7 @@ DROP PROCEDURE IF EXISTS sea_AddCharacterEight $$
 CREATE PROCEDURE sea_AddCharacterEight(IN p_id INT)
 	BEGIN
 		UPDATE sea_user_characters SET character_eight = character_eight + 1 WHERE id = p_id;
+		SELECT character_eight AS res FROM sea_user_characters where id = p_id;
 	END
 $$
 
@@ -80,6 +88,7 @@ DROP PROCEDURE IF EXISTS sea_AddCharacterNine $$
 CREATE PROCEDURE sea_AddCharacterNine(IN p_id INT)
 	BEGIN
 		UPDATE sea_user_characters SET character_nine = character_nine + 1 WHERE id = p_id;
+		SELECT character_nine AS res FROM sea_user_characters where id = p_id;
 	END
 $$
 
@@ -87,6 +96,7 @@ DROP PROCEDURE IF EXISTS sea_AddCharacterTen $$
 CREATE PROCEDURE sea_AddCharacterTen(IN p_id INT)
 	BEGIN
 		UPDATE sea_user_characters SET character_ten = character_ten + 1 WHERE id = p_id;
+		SELECT character_ten AS res FROM sea_user_characters where id = p_id;
 	END
 $$
 

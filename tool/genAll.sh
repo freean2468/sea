@@ -1,7 +1,11 @@
 node messageIdGen.js s2c c2s g2l
 
+node sessionInfoGen.js '-unmanaged' 'VersionInfo' 'RegisterAccount' 'Login' '-unregister' 'Logout' 'UnregisterAccount'
+cp -a sessionInfo.js ../gameServer/
+
 node protoBuildGen.js game s2c c2s g2l
 cp -a gameProtoBuild.js ../gameServer/protoBuild.js
+cp -a gameProtoBuild.js ../test/
 
 node protoBuildGen.js log g2l
 cp -a logProtoBuild.js ../logServer/protoBuild.js
@@ -14,7 +18,7 @@ cp -a handle.js ../logServer/
 echo 'handle.js has been copied to ../gameServer/ and ../logServer'
 
 node handlerGen.js 'c2s' 's2c' 'g2l'
-node handlerImplGen.js 'game' 'c2s' '-request' '-session' '-data'
+node handlerImplGen.js 'game' 'c2s' '-request' '-session'
 
 cp -a gameHandler_MySQL.js ../gameServer/handler_MySQL.js
 cp -a gameHandler_MongoDB.js ../gameServer/handler_MongoDB.js
@@ -28,8 +32,12 @@ echo 'logHandler_MongoDB and logHandler_MySQL have been copied to ../logServer/ 
 
 cp -a c2s.proto ../gameServer/
 cp -a s2c.proto ../gameServer/
-cp -a g2l.proto ../gameServer
+cp -a g2l.proto ../gameServer/
 echo 'c2s, s2c and g2l proto files have been copied to ../gameServer'
+
+cp -a c2s.proto ../test/
+cp -a s2c.proto ../test/
+cp -a g2l.proto ../test/
 
 cp -a g2l.proto ../logServer/
 echo 'g2l file has been copied to ../logServer'

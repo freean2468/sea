@@ -18,6 +18,7 @@ enum Result {
 	INVALID_BATON_RESULT = 15;
 	INVALID_HONEY = 16;
 	FULLY_UPGRADED = 17;
+	FAILED_DB_UPDATE = 18;
 }
 
 enum Update {
@@ -26,35 +27,35 @@ enum Update {
 }
 
 message SystemMessage {
-	optional uint64 id = 1 [default=930151572];
+	optional uint64 id = 1 [default=131068445];
 	required Result res = 2;
 } // end
 
 message VersionInfoReply {
-	optional uint64 id = 1 [default=212532706];
+	optional uint64 id = 1 [default=1089076202];
 	required string version = 2;
 } // end
 
 message RegisterAccountReply {
-	optional uint64 id = 1 [default=1622018505];
+	optional uint64 id = 1 [default=3142601];
 } // end
 
 message SelectCharacterReply {
-	optional uint64 id = 1 [default=1952577891];
+	optional uint64 id = 1 [default=54132717];
 } // end
 
 message SelectAssistantReply {
-	optional uint64 id = 1 [default=1952577891];
+	optional uint64 id = 1 [default=35517005];
 } // end
 
 message StartGameReply {
-	optional uint64 id = 1 [default=519762701];
+	optional uint64 id = 1 [default=278724898];
 	required int32 honey = 2;
 	required int64 last_charged_time = 3;
 } // end
 
 message AccountInfo {
-	optional uint64 id = 1 [default=74840653];
+	optional uint64 id = 1 [default=76741253];
 	required int32 coin = 2;
 	required int32 mineral = 3;
 	required int32 lv = 4;
@@ -71,8 +72,10 @@ message AccountInfo {
 	required int32 item_last = 15;
 	required int32 max_attack = 16;
 	required int32 random = 17;
-	repeated CharacterInfo characters = 18;
-	repeated AssistantInfo assistants = 19;
+	required int32 mileage = 18;
+	required int32 draw = 19;
+	repeated CharacterInfo characters = 20;
+	repeated AssistantInfo assistants = 21;
 
 	enum ID {
 		ONE = 1;
@@ -99,17 +102,17 @@ message AccountInfo {
 } // end
 
 message LogoutReply {
-	optional uint64 id = 1 [default=64091022];
+	optional uint64 id = 1 [default=1481109953];
 } // end
 
 message ChargeInfo {
-	optional uint64 id = 1 [default=7663927];
+	optional uint64 id = 1 [default=149157351];
 	required int32 honey = 2;
 	required int64 last_charged_time = 3;
 } // end
 
 message RankInfo {
-	optional uint64 id = 1 [default=25751552];
+	optional uint64 id = 1 [default=9108294];
 	required int64 overall_ranking = 2;
 	repeated FriendRankInfo ranking_list = 3;
 	
@@ -121,7 +124,7 @@ message RankInfo {
 } // end
 
 message PostedHoney {
-	optional uint64 id = 1 [default=92009206];
+	optional uint64 id = 1 [default=8122398];
 	repeated Honey honey = 2;
 
 	message Honey {
@@ -131,7 +134,7 @@ message PostedHoney {
 } // end
 
 message PostedBaton {
-	optional uint64 id = 1 [default=81000074];
+	optional uint64 id = 1 [default=4127219];
 	repeated Baton baton = 2;
 
 	message Baton {
@@ -143,7 +146,7 @@ message PostedBaton {
 } // end
 
 message PostedBatonResult {
-	optional uint64 id = 1 [default=642844433];
+	optional uint64 id = 1 [default=4191570];
 	repeated BatonResult baton_result = 2;
 	
 	message BatonResult {
@@ -154,7 +157,7 @@ message PostedBatonResult {
 } // end
 
 message GameResult {
-	optional uint64 id = 1 [default=10876551];
+	optional uint64 id = 1 [default=194297];
 	required int32 score = 2;
 	required int32 coin = 3;
 	required int32 bonus_score = 4;
@@ -162,11 +165,14 @@ message GameResult {
 	required int32 level = 6;
 	required int32 exp = 7;
 	required int32 total_coin = 8;
+	required int32 mileage = 9;
+	required int32 draw = 10;
 } // end
 
 message BuyItemReply {
-	optional uint64 id = 1 [default=74117480];
+	optional uint64 id = 1 [default=4191111];
 	required Item item = 2;
+	required int32 coin = 3;
 
 	enum Item {
 		EXP_BOOST = 1;
@@ -185,9 +191,13 @@ message BuyItemReply {
 	}
 } // end 
 
-message BuyCharacterReply {
-	optional uint64 id = 1 [default=2059273157];
+message BuyOrUpgradeCharacterReply {
+	optional uint64 id = 1 [default=6160160];
 	required Character character = 2;
+	required int32 lv = 3;
+	required int32 coin = 4;
+	required int32 mileage = 5;
+	required int32 draw = 6;
 
 	enum Character {
 		ONE = 1;
@@ -203,9 +213,13 @@ message BuyCharacterReply {
 	}
 } // end
 
-message BuyAssistantReply {
-	optional uint64 id = 1 [default=2059273358];
+message BuyOrUpgradeAssistantReply {
+	optional uint64 id = 1 [default=1176176];
 	required Assistant assistant = 2;
+	required int32 lv = 3;
+	required int32 coin = 4;
+	required int32 mileage = 5;
+	required int32 draw = 6;
 
 	enum Assistant {
 		ONE = 1;
@@ -222,36 +236,59 @@ message BuyAssistantReply {
 } // end
 
 message SendHoneyReply {
-	optional uint64 id = 1 [default=518193085];
+	optional uint64 id = 1 [default=1242437];
+	required int32 mileage = 2;
+	required int32 draw = 3;
 } // end
 
 message RequestBatonReply {
-	optional uint64 id = 1 [default=1132791610];
+	optional uint64 id = 1 [default=194286];
 	required int32 coin = 2;
 } // end
 
 message AcceptHoneyReply {
-	optional uint64 id = 1 [default=510456537];
+	optional uint64 id = 1 [default=3208394];
 } // end
 
 message AcceptBatonReply {
-	optional uint64 id = 1 [default=807931012];
+	optional uint64 id = 1 [default=7270557];
 } // end
 
 message BatonResult {
-	optional uint64 id = 1 [default=7864253];
+	optional uint64 id = 1 [default=261180];
 	required int32 coin = 2;
 	required int32 total_coin = 3;
 	required Update update = 4;
 } // end
 
 message AcceptBatonResultReply {
-	optional uint64 id = 1 [default=1775630798];
+	optional uint64 id = 1 [default=5242518];
 	required Update update = 2;
 	required int32 score = 3;
 } // end
 
 message UpgradeReply {
-	optional uint64 id = 1 [default=97120694];
+	optional uint64 id = 1 [default=3273014];
 	required int32 coin = 2;
+	required int32 mileage = 3;
+	required int32 draw = 4;
+} // end
+
+message InviteFriendReply {
+	optional uint64 id = 1 [default=5307594];
+	required int32 invite_count = 2;
+	required int32 mileage = 3;
+	required int32 draw = 4;
+} // end
+
+message LoadRewardReply {
+	optional uint64 id = 1 [default=325704];
+	required Reward reward = 2;
+
+	enum Reward {
+		INVITE_10_REWARD = 1;
+		INVITE_15_REWARD = 2;
+		INVITE_30_REWARD = 3;
+		MAX = 4;
+	}
 } // end

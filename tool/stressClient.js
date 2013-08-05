@@ -3,7 +3,7 @@ var idx;
 
 process.argv.forEach(function(val, index, array) {
 	if ( index === 2) {
-		idx = val[0];
+		idx = val;
 	}	
 });
 
@@ -39,18 +39,21 @@ var endBaton = new build.EndBaton();
 var acceptBatonResult = new build.AcceptBatonResult();
 var acceptBatonResultReply = new build.AcceptBatonResultReply();
 var batonResult = new build.BatonResult();
+var systemMessage = new build.SystemMessage();
 
 var http = require('http');
 var encrypt = require('./util').encrypt;
 var decrypt = require('./util').decrypt;
 var fetchId = require('./util').fetchId;
-var UUID = require('./util').UUID;
 var toBuf = require('./util').toBuf;
 var toArrBuf = require('./util').toArrBuf;
 
 var piece = "";
+var k_id = require('./kIdTable').table[idx];
 
-registerAccount['k_id'] = require('./kIdTable').table[idx];
+var pre = new Date().getTime();
+
+registerAccount['k_id'] = k_id;
 
 request(registerAccount);
 
@@ -83,82 +86,62 @@ function request(data) {
 			var id = fetchId(res);
 
 			if (id === registerAccountReply['id']['low']) {
-				login['k_id'] = registerAccount['k_id'];
+				login['k_id'] = k_id;
 				request(login);
-
-//				unregisterAccount['k_id'] = res['k_id'];
-//				request(unregisterAccount);
 			} else if (id === accountInfo['id']['low']) {
-				msg = build.AccountInfo.decode(res);
-				if (msg['res'] === build.Result['BLOCK']) {
-				} else {
-					var cookies = fetchCookie(response);
-					piece = cookies['piece'];
-					loadRankInfo['k_id'] = registerAccount['k_id'];
-					request(loadRankInfo);
-				}
+				var cookies = fetchCookie(response);
+				piece = cookies['piece'];
+				loadRankInfo['k_id'] = k_id;
+				request(loadRankInfo);				
 			} else if (id === rankInfo['id']['low']) {
-				loadPostedHoney['k_id'] = registerAccount['k_id'];
+				loadPostedHoney['k_id'] = k_id;
 				request(loadPostedHoney);
 			} else if (id === postedHoney['id']['low']) {
-				loadPostedBaton['k_id'] = registerAccount['k_id'];
+				loadPostedBaton['k_id'] = k_id;
 				request(loadPostedBaton);
 			} else if (id === postedBaton['id']['low']) {
 				msg = build.PostedBaton.decode(res);
-				loadPostedBatonResult['k_id'] = registerAccount['k_id'];
+				loadPostedBatonResult['k_id'] = k_id;
 				request(loadPostedBatonResult);
 			} else if (id === postedBatonResult['id']['low']) {
-				checkInCharge['k_id'] = registerAccount['k_id'];
+				checkInCharge['k_id'] = k_id;
 				request(checkInCharge);
 			}
-			else if (id === acceptHoneyReply['id']['low']) {
-				logout['k_id'] = registerAccount['k_id'];
-				request(logout);
-			}
-			else if (id === acceptBatonReply['id']['low']) {
-				endBaton['k_id'] = registerAccount['k_id'];
-				endBaton['sender_k_id'] = acceptBaton['sender_k_id'];
-				endBaton['sended_time'] = acceptBaton['sended_time'];
-				endBaton['selected_character'] = acceptBaton['selected_character'];
-				endBaton['selected_assistant'] = acceptBaton['selected_assistant'];
-				endBaton['score'] = Math.floor(Math.random() * 1000) + 1;
-				endBaton['dist'] = Math.floor(Math.random() * 10) + 1;
-				endBaton['kill'] = Math.floor(Math.random() * 10) + 1;
-				endBaton['usedItem'] = 0;
-				endBaton['playTime'] = Math.floor(Math.random() * 1000) + 1; 
-				endBaton['coin'] = Math.floor(Math.random() * 1000) + 1;
-
-				request(endBaton);
-			}
-			else if (id === batonResult['id']['low']) {
-			}
 			else if (id === chargeInfo['id']['low']) {
-				buyItem['k_id'] = registerAccount['k_id'];
-				buyItem['item'] = Math.floor(Math.random() * build.BuyItem.Item['RANDOM']) + 1;
+				buyItem['k_id'] = k_id;
+				buyItem['item'] = Math.floor(Math.random() * (build.BuyItem.Item['MAX']-1)) + 1;
 				request(buyItem);
 			}
 			else if (id === buyItemReply['id']['low']){
-				startGame['k_id'] = registerAccount['k_id'];
-				startGame['selected_character'] = build.StartGame.Pack['BASIC'];
-				startGame['selected_assistant'] = build.StartGame.Pack['ZERO'];
+				startGame['k_id'] = k_id;
+				startGame['selected_character'] = 1;
+				startGame['selected_assistant'] = 0;
 				request(startGame);
 			}
 			else if (id === startGameReply['id']['low']) {
-				endGame['k_id'] = registerAccount['k_id'];
-				endGame['dist'] = 100;
-				endGame['kill'] = 5;
-				endGame['usedItem'] = 0;
-				endGame['selected_character'] = build.EndGame.Pack['BASIC'];
-				endGame['selected_assistant'] = build.EndGame.Pack['ZERO'];
+				endGame['k_id'] = k_id;
+				endGame['dist'] = Math.floor(Math.random() * 100);
+				endGame['enemy_kill'] = Math.floor(Math.random() * 10);
+				endGame['selected_character'] = 1;
+				endGame['selected_assistant'] = 0;
 				endGame['score'] = Math.floor(Math.random() * 1000) + 1;
-				endGame['playTime'] = Math.floor(Math.random() * 1000) + 1;
+				endGame['play_time'] = Math.floor(Math.random() * 1000) + 1;
 				endGame['coin'] = Math.floor(Math.random() * 1000) + 1;
 				request(endGame);
 			}
 			else if (id === gameResult['id']['low']) {
-				logout['k_id'] = registerAccount['k_id'];
+				logout['k_id'] = k_id;
 				request(logout);
-				console.log(logout['k_id'] + " : logout!");
+				var post = new Date().getTime();
+				var period = post - pre;
+
+				console.log(logout['k_id'] + " : logout! (" + period + "ms)");
+			} else if (id === systemMessage['id']['low']) {
+				msg = build.SystemMessage.decode(res);
+				if (msg['res'] === build.Result['EXISTED_ACCOUNT']) {
+					login['k_id'] = k_id;
+					request(login);					
+				}
 			}
 			else {
 
@@ -175,9 +158,10 @@ function request(data) {
 		method: 'POST',
 		path: '/',
 		headers: {
-			'Content-Type': 'application/octet-stream',
-			'Content-length': stream.length,
-			'Cookie': 'piece=' + piece
+			'content-type': 'application/octet-stream',
+			'content-length': stream.length,
+			'cookie': 'piece=' + piece,
+			'connection': 'close',
 		}
 	};
 

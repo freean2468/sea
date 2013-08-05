@@ -155,11 +155,11 @@ for (var i = 0; i < protoFileList.length; ++i) {
 	}
 }
 
-var outputFile = 'QTestTable.js';
+var outputFile = 'table.js';
 fs.writeFileSync(outputFile, contents + head + body + tail);
 console.log(outputFile + ' file has been generated');
 
-var root = require('./QTestTable.js').root;
+var root = require('./table.js').root;
 head = "var build = require('./gameProtoBuild');" + '\n'
 	+ '\n'
 	+ "var msgs = [" + '\n'
@@ -180,6 +180,6 @@ for (i = 0; i < root.length; ++i) {
 	}
 }
 
-outputFile = 'QTestMsgs.js';
+outputFile = 'msg.js';
 fs.writeFileSync(outputFile, head + body + tail);
 console.log(outputFile + ' file has been generated');

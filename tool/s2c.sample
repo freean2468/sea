@@ -18,6 +18,7 @@ enum Result {
 	INVALID_BATON_RESULT = 15;
 	INVALID_HONEY = 16;
 	FULLY_UPGRADED = 17;
+	FAILED_DB_UPDATE = 18;
 }
 
 enum Update {
@@ -64,8 +65,10 @@ message AccountInfo {
 	required int32 item_last = 15;
 	required int32 max_attack = 16;
 	required int32 random = 17;
-	repeated CharacterInfo characters = 18;
-	repeated AssistantInfo assistants = 19;
+	required int32 mileage = 18;
+	required int32 draw = 19;
+	repeated CharacterInfo characters = 20;
+	repeated AssistantInfo assistants = 21;
 
 	enum ID {
 		ONE = 1;
@@ -148,10 +151,13 @@ message GameResult {
 	required int32 level = 6;
 	required int32 exp = 7;
 	required int32 total_coin = 8;
+	required int32 mileage = 9;
+	required int32 draw = 10;
 } // end
 
 message BuyItemReply {
 	required Item item = 2;
+	required int32 coin = 3;
 
 	enum Item {
 		EXP_BOOST = 1;
@@ -170,8 +176,12 @@ message BuyItemReply {
 	}
 } // end 
 
-message BuyCharacterReply {
+message BuyOrUpgradeCharacterReply {
 	required Character character = 2;
+	required int32 lv = 3;
+	required int32 coin = 4;
+	required int32 mileage = 5;
+	required int32 draw = 6;
 
 	enum Character {
 		ONE = 1;
@@ -187,8 +197,12 @@ message BuyCharacterReply {
 	}
 } // end
 
-message BuyAssistantReply {
+message BuyOrUpgradeAssistantReply {
 	required Assistant assistant = 2;
+	required int32 lv = 3;
+	required int32 coin = 4;
+	required int32 mileage = 5;
+	required int32 draw = 6;
 
 	enum Assistant {
 		ONE = 1;
@@ -205,6 +219,8 @@ message BuyAssistantReply {
 } // end
 
 message SendHoneyReply {
+	required int32 mileage = 2;
+	required int32 draw = 3;
 } // end
 
 message RequestBatonReply {
@@ -230,4 +246,23 @@ message AcceptBatonResultReply {
 
 message UpgradeReply {
 	required int32 coin = 2;
+	required int32 mileage = 3;
+	required int32 draw = 4;
+} // end
+
+message InviteFriendReply {
+	required int32 invite_count = 2;
+	required int32 mileage = 3;
+	required int32 draw = 4;
+} // end
+
+message LoadRewardReply {
+	required Reward reward = 2;
+
+	enum Reward {
+		INVITE_10_REWARD = 1;
+		INVITE_15_REWARD = 2;
+		INVITE_30_REWARD = 3;
+		MAX = 4;
+	}
 } // end

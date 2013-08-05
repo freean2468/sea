@@ -8,7 +8,7 @@ var tail = "];" + '\n';
 
 tail += "\nexports.table = table;";
 
-for (i = 0; i < 2000; ++i) {
+for (i = 0; i < 10000; ++i) {
 	body += "\t'" + UUID() + "', \n";
 }
 

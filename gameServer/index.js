@@ -1,6 +1,5 @@
-var server = require('./server');
-var router = require('./router');
-
-var handle = require('./handle').handle;
+var server = require('./server'),
+	router = require('./router'),
+	handle = require('./handle').handle;
 
 server.start(router.resRoute, handle);

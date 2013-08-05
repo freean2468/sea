@@ -2,6 +2,7 @@ package C2S;
 
 enum Pack {
 	BASIC	= 1;
+	MAX	= 2;
 }
 
 enum ID {
@@ -15,6 +16,7 @@ enum ID {
 	EIGHT = 8;
 	NINE = 9;
 	TEN = 10;
+	MAX = 11;
 }
 
 message VersionInfo {
@@ -98,10 +100,11 @@ message BuyItem {
 		LAST_ITEM = 2;
 		MAX_ATTACK = 3;
 		RANDOM = 4;
+		MAX = 5;
 	}
 } // end
 
-message BuyCharacter {
+message BuyOrUpgradeCharacter {
 	required string k_id = 2;
 	required Character character = 3;
 
@@ -116,10 +119,11 @@ message BuyCharacter {
 		EIGHT = 8;
 		NINE = 9;
 		TEN = 10;
+		MAX = 11;
 	}
 } // end
 
-message BuyAssistant {
+message BuyOrUpgradeAssistant {
 	required string k_id = 2;
 	required Assistant assistant = 3;
 
@@ -134,6 +138,7 @@ message BuyAssistant {
 		EIGHT = 8;
 		NINE = 9;
 		TEN = 10;
+		MAX = 11;
 	}
 } // end
 
@@ -194,13 +199,18 @@ message UpgradeCooldown {
 	required string k_id = 2;
 } // end
 
-message UpgradeMaxAttack {
+message InviteFriend {
 	required string k_id = 2;
-	required ID character_id = 3;
+	required string friend_k_id = 3;
 } // end
 
-message UpgradePet {
-	required string k_id = 2;
-	required ID pet_id = 3;
-} // end
+message LoadReward {
+	required Reward reward = 2;
 
+	enum Reward {
+		INVITE_10_REWARD = 1;
+		INVITE_15_REWARD = 2;
+		INVITE_30_REWARD = 3;
+		MAX = 4;
+	}
+} // end

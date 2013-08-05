@@ -13,6 +13,9 @@ CREATE TABLE sea.sea_user_info(
 	last_charged_time BIGINT NOT NULL,
 	selected_character TINYINT NOT NULL,
 	selected_assistant TINYINT NOT NULL,
+	invite_count SMALLINT NOT NULL,
+	mileage TINYINT UNSIGNED NOT NULL,
+	draw SMALLINT UNSIGNED NOT NULL,
 
 	INDEX idx_user_info_1 (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -22,8 +25,8 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS sea_LoadUserInfo $$
 CREATE PROCEDURE sea_LoadUserInfo(IN p_id INT)
 	BEGIN
-		SELECT I.coin, I.mineral, I.lv, I.exp, I.point, I.honey, I.last_charged_time, I.selected_character, I.selected_assistant, 
-				IT.exp_boost, IT.item_last, IT.max_attack, IT.random, 
+		SELECT I.coin, I.mineral, I.lv, I.exp, I.point, I.honey, I.last_charged_time, I.selected_character, I.selected_assistant, I.invite_count, I.mileage, I.draw,
+				IT.exp_boost, IT.item_last, IT.max_attack, IT.random,
 				M.uv, 
 				UG.honey_score, UG.honey_time, UG.cooldown,
 				C.character_one, C.character_two, C.character_three, C.character_four, C.character_five, C.character_six, C.character_seven, C.character_eight, C.character_nine, C.character_ten,
@@ -52,10 +55,24 @@ CREATE PROCEDURE sea_LoadCoin(IN p_id INT)
 	END
 $$
 
+DROP PROCEDURE IF EXISTS sea_LoadInviteCountWithMileageAndDraw $$
+CREATE PROCEDURE sea_LoadInviteCountWithMileageAndDraw(IN p_id INT)
+	BEGIN
+		SELECT invite_count mileage, draw AS res FROM sea.sea_user_info WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_LoadMileageAndDraw $$
+CREATE PROCEDURE sea_LoadMileageAndDraw(IN p_id INT)
+	BEGIN
+		SELECT mileage, draw FROM sea.sea_user_info WHERE id = p_id;
+	END
+$$
+
 DROP PROCEDURE IF EXISTS sea_LoadUserBriefInfo $$
 CREATE PROCEDURE sea_LoadUserBriefInfo(IN p_id INT)
 	BEGIN
-		SELECT coin, lv, exp FROM sea.sea_user_info WHERE id = p_id;
+		SELECT coin, lv, exp, mileage, draw FROM sea.sea_user_info WHERE id = p_id;
 	END
 $$
 
@@ -130,5 +147,28 @@ CREATE PROCEDURE sea_UpdateSelectedAssistant(IN p_id INT, IN p_selected TINYINT)
 		UPDATE sea_user_info SET selected_assistant = p_selected WHERE id = p_id;
 	END
 $$
+
+DROP PROCEDURE IF EXISTS sea_UpdateInviteCount $$
+CREATE PROCEDURE sea_UpdateInviteCount(IN p_id INT, IN p_invite_count TINYINT)
+	BEGIN
+		UPDATE sea_user_info SET invite_count = p_invite_count WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_UpdateMileage $$
+CREATE PROCEDURE sea_UpdateMileage(IN p_id INT, IN p_mileage TINYINT)
+	BEGIN
+		UPDATE sea_user_info SET mileage = p_mileage WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_UpdateDraw $$
+CREATE PROCEDURE sea_UpdateDraw(IN p_id INT, IN p_draw TINYINT)
+	BEGIN
+		UPDATE sea_user_info SET draw = p_draw WHERE id = p_id;
+	END
+$$
+
+
 
 DELIMITER ;

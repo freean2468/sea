@@ -7,7 +7,6 @@ var UUID = require('./util').UUID;
 var convertMS2S = require('./util').convertMS2S;
 var request = require('./request').request;
 var registerSession = require('./session').registerSession;
-var upgradeTable = require('./data').upgrade;
 var log = require('./log');
 
 function write(res, stream) {
@@ -144,7 +143,8 @@ function LoginHandler(response, data){
 						params = id;											
 
 						mysql.call(procedure, params, function (results, fields) {
-							res = results[0][0];
+							console.log(results);
+							var _res = results[0][0];
 							var Pack = build.AccountInfo.Pack;
 							var piece = UUID();
 
@@ -154,90 +154,90 @@ function LoginHandler(response, data){
 								write(response, toStream(sysMsg));
 							} else {
 								// info
-								rMsg['coin'] = res['coin'];
-								rMsg['mineral'] = res['mineral'];
-								rMsg['lv'] = res['lv'];
-								rMsg['exp'] = res['exp'];
-								rMsg['point'] = res['point'];
-								rMsg['honey'] = res['honey'];
-								rMsg['last_charged_time'] = res['last_charged_time'];
-								rMsg['selected_character'] = res['selected_character'];
-								rMsg['selected_assistant'] = res['selected_assistant'];
+								rMsg['coin'] = _res['coin'];
+								rMsg['mineral'] = _res['mineral'];
+								rMsg['lv'] = _res['lv'];
+								rMsg['exp'] = _res['exp'];
+								rMsg['point'] = _res['point'];
+								rMsg['honey'] = _res['honey'];
+								rMsg['last_charged_time'] = _res['last_charged_time'];
+								rMsg['selected_character'] = _res['selected_character'];
+								rMsg['selected_assistant'] = _res['selected_assistant'];
 
 								// character
-								if (res['character_one'] > 0) {	
-									rMsg['characters'].push({'id':build.AccountInfo.ID['ONE'], 'upgraded':res['character_one']}); 
+								if (_res['character_one'] > 0) {	
+									rMsg['characters'].push({'id':build.AccountInfo.ID['ONE'], 'upgraded':_res['character_one']}); 
 								}
-								if (res['character_two'] > 0) {	
-									rMsg['characters'].push({'id':build.AccountInfo.ID['TWO'], 'upgraded':res['character_two']}); 
+								if (_res['character_two'] > 0) {	
+									rMsg['characters'].push({'id':build.AccountInfo.ID['TWO'], 'upgraded':_res['character_two']}); 
 								}
-								if (res['character_three'] > 0) { 
-									rMsg['characters'].push({'id':build.AccountInfo.ID['THREE'], 'upgraded':res['character_three']});
+								if (_res['character_three'] > 0) { 
+									rMsg['characters'].push({'id':build.AccountInfo.ID['THREE'], 'upgraded':_res['character_three']});
 								}
-								if (res['character_four'] > 0) { 
-									rMsg['characters'].push({'id':build.AccountInfo.ID['FOUR'], 'upgraded':res['character_four']}); 
+								if (_res['character_four'] > 0) { 
+									rMsg['characters'].push({'id':build.AccountInfo.ID['FOUR'], 'upgraded':_res['character_four']}); 
 								}
-								if (res['character_five'] > 0) { 
-									rMsg['characters'].push({'id':build.AccountInfo.ID['FIVE'], 'upgraded':res['character_five']}); 
+								if (_res['character_five'] > 0) { 
+									rMsg['characters'].push({'id':build.AccountInfo.ID['FIVE'], 'upgraded':_res['character_five']}); 
 								}
-								if (res['character_six'] > 0) {	
-									rMsg['characters'].push({'id':build.AccountInfo.ID['SIX'], 'upgraded':res['character_six']}); 
+								if (_res['character_six'] > 0) {	
+									rMsg['characters'].push({'id':build.AccountInfo.ID['SIX'], 'upgraded':_res['character_six']}); 
 								}
-								if (res['character_seven'] > 0) { 
-									rMsg['characters'].push({'id':build.AccountInfo.ID['SEVEN'], 'upgraded':res['character_seven']});
+								if (_res['character_seven'] > 0) { 
+									rMsg['characters'].push({'id':build.AccountInfo.ID['SEVEN'], 'upgraded':_res['character_seven']});
 								}
-								if (res['character_eight'] > 0) { 
-									rMsg['characters'].push({'id':build.AccountInfo.ID['EIGHT'], 'upgraded':res['character_eight']});
+								if (_res['character_eight'] > 0) { 
+									rMsg['characters'].push({'id':build.AccountInfo.ID['EIGHT'], 'upgraded':_res['character_eight']});
 								}
-								if (res['character_nine'] > 0) { 
-									rMsg['characters'].push({'id':build.AccountInfo.ID['NINE'], 'upgraded':res['character_nine']}); 
+								if (_res['character_nine'] > 0) { 
+									rMsg['characters'].push({'id':build.AccountInfo.ID['NINE'], 'upgraded':_res['character_nine']}); 
 								}
-								if (res['character_ten'] > 0) {	
-									rMsg['characters'].push({'id':build.AccountInfo.ID['TEN'], 'upgraded':res['character_ten']}); 
+								if (_res['character_ten'] > 0) {	
+									rMsg['characters'].push({'id':build.AccountInfo.ID['TEN'], 'upgraded':_res['character_ten']}); 
 								}
 
 								// assistant
-								if (res['assistant_one'] > 0) {	
-									rMsg['assistants'].push({'id':build.AccountInfo.ID['ONE'], 'upgraded':res['assistant_one']}); 
+								if (_res['assistant_one'] > 0) {	
+									rMsg['assistants'].push({'id':build.AccountInfo.ID['ONE'], 'upgraded':_res['assistant_one']}); 
 								}
-								if (res['assistant_two'] > 0) {	
-									rMsg['assistants'].push({'id':build.AccountInfo.ID['TWO'], 'upgraded':res['assistant_two']}); 
+								if (_res['assistant_two'] > 0) {	
+									rMsg['assistants'].push({'id':build.AccountInfo.ID['TWO'], 'upgraded':_res['assistant_two']}); 
 								}
-								if (res['assistant_three'] > 0) { 
-									rMsg['assistants'].push({'id':build.AccountInfo.ID['THREE'], 'upgraded':res['assistant_three']});
+								if (_res['assistant_three'] > 0) { 
+									rMsg['assistants'].push({'id':build.AccountInfo.ID['THREE'], 'upgraded':_res['assistant_three']});
 								}
-								if (res['assistant_four'] > 0) { 
-									rMsg['assistants'].push({'id':build.AccountInfo.ID['FOUR'], 'upgraded':res['assistant_four']}); 
+								if (_res['assistant_four'] > 0) { 
+									rMsg['assistants'].push({'id':build.AccountInfo.ID['FOUR'], 'upgraded':_res['assistant_four']}); 
 								}
-								if (res['assistant_five'] > 0) { 
-									rMsg['assistants'].push({'id':build.AccountInfo.ID['FIVE'], 'upgraded':res['assistant_five']}); 
+								if (_res['assistant_five'] > 0) { 
+									rMsg['assistants'].push({'id':build.AccountInfo.ID['FIVE'], 'upgraded':_res['assistant_five']}); 
 								}
-								if (res['assistant_six'] > 0) {	
-									rMsg['assistants'].push({'id':build.AccountInfo.ID['SIX'], 'upgraded':res['assistant_six']}); 
+								if (_res['assistant_six'] > 0) {	
+									rMsg['assistants'].push({'id':build.AccountInfo.ID['SIX'], 'upgraded':_res['assistant_six']}); 
 								}
-								if (res['assistant_seven'] > 0) { 
-									rMsg['assistants'].push({'id':build.AccountInfo.ID['SEVEN'], 'upgraded':res['assistant_seven']});
+								if (_res['assistant_seven'] > 0) { 
+									rMsg['assistants'].push({'id':build.AccountInfo.ID['SEVEN'], 'upgraded':_res['assistant_seven']});
 								}
-								if (res['assistant_eight'] > 0) { 
-									rMsg['assistants'].push({'id':build.AccountInfo.ID['EIGHT'], 'upgraded':res['assistant_eight']});
+								if (_res['assistant_eight'] > 0) { 
+									rMsg['assistants'].push({'id':build.AccountInfo.ID['EIGHT'], 'upgraded':_res['assistant_eight']});
 								}
-								if (res['assistant_nine'] > 0) { 
-									rMsg['assistants'].push({'id':build.AccountInfo.ID['NINE'], 'upgraded':res['assistant_nine']}); 
+								if (_res['assistant_nine'] > 0) { 
+									rMsg['assistants'].push({'id':build.AccountInfo.ID['NINE'], 'upgraded':_res['assistant_nine']}); 
 								}
-								if (res['assistant_ten'] > 0) {	
-									rMsg['assistants'].push({'id':build.AccountInfo.ID['TEN'], 'upgraded':res['assistant_ten']}); 
+								if (_res['assistant_ten'] > 0) {	
+									rMsg['assistants'].push({'id':build.AccountInfo.ID['TEN'], 'upgraded':_res['assistant_ten']}); 
 								}
 
 								// upgrade
-								rMsg['honey_score'] = res['honey_score'];
-								rMsg['honey_time'] = res['honey_time'];
-								rMsg['cooldown'] = res['cooldown'];
+								rMsg['honey_score'] = _res['honey_score'];
+								rMsg['honey_time'] = _res['honey_time'];
+								rMsg['cooldown'] = _res['cooldown'];
 
 								// item
-								rMsg['exp_boost'] = res['exp_boost'];
-								rMsg['item_last'] = res['item_last'];
-								rMsg['max_attack'] = res['max_attack'];
-								rMsg['random'] = res['random'];
+								rMsg['exp_boost'] = _res['exp_boost'];
+								rMsg['item_last'] = _res['item_last'];
+								rMsg['max_attack'] = _res['max_attack'];
+								rMsg['random'] = _res['random'];
 								
 //								for (var val in res) {
 //									if (rMsg[''+val] === null) {
@@ -250,6 +250,36 @@ function LoginHandler(response, data){
 //									}
 //								}
 
+								var _mileage = _res['mileage'];
+								var _draw = _res['draw'];
+
+								if (_res['uv'] === 0) {
+									procedure = 'sea_UpdateUvOn';
+									params = id;
+
+									mysql.call(procedure, params, function (results, fields) {});
+
+									_mileage = _res['mileage'] + 25;
+	
+									if (_mileage >= 100) {
+										_mileage -= 100;
+										++_draw;
+
+										procedure = 'sea_UpdateDraw';
+										params = id + ', ' + _draw;
+
+										mysql.call(procedure, params, function (results, fields) {});
+									}
+
+									procedure = 'sea_UpdateMileage';
+									params = id + ', ' + _mileage;
+
+									mysql.call(procedure, params, function (results, fields) {});
+								}
+
+								rMsg['mileage'] = _mileage;
+								rMsg['draw'] = _draw;
+								
 								var stream = toStream(rMsg);
 
 								response.writeHead(200, {'Set-Cookie' : 'piece='+piece,
@@ -257,13 +287,6 @@ function LoginHandler(response, data){
 														'Content-Length': stream.length});
 								response.write(stream);
 								response.end();
-
-								if (res['uv'] === 0) {
-									procedure = 'sea_UpdateUvOn';
-									params = id;
-
-									mysql.call(procedure, params, function (results, fields) {});
-								}
 							}
 						});
 
@@ -423,14 +446,40 @@ function SelectCharacterHandler(response, data){
 				params = id;
 
 				mysql.call(procedure, params, function (results, fields) {
-					res = results[0][0]['res'];
+					res = results[0][0];
+					var selected = msg['selected_character'];
 
-					if (res & msg['selected_character']) {
+					if (selected < 0 || selected > 10) {
+						log.addLog('ERROR', 'Character Range Over (' + msg['k_id'] + ', ' + 'character : ' + msg['selected_character'] + ')');
+						sysMsg['res'] = build.Result['INVALID_CHARACTER'];
+						write(response, toStream(sysMsg));
+						return;
+					}
+					
+					if (selected === 1 && res['character_one']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 2 && res['character_two']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 3 && res['character_three']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 4 && res['character_four']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 5 && res['character_five']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 6 && res['character_six']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 7 && res['character_seven']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 8 && res['character_eight']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 9 && res['character_nine']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 10 && res['character_ten']) {
 						write(response, toStream(rMsg));
 					} else {
 						log.addLog('ERROR', 'Invalid character (' + msg['k_id'] + ', ' + 'character : ' + msg['selected_character'] + ')');
 						sysMsg['res'] = build.Result['INVALID_CHARACTER'];
-						write(response, toStream(sysMsg));
+						write(response, toStream(sysMsg));				
 					}
 				});
 			} else {
@@ -465,15 +514,40 @@ function SelectAssistantHandler(response, data){
 				params = res;
 
 				mysql.call(procedure, params, function (results, fields) {
-					res = results[0][0]['res'];
+					res = results[0][0];
+					var selected = msg['selected_assistant'];
 
-					if (res & msg['selected_assistant']) {
-						write(response, toStream(rMsg));
-					}
-					else {
-						log.addLog('ERROR', 'Invalid assistant (' + msg['k_id'] + ', ' + 'assistant : ' + msg['selected_assistant'] + ')');
+					if (selected < 0 || selected > 10) {
+						log.addLog('ERROR', 'Assistant Range Over (' + msg['k_id'] + ', ' + 'assistant : ' + msg['selected_assistant'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ASSISTANT'];
 						write(response, toStream(sysMsg));
+						return;
+					}
+					
+					if (selected === 1 && res['assistant_one']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 2 && res['assistant_two']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 3 && res['assistant_three']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 4 && res['assistant_four']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 5 && res['assistant_five']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 6 && res['assistant_six']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 7 && res['assistant_seven']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 8 && res['assistant_eight']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 9 && res['assistant_nine']) {
+						write(response, toStream(rMsg));
+					} else if (selected === 10 && res['assistant_ten']) {
+						write(response, toStream(rMsg));
+					} else {
+						log.addLog('ERROR', 'Invalid assistant (' + msg['k_id'] + ', ' + 'assistant : ' + msg['selected_assistant'] + ')');
+						sysMsg['res'] = build.Result['INVALID_ASSISTANT'];
+						write(response, toStream(sysMsg));				
 					}
 				});
 			}
@@ -531,6 +605,7 @@ function StartGameHandler(response, data){
 					else {
 						if (honey == honeyMax) {
 							last = new Date().getTime();	
+							last = convertMS2S(last);
 						}
 						honey -= 1;
 
@@ -583,13 +658,31 @@ function EndGameHandler(response, data){
 				params = id;
 
 				mysql.call(procedure, params, function (results, fields) {
-					res = results[0][0];
-					
+					res = results[0][0];					
+					var _mileage = res['mileage'] + 5;
+					var _draw = res['draw'];
+
+					if (_mileage >= 100) {
+						++_draw;
+
+						procedure = 'sea_UpdateDraw';
+						params = id + ', ' + _draw;
+
+						mysql.call(procedure, params, function (results, fields) {});
+					}
+
+					procedure = 'sea_UpdateMileage';
+					params = id + ', ' + _mileage;
+
+					mysql.call(procedure, params, function (results, fields) {});
+
 					rMsg['score'] = msg['score'];
 					rMsg['coin'] = msg['coin'];
 					rMsg['total_coin'] = msg['coin'] + res['coin'];
 					rMsg['bonus_score'] = parseInt((msg['score'] + msg['coin']) * (res['lv']/100));
 					rMsg['total_score'] = msg['score'] + msg['coin'] + rMsg['bonus_score'];
+					rMsg['mileage'] = _mileage;
+					rMsg['draw'] = _draw;
 					// TODO
 					rMsg['level'] = res['lv'];
 					rMsg['exp'] = res['exp'] + rMsg['total_score'];
@@ -697,7 +790,7 @@ function LoadRankInfoHandler(response, data){
 						res = results[0][0]['receiver_id'];
 
 						if (res === 0) {
-							for (var i = 0; i < rankingList.length; ++i) {
+							for (var i = 0, l = rankingList.length; i < l; ++i) {
 								var score = rankingList[i]['highest_score'];
 								var honey_sended = 0;
 								
@@ -721,7 +814,7 @@ function LoadRankInfoHandler(response, data){
 								temp.push(results[0][0]['res']);
 
 								if (count === length) {
-									for (var i = 0; i < rankingList.length; ++i) {
+									for (var i = 0, l = rankingList.length; i < l; ++i) {
 										var score = rankingList[i]['highest_score'];
 										var honey_sended = 0;
 
@@ -745,7 +838,7 @@ function LoadRankInfoHandler(response, data){
 							};
 							procedure = 'sea_LoadUserKId';
 
-							for (i = 0; i < length; ++i) {
+							for (var i = 0; i < length; ++i) {
 								param = list[i]['receiver_id'];
 
 								mysql.call(procedure, param, loadUserKIdCallback);
@@ -793,17 +886,16 @@ function LoadPostedHoneyHandler(response, data){
 					} else {
 						procedure = 'sea_LoadUserKId';
 						var list = results[0];
-						var length = list.length;
 						var count = 0;
 
-						for (i = 0; i < length; ++i) {
+						for (var i = 0, l = list.length; i < l; ++i) {
 							params = list[i]['sender_id'];
 							mysql.call(procedure, params, function (results, fields) {							
 								var res = results[0][0]['res'];
 								
 								rMsg['honey'].push({'sender_k_id':res, 'sended_time':list[count]['sended_time']});
 								++count;
-								if (count === length) {
+								if (count === l) {
 									write(response, toStream(rMsg));
 								}
 							});						
@@ -850,10 +942,9 @@ function LoadPostedBatonHandler(response, data){
 					} else {
 						var list = results[0];
 						procedure = 'sea_LoadUserKId';
-						var length = list.length;
 						var count = 0;
 
-						for(i = 0; i < length; ++i) {
+						for (var i = 0, l = list.length; i < l; ++i) {
 							params = list[i]['sender_id'];
 							mysql.call(procedure, params, function (results, fields) {
 								var res = results[0][0]['res'];
@@ -861,7 +952,7 @@ function LoadPostedBatonHandler(response, data){
 								rMsg['baton'].push({'sender_k_id':res, 'map_name':cp['map'], 'last_score':cp['score'], 'sended_time':cp['sended_time']});
 								++count;
 
-								if (count === length) {
+								if (count === l) {
 									write(response, toStream(rMsg));
 								}
 							});						
@@ -908,10 +999,9 @@ function LoadPostedBatonResultHandler(response, data){
 					} else {
 						var list = results[0];
 						procedure = 'sea_LoadUserKId';
-						var length = list.length;
 						var count = 0;
 
-						for (i = 0; i < length; ++i) {
+						for (var i = 0, l = list.length; i < l; ++i) {
 							params = list[i]['sender_id'];
 							mysql.call(procedure, params, function (results, fields) {
 								var temp = results[0][0]['res'];
@@ -921,7 +1011,7 @@ function LoadPostedBatonResultHandler(response, data){
 
 								++count;
 
-								if (count === length) {
+								if (count === l) {
 									write(response, toStream(rMsg));
 								}
 							});						
@@ -971,58 +1061,97 @@ function BuyItemHandler(response, data){
 						sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
 						write(response, toStream(sysMsg));
 					} else {
-						// FIXME
-						if (msg['item'] === build.BuyItem.Item['EXP_BOOST']) {						
-							procedure = 'sea_UpdateCoin';
-							params = id + ', ' + 0;
-							mysql.call(procedure, params, function(results, fields){});
+						procedure = 'sea_LoadMileageAndDraw';
+						params = id;
 
-							procedure = 'sea_UpdateExpBoost';
-							params = id + ', ' + 1;
-							mysql.call(procedure, params, function(results, fields){});
-			
-							rMsg['item'] = BuyItemReply.Item['EXP_BOOST'];
-							write(response, toStream(rMsg));
-						} else if (msg['item'] === build.BuyItem.Item['LAST_ITEM']) {
-							procedure = 'sea_UpdateCoin';
-							params = id + ', ' + 0;
-							mysql.call(procedure, params, function(results, fields){});
+						mysql.call(procedure, params, function (results, fields) {
+							var _res = results[0][0];
+							var _mileage = _res['mileage'] + 10;
+							var _draw = _res['draw'];
+							var _flag = true;
 
-							procedure = 'sea_UpdateItemLast';
-							params = id + ', ' + 1;
-							mysql.call(procedure, params, function(results, fields){});
-			
-							rMsg['item'] = BuyItemReply.Item['LAST_ITEM'];
-							write(response, toStream(rMsg));
-						} else if (msg['item'] === build.BuyItem.Item['MAX_ATTACK']) {
-							procedure = 'sea_UpdateCoin';
-							params = id + ', ' + 0;
-							mysql.call(procedure, params, function(results, fields){});
+							if (_mileage >= 100) {
+								++_draw;
+							}
 
-							procedure = 'sea_UpdateMaxAttack';
-							params = id + ', ' + 1;
-							mysql.call(procedure, params, function(results, fields){});
-			
-							rMsg['item'] = BuyItemReply.Item['MAX_ATTACK'];
-							write(response, toStream(rMsg));
-						} else if (msg['item'] === build.BuyItem.Item['RANDOM']) {
-							procedure = 'sea_UpdateCoin';
-							params = id + ', ' + 0;
-							mysql.call(procedure, params, function(results, fields){});
+							rMsg['mileage'] = _mileage;
+							rMsg['draw'] = _draw;
 
-							var random = Math.floor(Math.random() * (BuyItemReply.Item['MAX'] - BuyItemReply.Item['MAGNET'])) + BuyItemReply.Item['MAGNET'];
+							if (msg['item'] === build.BuyItem.Item['EXP_BOOST']) {
+								procedure = 'sea_UpdateCoin';
+								coin -= require('../data/item_data').exp_boost;
+								params = id + ', ' + coin;
+								mysql.call(procedure, params, function(results, fields){});
 
-							procedure = 'sea_UpdateRandom';
-							params = id + ', ' + random;
-							mysql.call(procedure, params, function(results, fields){});
-			
-							rMsg['item'] = random;
-							write(response, toStream(rMsg));
-						} else {
-							log.addLog('ERROR', 'Invalid request field (' + msg['k_id'] + ', ' + msg['item'] + ')');
-							sysMsg['res'] = build.Result['INVALID_REQ_FIELD'];
-							write(response, toStream(sysMsg));
-						}
+								procedure = 'sea_UpdateExpBoost';
+								params = id + ', ' + 1;
+								mysql.call(procedure, params, function(results, fields){});
+				
+								rMsg['item'] = BuyItemReply.Item['EXP_BOOST'];
+								rMsg['coin'] = coin;
+								write(response, toStream(rMsg));
+							} else if (msg['item'] === build.BuyItem.Item['LAST_ITEM']) {								
+								procedure = 'sea_UpdateCoin';
+								coin -= require('../data/item_data').last_item;
+								params = id + ', ' + coin;
+								mysql.call(procedure, params, function(results, fields){});
+
+								procedure = 'sea_UpdateItemLast';
+								params = id + ', ' + 1;
+								mysql.call(procedure, params, function(results, fields){});
+				
+								rMsg['item'] = BuyItemReply.Item['LAST_ITEM'];
+								rMsg['coin'] = coin;
+								write(response, toStream(rMsg));
+							} else if (msg['item'] === build.BuyItem.Item['MAX_ATTACK']) {
+								procedure = 'sea_UpdateCoin';
+								coin -= require('../data/item_data').max_attack;
+								params = id + ', ' + coin;
+								mysql.call(procedure, params, function(results, fields){});
+
+								procedure = 'sea_UpdateMaxAttack';
+								params = id + ', ' + 1;
+								mysql.call(procedure, params, function(results, fields){});
+				
+								rMsg['item'] = BuyItemReply.Item['MAX_ATTACK'];
+								rMsg['coin'] = coin;
+								write(response, toStream(rMsg));
+							} else if (msg['item'] === build.BuyItem.Item['RANDOM']) {
+								procedure = 'sea_UpdateCoin';
+								coin -= require('../data/item_data').random;
+								params = id + ', ' + coin;
+								mysql.call(procedure, params, function(results, fields){});
+
+								var random = Math.floor(Math.random() * (BuyItemReply.Item['MAX'] - BuyItemReply.Item['MAGNET'])) + BuyItemReply.Item['MAGNET'];
+
+								procedure = 'sea_UpdateRandom';
+								params = id + ', ' + random;
+								mysql.call(procedure, params, function(results, fields){});
+				
+								rMsg['item'] = random;
+								rMsg['coin'] = coin;
+								write(response, toStream(rMsg));
+							} else {
+								_flag = false;
+								log.addLog('ERROR', 'Invalid request field (' + msg['k_id'] + ', ' + msg['item'] + ')');
+								sysMsg['res'] = build.Result['INVALID_REQ_FIELD'];
+								write(response, toStream(sysMsg));
+							}
+
+							if (_flag === true) {
+								if (_mileage >= 100) {
+									procedure = 'sea_UpdateDraw';
+									params = id + ', ' + _draw;
+
+									mysql.call(procedure, params, function (results, fields) {});
+								}
+
+								procedure = 'sea_UpdateMileage';
+								params = id + ', ' + _mileage;
+
+								mysql.call(procedure, params, function (results, fields) {});
+							}
+						});
 					}
 				});
 			}
@@ -1035,14 +1164,13 @@ function BuyItemHandler(response, data){
 	}
 } // end BuyItemHandler
 
-function BuyCharacterHandler(response, data){
-	var msg = build.BuyCharacter.decode(data);
-	var BuyItemReply = build.BuyItemReply;
-	var rMsg = new BuyItemReply();
+function BuyOrUpgradeCharacterHandler(response, data){
+	var msg = build.BuyOrUpgradeCharacter.decode(data);
+	var rMsg = new build.BuyOrUpgradeCharacterReply();
 	var sysMsg = new build.SystemMessage();
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in BuyItemHandler");
+		log.addLog('ERROR', "Undefined field is detected in BuyOrUpgradeCharacterHandler");
 		sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 		write(response, toStream(sysMsg));
 	} else {
@@ -1050,39 +1178,263 @@ function BuyCharacterHandler(response, data){
 		var params = "'" + msg['k_id'] + "'";
 
 		mysql.call(procedure, params, function (results, fields) {
-			var res = results[0][0]['res'];
-			var id;
-
+			var res = results[0][0]['res'];		
+			
 			if (res > 0) {
-				id = res;			
-				procedure = 'sea_LoadCoin';
+				var id = res;
+				procedure = 'sea_SelectUserCharacter';
 				params = id;
-				mysql.call(procedure, params, function(results, fields) {
-					var coin = results[0][0]['coin'];
 
-					if (coin < 0) {
-						log.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
-						sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
+				mysql.call(procedure, params, function (results, fields) {
+					var character = msg['character'];
+
+					if (character > 14 || character < 0) {
+						log.addLog('ERROR', "Invalid character (" + msg['k_id'] + ", " + character + ")");
+						sysMsg['res'] = build.Result['NO_MATHCH_WITH_DB'];
+						write(response, toStream(sysMsg));
+
+						return;
+					}
+
+					res = results[0][0];
+					var idx = 0;
+					var idxId;
+
+					for (var val in res) {
+						++idx;
+
+						if (idx === character) {
+							idxId = val+'';
+							break;
+						}
+					}
+
+					var lv = res[idxId];
+
+					if (lv > 14) {
+						log.addLog('ERROR', "The character is fully upgraded. (" + msg['k_id'] + ")");
+						sysMsg['res'] = build.Result['FULLY_UPGRADED'];
+						write(response, toStream(sysMsg));
+					} else if (lv < 0) {
+						log.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
+						sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
 						write(response, toStream(sysMsg));
 					} else {
-						log.addLog('ERROR', 'Invalid request field (' + msg['k_id'] + ', ' + msg['item'] + ')');
-						sysMsg['res'] = build.Result['INVALID_REQ_FIELD'];
-						write(response, toStream(sysMsg));
+						procedure = 'sea_LoadCoin';
+						params = id;
+
+						mysql.call(procedure, params, function (results, fields) {
+							var coin = results[0][0]['coin'];							
+							var data = require('../data/character_data')[character+''];
+							var cost = data[lv];
+
+							if (cost < coin) {								
+								coin -= cost;
+								
+								var text = 'character_';
+								idxId = idxId.slice(text.length);
+								var first = idxId[0];
+								var rest = idxId.slice(1);
+
+								procedure = 'sea_AddCharacter' + first.toUpperCase() + rest;
+								params = id;
+
+								mysql.call(procedure, params, function (results, fields) {
+									res = results[0][0]['res'];
+
+									if (res === lv + 1) {
+										procedure = 'sea_LoadMileageAndDraw';
+										params = id;
+
+										mysql.call(procedure, params, function (results, fields) {
+											var _res = results[0][0];
+											var _mileage = _res['mileage'] + 30;
+											var _draw = _res['draw'];
+
+											if (_mileage >= 100) {
+												++_draw;
+
+												procedure = 'sea_UpdateDraw';
+												params = id + ', ' + _draw;
+
+												mysql.call(procedure, params, function (results, fields) {});
+											}
+
+											procedure = 'sea_UpdateMileage';
+											params = id + ', ' + _mileage;
+
+											mysql.call(procedure, params, function (results, fields) {});
+
+											rMsg['mileage'] = _mileage;
+											rMsg['draw'] = _draw;
+											rMsg['coin'] = coin;
+											rMsg['character'] = character;
+											rMsg['lv'] = res;
+											write(response, toStream(rMsg));
+										});
+									} else {
+										log.addLog('ERROR', "Failed to upgrade on DB(" + msg['k_id'] + ', ' + character + ")");
+										sysMsg['res'] = build.Result['FAILED_DB_UPDATE'];
+										write(response, toStream(sysMsg));
+									}
+								});
+
+								procedure = 'sea_UpdateCoin';
+								params = id + ', ' + coin;
+								
+								mysql.call(procedure, params, function (results, fields) {});
+							} else {
+								log.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
+								sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
+								write(response, toStream(sysMsg));
+							}
+						});
 					}
 				});
-			}
-			else {
+			} else {
 				log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 				sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 				write(response, toStream(sysMsg));
 			}
 		});
 	}
-} // end BuyCharacterHandler
+} // end BuyOrUpgradeCharacterHandler
 
-function BuyAssistantHandler(response, data){
-	var msg = build.BuyAssistant.decode(data);
-} // end BuyAssistantHandler
+function BuyOrUpgradeAssistantHandler(response, data){
+	var msg = build.BuyOrUpgradeAssistant.decode(data);
+	var rMsg = new build.BuyOrUpgradeAssistantReply();
+	var sysMsg = new build.SystemMessage();
+
+	if (inspectField(msg) === false) {
+		log.addLog('ERROR', "Undefined field is detected in BuyOrUpgradeAssistantHandler");
+		sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
+		write(response, toStream(sysMsg));
+	} else {
+		var procedure = 'sea_LoadUser';
+		var params = "'" + msg['k_id'] + "'";
+
+		mysql.call(procedure, params, function (results, fields) {
+			var res = results[0][0]['res'];		
+			
+			if (res > 0) {
+				var id = res;
+				procedure = 'sea_SelectUserAssistant';
+				params = id;
+
+				mysql.call(procedure, params, function (results, fields) {
+					var assistant = msg['assistant'];
+
+					if (assistant > 14 || assistant < 0) {
+						log.addLog('ERROR', "Invalid assistant (" + msg['k_id'] + ", " + assistant + ")");
+						sysMsg['res'] = build.Result['NO_MATHCH_WITH_DB'];
+						write(response, toStream(sysMsg));
+
+						return;
+					}
+
+					res = results[0][0];
+					var idx = 0;
+					var idxId;
+
+					for (var val in res) {
+						++idx;
+
+						if (idx === assistant) {
+							idxId = val+'';
+							break;
+						}
+					}
+
+					var lv = res[idxId];
+
+					if (lv > 4) {
+						log.addLog('ERROR', "The assistant is fully upgraded. (" + msg['k_id'] + ")");
+						sysMsg['res'] = build.Result['FULLY_UPGRADED'];
+						write(response, toStream(sysMsg));
+					} else if (lv < 0) {
+						log.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
+						sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
+						write(response, toStream(sysMsg));
+					} else {
+						procedure = 'sea_LoadCoin';
+						params = id;
+
+						mysql.call(procedure, params, function (results, fields) {
+							var coin = results[0][0]['coin'];							
+							var data = require('../data/assistant_data')[assistant+''];
+							var cost = data[lv];
+
+							if (cost < coin) {								
+								coin -= cost;
+								
+								var text = 'assistant_';
+								idxId = idxId.slice(text.length);
+								var first = idxId[0];
+								var rest = idxId.slice(1);
+
+								procedure = 'sea_AddAssistant' + first.toUpperCase() + rest;
+								params = id;
+
+								mysql.call(procedure, params, function (results, fields) {
+									res = results[0][0]['res'];
+
+									if (res === lv + 1) {
+										procedure = 'sea_LoadMileageAndDraw';
+										params = id;
+
+										mysql.call(procedure, params, function (results, fields) {
+											var _res = results[0][0];
+											var _mileage = _res['mileage'] + 30;
+											var _draw = _res['draw'];
+
+											if (_mileage >= 100) {
+												++_draw;
+
+												procedure = 'sea_UpdateDraw';
+												params = id + ', ' + _draw;
+
+												mysql.call(procedure, params, function (results, fields) {});
+											}
+
+											procedure = 'sea_UpdateMileage';
+											params = id + ', ' + _mileage;
+
+											mysql.call(procedure, params, function (results, fields) {});
+
+											rMsg['mileage'] = _mileage;
+											rMsg['draw'] = _draw;
+											rMsg['coin'] = coin;
+											rMsg['assistant'] = assistant;
+											rMsg['lv'] = res;
+											write(response, toStream(rMsg));
+										});
+									} else {
+										log.addLog('ERROR', "Failed to upgrade on DB(" + msg['k_id'] + ', ' + assistant + ")");
+										sysMsg['res'] = build.Result['FAILED_DB_UPDATE'];
+										write(response, toStream(sysMsg));
+									}
+								});
+
+								procedure = 'sea_UpdateCoin';
+								params = id + ', ' + coin;
+								
+								mysql.call(procedure, params, function (results, fields) {});
+							} else {
+								log.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
+								sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
+								write(response, toStream(sysMsg));
+							}
+						});
+					}
+				});
+			} else {
+				log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+				sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
+				write(response, toStream(sysMsg));
+			}
+		});
+	}
+} // end BuyOrUpgradeAssistantHandler
 
 function SendHoneyHandler(response, data){
 	var msg = build.SendHoney.decode(data);
@@ -1111,12 +1463,36 @@ function SendHoneyHandler(response, data){
 					if (res > 0) {
 						var receiver_id = res;
 
-						procedure = 'sea_AddHoney';
-						params = sender_id + ', ' + receiver_id;						
+						procedure = 'sea_LoadMileageAndDraw';
+						params = sender_id;
 
-						write(response, toStream(rMsg));
+						mysql.call(procedure, params, function (results, fields) {
+							var _res = results[0][0];
 
-						mysql.call(procedure, params, function(results, fields) {});
+							procedure = 'sea_AddHoney';
+							params = sender_id + ', ' + receiver_id;
+
+							mysql.call(procedure, params, function(results, fields) {});
+								
+							var _mileage = _res['mileage'] + 5;
+							var _draw = _res['draw'];
+
+							if (_mileage >= 100) {
+								++_draw;
+
+								procedure = 'sea_UpdateDraw';
+								params = id + ', ' + _draw;
+
+								mysql.call(procedure, params, function (results, fields) {});
+							}
+
+							procedure = 'sea_UpdateMileage';
+							params = id + ', ' + _mileage;
+
+							rMsg['mileage'] = _mileage;
+							rMsg['draw'] = _draw;
+							write(response, toStream(rMsg));
+						});
 					}
 					else {
 						log.addLog('ERROR', 'Invalid account (' + msg['receiver_k_id'] + ')');
@@ -1555,7 +1931,7 @@ function UpgradeHoneyScoreHandler(response, data){
 	var sysMsg = new build.SystemMessage();
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in SendHoneyHandler");
+		log.addLog('ERROR', "Undefined field is detected in UpgradeHoneyScoreHandler");
 		sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 		write(response, toStream(sysMsg));
 	} else {
@@ -1572,6 +1948,7 @@ function UpgradeHoneyScoreHandler(response, data){
 
 				mysql.call(procedure, params, function (results, fields) {
 					var honeyScore = results[0][0]['honey_score'];
+
 					if (honeyScore > 19) {
 						log.addLog('ERROR', "honey is fully upgraded. (" + msg['k_id'] + ")");
 						sysMsg['res'] = build.Result['FULLY_UPGRADED'];
@@ -1586,25 +1963,52 @@ function UpgradeHoneyScoreHandler(response, data){
 
 						mysql.call(procedure, params, function (results, fields) {
 							var coin = results[0][0]['coin'];
-							var table;
-							for (i = 0; i < upgradeTable.length; ++i) {
-								if (upgradeTable[i]['field'] === 'honeyScore') {
-									table = upgradeTable[i]['table'];
-									break;
-								}
-							}
-							var cost = table[honeyScore]['cost'];
+							var honey_score = require('../data/upgrade_data').honey_score;
+							var cost = honey_score[honeyScore];
 
-							if (cost < coin) {								
+							if (cost < coin) {
 								coin -= cost;
-
-								rMsg['coin'] = coin;
-								write(response, toStream(rMsg));
 
 								procedure = 'sea_UpgradeHoneyScore';
 								params = id;
 
-								mysql.call(procedure, params, function (results, fields) {});
+								mysql.call(procedure, params, function (results, fields) {
+									res = results[0][0]['res'];
+
+									if (res === honeyScore + 1) {
+										procedure = 'sea_LoadMileageAndDraw';
+										params = id;
+
+										mysql.call(procedure, params, function (results, fields) {
+											var _res = results[0][0];
+											var _mileage = _res['mileage'] + 15;
+											var _draw = _res['draw'];
+
+											if (_mileage >= 100) {
+												++_draw;
+
+												procedure = 'sea_UpdateDraw';
+												params = id + ', ' + _draw;
+
+												mysql.call(procedure, params, function (results, fields) {});
+											}
+
+											procedure = 'sea_UpdateMileage';
+											params = id + ', ' + _mileage;
+
+											mysql.call(procedure, params, function (results, fields) {});
+
+											rMsg['mileage'] = _mileage;
+											rMsg['draw'] = _draw;
+											rMsg['coin'] = coin;
+											write(response, toStream(rMsg));
+										});
+									} else {
+										log.addLog('ERROR', "Failed to upgrade honeyScore on DB(" + msg['k_id'] + ', ' + honeyScore + ")");
+										sysMsg['res'] = build.Result['FAILED_DB_UPDATE'];
+										write(response, toStream(sysMsg));
+									}
+								});
 
 								procedure = 'sea_UpdateCoin';
 								params = id + ', ' + coin;
@@ -1633,7 +2037,7 @@ function UpgradeHoneyTimeHandler(response, data){
 	var sysMsg = new build.SystemMessage();
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in SendHoneyHandler");
+		log.addLog('ERROR', "Undefined field is detected in UpgradeHoneyTimeHandler");
 		sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 		write(response, toStream(sysMsg));
 	} else {
@@ -1664,25 +2068,52 @@ function UpgradeHoneyTimeHandler(response, data){
 
 						mysql.call(procedure, params, function (results, fields) {
 							var coin = results[0][0]['coin'];
-							var table;
-							for (i = 0; i < upgradeTable.length; ++i) {
-								if (upgradeTable[i]['field'] === 'honeyTime') {
-									table = upgradeTable[i]['table'];
-									break;
-								}
-							}
-							var cost = table[honeyTime]['cost'];
+							var honey_time = require('../data/upgrade_data').honey_time;
+							var cost = honey_time[honeyTime];
 
 							if (cost < coin) {								
 								coin -= cost;
 
-								rMsg['coin'] = coin;
-								write(response, toStream(rMsg));
-
 								procedure = 'sea_UpgradeHoneyTime';
 								params = id;
 
-								mysql.call(procedure, params, function (results, fields) {});
+								mysql.call(procedure, params, function (results, fields) {
+									res = results[0][0]['res'];
+
+									if (res === honeyTime + 1) {
+										procedure = 'sea_LoadMileageAndDraw';
+										params = id;
+
+										mysql.call(procedure, params, function (results, fields) {
+											var _res = results[0][0];
+											var _mileage = _res['mileage'] + 15;
+											var _draw = _res['draw'];
+
+											if (_mileage >= 100) {
+												++_draw;
+
+												procedure = 'sea_UpdateDraw';
+												params = id + ', ' + _draw;
+
+												mysql.call(procedure, params, function (results, fields) {});
+											}
+
+											procedure = 'sea_UpdateMileage';
+											params = id + ', ' + _mileage;
+
+											mysql.call(procedure, params, function (results, fields) {});
+
+											rMsg['mileage'] = _mileage;
+											rMsg['draw'] = _draw;
+											rMsg['coin'] = coin;
+											write(response, toStream(rMsg));
+										});
+									} else {
+										log.addLog('ERROR', "Failed to upgrade honeyTime on DB(" + msg['k_id'] + ', ' + honeyTime + ")");
+										sysMsg['res'] = build.Result['FAILED_DB_UPDATE'];
+										write(response, toStream(sysMsg));
+									}
+								});
 
 								procedure = 'sea_UpdateCoin';
 								params = id + ', ' + coin;
@@ -1711,7 +2142,7 @@ function UpgradeCooldownHandler(response, data){
 	var sysMsg = new build.SystemMessage();
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in SendHoneyHandler");
+		log.addLog('ERROR', "Undefined field is detected in UpgradeCooldownHandler");
 		sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 		write(response, toStream(sysMsg));
 	} else {
@@ -1728,6 +2159,7 @@ function UpgradeCooldownHandler(response, data){
 
 				mysql.call(procedure, params, function (results, fields) {
 					var cooldown = results[0][0]['cooldown'];
+
 					if (cooldown > 19) {
 						log.addLog('ERROR', "cooldown is fully upgraded. (" + msg['k_id'] + ")");
 						sysMsg['res'] = build.Result['FULLY_UPGRADED'];
@@ -1742,25 +2174,52 @@ function UpgradeCooldownHandler(response, data){
 
 						mysql.call(procedure, params, function (results, fields) {
 							var coin = results[0][0]['coin'];
-							var table;
-							for (i = 0; i < upgradeTable.length; ++i) {
-								if (upgradeTable[i]['field'] === 'cooldown') {
-									table = upgradeTable[i]['table'];
-									break;
-								}
-							}
-							var cost = table[cooldown]['cost'];
+							var Cooldown = require('../data/upgrade_data').cooldown;
+							var cost = Cooldown[cooldown];
 
 							if (cost < coin) {								
 								coin -= cost;
 
-								rMsg['coin'] = coin;
-								write(response, toStream(rMsg));
-
 								procedure = 'sea_UpgradeCooldown';
 								params = id;
 
-								mysql.call(procedure, params, function (results, fields) {});
+								mysql.call(procedure, params, function (results, fields) {
+									res = results[0][0]['res'];
+
+									if (res === cooldown + 1) {
+										procedure = 'sea_LoadMileageAndDraw';
+										params = id;
+
+										mysql.call(procedure, params, function (results, fields) {
+											var _res = results[0][0];
+											var _mileage = _res['mileage'] + 15;
+											var _draw = _res['draw'];
+
+											if (_mileage >= 100) {
+												++_draw;
+
+												procedure = 'sea_UpdateDraw';
+												params = id + ', ' + _draw;
+
+												mysql.call(procedure, params, function (results, fields) {});
+											}
+
+											procedure = 'sea_UpdateMileage';
+											params = id + ', ' + _mileage;
+
+											mysql.call(procedure, params, function (results, fields) {});
+
+											rMsg['mileage'] = _mileage;
+											rMsg['draw'] = _draw;
+											rMsg['coin'] = coin;
+											write(response, toStream(rMsg));
+										});
+									} else {
+										log.addLog('ERROR', "Failed to upgrade cooldown on DB(" + msg['k_id'] + ', ' + cooldown + ")");
+										sysMsg['res'] = build.Result['FAILED_DB_UPDATE'];
+										write(response, toStream(sysMsg));
+									}
+								});
 
 								procedure = 'sea_UpdateCoin';
 								params = id + ', ' + coin;
@@ -1783,13 +2242,13 @@ function UpgradeCooldownHandler(response, data){
 	}
 } // end UpgradeCooldownHandler
 
-function UpgradeMaxAttackHandler(response, data){
-	var msg = build.UpgradeMaxAttack.decode(data);
-	var rMsg = new build.UpgradeReply();
+function InviteFriendHandler(response, data){
+	var msg = build.InviteFriend.decode(data);
+	var rMsg = new build.InviteFriendReply();
 	var sysMsg = new build.SystemMessage();
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in SendHoneyHandler");
+		log.addLog('ERROR', "Undefined field is detected in InviteFriendHandler");
 		sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 		write(response, toStream(sysMsg));
 	} else {
@@ -1801,89 +2260,49 @@ function UpgradeMaxAttackHandler(response, data){
 			
 			if (res > 0) {
 				var id = res;
-				procedure = 'sea_SelectUserCharacter';
+				procedure = 'sea_LoadInviteCountWithMileageAndDraw';
 				params = id;
 
 				mysql.call(procedure, params, function (results, fields) {
-					var character = msg['character_id'];
+					var _res = results[0][0];
+					var _invite = _res['invite_count'] + 1;
+					var _mileage = _res['mileage'] + 5;
+					var _draw = _res['draw'];
 
-					if (character > 14 || character < 0) {
-						log.addLog('ERROR', "Invalid character ID (" + msg['k_id'] + ", " + character + ")");
-						sysMsg['res'] = build.Result['NO_MATHCH_WITH_DB'];
-						write(response, toStream(sysMsg));
+					procedure = 'sea_UpdateInviteCount';
+					params = id + ', ' + _invite;
 
-						return;
-					}
+					mysql.call(procedure, params, function (results, fields) {
+						rMsg['invite_count'] = _invite;
 
-					res = results[0][0];
-					var idx = 0;
-					var idxId;
+						if (_mileage >= 100) {
+							++_draw;
 
-					for (var val in res) {
-						++idx;
+							procedure = 'sea_UpdateDraw';
+							params = id + ', ' + _draw;
 
-						if (idx === character) {
-							idxId = val+'';
-							break;
+							mysql.call(procedure, params, function (results, fields) {});
 						}
-					}
 
-					var dbValue = res[idxId];
+						procedure = 'sea_UpdateMileage';
+						params = id + ', ' + _mileage;
 
-					if (dbValue > 14) {
-						log.addLog('ERROR', "The character is fully upgraded. (" + msg['k_id'] + ")");
-						sysMsg['res'] = build.Result['FULLY_UPGRADED'];
-						write(response, toStream(sysMsg));
-					} else if (dbValue < 0) {
-						log.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
-						sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
-						write(response, toStream(sysMsg));
-					} else if (dbValue === 0) {
-						log.addLog('ERROR', "Trying to upgrade before buying a character. (" + msg['k_id'] + ")");
-						sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
-						write(response, toStream(sysMsg));
-					} else {
-						procedure = 'sea_LoadCoin';
-						params = id;
+						mysql.call(procedure, params, function (results, fields) {});
 
-						mysql.call(procedure, params, function (results, fields) {
-							var coin = results[0][0]['coin'];
-							var table;
-							for (i = 0; i < upgradeTable.length; ++i) {
-								if (upgradeTable[i]['field'] === 'maxAttack') {
-									table = upgradeTable[i]['table'];
-									break;
-								}
-							}
-							var cost = table[dbValue]['cost'];
+						rMsg['mileage'] = _mileage;
+						rMsg['draw'] = _draw;
 
-							if (cost < coin) {								
-								coin -= cost;
+						// TODO
+						if (_invite === 10) {
 
-								rMsg['coin'] = coin;
-								write(response, toStream(rMsg));
-								
-								var text = 'character_';
-								idxId = idxId.slice(text.length);
-								var first = idxId[0];
-								var rest = idxId.slice(1);
+						} else if (_invite === 15) {
 
-								procedure = 'sea_AddCharacter' + first.toUpperCase() + rest;
-								params = id;
+						} else if (_invite === 30) {
 
-								mysql.call(procedure, params, function (results, fields) {});
+						}
 
-								procedure = 'sea_UpdateCoin';
-								params = id + ', ' + coin;
-								
-								mysql.call(procedure, params, function (results, fields) {});
-							} else {
-								log.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
-								sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
-								write(response, toStream(sysMsg));
-							}
-						});
-					}
+						write(response, toStream(rMsg));
+					});
 				});
 			} else {
 				log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
@@ -1892,118 +2311,11 @@ function UpgradeMaxAttackHandler(response, data){
 			}
 		});
 	}
-} // end UpgradeMaxAttackHandler
+} // end InviteFriendHandler
 
-function UpgradePetHandler(response, data){
-	var msg = build.UpgradePet.decode(data);
-	var rMsg = new build.UpgradeReply();
-	var sysMsg = new build.SystemMessage();
-
-	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in SendHoneyHandler");
-		sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
-		write(response, toStream(sysMsg));
-	} else {
-		var procedure = 'sea_LoadUser';
-		var params = "'" + msg['k_id'] + "'";
-
-		mysql.call(procedure, params, function (results, fields) {
-			var res = results[0][0]['res'];		
-			
-			if (res > 0) {
-				var id = res;
-				procedure = 'sea_SelectUserAssistant';
-				params = id;
-
-				mysql.call(procedure, params, function (results, fields) {
-					var assistant = msg['pet_id'];
-
-					if (assistant > 14 || assistant < 0) {
-						log.addLog('ERROR', "Invalid character ID (" + msg['k_id'] + ", " + assistant + ")");
-						sysMsg['res'] = build.Result['NO_MATHCH_WITH_DB'];
-						write(response, toStream(sysMsg));
-
-						return;
-					}
-
-					res = results[0][0];
-					var idx = 0;
-					var idxId;
-
-					for (var val in res) {
-						++idx;
-
-						if (idx === assistant) {
-							idxId = val+'';
-							break;
-						}
-					}
-
-					var dbValue = res[idxId];
-
-					if (dbValue > 14) {
-						log.addLog('ERROR', "The character is fully upgraded. (" + msg['k_id'] + ")");
-						sysMsg['res'] = build.Result['FULLY_UPGRADED'];
-						write(response, toStream(sysMsg));
-					} else if (dbValue < 0) {
-						log.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
-						sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
-						write(response, toStream(sysMsg));
-					} else if (dbValue === 0) {
-						log.addLog('ERROR', "Trying to upgrade before buying a pet. (" + msg['k_id'] + ")");
-						sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
-						write(response, toStream(sysMsg));
-					} else {
-						procedure = 'sea_LoadCoin';
-						params = id;
-
-						mysql.call(procedure, params, function (results, fields) {
-							var coin = results[0][0]['coin'];
-							var table;
-							for (i = 0; i < upgradeTable.length; ++i) {
-								if (upgradeTable[i]['field'] === 'maxAttack') {
-									table = upgradeTable[i]['table'];
-									break;
-								}
-							}
-							var cost = table[dbValue]['cost'];
-
-							if (cost < coin) {								
-								coin -= cost;
-
-								rMsg['coin'] = coin;
-								write(response, toStream(rMsg));
-
-								var text = 'assistant_';
-								idxId = idxId.slice(text.length);
-								var first = idxId[0];
-								var rest = idxId.slice(1);
-
-								procedure = 'sea_AddAssistant' + first.toUpperCase() + rest;
-								params = id;
-
-								mysql.call(procedure, params, function (results, fields) {});
-
-								procedure = 'sea_UpdateCoin';
-								params = id + ', ' + coin;
-								
-								mysql.call(procedure, params, function (results, fields) {});
-							} else {
-								log.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
-								sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
-								write(response, toStream(sysMsg));
-							}
-						});
-					}
-				});
-			} else {
-				log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
-				sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
-				write(response, toStream(sysMsg));
-			}
-		});
-	}
-} // end UpgradePetHandler
+function LoadRewardHandler(response, data){
+	var msg = build.LoadReward.decode(data);
+} // end LoadRewardHandler
 
 exports.VersionInfoHandler = VersionInfoHandler;
 exports.RegisterAccountHandler = RegisterAccountHandler;
@@ -2021,8 +2333,8 @@ exports.LoadPostedBatonHandler = LoadPostedBatonHandler;
 exports.LoadPostedBatonResultHandler = LoadPostedBatonResultHandler;
 exports.RequestPointRewardHandler = RequestPointRewardHandler;
 exports.BuyItemHandler = BuyItemHandler;
-exports.BuyCharacterHandler = BuyCharacterHandler;
-exports.BuyAssistantHandler = BuyAssistantHandler;
+exports.BuyOrUpgradeCharacterHandler = BuyOrUpgradeCharacterHandler;
+exports.BuyOrUpgradeAssistantHandler = BuyOrUpgradeAssistantHandler;
 exports.SendHoneyHandler = SendHoneyHandler;
 exports.AcceptHoneyHandler = AcceptHoneyHandler;
 exports.RequestBatonHandler = RequestBatonHandler;
@@ -2032,5 +2344,5 @@ exports.AcceptBatonResultHandler = AcceptBatonResultHandler;
 exports.UpgradeHoneyScoreHandler = UpgradeHoneyScoreHandler;
 exports.UpgradeHoneyTimeHandler = UpgradeHoneyTimeHandler;
 exports.UpgradeCooldownHandler = UpgradeCooldownHandler;
-exports.UpgradeMaxAttackHandler = UpgradeMaxAttackHandler;
-exports.UpgradePetHandler = UpgradePetHandler;
+exports.InviteFriendHandler = InviteFriendHandler;
+exports.LoadRewardHandler = LoadRewardHandler;

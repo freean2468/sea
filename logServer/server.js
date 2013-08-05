@@ -24,7 +24,9 @@ function start(route, handle) {
 	
 	log.mkdirLog();
 
-	http.createServer(onRequest).listen(8889);
+	server = http.createServer(onRequest)
+	server.timeout = 0;
+	server.listen(8889);
 
 	console.log('log server has started.');
 }

@@ -75,7 +75,7 @@ function fetchCookie(res) {
 
 // data is a proto message object.
 function request(data) {
-	var callback = function(response) {
+	var callback = function (response) {
 		var res_data = '';
 
 		console.log('STATUS: ' + response.statusCode);
