@@ -1,0 +1,24 @@
+package A2G;
+
+message SystemMessage {
+	required Result res = 1;
+	required string k_id = 2;
+
+	enum Result {
+		DUPLICATED_LOGIN = 1;
+		INVALID_SESSION = 2;
+	}
+} // end
+
+message RegisterSessionReply {
+	required string k_id = 1;
+	required string session_id = 2;
+} // end
+
+message UnregisterSessionReply {
+	required string k_id = 1;
+} // end
+
+message UpdateSessionReply {
+	required string k_id = 1;
+} // end

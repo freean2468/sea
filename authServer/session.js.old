@@ -1,0 +1,108 @@
+var g2a_proto = require('./g2a-proto');
+var UUID = require('../common/util').UUID;
+
+var	MINUTE = require('../common/define').MINUTE,
+	EXPIRATION = MINUTE * 15;
+
+var sessionList = [],
+	emptyList = [],
+	k_idList = [],
+	emptyList = [],
+	timerList = []; // Don't need to manage this list.
+
+function setExpiration(index, id) {
+	var callback = function (index) {
+		unregisterSession(index, id);
+		
+		var SyncUnregisterSession = g2a_proto.packetMaker('a2g.SyncUnregisterSession');
+		var msg = new SyncUnregisterSession;
+
+		msg.session_id = id;
+
+		for (var client in server.clientList) {
+			g2a_proto.sendPacket(client, msg);
+		}
+	};
+
+	var timerId = setTimeout(callback, EXPIRATION, index);
+
+	timerList[index] = timerId;
+}
+
+function updateSession(id) {
+	var index = sessionList.indexOf(id);
+	console.log(id);
+	console.log(sessionList);
+	if (index !== -1) {
+		clearTimeout(timerList[index]);
+		setExpiration(index, sessionList[index]);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function unregisterSession(id) {
+	var index = sessionList.indexOf(id);
+
+	if (index !== -1) {
+		var emptyIndex = emptyList.indexOf(undefined);
+	
+		if (emptyIndex === -1) {
+			emptyList.push(index);
+		} else {
+			emptyList[emptyIndex] = index;
+		}
+
+		sessionList[index] = null;
+		k_idList[index] = null;
+		clearTimeout(timerList[index]);
+		
+		return true;
+	} else {
+		//throw console.log("exception happened in unregisterSession");
+		return false;
+	}
+}
+
+function registerSession(k_id) {
+	var session_id = UUID();
+	var	emptyIndex = sessionList.indexOf(null);
+	var	index;
+
+	for (var i = 0; i < k_idList.length; ++i) {
+		if(k_idList[i] === k_id) {
+			return 0;
+		}
+	}
+
+	if (emptyIndex === -1) {
+		index = sessionList.push(id) - 1;
+		k_idList.push(k_id);
+	} else {
+		index = emptyIndex;
+		sessionList[index] = session_id;
+		k_idList[index] = k_id;
+	}
+
+	setExpiration(index, session_id);
+
+	return session_id;
+}
+
+function CCU() {
+	var count = 0;
+	for (var i = 0, l = sessionList.length; i < l; ++i) {
+		if (sessionList[i] != null) {
+			++count;
+		}
+	}
+	return count;
+}
+
+module.exports = {
+	'registerSession': registerSession,
+	'unregisterSession': unregisterSession,
+	'updateSession': updateSession,
+	'CCU': CCU,
+};

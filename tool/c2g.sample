@@ -1,0 +1,216 @@
+package C2G;
+
+enum Pack {
+	BASIC	= 1;
+	MAX	= 2;
+}
+
+enum ID {
+	ONE	= 1;
+	TWO = 2;
+	THREE = 3;
+	FOUR = 4;
+	FIVE = 5;
+	SIX = 6;
+	SEVEN = 7;
+	EIGHT = 8;
+	NINE = 9;
+	TEN = 10;
+	MAX = 11;
+}
+
+message VersionInfo {
+	required string version = 2;
+} // end
+
+message RegisterAccount {
+	required string k_id = 2;
+} // end
+
+message UnregisterAccount {
+	required string k_id = 2;
+} // end
+
+message Login {
+	required string k_id = 2;
+} // end
+
+message Logout {
+	required string k_id = 2;
+} // end
+
+message CheckInCharge {
+	required string k_id = 2;
+} // end
+
+message SelectCharacter {
+	required string k_id = 2;
+	required int32 selected_character = 3;
+} // end
+
+message SelectAssistant {
+	required string k_id = 2;
+	required int32 selected_assistant = 3;
+} // end
+
+message StartGame {
+	required string k_id = 2;
+	required int32 selected_character = 3;
+	required int32 selected_assistant = 4;
+} // end
+
+message EndGame {
+	required string k_id = 2;
+	required int32 selected_character = 3;
+	required int32 selected_assistant = 4;
+	required int32 score = 5;
+	required int32 dist = 6;
+	required int32 enemy_kill = 7;
+	required int32 play_time = 8;
+	required int32 coin = 9;
+} // end
+
+message LoadRankInfo {
+	required string k_id = 2;
+} // end
+
+message LoadPostedHoney {
+	required string k_id = 2;
+} // end
+
+message LoadPostedBaton {
+	required string k_id = 2;
+} // end
+
+message LoadPostedBatonResult {
+	required string k_id = 2;
+} // end
+
+message RequestPointReward {
+	required string k_id = 2;
+	required int32 point = 3;
+} // end
+
+message BuyItem {
+	required string k_id = 2;
+	required Item item = 3;
+
+	enum Item {
+		EXP_BOOST = 1;
+		LAST_ITEM = 2;
+		MAX_ATTACK = 3;
+		RANDOM = 4;
+		MAX = 5;
+	}
+} // end
+
+message BuyOrUpgradeCharacter {
+	required string k_id = 2;
+	required Character character = 3;
+
+	enum Character {
+		ONE = 1;
+		TWO = 2;
+		THREE = 3;
+		FOUR = 4;
+		FIVE = 5;
+		SIX = 6;
+		SEVEN = 7;
+		EIGHT = 8;
+		NINE = 9;
+		TEN = 10;
+		MAX = 11;
+	}
+} // end
+
+message BuyOrUpgradeAssistant {
+	required string k_id = 2;
+	required Assistant assistant = 3;
+
+	enum Assistant {
+		ONE = 1;
+		TWO = 2;
+		THREE = 3;
+		FOUR = 4;
+		FIVE = 5;
+		SIX = 6;
+		SEVEN = 7;
+		EIGHT = 8;
+		NINE = 9;
+		TEN = 10;
+		MAX = 11;
+	}
+} // end
+
+message SendHoney {
+	required string k_id = 2;
+	required string receiver_k_id = 3;
+} // end
+
+message AcceptHoney {
+	required string k_id = 2;
+	required string sender_k_id = 3;
+	required int64 sended_time = 4;
+} // end
+
+message RequestBaton {
+	required string k_id = 2;
+	required string receiver_k_id = 3;
+	required string map = 4;
+	required int32 score = 5;
+} // end
+
+message AcceptBaton {
+	required string k_id = 2;
+	required string sender_k_id = 3;
+	required int64 sended_time = 4;
+	required int32 selected_character = 5;
+	required int32 selected_assistant = 6;
+} // end
+
+message EndBaton {
+	required string k_id = 2;
+	required string sender_k_id = 3;
+	required int64 sended_time = 4;
+	required int32 selected_character = 5;
+	required int32 selected_assistant = 6;
+	required int32 score = 7;
+	required int32 dist = 8;
+	required int32 enemy_kill = 9;
+	required int32 play_time = 10;
+	required int32 coin = 11;
+} // end
+
+message AcceptBatonResult {
+	required string k_id = 2;
+	required string sender_k_id = 3;
+	required int64 sended_time = 4;
+} // end
+
+message UpgradeHoneyScore {
+	required string k_id = 2;
+} // end
+
+message UpgradeHoneyTime {
+	required string k_id = 2;
+} // end
+
+message UpgradeCooldown {
+	required string k_id = 2;
+} // end
+
+message InviteFriend {
+	required string k_id = 2;
+	required string friend_k_id = 3;
+} // end
+
+message LoadReward {
+	required Reward reward = 2;
+
+	enum Reward {
+		INVITE_10_REWARD = 1;
+		INVITE_15_REWARD = 2;
+		INVITE_30_REWARD = 3;
+		MAX = 4;
+	}
+} // end

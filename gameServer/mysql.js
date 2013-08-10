@@ -10,7 +10,7 @@ var pool = mysql.createPool({
 	user: 'root',
 	password: 'xmongames',
 	waitForConnections: true,
-	connectionLimit: 10,
+	connectionLimit: 60,
 });
 
 function query(sql, escaped, callback) {
@@ -21,9 +21,6 @@ function query(sql, escaped, callback) {
 			if (err) throw err;
 	
 			connection.end();
-			
-			console.log(results);
-
 			callback(results, fields);
 		});
 /*
@@ -43,16 +40,12 @@ function query(sql, escaped, callback) {
 
 function call(procedure, params, callback) {
 	pool.getConnection(function(err, connection) {
-//		handleDisconnect(connection);
-
 		var call = 'CALL ' + procedure + '(' + params + ')';
-		console.log(call);
 
 		connection.query(call, function(err, results, fields) {
 			if (err) throw err;
 
 			connection.end();
-
 			callback(results, fields);
 		});
 	});

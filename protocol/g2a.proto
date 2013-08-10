@@ -1,0 +1,15 @@
+package G2A;
+
+message RegisterSession {
+	required string k_id = 1;
+} // end
+
+message UnregisterSession {
+	required string k_id = 1;
+	required string session_id = 2;
+} // end
+
+message UpdateSession {
+	required string k_id = 1;
+	required string session_id = 2;
+} // end

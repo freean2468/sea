@@ -1,121 +1,49 @@
-var UUID = require('./util').UUID;
-var MINUTE = require('./define').MINUTE;
-var EXPIRATION = MINUTE * 15;
-var unmanagedAreaMsg = require('./sessionInfo').unmanaged;
-var unregisterMsg = require('./sessionInfo').unregister;
-var sessionList = [];
-var emptyList = [];
-var k_idList = [];
-var timerList = []; // Don't need to manage this list.
+var	toAuth = require('./a2g-client').toAuth;
+var sessionEvent = require('./a2g-event').sessionEvent;
 
-var TIMER_ON_UNREGISTER = 1;
-var EXPLICIT_UNREGISTER = 0;
-
-function setExpiration(index, piece) {
-	var callback = function (index) {
-		unregisterSession(index, piece);
-	};
-
-	var timerId = setTimeout(callback, EXPIRATION, index);
-
-	timerList[index] = timerId;
-}
-
-function updateExpiration(index) {
-	clearTimeout(timerList[index]);
-
-	setExpiration(index, sessionList[index]);
-}
-
-function unregisterSession(index, piece) {
-	if (sessionList[index] !== undefined && sessionList[index] === piece) {
-		var emptyIndex = emptyList.indexOf(undefined);
+function toAuthRegisterSession(k_id, callback) {
+	var RegisterSession = toAuth.proto.packetMaker('g2a.RegisterSession');
+	var toAuthMsg = new RegisterSession;
 	
-		if (emptyIndex === -1) {
-			emptyList.push(index);
-		}
-		else {
-			emptyList[emptyIndex] = index;
-		}
+	toAuthMsg.k_id = k_id;
 
-		delete sessionList[index];
-		delete k_idList[index];
-	}
-	else {
-		throw console.log("exception happened in unregisterSession");
-	}
+	toAuth.proto.sendPacket(toAuth.socket, toAuthMsg);
+
+	sessionEvent.insert(k_id, function (res) {
+		callback(res);
+	});
 }
 
-function registerSession(piece, k_id) {
-	var emptyIndex = sessionList.indexOf(undefined);
-	var index;
+function toAuthUnregisterSession(k_id, session_id, callback) {
+	var UnregisterSession = toAuth.proto.packetMaker('g2a.UnregisterSession');
+	var toAuthMsg = new UnregisterSession;
+	
+	toAuthMsg.k_id = k_id;
+	toAuthMsg.session_id = session_id;
 
-	for (i = 0; i < k_idList.length; ++i) {
-		if(k_idList[i] === k_id) {
-			return 0;
-		}
-	}
+	toAuth.proto.sendPacket(toAuth.socket, toAuthMsg);
 
-	if (emptyIndex === -1) {
-		index = sessionList.push(piece) - 1;
-		k_idList.push(k_id);
-	}
-	else {
-		index = emptyIndex;
-		sessionList[index] = piece;
-		k_idList[index] = k_id;
-	}
-
-	setExpiration(index, piece);
-
-	return piece;
+	sessionEvent.insert(k_id, function (res) {
+		callback(res);
+	});
 }
 
-function isUnregisterMsg(id) {
-	for (i = 0; i < unregisterMsg.length; ++i) {
-		if (unregisterMsg[i] === id) {
-			return true;
-		}
-	}
-	return false;
+function toAuthUpdateSession(k_id, session_id, callback) {
+	var UpdateSession = toAuth.proto.packetMaker('g2a.UpdateSession');
+	var toAuthMsg = new UpdateSession;
+	
+	toAuthMsg.k_id = k_id;
+	toAuthMsg.session_id = session_id;
+
+	toAuth.proto.sendPacket(toAuth.socket, toAuthMsg);
+
+	sessionEvent.insert(k_id, function (res) {
+		callback(res);
+	});
 }
 
-function authenticateSession(msgId, piece) {
-	if (unmanagedAreaMsg.indexOf(msgId) !== -1) {
-		return true;
-	}
-	else {
-		var index = sessionList.indexOf(piece);
-		var res = (index !== -1);
-
-		// There is a possibility to execute unregisterSession by timer on before explicitly.
-		if (res === true) {			
-			if (isUnregisterMsg(msgId)) {
-				console.log("unregisterSession");
-				unregisterSession(index, piece);	
-				clearTimeout(timerList[index]);
-			}
-			else {
-				console.log("updateExpiration");
-				updateExpiration(index, piece);
-			}
-		}
-
-		return res;
-	}
-}
-
-function CCU() {
-	var count = 0;
-	for (var val in sessionList) {
-		if (val != undefined) {
-			++count;
-		}
-	}
-	return count;
-}
-
-exports.registerSession = registerSession;
-exports.unregisterSession = unregisterSession;
-exports.authenticateSession = authenticateSession;
-exports.CCU = CCU;
+module.exports = {
+	'toAuthRegisterSession' : toAuthRegisterSession,
+	'toAuthUnregisterSession' : toAuthUnregisterSession,
+	'toAuthUpdateSession': toAuthUpdateSession,
+};
