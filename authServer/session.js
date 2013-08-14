@@ -34,7 +34,7 @@ function SessionMgr(logMgr) {
 			clearTimeout(this.timerList[kId]);
 			this.timerList[kId] = null;
 			
-			//this.logMgr.addLog('AUTH', 'Unregister session. (' +kId + ', ' + sessionId + ')');
+			this.logMgr.addLog('AUTH', 'Unregister session. (' +kId + ', ' + sessionId + ')');
 			return true;
 		} else {
 			this.logMgr.addLog('ERROR', 'A wrong access was detected in unregisterSession. (' + kId + ', ' + sessionId + ')');
@@ -59,7 +59,7 @@ function SessionMgr(logMgr) {
 		if (_sessionId !== null && _sessionId === sessionId) {
 			clearTimeout(this.timerList[kId]);
 			this.setExpiration(kId, sessionId);
-			this.logMgr.addLog('AUTH', 'Update session. (' + kId + ', ' + sessionId + ')');
+//			this.logMgr.addLog('AUTH', 'Update session. (' + kId + ', ' + sessionId + ')');
 			return true;
 		} else {
 			this.logMgr.addLog('ERROR', 'A wrong access was detected in updateSession. (' + kId + ', ' + sessionId + ')');
