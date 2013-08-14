@@ -19,6 +19,10 @@ process.argv.forEach(function(val, index, array) {
 		option += "var sessionEvent = require('./a2g-event').sessionEvent;" + '\n';
 		option += "var session = require('./session');" + '\n';
 	}
+
+	if (val === 'g2l') {
+
+	}
 });
 
 var protoIdList = [];
@@ -58,9 +62,7 @@ mysql['head'] += "var mysql = require('./mysql');" + '\n'
 mongodb['head'] += "var mongodb = require('./mongodb');" + '\n'
 				;
 
-headCommon += "var log = require('./log');" + '\n'
-				+ '\n'
-				+ "function write(res, stream) {" + '\n'
+headCommon += '\n' + "function write(res, stream) {" + '\n'
 				+ '\t' + "res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':stream.length});" + '\n'
 				+ '\t' + "res.write(stream);" + '\n'
 				+ '\t' + "res.end();" + '\n'

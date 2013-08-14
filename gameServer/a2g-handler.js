@@ -1,20 +1,17 @@
-var a2g_proto = require('./a2g-proto');
-var sessionEvent = require('./a2g-event').sessionEvent;
-
-function processSystemMessageReply(socket, data) {
-	sessionEvent.emit('systemMessage', data.k_id, data.res);
+function processSystemMessageReply(client, socket, data) {
+	client.sessionEvent.systemMessage(data.k_id, data.res);
 }
 
-function processRegisterSessionReply(socket, data) {
-	sessionEvent.emit('register', data.k_id, data.session_id);
+function processRegisterSessionReply(client, socket, data) {
+	client.sessionEvent.register(data.k_id, data.session_id);
 }
 
-function processUnregisterSessionReply(socket, data) {
-	sessionEvent.emit('unregister', data.k_id);
+function processUnregisterSessionReply(client, socket, data) {
+	client.sessionEvent.unregister(data.k_id);
 }
 
-function processUpdateSessionReply(socket, data) {
-	sessionEvent.emit('update', data.k_id);
+function processUpdateSessionReply(client, socket, data) {
+	client.sessionEvent.update(data.k_id);
 }
 
 module.exports = {

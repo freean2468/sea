@@ -3,65 +3,84 @@ var http = require('http'),
 	cluster = require('cluster'),
 	cp = require('child_process'),
 	numCPUs = require('os').cpus().length;
+	numCPUs = 3;
 
 var build = require('./c2g-proto-build'),
-	log = require('./log'),
+	LogMgr = require('./log').LogMgr,
 	rank = cp.fork('./rank.js'),
 	request = require('./g2l-request').request,
-	toAuth = require('./a2g-client').toAuth;
+	Client = require('./a2g-client').Client,
+	Router = require('./c2g-router').Router;
 
-var rankingList = [];
+var currentDate = new Date();
 
-function start(route, handle) {
-	function onRequest(request, response) {
-		var postData = '';
-		var pathname = url.parse(request.url).pathname;
+function Server() {
+	// property
+	this.rankingList = [];
+	this.logMgr = new LogMgr(currentDate);
+	this.clientList = {};
+	this.server;
+	this.router = new Router();
 
-		//console.log('Request for ' + pathname + ' received.');
+	// method
+	this.start = function () {
+		this.logMgr.init('GAME');
+		this.router.init(this.logMgr);
 
-		request.setEncoding('utf8');
+		var that = this;
+		function onRequest(request, response) {
+			var postData = '';
+			var pathname = url.parse(request.url).pathname;
 
-		request.addListener('data', function data(postDataChunk) {
-			postData += postDataChunk;
-			//console.log('Received POST data chunk \'' + postDataChunk + '\'.');
-		});
+			//console.log('Request for ' + pathname + ' received.');
 
-		request.addListener('end', function end() {
-			route(request, handle, pathname, response, postData);
-		});
-	}
+			request.setEncoding('utf8');
 
-	if (cluster.isMaster) {		
-//		metric();	
-	
-		log.mkdirLog();
+			request.addListener('data', function data(postDataChunk) {
+				postData += postDataChunk;
+				//console.log('Received POST data chunk \'' + postDataChunk + '\'.');
+			});
 
-		rank.on('message', function(m) {
-			rankingList = m;
-			exports.rankingList = rankingList;
-		});
-
-		console.log('rank calc has started.');	
-
-		for (var i = 0; i < numCPUs; ++i) {
-			cluster.fork();
+			request.addListener('end', function end() {
+				that.router.route(request, pathname, response, postData);
+			});
 		}
 
-		cluster.on('exit', function (worker, code, signal) {
-			console.log('worker ' + worker.process.pid + ' died');
-		});
-	} else {
-		server = http.createServer(onRequest);
-		server.timeout = 0;
-		server.listen(8888);
+		if (cluster.isMaster) {		
+	//		metric();	
 
-		console.log('game server(' + process.pid + ') has started to listening on 8888 port.');
+			rank.on('message', function(m) {
+				this.rankingList = m;
+			});
 
-		toAuth.init();
-	}
+			console.log('rank calc has started.');	
+
+			for (var i = 0; i < numCPUs; ++i) {
+				cluster.fork();
+			}
+
+			cluster.on('exit', function (worker, code, signal) {
+				console.log('worker ' + worker.process.pid + ' died');
+			});
+		} else {
+			this.server = http.createServer(onRequest);
+			this.server.timeout = 0;
+			this.server.listen(8888);
+
+			console.log('game server(' + process.pid + ') has started to listening on 8888 port.');
+
+			var client = new Client('127.0.0.1', 8870);
+			client.init();
+
+			this.clientList[process.pid] = client;
+		}
+	};
+
+	this.getClient = function () {
+		return this.clientList[process.pid];
+	};
 }
 
 module.exports = {
-	'start': start,
-	'rankingList': rankingList,
+	'Server': Server,
 };

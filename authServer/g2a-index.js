@@ -1,9 +1,13 @@
-var g2a_server = require('./g2a-server'),
-    g2a_route = require('./g2a-route');
+var Server = require('./g2a-server').Server,
+    Router = require('./g2a-router').Router,
+	Proto = require('./g2a-proto').Proto;
 
 var PORT = 8870;
 
-var server = g2a_server.createServer(g2a_route);
+var server = new Server(new Router(new Proto()));
+server.create();
 server.listen(PORT);
 
-console.log("g2a-tcp-server(" + process.pid + ") hast started at port " + PORT);
+module.exports = {
+	'server': server,
+};

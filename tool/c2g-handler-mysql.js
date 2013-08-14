@@ -8,7 +8,7 @@ var request = require('./g2l-request').request;
 var toAuth = require('./a2g-client').toAuth;
 var sessionEvent = require('./a2g-event').sessionEvent;
 var session = require('./session');
-var log = require('./log');
+var logMgr = require('./c2g-index').server.logMgr;
 
 function write(res, stream) {
 	res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':stream.length});
@@ -31,7 +31,7 @@ function VersionInfoHandler(response, data, session_id){
 	var sysMsg = new build.SystemMessage();
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in VersionInfoHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in VersionInfoHandler");
 		sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 		write(response, toStream(sysMsg));
 	} else {
@@ -47,7 +47,7 @@ function RegisterAccountHandler(response, data, session_id){
 	var sysMsg = new build.SystemMessage();
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in RegisterAccountHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in RegisterAccountHandler");
 		sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 		write(response, toStream(sysMsg));
 	} else {
@@ -58,7 +58,7 @@ function RegisterAccountHandler(response, data, session_id){
 			var res = results[0][0]['res'];
 
 			if (res === 0) {
-				log.addLog('ERROR', 'Already exsisting account : ' + msg['k_id']);
+				logMgr.addLog('ERROR', 'Already exsisting account : ' + msg['k_id']);
 				sysMsg['res'] = build.Result['EXISTED_ACCOUNT'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -81,7 +81,7 @@ function UnregisterAccountHandler(response, data, session_id){
 	session.toAuthUnregisterSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in UnregisterAccountHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in UnregisterAccountHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -95,7 +95,7 @@ function UnregisterAccountHandler(response, data, session_id){
 						procedure = 'sea_DeleteUser';
 						params = res;
 						mysql.call(procedure, params, function (results, fields) {});
-						log.addLog('SYSTEM', 'UnregisterAccount : ' + msg['k_id']);
+						logMgr.addLog('SYSTEM', 'UnregisterAccount : ' + msg['k_id']);
 						
 						var UserUnregister = build.UserUnregister;
 						var req = new UserUnregister();
@@ -105,13 +105,13 @@ function UnregisterAccountHandler(response, data, session_id){
 						write(response, toStream(rMsg));
 					} else {			
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
-						log.addLog('ERROR', 'Unregister Invalid Account : ' + msg['k_id'] + ', ' + res);
+						logMgr.addLog('ERROR', 'Unregister Invalid Account : ' + msg['k_id'] + ', ' + res);
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -124,7 +124,7 @@ function LoginHandler(response, data, session_id){
 	var sysMsg = new build.SystemMessage();
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in LoginHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in LoginHandler");
 		sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 		write(response, toStream(sysMsg));
 	} else {	
@@ -142,7 +142,7 @@ function LoginHandler(response, data, session_id){
 					res = results[0][0]['res'];
 
 					if (res) {
-						log.addLog('SYSTEM', 'blocked account access : (' + msg['k_id'] + ')');
+						logMgr.addLog('SYSTEM', 'blocked account access : (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['BLOCKED_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					} else {			
@@ -289,7 +289,7 @@ function LoginHandler(response, data, session_id){
 									response.write(stream);
 									response.end();
 								} else {
-									log.addLog('SYSTEM', 'Duplicated account login (' + msg['k_id'] + ')');
+									logMgr.addLog('SYSTEM', 'Duplicated account login (' + msg['k_id'] + ')');
 									sysMsg['res'] = build.Result['DUPLICATED_LOGIN'];
 									write(response, toStream(sysMsg));
 								}
@@ -304,7 +304,7 @@ function LoginHandler(response, data, session_id){
 					} // end if else
 				}); // end mysql.call();
 			} else {
-				log.addLog('SYSTEM', 'Invalid account (res : ' + res + ')');
+				logMgr.addLog('SYSTEM', 'Invalid account (res : ' + res + ')');
 				sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 				write(response, toStream(sysMsg));
 			}
@@ -320,7 +320,7 @@ function LogoutHandler(response, data, session_id){
 	session.toAuthUnregisterSession(msg['k_id'], session_id, function (res) {
 		if (res === true){
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in LogoutHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in LogoutHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -331,17 +331,17 @@ function LogoutHandler(response, data, session_id){
 					var res = results[0][0]['res'];
 
 					if (res > 0) {
-						log.addLog('SYSTEM', 'logout : ' + msg['k_id']);
+						logMgr.addLog('SYSTEM', 'logout : ' + msg['k_id']);
 						write(response, toStream(rMsg));
 					} else {			
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
-						log.addLog('ERROR', 'logoutHandle failed : ' + msg['k_id'] + ', ' + res);
+						logMgr.addLog('ERROR', 'logoutHandle failed : ' + msg['k_id'] + ', ' + res);
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -356,7 +356,7 @@ function CheckInChargeHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in CheckInChargeHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in CheckInChargeHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -425,14 +425,14 @@ function CheckInChargeHandler(response, data, session_id){
 							} // end else
 						}); // end mysql.call()
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				}); // end mysql.call()
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -447,7 +447,7 @@ function SelectCharacterHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in SelectCharacterHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in SelectCharacterHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -468,7 +468,7 @@ function SelectCharacterHandler(response, data, session_id){
 							var selected = msg['selected_character'];
 
 							if (selected < 0 || selected > 10) {
-								log.addLog('ERROR', 'Character Range Over (' + msg['k_id'] + ', ' + 'character : ' + msg['selected_character'] + ')');
+								logMgr.addLog('ERROR', 'Character Range Over (' + msg['k_id'] + ', ' + 'character : ' + msg['selected_character'] + ')');
 								sysMsg['res'] = build.Result['INVALID_CHARACTER'];
 								write(response, toStream(sysMsg));
 								return;
@@ -495,20 +495,20 @@ function SelectCharacterHandler(response, data, session_id){
 							} else if (selected === 10 && res['character_ten']) {
 								write(response, toStream(rMsg));
 							} else {
-								log.addLog('ERROR', 'Invalid character (' + msg['k_id'] + ', ' + 'character : ' + msg['selected_character'] + ')');
+								logMgr.addLog('ERROR', 'Invalid character (' + msg['k_id'] + ', ' + 'character : ' + msg['selected_character'] + ')');
 								sysMsg['res'] = build.Result['INVALID_CHARACTER'];
 								write(response, toStream(sysMsg));				
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -523,7 +523,7 @@ function SelectAssistantHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in SelectAssistantHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in SelectAssistantHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -544,7 +544,7 @@ function SelectAssistantHandler(response, data, session_id){
 							var selected = msg['selected_assistant'];
 
 							if (selected < 0 || selected > 10) {
-								log.addLog('ERROR', 'Assistant Range Over (' + msg['k_id'] + ', ' + 'assistant : ' + msg['selected_assistant'] + ')');
+								logMgr.addLog('ERROR', 'Assistant Range Over (' + msg['k_id'] + ', ' + 'assistant : ' + msg['selected_assistant'] + ')');
 								sysMsg['res'] = build.Result['INVALID_ASSISTANT'];
 								write(response, toStream(sysMsg));
 								return;
@@ -571,21 +571,21 @@ function SelectAssistantHandler(response, data, session_id){
 							} else if (selected === 10 && res['assistant_ten']) {
 								write(response, toStream(rMsg));
 							} else {
-								log.addLog('ERROR', 'Invalid assistant (' + msg['k_id'] + ', ' + 'assistant : ' + msg['selected_assistant'] + ')');
+								logMgr.addLog('ERROR', 'Invalid assistant (' + msg['k_id'] + ', ' + 'assistant : ' + msg['selected_assistant'] + ')');
 								sysMsg['res'] = build.Result['INVALID_ASSISTANT'];
 								write(response, toStream(sysMsg));				
 							}
 						});
 					}
 					else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -600,7 +600,7 @@ function StartGameHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in StartGameHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in StartGameHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -627,11 +627,11 @@ function StartGameHandler(response, data, session_id){
 							var last = res['last_charged_time'];
 
 							if (honey < 1) {
-								log.addLog('system', 'Not enough honey : ' + rMsg['k_id']);
+								logMgr.addLog('system', 'Not enough honey : ' + rMsg['k_id']);
 								sysMsg['res'] = build.Result['NOT_ENOUGH_HONEY'];
 								write(response, toStream(sysMsg));
 							} else if (character != msg['selected_character'] || assistant != reqassistant) {
-								log.addLog('error', "Doesn't match with db (" + character + ": " + msg['selected_character'] + ", " + assistant + ": " + reqassistant + ")" ); 
+								logMgr.addLog('error', "Doesn't match with db (" + character + ": " + msg['selected_character'] + ", " + assistant + ": " + reqassistant + ")" ); 
 								sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
 								write(response, toStream(sysMsg));
 							} else {
@@ -658,14 +658,14 @@ function StartGameHandler(response, data, session_id){
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				}); // end sea_LoadUser
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -680,7 +680,7 @@ function EndGameHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in EndGameHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in EndGameHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -787,14 +787,14 @@ function EndGameHandler(response, data, session_id){
 							});
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -809,7 +809,7 @@ function LoadRankInfoHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in LoadRankInfoHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in LoadRankInfoHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -891,14 +891,14 @@ function LoadRankInfoHandler(response, data, session_id){
 							}); // end mysql.call()
 						}
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -913,7 +913,7 @@ function LoadPostedHoneyHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in LoadPostedHoneyHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in LoadPostedHoneyHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -954,14 +954,14 @@ function LoadPostedHoneyHandler(response, data, session_id){
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -976,7 +976,7 @@ function LoadPostedBatonHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in LoadPostedBatonHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in LoadPostedBatonHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -1019,14 +1019,14 @@ function LoadPostedBatonHandler(response, data, session_id){
 						});
 					}
 					else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -1041,7 +1041,7 @@ function LoadPostedBatonResultHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in LoadPostedBatonResultHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in LoadPostedBatonResultHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -1085,14 +1085,14 @@ function LoadPostedBatonResultHandler(response, data, session_id){
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -1112,7 +1112,7 @@ function BuyItemHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in BuyItemHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in BuyItemHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -1131,7 +1131,7 @@ function BuyItemHandler(response, data, session_id){
 							var coin = results[0][0]['coin'];
 
 							if (coin < 0) {
-								log.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
+								logMgr.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
 								sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
 								write(response, toStream(sysMsg));
 							} else {
@@ -1207,7 +1207,7 @@ function BuyItemHandler(response, data, session_id){
 										write(response, toStream(rMsg));
 									} else {
 										_flag = false;
-										log.addLog('ERROR', 'Invalid request field (' + msg['k_id'] + ', ' + msg['item'] + ')');
+										logMgr.addLog('ERROR', 'Invalid request field (' + msg['k_id'] + ', ' + msg['item'] + ')');
 										sysMsg['res'] = build.Result['INVALID_REQ_FIELD'];
 										write(response, toStream(sysMsg));
 									}
@@ -1229,14 +1229,14 @@ function BuyItemHandler(response, data, session_id){
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -1251,7 +1251,7 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in BuyOrUpgradeCharacterHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in BuyOrUpgradeCharacterHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -1270,7 +1270,7 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 							var character = msg['character'];
 
 							if (character > 14 || character < 0) {
-								log.addLog('ERROR', "Invalid character (" + msg['k_id'] + ", " + character + ")");
+								logMgr.addLog('ERROR', "Invalid character (" + msg['k_id'] + ", " + character + ")");
 								sysMsg['res'] = build.Result['NO_MATHCH_WITH_DB'];
 								write(response, toStream(sysMsg));
 
@@ -1293,11 +1293,11 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 							var lv = res[idxId];
 
 							if (lv > 14) {
-								log.addLog('ERROR', "The character is fully upgraded. (" + msg['k_id'] + ")");
+								logMgr.addLog('ERROR', "The character is fully upgraded. (" + msg['k_id'] + ")");
 								sysMsg['res'] = build.Result['FULLY_UPGRADED'];
 								write(response, toStream(sysMsg));
 							} else if (lv < 0) {
-								log.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
+								logMgr.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
 								sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
 								write(response, toStream(sysMsg));
 							} else {
@@ -1354,7 +1354,7 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 													write(response, toStream(rMsg));
 												});
 											} else {
-												log.addLog('ERROR', "Failed to upgrade on DB(" + msg['k_id'] + ', ' + character + ")");
+												logMgr.addLog('ERROR', "Failed to upgrade on DB(" + msg['k_id'] + ', ' + character + ")");
 												sysMsg['res'] = build.Result['FAILED_DB_UPDATE'];
 												write(response, toStream(sysMsg));
 											}
@@ -1365,7 +1365,7 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 										
 										mysql.call(procedure, params, function (results, fields) {});
 									} else {
-										log.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
+										logMgr.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
 										sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
 										write(response, toStream(sysMsg));
 									}
@@ -1373,14 +1373,14 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -1395,7 +1395,7 @@ function BuyOrUpgradeAssistantHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in BuyOrUpgradeAssistantHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in BuyOrUpgradeAssistantHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -1414,7 +1414,7 @@ function BuyOrUpgradeAssistantHandler(response, data, session_id){
 							var assistant = msg['assistant'];
 
 							if (assistant > 14 || assistant < 0) {
-								log.addLog('ERROR', "Invalid assistant (" + msg['k_id'] + ", " + assistant + ")");
+								logMgr.addLog('ERROR', "Invalid assistant (" + msg['k_id'] + ", " + assistant + ")");
 								sysMsg['res'] = build.Result['NO_MATHCH_WITH_DB'];
 								write(response, toStream(sysMsg));
 
@@ -1437,11 +1437,11 @@ function BuyOrUpgradeAssistantHandler(response, data, session_id){
 							var lv = res[idxId];
 
 							if (lv > 4) {
-								log.addLog('ERROR', "The assistant is fully upgraded. (" + msg['k_id'] + ")");
+								logMgr.addLog('ERROR', "The assistant is fully upgraded. (" + msg['k_id'] + ")");
 								sysMsg['res'] = build.Result['FULLY_UPGRADED'];
 								write(response, toStream(sysMsg));
 							} else if (lv < 0) {
-								log.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
+								logMgr.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
 								sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
 								write(response, toStream(sysMsg));
 							} else {
@@ -1498,7 +1498,7 @@ function BuyOrUpgradeAssistantHandler(response, data, session_id){
 													write(response, toStream(rMsg));
 												});
 											} else {
-												log.addLog('ERROR', "Failed to upgrade on DB(" + msg['k_id'] + ', ' + assistant + ")");
+												logMgr.addLog('ERROR', "Failed to upgrade on DB(" + msg['k_id'] + ', ' + assistant + ")");
 												sysMsg['res'] = build.Result['FAILED_DB_UPDATE'];
 												write(response, toStream(sysMsg));
 											}
@@ -1509,7 +1509,7 @@ function BuyOrUpgradeAssistantHandler(response, data, session_id){
 										
 										mysql.call(procedure, params, function (results, fields) {});
 									} else {
-										log.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
+										logMgr.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
 										sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
 										write(response, toStream(sysMsg));
 									}
@@ -1517,14 +1517,14 @@ function BuyOrUpgradeAssistantHandler(response, data, session_id){
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -1539,7 +1539,7 @@ function SendHoneyHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in SendHoneyHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in SendHoneyHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -1591,20 +1591,20 @@ function SendHoneyHandler(response, data, session_id){
 									write(response, toStream(rMsg));
 								});
 							} else {
-								log.addLog('ERROR', 'Invalid account (' + msg['receiver_k_id'] + ')');
+								logMgr.addLog('ERROR', 'Invalid account (' + msg['receiver_k_id'] + ')');
 								sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 								write(response, toStream(sysMsg));
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -1619,7 +1619,7 @@ function AcceptHoneyHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in AcceptHoneyHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in AcceptHoneyHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -1647,7 +1647,7 @@ function AcceptHoneyHandler(response, data, session_id){
 									res = results[0][0]['res'];
 
 									if (res === -1) {
-										log.addLog('ERROR', 'Invalid honey (' + msg['receiver_k_id'] + ', ' + msg['sender_k_id'] + ')');
+										logMgr.addLog('ERROR', 'Invalid honey (' + msg['receiver_k_id'] + ', ' + msg['sender_k_id'] + ')');
 										sysMsg['res'] = build.Result['INVALID_HONEY'];
 										write(response, toStream(sysMsg));
 									} else {
@@ -1664,20 +1664,20 @@ function AcceptHoneyHandler(response, data, session_id){
 									}
 								});
 							} else {
-								log.addLog('ERROR', 'Invalid account (' + msg['sender_k_id'] + ')');
+								logMgr.addLog('ERROR', 'Invalid account (' + msg['sender_k_id'] + ')');
 								sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 								write(response, toStream(sysMsg));
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -1692,7 +1692,7 @@ function RequestBatonHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in RequestBatonHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in RequestBatonHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -1734,26 +1734,26 @@ function RequestBatonHandler(response, data, session_id){
 
 										write(response, toStream(rMsg));
 									} else {
-										log.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
+										logMgr.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
 										sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
 										write(response, toStream(sysMsg));							
 									}
 								});
 							} else {
-								log.addLog('ERROR', 'Invalid account (' + msg['receiver_k_id'] + ')');
+								logMgr.addLog('ERROR', 'Invalid account (' + msg['receiver_k_id'] + ')');
 								sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 								write(response, toStream(sysMsg));
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -1768,7 +1768,7 @@ function AcceptBatonHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in AcceptBatonHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in AcceptBatonHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -1807,7 +1807,7 @@ function AcceptBatonHandler(response, data, session_id){
 											var assistant = res['selected_assistant'];
 
 											if (character != msg['selected_character'] || assistant != reqassistant) {
-												log.addLog('error', "Doesn't match with db (" + character + ": " + msg['selected_character'] + ", " + assistant + ": " + reqassistant + ")" ); 
+												logMgr.addLog('error', "Doesn't match with db (" + character + ": " + msg['selected_character'] + ", " + assistant + ": " + reqassistant + ")" ); 
 												sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
 												write(response, toStream(sysMsg));
 											} else {
@@ -1815,26 +1815,26 @@ function AcceptBatonHandler(response, data, session_id){
 											}
 										});
 									} else {
-										log.addLog('ERROR', 'Invalid baton (sed:' + sender_id + ', rec:' + receiver_id + ', time: ' + msg['sended_time'] + ')');
+										logMgr.addLog('ERROR', 'Invalid baton (sed:' + sender_id + ', rec:' + receiver_id + ', time: ' + msg['sended_time'] + ')');
 										sysMsg['res'] = build.Result['INVALID_BATON'];
 										write(response, toStream(sysMsg));
 									}
 								});
 							} else {
-								log.addLog('ERROR', 'Invalid account (' + msg['sender_k_id'] + ')');
+								logMgr.addLog('ERROR', 'Invalid account (' + msg['sender_k_id'] + ')');
 								sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 								write(response, toStream(sysMsg));
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -1849,7 +1849,7 @@ function EndBatonHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in EndBatonHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in EndBatonHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -1879,7 +1879,7 @@ function EndBatonHandler(response, data, session_id){
 									res = results[0][0]['score'];
 
 									if (res === -1) {
-										log.addLog('ERROR', 'Invalid baton (sed:' + sender_id + ', rec:' + receiver_id + ', time: ' + msg['sended_time'] + ')');
+										logMgr.addLog('ERROR', 'Invalid baton (sed:' + sender_id + ', rec:' + receiver_id + ', time: ' + msg['sended_time'] + ')');
 										sysMsg['res'] = build.Result['INVALID_BATON'];
 										write(response, toStream(sysMsg));
 									} else {
@@ -1954,20 +1954,20 @@ function EndBatonHandler(response, data, session_id){
 									}
 								});
 							} else {
-								log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+								logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 								sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 								write(response, toStream(sysMsg));
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -1982,7 +1982,7 @@ function AcceptBatonResultHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in EndBatonHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in EndBatonHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -2011,7 +2011,7 @@ function AcceptBatonResultHandler(response, data, session_id){
 									res = results[0][0]['score'];
 
 									if (res === -1 ) {
-										log.addLog('ERROR', 'Invalid baton result (sed:' + sender_id + ', rec:' + receiver_id + ', time: ' + msg['sended_time'] + ')');
+										logMgr.addLog('ERROR', 'Invalid baton result (sed:' + sender_id + ', rec:' + receiver_id + ', time: ' + msg['sended_time'] + ')');
 										sysMsg['res'] = build.Result['INVALID_BATON_RESULT'];
 										write(response, toStream(sysMsg));
 									} else {
@@ -2043,20 +2043,20 @@ function AcceptBatonResultHandler(response, data, session_id){
 									}
 								});
 							} else {
-								log.addLog('ERROR', 'Invalid account (' + msg['sender_k_id'] + ')');
+								logMgr.addLog('ERROR', 'Invalid account (' + msg['sender_k_id'] + ')');
 								sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 								write(response, toStream(sysMsg));
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -2071,7 +2071,7 @@ function UpgradeHoneyScoreHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in UpgradeHoneyScoreHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in UpgradeHoneyScoreHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -2090,11 +2090,11 @@ function UpgradeHoneyScoreHandler(response, data, session_id){
 							var honeyScore = results[0][0]['honey_score'];
 
 							if (honeyScore > 19) {
-								log.addLog('ERROR', "honey is fully upgraded. (" + msg['k_id'] + ")");
+								logMgr.addLog('ERROR', "honey is fully upgraded. (" + msg['k_id'] + ")");
 								sysMsg['res'] = build.Result['FULLY_UPGRADED'];
 								write(response, toStream(sysMsg));
 							} else if (honeyScore < 0) {
-								log.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
+								logMgr.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
 								sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
 								write(response, toStream(sysMsg));
 							} else {
@@ -2144,7 +2144,7 @@ function UpgradeHoneyScoreHandler(response, data, session_id){
 													write(response, toStream(rMsg));
 												});
 											} else {
-												log.addLog('ERROR', "Failed to upgrade honeyScore on DB(" + msg['k_id'] + ', ' + honeyScore + ")");
+												logMgr.addLog('ERROR', "Failed to upgrade honeyScore on DB(" + msg['k_id'] + ', ' + honeyScore + ")");
 												sysMsg['res'] = build.Result['FAILED_DB_UPDATE'];
 												write(response, toStream(sysMsg));
 											}
@@ -2155,7 +2155,7 @@ function UpgradeHoneyScoreHandler(response, data, session_id){
 										
 										mysql.call(procedure, params, function (results, fields) {});
 									} else {
-										log.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
+										logMgr.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
 										sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
 										write(response, toStream(sysMsg));
 									}
@@ -2163,14 +2163,14 @@ function UpgradeHoneyScoreHandler(response, data, session_id){
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -2185,7 +2185,7 @@ function UpgradeHoneyTimeHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in UpgradeHoneyTimeHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in UpgradeHoneyTimeHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -2203,11 +2203,11 @@ function UpgradeHoneyTimeHandler(response, data, session_id){
 						mysql.call(procedure, params, function (results, fields) {
 							var honeyTime = results[0][0]['honey_time'];
 							if (honeyTime > 19) {
-								log.addLog('ERROR', "honeyTime is fully upgraded. (" + msg['k_id'] + ")");
+								logMgr.addLog('ERROR', "honeyTime is fully upgraded. (" + msg['k_id'] + ")");
 								sysMsg['res'] = build.Result['FULLY_UPGRADED'];
 								write(response, toStream(sysMsg));
 							} else if (honeyTime < 0) {
-								log.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
+								logMgr.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
 								sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
 								write(response, toStream(sysMsg));
 							} else {
@@ -2257,7 +2257,7 @@ function UpgradeHoneyTimeHandler(response, data, session_id){
 													write(response, toStream(rMsg));
 												});
 											} else {
-												log.addLog('ERROR', "Failed to upgrade honeyTime on DB(" + msg['k_id'] + ', ' + honeyTime + ")");
+												logMgr.addLog('ERROR', "Failed to upgrade honeyTime on DB(" + msg['k_id'] + ', ' + honeyTime + ")");
 												sysMsg['res'] = build.Result['FAILED_DB_UPDATE'];
 												write(response, toStream(sysMsg));
 											}
@@ -2268,7 +2268,7 @@ function UpgradeHoneyTimeHandler(response, data, session_id){
 										
 										mysql.call(procedure, params, function (results, fields) {});
 									} else {
-										log.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
+										logMgr.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
 										sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
 										write(response, toStream(sysMsg));
 									}
@@ -2276,14 +2276,14 @@ function UpgradeHoneyTimeHandler(response, data, session_id){
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -2298,7 +2298,7 @@ function UpgradeCooldownHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in UpgradeCooldownHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in UpgradeCooldownHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -2317,11 +2317,11 @@ function UpgradeCooldownHandler(response, data, session_id){
 							var cooldown = results[0][0]['cooldown'];
 
 							if (cooldown > 19) {
-								log.addLog('ERROR', "cooldown is fully upgraded. (" + msg['k_id'] + ")");
+								logMgr.addLog('ERROR', "cooldown is fully upgraded. (" + msg['k_id'] + ")");
 								sysMsg['res'] = build.Result['FULLY_UPGRADED'];
 								write(response, toStream(sysMsg));
 							} else if (cooldown < 0) {
-								log.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
+								logMgr.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
 								sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
 								write(response, toStream(sysMsg));
 							} else {
@@ -2371,7 +2371,7 @@ function UpgradeCooldownHandler(response, data, session_id){
 													write(response, toStream(rMsg));
 												});
 											} else {
-												log.addLog('ERROR', "Failed to upgrade cooldown on DB(" + msg['k_id'] + ', ' + cooldown + ")");
+												logMgr.addLog('ERROR', "Failed to upgrade cooldown on DB(" + msg['k_id'] + ', ' + cooldown + ")");
 												sysMsg['res'] = build.Result['FAILED_DB_UPDATE'];
 												write(response, toStream(sysMsg));
 											}
@@ -2382,7 +2382,7 @@ function UpgradeCooldownHandler(response, data, session_id){
 										
 										mysql.call(procedure, params, function (results, fields) {});
 									} else {
-										log.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
+										logMgr.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
 										sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
 										write(response, toStream(sysMsg));
 									}
@@ -2390,14 +2390,14 @@ function UpgradeCooldownHandler(response, data, session_id){
 							}
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}
@@ -2412,7 +2412,7 @@ function InviteFriendHandler(response, data, session_id){
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
 		if (res === true) {
 			if (inspectField(msg) === false) {
-				log.addLog('ERROR', "Undefined field is detected in InviteFriendHandler");
+				logMgr.addLog('ERROR', "Undefined field is detected in InviteFriendHandler");
 				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 				write(response, toStream(sysMsg));
 			} else {
@@ -2469,14 +2469,14 @@ function InviteFriendHandler(response, data, session_id){
 							});
 						});
 					} else {
-						log.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 						write(response, toStream(sysMsg));
 					}
 				});
 			}
 		} else {
-			log.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
 			sysMsg['res'] = build.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 		}

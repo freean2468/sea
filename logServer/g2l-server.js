@@ -1,33 +1,42 @@
-var http = require('http');
-var url = require('url');
-var log = require('./log');
+var http = require('http'),
+	url = require('url');
 
-function start(route, handle) {
-	function onRequest(request, response) {
-		var postData = '';
-		var pathname = url.parse(request.url).pathname;
+var LogMgr = require('./log').LogMgr;
 
-		//console.log('Request for ' + pathname + ' received.');
+function Server() {
+	// property
+	this.logMgr = new LogMgr();
 
-		request.setEncoding('utf8');
+	// method
+	this.start = function (route, handle) {
+		function onRequest(request, response) {
+			var postData = '';
+			var pathname = url.parse(request.url).pathname;
 
-		request.addListener('data', function data(postDataChunk) {
-			postData += postDataChunk;
-			//console.log('Received POST data chunk \'' + postDataChunk + '\'.');
-		});
+			//console.log('Request for ' + pathname + ' received.');
 
-		request.addListener('end', function end() {
-			route(handle, pathname, response, postData);
-		});
-	}
-	
-	log.mkdirLog();
+			request.setEncoding('utf8');
 
-	server = http.createServer(onRequest)
-	server.timeout = 0;
-	server.listen(8889);
+			request.addListener('data', function data(postDataChunk) {
+				postData += postDataChunk;
+				//console.log('Received POST data chunk \'' + postDataChunk + '\'.');
+			});
 
-	console.log('log server has started.');
+			request.addListener('end', function end() {
+				route(handle, pathname, response, postData, this.logMgr);
+			});
+		}
+		
+		this.logMgr.init('LOG');
+
+		server = http.createServer(onRequest)
+		server.timeout = 0;
+		server.listen(8889);
+
+		console.log('log server has started.');
+	};
 }
 
-exports.start = start;
+module.exports = {
+	'Server': Server,
+};

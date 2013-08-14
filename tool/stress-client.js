@@ -88,10 +88,8 @@ function request(data) {
 			var id = util.fetchId(res);
 
 			if (id === registerAccountReply['id']['low']) {
-				setTimeout(function () {
-					login['k_id'] = k_id;
-					request(login);
-				}, 1000);
+				login['k_id'] = k_id;
+				request(login);
 			} else if (id === accountInfo['id']['low']) {
 				var cookies = fetchCookie(response);
 				piece = cookies['piece'];
@@ -143,10 +141,8 @@ function request(data) {
 			} else if (id === systemMessage['id']['low']) {
 				msg = build.SystemMessage.decode(res);
 				if (msg['res'] === build.Result['EXISTED_ACCOUNT']) {
-					setTimeout(function () {
-						login['k_id'] = k_id;
-						request(login);
-					}, 1000);
+					login['k_id'] = k_id;
+					request(login);
 				}
 			}
 			else {

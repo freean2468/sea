@@ -4,7 +4,7 @@ var assert = require('assert');
 var toStream = require('../common/util').toStream;
 var UUID = require('../common/util').UUID;
 var convertMS2S = require('../common/util').convertMS2S;
-var log = require('./log');
+var logMgr = require('./g2l-index').server.logMgr;
 
 function write(res, stream) {
 	res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':stream.length});
@@ -25,7 +25,7 @@ function AccountLoginHandler(response, data){
 	var msg = build.AccountLogin.decode(data);
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in AccountLoginHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in AccountLoginHandler");
 	} else {
 		var procedure = 'sea_AddLogLogin';
 		var params = "'" + msg['k_id'] + "'";
@@ -43,7 +43,7 @@ function ConcurrentUserHandler(response, data){
 	var msg = build.ConcurrentUser.decode(data);
 	
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in ConcurrentUserHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in ConcurrentUserHandler");
 	} else {
 		var ccu = msg['ccu'];
 		var procedure = 'sea_AddConcurrentUser';
@@ -62,7 +62,7 @@ function PeakConcurrentUserHandler(response, data){
 	var msg = build.PeakConcurrentUser.decode(data);
 	
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in PeakConcurrentUserHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in PeakConcurrentUserHandler");
 	} else {
 		var procedure = 'sea_PeakConcurrentUser';
 		var params = '';
@@ -87,7 +87,7 @@ function UniqueVisitorHandler(response, data){
 	var msg = build.UniqueVisitor.decode(data);
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in UniqueVisitorHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in UniqueVisitorHandler");
 	} else {
 		var uv = msg['uv'];
 		var procedure = 'sea_AddUniqueVisitor';
@@ -106,7 +106,7 @@ function RetentionRateHandler(response, data){
 	var msg = build.RetentionRate.decode(data);
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in RetentionRateHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in RetentionRateHandler");
 	} else {
 		var rr = msg['rr'];
 		var procedure = 'sea_AddRetentionRate';
@@ -125,7 +125,7 @@ function PayAssistantHandler(response, data){
 	var msg = build.PayAssistant.decode(data);
 	
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in PayAssistantHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in PayAssistantHandler");
 	} else {
 		var procedure = 'sea_AddLogPayAssistant';
 		var params = "'" + msg['k_id'] + "', " + msg['paid_assistant'] + ", " + msg['rest_coin'];
@@ -142,7 +142,7 @@ function PayCharacterHandler(response, data){
 	var msg = build.PayCharacter.decode(data);
 	
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in PayCharacterHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in PayCharacterHandler");
 	} else {
 		var procedure = 'sea_AddLogPayCharacter';
 		var params = "'" + msg['k_id'] + "', " + msg['paid_character'] + ", " + msg['rest_coin'];
@@ -159,7 +159,7 @@ function PayCoinHandler(response, data){
 	var msg = build.PayCoin.decode(data);
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in PayCoinHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in PayCoinHandler");
 	} else {
 		var procedure = 'sea_AddLogPayCoin';
 		var params = "'" + msg['k_id'] + "', " + msg['paid_coin'] + ", " + msg['rest_money'];
@@ -176,7 +176,7 @@ function PayHeartHandler(response, data){
 	var msg = build.PayHeart.decode(data);
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in PayHeartHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in PayHeartHandler");
 	} else {
 		var procedure = 'sea_AddLogPayHeart';
 		var params = "'" + msg['k_id'] + "', " + msg['paid_heart'] + ", " + msg['rest_coin'];
@@ -193,7 +193,7 @@ function PayItemHandler(response, data){
 	var msg = build.PayItem.decode(data);
 	
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in PayItemHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in PayItemHandler");
 	} else {
 		var procedure = 'sea_AddLogPayItem';
 		var params = "'" + msg['k_id'] + "', " + msg['paid_item'] + ", " + msg['rest_coin'];
@@ -210,7 +210,7 @@ function PayMoneyHandler(response, data){
 	var msg = build.PayMoney.decode(data);
 	
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in PayMoneyHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in PayMoneyHandler");
 	} else {
 		var procedure = 'sea_AddLogPayMoney';
 		var params = "'" + msg['k_id'] + "', " + msg['paid_money'] + ", " + msg['rest_money'];
@@ -227,7 +227,7 @@ function UserGamePlayHandler(response, data){
 	var msg = build.UserGamePlay.decode(data);
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in UserGamePlayHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in UserGamePlayHandler");
 	} else {
 		var procedure = 'sea_AddLogPlay';
 		var params = "'" + msg['k_id'] + "', " + msg['selected_character'] + ", " + msg['selected_assistant'] + ", " + msg['score'] + ", " + msg['enemy_kill'] + ", " + msg['dist'] + ", " + msg['play_time'] + ", " + msg['exp_boost'] + ", " + msg['last_item'] + ", " + msg['max_attack'] + ", " + msg['random'];
@@ -244,7 +244,7 @@ function UserRegisterHandler(response, data){
 	var msg = build.UserRegister.decode(data);
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in UserRegisterHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in UserRegisterHandler");
 	} else {
 		var procedure = 'sea_AddLogRegister';
 		var params = "'" + msg['k_id'] + "'";
@@ -261,7 +261,7 @@ function UserUnregisterHandler(response, data){
 	var msg = build.UserUnregister.decode(data);
 
 	if (inspectField(msg) === false) {
-		log.addLog('ERROR', "Undefined field is detected in UserUnregisterHandler");
+		logMgr.addLog('ERROR', "Undefined field is detected in UserUnregisterHandler");
 	} else {
 		var procedure = 'sea_AddLogUnregister';
 		var params = "'" + msg['k_id'] + "'";

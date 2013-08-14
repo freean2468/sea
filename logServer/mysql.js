@@ -10,7 +10,7 @@ var pool = mysql.createPool({
 	user: 'root',
 	password: 'xmongames',
 	waitForConnections: true,
-	connectionLimit: 60,
+	connectionLimit: 500,
 });
 
 function query(sql, escaped, callback) {

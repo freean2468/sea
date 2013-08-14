@@ -1,36 +1,53 @@
 var fs = require('fs');
+var PATH = './LOG/';
 
-Date.prototype.today = function() {
-	return ((this.getDate() < 10)?'0':'') + this.getDate() + '_'
-		+ (((this.getMonth()+1) < 10)?'0':'') + (this.getMonth()+1) + '_'
-		+ this.getFullYear();
+function LogMgr(currentDate) {
+	// property
+	this.currentDate = currentDate;
+	this.owner = '';
+	this.currentDate;
+	this.startTime;
+	this.fullPath;
+
+	// method
+	this.init = function (owner) {
+		this.owner = owner;
+		this.startTime = this.getDateTime();
+		this.fullPath = PATH + owner + '-' + this.startTime + '/';
+		this.mkdirLog();
+	};
+
+	this.mkdirLog = function () {
+		if (!fs.existsSync(PATH)) {
+			fs.mkdirSync(PATH);
+		}
+		if (!fs.existsSync(this.fullPath)) {
+			fs.mkdirSync(this.fullPath);
+		}
+	};
+
+	this.addLog = function (type, line) {
+		fs.appendFileSync(this.fullPath + '[' + type + ']', this.getDateTime() + ' ' + line + '\n');
+		console.log(line);
+	};
+	
+	this.getDateTime = function () {
+		return this.today(this.currentDate) + '-' + this.timeNow(this.currentDate);
+	};
+
+	this.today = function (currentDate) {
+		return ((currentDate.getDate() < 10)?'0':'') + currentDate.getDate() + '-'
+			+ (((currentDate.getMonth()+1) < 10)?'0':'') + (currentDate.getMonth()+1) + '-'
+			+ currentDate.getFullYear();
+	};
+
+	this.timeNow = function (currentDate) {
+		return ((currentDate.getHours() < 10)?'0':'') + currentDate.getHours() + '-'
+			+ ((currentDate.getMinutes() < 10)?'0':'') + currentDate.getMinutes() + '-'
+			+ ((currentDate.getSeconds() < 10)?'0':'') + currentDate.getSeconds();
+	};
 };
 
-Date.prototype.timeNow = function() {
-	return ((this.getHours() < 10)?'0':'') + this.getHours() + '_'
-		+ ((this.getMinutes() < 10)?'0':'') + this.getMinutes() + '_'
-		+ ((this.getSeconds() < 10)?'0':'') + this.getSeconds();
+module.exports = {
+	'LogMgr': LogMgr,
 };
-
-var currentDate = new Date();
-var start = getDateTime();
-var path = './LOG/';
-var file = start+'_LOG';
-
-function mkdirLog() {
-	if (!fs.existsSync(path)) {
-		fs.mkdirSync(path);
-	}
-}
-
-function addLog(type, line) {
-	fs.appendFileSync(path + '[' + type + ']_' + file, getDateTime() + ' ' + line + '\n');
-	console.log(line);
-}
-
-function getDateTime() {
-	return currentDate.today() + '_' + currentDate.timeNow();
-}
-
-exports.mkdirLog = mkdirLog;
-exports.addLog = addLog;

@@ -3,20 +3,16 @@
  * Synchronize session with game servers connected to this.
  */
 
-var g2a_proto = require('./g2a-proto'),
-	sessionMgr = require('./session').sessionMgr;
-
-function processRegisterSession(socket, data) {
-    var RegisterSessionReply = g2a_proto.packetMaker('a2g.RegisterSessionReply');
+function processRegisterSession(server, socket, data) {
+    var RegisterSessionReply = server.router.proto.packetMaker('a2g.RegisterSessionReply');
     var msg = new RegisterSessionReply;
-	var clientList = require('./g2a-server').getClientList();
 
-	var res = sessionMgr.registerSession(data.k_id);
+	var res = server.sessionMgr.registerSession(data.k_id);
 
 	if (res !== false) {
 		msg.session_id = res;
 	} else {
-		var SystemMessage = g2a_proto.packetMaker('a2g.SystemMessage');
+		var SystemMessage = server.router.proto.packetMaker('a2g.SystemMessage');
 		msg = null;
 		msg = new SystemMessage;
 
@@ -25,20 +21,19 @@ function processRegisterSession(socket, data) {
 
 	msg.k_id = data.k_id;
 
-	g2a_proto.sendPacket(socket, msg);
+	server.router.proto.sendPacket(socket, msg);
 }
 
-function processUnregisterSession(socket, data) {
-    var UnregisterSessionReply = g2a_proto.packetMaker('a2g.UnregisterSessionReply');
+function processUnregisterSession(server, socket, data) {
+    var UnregisterSessionReply = server.router.proto.packetMaker('a2g.UnregisterSessionReply');
     var msg = new UnregisterSessionReply;
-	var clientList = require('./g2a-server').getClientList();
 
-	var res = sessionMgr.unregisterSession(data.k_id, data.session_id);
+	var res = server.sessionMgr.unregisterSession(data.k_id, data.session_id);
 
 	if (res) {
 
 	} else {
-		var SystemMessage = g2a_proto.packetMaker('a2g.SystemMessage');
+		var SystemMessage = server.router.proto.packetMaker('a2g.SystemMessage');
 		msg = null;
 		msg = new SystemMessage;
 
@@ -47,20 +42,19 @@ function processUnregisterSession(socket, data) {
 
 	msg.k_id = data.k_id;
 
-	g2a_proto.sendPacket(socket, msg);
+	server.router.proto.sendPacket(socket, msg);
 }
 
-function processUpdateSession(socket, data) {
-    var UpdateSessionReply = g2a_proto.packetMaker('a2g.UpdateSessionReply');
+function processUpdateSession(server, socket, data) {
+    var UpdateSessionReply = server.router.proto.packetMaker('a2g.UpdateSessionReply');
     var msg = new UpdateSessionReply;
-	var clientList = require('./g2a-server').getClientList();
 
-	var res = sessionMgr.updateSession(data.k_id, data.session_id);
+	var res = server.sessionMgr.updateSession(data.k_id, data.session_id);
 
 	if (res) {
 
 	} else {
-		var SystemMessage = g2a_proto.packetMaker('a2g.SystemMessage');
+		var SystemMessage = server.router.proto.packetMaker('a2g.SystemMessage');
 		msg = null;
 		msg = new SystemMessage;
 
@@ -68,8 +62,8 @@ function processUpdateSession(socket, data) {
 	}
 
 	msg.k_id = data.k_id;
-
-	g2a_proto.sendPacket(socket, msg);
+	
+	server.router.proto.sendPacket(socket, msg);
 }
 
 module.exports = {

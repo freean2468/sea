@@ -37,7 +37,7 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 
 			INSERT sea_user_info(coin, mineral, lv, exp, point, honey, last_charged_time, 
 									selected_character, selected_assistant, invite_count, mileage, draw)
-			VALUES (99999, 9999, 1, 0, 0, 99, UNIX_TIMESTAMP(NOW()), 
+			VALUES (99999, 9999, 1, 0, 0, 9999, UNIX_TIMESTAMP(NOW()), 
 					1, 0, 0, 0, 0);
 
 			INSERT sea_user_characters(character_one, character_two, character_three, character_four, character_five, character_six, character_seven, character_eight, character_nine, character_ten)

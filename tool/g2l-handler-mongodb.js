@@ -4,7 +4,7 @@ var assert = require('assert');
 var toStream = require('../common/util').toStream;
 var UUID = require('../common/util').UUID;
 var convertMS2S = require('../common/util').convertMS2S;
-var log = require('./log');
+var logMgr = require('./g2l-index').server.logMgr;
 
 function write(res, stream) {
 	res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':stream.length});

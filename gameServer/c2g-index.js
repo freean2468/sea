@@ -1,5 +1,8 @@
-var server = require('./c2g-server'),
-	router = require('./c2g-router'),
-	handle = require('./c2g-handle').handle;
+var Server = require('./c2g-server').Server;
 
-server.start(router.resRoute, handle);
+var server = new Server();
+server.start();
+
+module.exports = {
+	'server': server,
+};

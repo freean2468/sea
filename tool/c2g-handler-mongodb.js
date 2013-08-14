@@ -8,7 +8,7 @@ var request = require('./g2l-request').request;
 var toAuth = require('./a2g-client').toAuth;
 var sessionEvent = require('./a2g-event').sessionEvent;
 var session = require('./session');
-var log = require('./log');
+var logMgr = require('./c2g-index').server.logMgr;
 
 function write(res, stream) {
 	res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':stream.length});

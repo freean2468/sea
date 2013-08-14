@@ -4,21 +4,22 @@ var UUID = require('../common/util').UUID;
 var	MINUTE = require('../common/define').MINUTE,
 	EXPIRATION = MINUTE * 15;
 
-var sessionMgr = new SessionManager;
-
-function SessionManager() {
+function SessionMgr(logMgr) {
 	// property
 	this.sessionList = {};
 	this.timerList = {};
+	this.logMgr = logMgr;
 
 	// method
 	this.registerSession = function (kId) {
 		var sessionId = UUID();
 
-		if (this.sessionList[kId] != null) {
+		if (this.sessionList[kId] !== undefined && this.sessionList[kId] !== null) {
+			this.logMgr.addLog('ERROR', 'Duplicated Auth. (' + kId + ')');
 			return false;
 		}
 
+		this.logMgr.addLog('AUTH', 'Register new session. (' + kId + ', ' + sessionId + ')');
 		this.sessionList[kId] = sessionId;
 		this.setExpiration(kId, sessionId);
 
@@ -33,9 +34,10 @@ function SessionManager() {
 			clearTimeout(this.timerList[kId]);
 			this.timerList[kId] = null;
 			
+			//this.logMgr.addLog('AUTH', 'Unregister session. (' +kId + ', ' + sessionId + ')');
 			return true;
 		} else {
-			console.log('A wrong access was detected in unregisterSession. (' + kId + ', ' + sessionId + ')');
+			this.logMgr.addLog('ERROR', 'A wrong access was detected in unregisterSession. (' + kId + ', ' + sessionId + ')');
 			return false;
 		}
 	};
@@ -57,9 +59,10 @@ function SessionManager() {
 		if (_sessionId !== null && _sessionId === sessionId) {
 			clearTimeout(this.timerList[kId]);
 			this.setExpiration(kId, sessionId);
+			this.logMgr.addLog('AUTH', 'Update session. (' + kId + ', ' + sessionId + ')');
 			return true;
 		} else {
-			console.log('A wrong access was detected in updateSession. (' + kId + ', ' + sessionId + ')');
+			this.logMgr.addLog('ERROR', 'A wrong access was detected in updateSession. (' + kId + ', ' + sessionId + ')');
 			return false;
 		}
 	};
@@ -76,5 +79,5 @@ function SessionManager() {
 }
 
 module.exports = {
-	'sessionMgr': sessionMgr,
+	'SessionMgr': SessionMgr,
 };
