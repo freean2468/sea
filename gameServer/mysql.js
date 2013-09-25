@@ -20,7 +20,7 @@ function query(sql, escaped, callback) {
 		var query = connection.query(sql, escaped, function(err, results, fields) {
 			if (err) throw err;
 	
-			connection.end();
+			connection.release();
 			callback(results, fields);
 		});
 /*
@@ -46,7 +46,7 @@ function call(procedure, params, callback) {
 		connection.query(call, function(err, results, fields) {
 			if (err) throw err;
 
-			connection.end();
+			connection.release();
 			callback(results, fields);
 		});
 	});
