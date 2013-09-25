@@ -29,12 +29,12 @@ var registerAccount = new build.RegisterAccount(),
 	logout = new build.Logout(),
 	buyItem = new build.BuyItem(),
 	buyItemReply = new build.BuyItemReply(),
-	sendHoney = new build.SendHoney(),
-	sendHoneyReply = new build.SendHoneyReply(),
-	acceptHoney = new build.AcceptHoney(),
-	acceptHoneyReply = new build.AcceptHoneyReply(),
-	loadPostedHoney = new build.LoadPostedHoney(),
-	postedHoney = new build.PostedHoney(),
+	sendEnergy = new build.SendEnergy(),
+	sendEnergyReply = new build.SendEnergyReply(),
+	acceptEnergy = new build.AcceptEnergy(),
+	acceptEnergyReply = new build.AcceptEnergyReply(),
+	loadPostedEnergy = new build.LoadPostedEnergy(),
+	postedEnergy = new build.PostedEnergy(),
 	loadPostedBaton = new build.LoadPostedBaton(),
 	postedBaton = new build.PostedBaton(),
 	loadPostedBatonResult = new build.LoadPostedBatonResult(),
@@ -96,9 +96,9 @@ function request(data) {
 				loadRankInfo['k_id'] = k_id;
 				request(loadRankInfo);				
 			} else if (id === rankInfo['id']['low']) {
-				loadPostedHoney['k_id'] = k_id;
-				request(loadPostedHoney);
-			} else if (id === postedHoney['id']['low']) {
+				loadPostedEnergy['k_id'] = k_id;
+				request(loadPostedEnergy);
+			} else if (id === postedEnergy['id']['low']) {
 				loadPostedBaton['k_id'] = k_id;
 				request(loadPostedBaton);
 			} else if (id === postedBaton['id']['low']) {
@@ -117,7 +117,6 @@ function request(data) {
 			else if (id === buyItemReply['id']['low']){
 				startGame['k_id'] = k_id;
 				startGame['selected_character'] = 1;
-				startGame['selected_assistant'] = 0;
 				request(startGame);
 			}
 			else if (id === startGameReply['id']['low']) {
@@ -125,7 +124,6 @@ function request(data) {
 				endGame['dist'] = Math.floor(Math.random() * 100);
 				endGame['enemy_kill'] = Math.floor(Math.random() * 10);
 				endGame['selected_character'] = 1;
-				endGame['selected_assistant'] = 0;
 				endGame['score'] = Math.floor(Math.random() * 1000) + 1;
 				endGame['play_time'] = Math.floor(Math.random() * 1000) + 1;
 				endGame['coin'] = Math.floor(Math.random() * 1000) + 1;

@@ -8,6 +8,7 @@ var request = require('./g2l-request').request;
 var toAuth = require('./a2g-client').toAuth;
 var sessionEvent = require('./a2g-event').sessionEvent;
 var session = require('./session');
+var logMgr = require('./c2g-index').server.logMgr;
 
 function write(res, stream) {
 	res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':stream.length});
@@ -24,7 +25,7 @@ function inspectField(msg) {
 	return true;
 }
 
-function VersionInfoHandler(response, data, session_id, logMgr){
+function VersionInfoHandler(response, data, session_id){
 	var msg = build.VersionInfo.decode(data);
 	var rMsg = new build.VersionInfoReply();
 	var sysMsg = new build.SystemMessage();
@@ -41,7 +42,7 @@ function VersionInfoHandler(response, data, session_id, logMgr){
 	write(response, toStream(rMsg));	
 } // end VersionInfoHandler
 
-function RegisterAccountHandler(response, data, session_id, logMgr){
+function RegisterAccountHandler(response, data, session_id){
 	var msg = build.RegisterAccount.decode(data);
 	var rMsg = new build.RegisterAccountReply();
 	var sysMsg = new build.SystemMessage();
@@ -76,7 +77,7 @@ function RegisterAccountHandler(response, data, session_id, logMgr){
 	});
 } // end RegisterAccountHandler
 
-function UnregisterAccountHandler(response, data, session_id, logMgr){
+function UnregisterAccountHandler(response, data, session_id){
 	var msg = build.UnregisterAccount.decode(data);
 	var sysMsg = new build.SystemMessage();
 	
@@ -123,7 +124,7 @@ function UnregisterAccountHandler(response, data, session_id, logMgr){
 	});
 } // end UnregisterAccountHandler
 
-function LoginHandler(response, data, session_id, logMgr){
+function LoginHandler(response, data, session_id){
 	var msg = build.Login.decode(data);
 	var rMsg = new build.AccountInfo();
 	var sysMsg = new build.SystemMessage();
@@ -276,7 +277,7 @@ function LoginHandler(response, data, session_id, logMgr){
 	}); // end mysql.call()
 } // end LoginHandler
 
-function LogoutHandler(response, data, session_id, logMgr){
+function LogoutHandler(response, data, session_id){
 	var msg = build.Logout.decode(data);
 	var sysMsg = new build.SystemMessage();
 	var rMsg = new build.LogoutReply();
@@ -315,7 +316,7 @@ function LogoutHandler(response, data, session_id, logMgr){
 	});
 } // end LogoutHandler
 
-function CheckInChargeHandler(response, data, session_id, logMgr){
+function CheckInChargeHandler(response, data, session_id){
 	var msg = build.CheckInCharge.decode(data);
 	var rMsg = new build.ChargeInfo();
 	var sysMsg = new build.SystemMessage();
@@ -409,7 +410,7 @@ function CheckInChargeHandler(response, data, session_id, logMgr){
 	});
 } // end CheckInChargeHandler
 
-function SelectCharacterHandler(response, data, session_id, logMgr){
+function SelectCharacterHandler(response, data, session_id){
 	var msg = build.SelectCharacter.decode(data);
 	var rMsg = new build.SelectCharacterReply();
 	var sysMsg = new build.SystemMessage();
@@ -474,7 +475,84 @@ function SelectCharacterHandler(response, data, session_id, logMgr){
 	});
 } // end SelectCharacterHandler
 
-function StartGameHandler(response, data, session_id, logMgr){
+function SelectAssistantHandler(response, data, session_id){
+	var msg = build.SelectAssistant.decode(data);
+	var rMsg = new build.SelectAssistantReply();
+	var sysMsg = new build.SystemMessage();
+
+	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
+		if (res === true) {
+			if (inspectField(msg) === false) {
+				logMgr.addLog('ERROR', "Undefined field is detected in SelectAssistantHandler");
+				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
+				write(response, toStream(sysMsg));
+			} else {
+				var procedure = 'sea_LoadUser';
+				var params = "'" + msg['k_id'] + "'";
+
+				mysql.call(procedure, params, function (results, fields) {
+					var res = results[0][0]['res'];
+					var id;
+
+					if (res > 0) {
+						id = res;
+						procedure = 'sea_SelectUserAssistant';
+						params = res;
+
+						mysql.call(procedure, params, function (results, fields) {
+							res = results[0][0];
+							var selected = msg['selected_assistant'];
+
+							if (selected < 0 || selected > 10) {
+								logMgr.addLog('ERROR', 'Assistant Range Over (' + msg['k_id'] + ', ' + 'assistant : ' + msg['selected_assistant'] + ')');
+								sysMsg['res'] = build.Result['INVALID_ASSISTANT'];
+								write(response, toStream(sysMsg));
+								return;
+							}
+							
+							if (selected === 1 && res['assistant_one']) {
+								write(response, toStream(rMsg));
+							} else if (selected === 2 && res['assistant_two']) {
+								write(response, toStream(rMsg));
+							} else if (selected === 3 && res['assistant_three']) {
+								write(response, toStream(rMsg));
+							} else if (selected === 4 && res['assistant_four']) {
+								write(response, toStream(rMsg));
+							} else if (selected === 5 && res['assistant_five']) {
+								write(response, toStream(rMsg));
+							} else if (selected === 6 && res['assistant_six']) {
+								write(response, toStream(rMsg));
+							} else if (selected === 7 && res['assistant_seven']) {
+								write(response, toStream(rMsg));
+							} else if (selected === 8 && res['assistant_eight']) {
+								write(response, toStream(rMsg));
+							} else if (selected === 9 && res['assistant_nine']) {
+								write(response, toStream(rMsg));
+							} else if (selected === 10 && res['assistant_ten']) {
+								write(response, toStream(rMsg));
+							} else {
+								logMgr.addLog('ERROR', 'Invalid assistant (' + msg['k_id'] + ', ' + 'assistant : ' + msg['selected_assistant'] + ')');
+								sysMsg['res'] = build.Result['INVALID_ASSISTANT'];
+								write(response, toStream(sysMsg));				
+							}
+						});
+					}
+					else {
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
+						write(response, toStream(sysMsg));
+					}
+				});
+			}
+		} else {
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			sysMsg['res'] = build.Result['INVALID_SESSION'];
+			write(response, toStream(sysMsg));
+		}
+	});
+} // end SelectAssistantHandler
+
+function StartGameHandler(response, data, session_id){
 	var msg = build.StartGame.decode(data);
 	var rMsg = new build.StartGameReply();
 	var sysMsg = new build.SystemMessage();
@@ -555,7 +633,7 @@ function StartGameHandler(response, data, session_id, logMgr){
 	});
 } // end StartGameHandler
 
-function EndGameHandler(response, data, session_id, logMgr){
+function EndGameHandler(response, data, session_id){
 	var msg = build.EndGame.decode(data);
 	var rMsg = new build.GameResult();
 	var sysMsg = new build.SystemMessage();
@@ -729,7 +807,7 @@ function EndGameHandler(response, data, session_id, logMgr){
 	});
 } // end EndGameHandler
 
-function LoadRankInfoHandler(response, data, session_id, logMgr){
+function LoadRankInfoHandler(response, data, session_id){
 	var msg = build.LoadRankInfo.decode(data);
 	var rMsg = new build.RankInfo();
 	var sysMsg = new build.SystemMessage();
@@ -836,7 +914,7 @@ function LoadRankInfoHandler(response, data, session_id, logMgr){
 	});
 } // end LoadRankInfoHandler
 
-function LoadPostedEnergyHandler(response, data, session_id, logMgr){
+function LoadPostedEnergyHandler(response, data, session_id){
 	var msg = build.LoadPostedEnergy.decode(data);
 	var rMsg = new build.PostedEnergy();
 	var sysMsg = new build.SystemMessage();
@@ -902,7 +980,7 @@ function LoadPostedEnergyHandler(response, data, session_id, logMgr){
 	});
 } // end LoadPostedEnergyHandler
 
-function LoadPostedBatonHandler(response, data, session_id, logMgr){
+function LoadPostedBatonHandler(response, data, session_id){
 	var msg = build.LoadPostedBaton.decode(data);
 	var rMsg = new build.PostedBaton();
 	var sysMsg = new build.SystemMessage();
@@ -969,7 +1047,7 @@ function LoadPostedBatonHandler(response, data, session_id, logMgr){
 	});
 } // end LoadPostedBatonHandler
 
-function LoadPostedBatonResultHandler(response, data, session_id, logMgr){
+function LoadPostedBatonResultHandler(response, data, session_id){
 	var msg = build.LoadPostedBatonResult.decode(data);
 	var rMsg = new build.PostedBatonResult();
 	var sysMsg = new build.SystemMessage();
@@ -1037,11 +1115,11 @@ function LoadPostedBatonResultHandler(response, data, session_id, logMgr){
 	});
 } // end LoadPostedBatonResultHandler
 
-function RequestPointRewardHandler(response, data, session_id, logMgr){
+function RequestPointRewardHandler(response, data, session_id){
 	var msg = build.RequestPointReward.decode(data);
 } // end RequestPointRewardHandler
 
-function BuyItemHandler(response, data, session_id, logMgr){
+function BuyItemHandler(response, data, session_id){
 	var msg = build.BuyItem.decode(data);
 	var BuyItemReply = build.BuyItemReply;
 	var rMsg = new BuyItemReply();
@@ -1180,7 +1258,7 @@ function BuyItemHandler(response, data, session_id, logMgr){
 	});
 } // end BuyItemHandler
 
-function BuyOrUpgradeCharacterHandler(response, data, session_id, logMgr){
+function BuyOrUpgradeCharacterHandler(response, data, session_id){
 	var msg = build.BuyOrUpgradeCharacter.decode(data);
 	var rMsg = new build.BuyOrUpgradeCharacterReply();
 	var sysMsg = new build.SystemMessage();
@@ -1328,7 +1406,151 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id, logMgr){
 	});
 } // end BuyOrUpgradeCharacterHandler
 
-function SendEnergyHandler(response, data, session_id, logMgr){
+function BuyOrUpgradeAssistantHandler(response, data, session_id){
+	var msg = build.BuyOrUpgradeAssistant.decode(data);
+	var rMsg = new build.BuyOrUpgradeAssistantReply();
+	var sysMsg = new build.SystemMessage();
+
+	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
+		if (res === true) {
+			if (inspectField(msg) === false) {
+				logMgr.addLog('ERROR', "Undefined field is detected in BuyOrUpgradeAssistantHandler");
+				sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
+				write(response, toStream(sysMsg));
+			} else {
+				var procedure = 'sea_LoadUser';
+				var params = "'" + msg['k_id'] + "'";
+
+				mysql.call(procedure, params, function (results, fields) {
+					var res = results[0][0]['res'];		
+					
+					if (res > 0) {
+						var id = res;
+						procedure = 'sea_SelectUserAssistant';
+						params = id;
+
+						mysql.call(procedure, params, function (results, fields) {
+							var assistant = msg['assistant'];
+
+							if (assistant > 14 || assistant < 0) {
+								logMgr.addLog('ERROR', "Invalid assistant (" + msg['k_id'] + ", " + assistant + ")");
+								sysMsg['res'] = build.Result['NO_MATHCH_WITH_DB'];
+								write(response, toStream(sysMsg));
+
+								return;
+							}
+
+							res = results[0][0];
+							var idx = 0;
+							var idxId;
+
+							for (var val in res) {
+								++idx;
+
+								if (idx === assistant) {
+									idxId = val+'';
+									break;
+								}
+							}
+
+							var lv = res[idxId];
+
+							if (lv > 4) {
+								logMgr.addLog('ERROR', "The assistant is fully upgraded. (" + msg['k_id'] + ")");
+								sysMsg['res'] = build.Result['FULLY_UPGRADED'];
+								write(response, toStream(sysMsg));
+							} else if (lv < 0) {
+								logMgr.addLog('ERROR', "Upgrade value can't not be less than 0.(" + msg['k_id'] + ")");
+								sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
+								write(response, toStream(sysMsg));
+							} else {
+								procedure = 'sea_LoadCoin';
+								params = id;
+
+								mysql.call(procedure, params, function (results, fields) {
+									var coin = results[0][0]['coin'];							
+									var data = require('../data/assistant-data')[assistant+''];
+									var cost = data[lv];
+
+									if (cost < coin) {								
+										coin -= cost;
+										
+										var text = 'assistant_';
+										idxId = idxId.slice(text.length);
+										var first = idxId[0];
+										var rest = idxId.slice(1);
+
+										procedure = 'sea_AddAssistant' + first.toUpperCase() + rest;
+										params = id;
+
+										mysql.call(procedure, params, function (results, fields) {
+											res = results[0][0]['res'];
+
+											if (res === lv + 1) {
+												procedure = 'sea_LoadMileageAndDraw';
+												params = id;
+
+												mysql.call(procedure, params, function (results, fields) {
+													var _res = results[0][0];
+													var _mileage = _res['mileage'] + 30;
+													var _draw = _res['draw'];
+
+													if (_mileage >= 100) {
+														++_draw;
+
+														procedure = 'sea_UpdateDraw';
+														params = id + ', ' + _draw;
+
+														mysql.call(procedure, params, function (results, fields) {});
+													}
+
+													procedure = 'sea_UpdateMileage';
+													params = id + ', ' + _mileage;
+
+													mysql.call(procedure, params, function (results, fields) {});
+
+													rMsg['mileage'] = _mileage;
+													rMsg['draw'] = _draw;
+													rMsg['coin'] = coin;
+													rMsg['assistant'] = assistant;
+													rMsg['lv'] = res;
+													write(response, toStream(rMsg));
+												});
+											} else {
+												logMgr.addLog('ERROR', "Failed to upgrade on DB(" + msg['k_id'] + ', ' + assistant + ")");
+												sysMsg['res'] = build.Result['FAILED_DB_UPDATE'];
+												write(response, toStream(sysMsg));
+											}
+										});
+
+										procedure = 'sea_UpdateCoin';
+										params = id + ', ' + coin;
+										
+										mysql.call(procedure, params, function (results, fields) {});
+									} else {
+										logMgr.addLog('SYSTEM', 'Not enough coin (' + msg['k_id'] + ')');
+										sysMsg['res'] = build.Result['NOT_ENOUGH_COIN'];
+										write(response, toStream(sysMsg));
+									}
+								});
+							}
+						});
+					} else {
+						logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
+						sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
+						write(response, toStream(sysMsg));
+					}
+				});
+			}
+		} else {
+			logMgr.addLog('ERROR', 'Unauthenticated client accessed : (' + msg['k_id'] + ', ' + session_id + ')');
+			sysMsg['res'] = build.Result['INVALID_SESSION'];
+			write(response, toStream(sysMsg));
+		}
+	});
+} // end BuyOrUpgradeAssistantHandler
+
+function SendEnergyHandler(response, data, session_id){
 	var msg = build.SendEnergy.decode(data);
 	var rMsg = new build.SendEnergyReply();
 	var sysMsg = new build.SystemMessage();
@@ -1412,7 +1634,7 @@ function SendEnergyHandler(response, data, session_id, logMgr){
 	});
 } // end SendEnergyHandler
 
-function AcceptEnergyHandler(response, data, session_id, logMgr){
+function AcceptEnergyHandler(response, data, session_id){
 	var msg = build.AcceptEnergy.decode(data);
 	var rMsg = new build.AcceptEnergyReply();
 	var sysMsg = new build.SystemMessage();
@@ -1489,7 +1711,7 @@ function AcceptEnergyHandler(response, data, session_id, logMgr){
 	});
 } // end AcceptEnergyHandler
 
-function RequestBatonHandler(response, data, session_id, logMgr){
+function RequestBatonHandler(response, data, session_id){
 	var msg = build.RequestBaton.decode(data);
 	var rMsg = new build.RequestBatonReply();
 	var sysMsg = new build.SystemMessage();
@@ -1569,7 +1791,7 @@ function RequestBatonHandler(response, data, session_id, logMgr){
 	});
 } // end RequestBatonHandler
 
-function AcceptBatonHandler(response, data, session_id, logMgr){
+function AcceptBatonHandler(response, data, session_id){
 	var msg = build.AcceptBaton.decode(data);
 	var rMsg = new build.AcceptBatonReply();
 	var sysMsg = new build.SystemMessage();
@@ -1652,7 +1874,7 @@ function AcceptBatonHandler(response, data, session_id, logMgr){
 	});
 } // end AcceptBatonHandler
 
-function EndBatonHandler(response, data, session_id, logMgr){
+function EndBatonHandler(response, data, session_id){
 	var msg = build.EndBaton.decode(data);
 	var rMsg = new build.BatonResult();
 	var sysMsg = new build.SystemMessage();
@@ -1826,7 +2048,7 @@ function EndBatonHandler(response, data, session_id, logMgr){
 	});
 } // end EndBatonHandler
 
-function AcceptBatonResultHandler(response, data, session_id, logMgr){
+function AcceptBatonResultHandler(response, data, session_id){
 	var msg = build.AcceptBatonResult.decode(data);
 	var rMsg = new build.AcceptBatonResultReply();
 	var sysMsg = new build.SystemMessage();
@@ -1920,7 +2142,7 @@ function AcceptBatonResultHandler(response, data, session_id, logMgr){
 	});
 } // end AcceptBatonResultHandler
 
-function UpgradeBonusScoreHandler(response, data, session_id, logMgr){
+function UpgradeBonusScoreHandler(response, data, session_id){
 	var msg = build.UpgradeBonusScore.decode(data);
 	var rMsg = new build.UpgradeReply();
 	var sysMsg = new build.SystemMessage();
@@ -2038,7 +2260,7 @@ function UpgradeBonusScoreHandler(response, data, session_id, logMgr){
 	});
 } // end UpgradeBonusScoreHandler
 
-function UpgradeBonusTimeHandler(response, data, session_id, logMgr){
+function UpgradeBonusTimeHandler(response, data, session_id){
 	var msg = build.UpgradeBonusTime.decode(data);
 	var rMsg = new build.UpgradeReply();
 	var sysMsg = new build.SystemMessage();
@@ -2154,7 +2376,7 @@ function UpgradeBonusTimeHandler(response, data, session_id, logMgr){
 	});
 } // end UpgradeBonysTimeHandler
 
-function UpgradeCooldownHandler(response, data, session_id, logMgr){
+function UpgradeCooldownHandler(response, data, session_id){
 	var msg = build.UpgradeCooldown.decode(data);
 	var rMsg = new build.UpgradeReply();
 	var sysMsg = new build.SystemMessage();
@@ -2271,7 +2493,7 @@ function UpgradeCooldownHandler(response, data, session_id, logMgr){
 	});
 } // end UpgradeCooldownHandler
 
-function InviteFriendHandler(response, data, session_id, logMgr){
+function InviteFriendHandler(response, data, session_id){
 	var msg = build.InviteFriend.decode(data);
 	var rMsg = new build.InviteFriendReply();
 	var sysMsg = new build.SystemMessage();
@@ -2353,7 +2575,7 @@ function InviteFriendHandler(response, data, session_id, logMgr){
 	});
 } // end InviteFriendHandler
 
-function LoadRewardHandler(response, data, session_id, logMgr){
+function LoadRewardHandler(response, data, session_id){
 	var msg = build.LoadReward.decode(data);
 } // end LoadRewardHandler
 
@@ -2364,6 +2586,7 @@ exports.LoginHandler = LoginHandler;
 exports.LogoutHandler = LogoutHandler;
 exports.CheckInChargeHandler = CheckInChargeHandler;
 exports.SelectCharacterHandler = SelectCharacterHandler;
+exports.SelectAssistantHandler = SelectAssistantHandler;
 exports.StartGameHandler = StartGameHandler;
 exports.EndGameHandler = EndGameHandler;
 exports.LoadRankInfoHandler = LoadRankInfoHandler;
@@ -2373,6 +2596,7 @@ exports.LoadPostedBatonResultHandler = LoadPostedBatonResultHandler;
 exports.RequestPointRewardHandler = RequestPointRewardHandler;
 exports.BuyItemHandler = BuyItemHandler;
 exports.BuyOrUpgradeCharacterHandler = BuyOrUpgradeCharacterHandler;
+exports.BuyOrUpgradeAssistantHandler = BuyOrUpgradeAssistantHandler;
 exports.SendEnergyHandler = SendEnergyHandler;
 exports.AcceptEnergyHandler = AcceptEnergyHandler;
 exports.RequestBatonHandler = RequestBatonHandler;

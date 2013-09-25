@@ -16,13 +16,13 @@ echo 'c2g-handle.js has been copied to ../gameServer'
 cp -a g2l-handle.js ../logServer/
 echo 'g2l-handle.js has been copied to ../logServer'
 
-node handler-gen.js '-server' 'c2g' 'g2l' '-proto' 'c2g' 'g2c' 'g2l'
+#node handler-gen.js '-server' 'c2g' 'g2l' '-proto' 'c2g' 'g2c' 'g2l'
 
-cp -a c2g-handler.js ../gameServer/
-echo 'c2g-handler.js has been copied to ../gameServer'
+#cp -a c2g-handler.js ../gameServer/
+#echo 'c2g-handler.js has been copied to ../gameServer'
 
-cp -a g2l-handler.js ../logServer/
-echo 'g2l-handler.js has been copied to ../logServer'
+#cp -a g2l-handler.js ../logServer/
+#echo 'g2l-handler.js has been copied to ../logServer'
 
 #node handler-impl-gen.js 'c2g'
 #

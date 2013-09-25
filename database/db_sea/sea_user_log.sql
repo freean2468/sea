@@ -3,7 +3,7 @@ USE sea;
 DROP TABLE IF EXISTS sea_user_log;
 
 CREATE TABLE sea.sea_user_log(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	total_score INT UNSIGNED NOT NULL,
 	highest_score INT UNSIGNED NOT NULL,
 	last_dist INT UNSIGNED NOT NULL,
@@ -17,14 +17,14 @@ CREATE TABLE sea.sea_user_log(
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sea_LoadHighestScore $$
-CREATE PROCEDURE sea_LoadHighestScore(IN p_id INT UNSIGNED)
+CREATE PROCEDURE sea_LoadHighestScore(IN p_id INT)
 	BEGIN
 		SELECT highest_score AS res FROM sea.sea_user_log WHERE id = p_id;
 	END
 $$
 
 DROP PROCEDURE IF EXISTS sea_UpdateUserLog $$
-CREATE PROCEDURE sea_UpdateUserLog(IN p_id INT UNSIGNED, IN p_score INT UNSIGNED, IN p_dist INT UNSIGNED, IN p_kill INT UNSIGNED)
+CREATE PROCEDURE sea_UpdateUserLog(IN p_id INT, IN p_score INT UNSIGNED, IN p_dist INT UNSIGNED, IN p_kill INT UNSIGNED)
 	BEGIN
 		DECLARE highest INT UNSIGNED;
 		SELECT highest_score INTO highest FROM sea.sea_user_log WHERE id = p_id;

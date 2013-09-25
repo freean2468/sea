@@ -2,7 +2,7 @@ var mysql = require('mysql');
 var log = require('./log');
 
 var pool = mysql.createPool({
-	host: 'localhost',
+	host: '127.0.0.1',
 	port: 3306,
 	database: 'sea',
 	charset: 'UTF8_GENERAL_CI',

@@ -1,4 +1,4 @@
-var honeyScore = [
+var scoreFactor = [
 	1,	
 	2,
 	3,
@@ -21,7 +21,7 @@ var honeyScore = [
 	200,
 ];
 
-var honeyTime = [
+var timeFactor = [
 	1,	
 	2,
 	3,
@@ -44,7 +44,7 @@ var honeyTime = [
 	200,
 ];
 
-var cooldown = [
+var cooldownFactor = [
 	1,	
 	2,
 	3,
@@ -68,7 +68,7 @@ var cooldown = [
 ];
 
 module.exports = {
-	'honey_score': honeyScore,
-	'honey_time': honeyTime,
-	'cooldown': cooldown,
+	'score_factor': scoreFactor,
+	'time_factor': timeFactor,
+	'cooldown_factor': cooldownFactor,
 };

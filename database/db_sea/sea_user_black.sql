@@ -3,7 +3,7 @@ USE sea;
 DROP TABLE IF EXISTS sea_user_black;
 
 CREATE TABLE sea.sea_user_black(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	k_id VARCHAR(40) NOT NULL,
 
 	INDEX idx_user_black_1 (k_id)

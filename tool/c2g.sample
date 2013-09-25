@@ -5,20 +5,6 @@ enum Pack {
 	MAX	= 2;
 }
 
-enum ID {
-	ONE	= 1;
-	TWO = 2;
-	THREE = 3;
-	FOUR = 4;
-	FIVE = 5;
-	SIX = 6;
-	SEVEN = 7;
-	EIGHT = 8;
-	NINE = 9;
-	TEN = 10;
-	MAX = 11;
-}
-
 message VersionInfo {
 	required string version = 2;
 } // end
@@ -48,33 +34,26 @@ message SelectCharacter {
 	required int32 selected_character = 3;
 } // end
 
-message SelectAssistant {
-	required string k_id = 2;
-	required int32 selected_assistant = 3;
-} // end
-
 message StartGame {
 	required string k_id = 2;
 	required int32 selected_character = 3;
-	required int32 selected_assistant = 4;
 } // end
 
 message EndGame {
 	required string k_id = 2;
 	required int32 selected_character = 3;
-	required int32 selected_assistant = 4;
-	required int32 score = 5;
-	required int32 dist = 6;
-	required int32 enemy_kill = 7;
-	required int32 play_time = 8;
-	required int32 coin = 9;
+	required int32 score = 4;
+	required int32 dist = 5;
+	required int32 enemy_kill = 6;
+	required int32 play_time = 7;
+	required int32 coin = 8;
 } // end
 
 message LoadRankInfo {
 	required string k_id = 2;
 } // end
 
-message LoadPostedHoney {
+message LoadPostedEnergy {
 	required string k_id = 2;
 } // end
 
@@ -96,58 +75,39 @@ message BuyItem {
 	required Item item = 3;
 
 	enum Item {
-		EXP_BOOST = 1;
+		SHIELD = 1;
 		LAST_ITEM = 2;
-		MAX_ATTACK = 3;
-		RANDOM = 4;
-		MAX = 5;
+		GHOST = 3;
+		WEAPON_REINFORCE = 4;
+		EXP_BOOST = 5;
+		MAX_ATTACK = 6;
+		BONUS_HEART = 7;
+		DROP_UP = 8;
+		MAGNET = 9;
+		BONUS_SCORE = 10;
+		MAX = 11;
 	}
 } // end
 
 message BuyOrUpgradeCharacter {
 	required string k_id = 2;
-	required Character character = 3;
+	required ID character = 3;
 
-	enum Character {
-		ONE = 1;
+	enum ID {
+		ONE	= 1;
 		TWO = 2;
 		THREE = 3;
 		FOUR = 4;
-		FIVE = 5;
-		SIX = 6;
-		SEVEN = 7;
-		EIGHT = 8;
-		NINE = 9;
-		TEN = 10;
-		MAX = 11;
+		MAX = 5;
 	}
 } // end
 
-message BuyOrUpgradeAssistant {
-	required string k_id = 2;
-	required Assistant assistant = 3;
-
-	enum Assistant {
-		ONE = 1;
-		TWO = 2;
-		THREE = 3;
-		FOUR = 4;
-		FIVE = 5;
-		SIX = 6;
-		SEVEN = 7;
-		EIGHT = 8;
-		NINE = 9;
-		TEN = 10;
-		MAX = 11;
-	}
-} // end
-
-message SendHoney {
+message SendEnergy {
 	required string k_id = 2;
 	required string receiver_k_id = 3;
 } // end
 
-message AcceptHoney {
+message AcceptEnergy {
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
@@ -165,7 +125,6 @@ message AcceptBaton {
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
 	required int32 selected_character = 5;
-	required int32 selected_assistant = 6;
 } // end
 
 message EndBaton {
@@ -173,12 +132,11 @@ message EndBaton {
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
 	required int32 selected_character = 5;
-	required int32 selected_assistant = 6;
-	required int32 score = 7;
-	required int32 dist = 8;
-	required int32 enemy_kill = 9;
-	required int32 play_time = 10;
-	required int32 coin = 11;
+	required int32 score = 6;
+	required int32 dist = 7;
+	required int32 enemy_kill = 8;
+	required int32 play_time = 9;
+	required int32 coin = 10;
 } // end
 
 message AcceptBatonResult {
@@ -187,15 +145,15 @@ message AcceptBatonResult {
 	required int64 sended_time = 4;
 } // end
 
-message UpgradeHoneyScore {
+message UpgradeScoreFactor {
 	required string k_id = 2;
 } // end
 
-message UpgradeHoneyTime {
+message UpgradeTimeFactor {
 	required string k_id = 2;
 } // end
 
-message UpgradeCooldown {
+message UpgradeCooldownFactor {
 	required string k_id = 2;
 } // end
 

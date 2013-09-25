@@ -1,92 +1,90 @@
 package G2L;
 
 message AccountLogin {
-	optional uint64 id = 1 [default=7599707];
+	optional uint64 id = 1 [default=3535091];
 	required string k_id = 2;
 } // end
 
 message ConcurrentUser {
-	optional uint64 id = 1 [default=4584043];
+	optional uint64 id = 1 [default=588967];
 	required uint32 ccu = 2;
 } // end
 
 message PeakConcurrentUser {
-	optional uint64 id = 1 [default=3603338];
+	optional uint64 id = 1 [default=7534626];
 } // end
 
 message UniqueVisitor {
-	optional uint64 id = 1 [default=8585154];
+	optional uint64 id = 1 [default=589692];
 	required uint32 uv = 2;
 } // end
 
 message RetentionRate {
-	optional uint64 id = 1 [default=10615070];
+	optional uint64 id = 1 [default=4587419];
 	required uint32 rr = 2;
 } // end
 
-message PayAssistant {
-	optional uint64 id = 1 [default=1637470];
-	required string k_id = 2;
-	required int32 paid_assistant = 3;
-	required int32 rest_coin = 4;
-} // end
-
 message PayCharacter {
-	optional uint64 id = 1 [default=5634001];
+	optional uint64 id = 1 [default=2620907];
 	required string k_id = 2;
 	required int32 paid_character = 3;
 	required int32 rest_coin = 4;
 } // end
 
 message PayCoin {
-	optional uint64 id = 1 [default=10681968];
+	optional uint64 id = 1 [default=10613532];
 	required string k_id = 2;
 	required int32 paid_coin = 3;
 	required int32 rest_money = 4;
 } // end
 
 message PayHeart {
-	optional uint64 id = 1 [default=2683878];
+	optional uint64 id = 1 [default=9630510];
 	required string k_id = 2;
 	required int32 paid_heart = 3;
 	required int32 rest_coin = 4;
 } // end
 
 message PayItem {
-	optional uint64 id = 1 [default=6683602];
+	optional uint64 id = 1 [default=1179605];
 	required string k_id = 2;
 	required int32 paid_item = 3;
 	required int32 rest_coin = 4;
 } // end
 
 message PayMoney {
-	optional uint64 id = 1 [default=4715093];
+	optional uint64 id = 1 [default=1635278];
 	required string k_id = 2;
 	required int32 paid_money = 3;
 	required int32 rest_money =4;
 } // end
 
 message UserGamePlay {
-	optional uint64 id = 1 [default=1701625];
+	optional uint64 id = 1 [default=1635188];
 	required string k_id = 2;
 	required int32 selected_character = 3;
-	required int32 selected_assistant = 4;
-	required int32 score = 5;
-	required int32 enemy_kill = 6;
-	required int32 dist = 7;
-	required int32 play_time = 8;
-	required int32 exp_boost = 9;
-	required int32 item_last = 10;
-	required int32 max_attack = 11;
-	required int32 random = 12;
+	required int32 score = 4;
+	required int32 enemy_kill = 5;
+	required int32 dist = 6;
+	required int32 play_time = 7;
+	required int32 exp_boost = 8;
+	required int32 item_last = 9;
+	required int32 max_attack = 10;
+	required int32 shield = 11;
+	required int32 ghost = 12;
+	required int32 weapon_reinforce = 13;
+	required int32 bonus_heart = 14;
+	required int32 drop_up = 15;
+	required int32 magnet = 16;
+	required int32 bonus_score = 17;
 } // end
 
 message UserRegister {
-	optional uint64 id = 1 [default=7732116];
+	optional uint64 id = 1 [default=7665682];
 	required string k_id = 2;
 } // end
 
 message UserUnregister {
-	optional uint64 id = 1 [default=1701548];
+	optional uint64 id = 1 [default=2683878];
 	required string k_id = 2;
 } // end

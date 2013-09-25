@@ -3,8 +3,8 @@ USE sea;
 DROP TABLE IF EXISTS sea_user_baton;
 
 CREATE TABLE sea.sea_user_baton (
-	sender_id INT UNSIGNED NOT NULL,
-	receiver_id INT UNSIGNED NOT NULL,
+	sender_id INT NOT NULL,
+	receiver_id INT NOT NULL,
 	score INT UNSIGNED NOT NULL,
 	map VARCHAR(10) NOT NULL,
 	sended_time BIGINT UNSIGNED NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE sea.sea_user_baton (
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sea_AddBaton $$
-CREATE PROCEDURE sea_AddBaton(IN p_sender_id INT UNSIGNED, IN p_receiver_id INT UNSIGNED, IN p_score INT UNSIGNED, IN p_map VARCHAR(10) CHARACTER SET utf8)
+CREATE PROCEDURE sea_AddBaton(IN p_sender_id INT, IN p_receiver_id INT, IN p_score INT UNSIGNED, IN p_map VARCHAR(10) CHARACTER SET utf8)
 	BEGIN
 		INSERT sea_user_baton(sender_id, receiver_id, score, map, sended_time)
 		VALUES (p_sender_id, p_receiver_id, p_score, p_map, UNIX_TIMESTAMP(NOW()));
@@ -28,7 +28,7 @@ CREATE PROCEDURE sea_AddBaton(IN p_sender_id INT UNSIGNED, IN p_receiver_id INT 
 $$
 
 DROP PROCEDURE IF EXISTS sea_ExistBaton $$
-CREATE PROCEDURE sea_ExistBaton(IN p_sender_id INT UNSIGNED, IN p_receiver_id INT UNSIGNED, IN p_sended_time BIGINT UNSIGNED) 
+CREATE PROCEDURE sea_ExistBaton(IN p_sender_id INT, IN p_receiver_id INT, IN p_sended_time BIGINT UNSIGNED) 
 	BEGIN
 		DECLARE count TINYINT UNSIGNED;
 		SELECT COUNT(*) INTO count FROM sea_user_baton WHERE receiver_id = p_receiver_id AND sender_id = p_sender_id AND p_sended_time = sended_time;
@@ -42,7 +42,7 @@ CREATE PROCEDURE sea_ExistBaton(IN p_sender_id INT UNSIGNED, IN p_receiver_id IN
 $$
 
 DROP PROCEDURE IF EXISTS sea_LoadBatonScore $$
-CREATE PROCEDURE sea_LoadBatonScore(IN p_sender_id INT UNSIGNED, IN p_receiver_id INT UNSIGNED, IN p_sended_time BIGINT UNSIGNED) 
+CREATE PROCEDURE sea_LoadBatonScore(IN p_sender_id INT, IN p_receiver_id INT, IN p_sended_time BIGINT UNSIGNED) 
 	BEGIN
 		DECLARE count TINYINT UNSIGNED;
 		SELECT COUNT(*) INTO count FROM sea_user_baton WHERE receiver_id = p_receiver_id AND sender_id = p_sender_id AND p_sended_time = sended_time;
@@ -56,9 +56,9 @@ CREATE PROCEDURE sea_LoadBatonScore(IN p_sender_id INT UNSIGNED, IN p_receiver_i
 $$
 
 DROP PROCEDURE IF EXISTS sea_LoadBaton $$
-CREATE PROCEDURE sea_LoadBaton(IN p_receiver_id INT UNSIGNED) 
+CREATE PROCEDURE sea_LoadBaton(IN p_receiver_id INT) 
 	BEGIN
-		DECLARE count INT UNSIGNED;
+		DECLARE count SMALLINT UNSIGNED;
 		SELECT COUNT(*) INTO count FROM sea_user_baton WHERE receiver_id = p_receiver_id;
 
 		IF count > 0 THEN
@@ -70,7 +70,7 @@ CREATE PROCEDURE sea_LoadBaton(IN p_receiver_id INT UNSIGNED)
 $$
 
 DROP PROCEDURE IF EXISTS sea_DeleteBaton $$
-CREATE PROCEDURE sea_DeleteBaton(IN p_sender_id INT UNSIGNED, IN p_receiver_id INT UNSIGNED, IN p_sended_time BIGINT UNSIGNED)
+CREATE PROCEDURE sea_DeleteBaton(IN p_sender_id INT, IN p_receiver_id INT, IN p_sended_time BIGINT UNSIGNED)
 	BEGIN
 		DELETE FROM sea_user_baton WHERE sender_id = p_sender_id AND receiver_id = p_receiver_id AND sended_time = p_sended_time;
 	END

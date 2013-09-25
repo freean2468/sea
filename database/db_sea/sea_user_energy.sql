@@ -3,8 +3,8 @@ USE sea;
 DROP TABLE IF EXISTS sea_user_energy;
 
 CREATE TABLE sea.sea_user_energy(
-	sender_id INT UNSIGNED NOT NULL,
-	receiver_id INT UNSIGNED NOT NULL,
+	sender_id INT NOT NULL,
+	receiver_id INT NOT NULL,
 	sended_time BIGINT UNSIGNED NOT NULL,
 
 	PRIMARY KEY(sender_id, receiver_id, sended_time),
@@ -18,7 +18,7 @@ CREATE TABLE sea.sea_user_energy(
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sea_AddEnergy $$
-CREATE PROCEDURE sea_AddEnergy(IN p_sender_id INT UNSIGNED, IN p_receiver_id INT UNSIGNED)
+CREATE PROCEDURE sea_AddEnergy(IN p_sender_id INT, IN p_receiver_id INT)
 	BEGIN
 		INSERT sea_user_energy(sender_id, receiver_id, sended_time)
 		VALUES (p_sender_id, p_receiver_id, UNIX_TIMESTAMP(NOW()));
@@ -26,9 +26,9 @@ CREATE PROCEDURE sea_AddEnergy(IN p_sender_id INT UNSIGNED, IN p_receiver_id INT
 $$
 
 DROP PROCEDURE IF EXISTS sea_LoadEnergyBySender $$
-CREATE PROCEDURE sea_LoadEnergyBySender(IN p_sender_id INT UNSIGNED) 
+CREATE PROCEDURE sea_LoadEnergyBySender(IN p_sender_id INT) 
 	BEGIN
-		DECLARE count INT UNSIGNED;
+		DECLARE count SMALLINT UNSIGNED;
 		SELECT COUNT(*) INTO count FROM sea_user_energy WHERE sender_id = p_sender_id;
 
 		IF count > 0 THEN
@@ -40,9 +40,9 @@ CREATE PROCEDURE sea_LoadEnergyBySender(IN p_sender_id INT UNSIGNED)
 $$
 
 DROP PROCEDURE IF EXISTS sea_LoadEnergyByReceiver $$
-CREATE PROCEDURE sea_LoadEnergyByReceiver(IN p_receiver_id INT UNSIGNED) 
+CREATE PROCEDURE sea_LoadEnergyByReceiver(IN p_receiver_id INT) 
 	BEGIN
-		DECLARE count INT UNSIGNED;
+		DECLARE count SMALLINT UNSIGNED;
 		SELECT COUNT(*) INTO count FROM sea_user_energy WHERE receiver_id = p_receiver_id;
 
 		IF count > 0 THEN
@@ -54,7 +54,7 @@ CREATE PROCEDURE sea_LoadEnergyByReceiver(IN p_receiver_id INT UNSIGNED)
 $$
 
 DROP PROCEDURE IF EXISTS sea_AcceptEnergy $$
-CREATE PROCEDURE sea_AcceptEnergy(IN p_sender_id INT UNSIGNED, IN p_receiver_id INT UNSIGNED, IN p_sended_time BIGINT UNSIGNED)
+CREATE PROCEDURE sea_AcceptEnergy(IN p_sender_id INT, IN p_receiver_id INT, IN p_sended_time BIGINT UNSIGNED)
 	BEGIN
 		DECLARE count TINYINT UNSIGNED;
 		SELECT COUNT(*) INTO count FROM sea_user_energy WHERE sender_id = p_sender_id AND receiver_id = p_receiver_id AND sended_time = p_sended_time;

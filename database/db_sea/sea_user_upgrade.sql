@@ -4,9 +4,9 @@ DROP TABLE IF EXISTS sea_user_upgrade;
 
 CREATE TABLE sea.sea_user_upgrade (
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	bonus_score TINYINT UNSIGNED NOT NULL,
-	bonus_time TINYINT UNSIGNED NOT NULL,
-	cooldown TINYINT UNSIGNED NOT NULL,
+	score_factor TINYINT UNSIGNED NOT NULL,
+	time_factor TINYINT UNSIGNED NOT NULL,
+	cooldown_factor TINYINT UNSIGNED NOT NULL,
 
 	INDEX idx_user_upgrade_1 (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -14,33 +14,33 @@ CREATE TABLE sea.sea_user_upgrade (
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sea_LoadUpgradeInfo $$
-CREATE PROCEDURE sea_LoadUpgradeInfo(IN p_id INT UNSIGNED)
+CREATE PROCEDURE sea_LoadUpgradeInfo(IN p_id INT)
 	BEGIN
-		SELECT bonus_score, bonus_time, cooldown FROM sea_user_upgrade WHERE id = p_id;
+		SELECT score_factor, time_factor, cooldown_factor FROM sea_user_upgrade WHERE id = p_id;
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_UpgradeBonusScore $$
-CREATE PROCEDURE sea_UpgradeBonusScore(IN p_id INT UNSIGNED)
+DROP PROCEDURE IF EXISTS sea_UpgradeScoreFactor $$
+CREATE PROCEDURE sea_UpgradeScoreFactor(IN p_id INT)
 	BEGIN
-		UPDATE sea_user_upgrade SET bonus_score = bonus_score + 1 WHERE id = p_id;
-		SELECT bonus_score AS res FROM sea_user_upgrade WHERE id = p_id;
+		UPDATE sea_user_upgrade SET score_factor = bonus_score + 1 WHERE id = p_id;
+		SELECT score_factor AS res FROM sea_user_upgrade WHERE id = p_id;
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_UpgradeBonusTime $$
-CREATE PROCEDURE sea_UpgradeBonusTime(IN p_id INT UNSIGNED)
+DROP PROCEDURE IF EXISTS sea_UpgradeTimeFactor $$
+CREATE PROCEDURE sea_UpgradeTimeFactor(IN p_id INT)
 	BEGIN
-		UPDATE sea_user_upgrade SET bonus_time = bonus_time + 1 WHERE id = p_id;
-		SELECT bonus_time AS res FROM sea_user_upgrade WHERE id = p_id;
+		UPDATE sea_user_upgrade SET time_factor = time_factor + 1 WHERE id = p_id;
+		SELECT time_factor AS res FROM sea_user_upgrade WHERE id = p_id;
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_UpgradeCooldown $$
-CREATE PROCEDURE sea_UpgradeCooldown(IN p_id INT UNSIGNED)
+DROP PROCEDURE IF EXISTS sea_UpgradeCooldownFactor $$
+CREATE PROCEDURE sea_UpgradeCooldownFactor(IN p_id INT)
 	BEGIN
-		UPDATE sea_user_upgrade SET cooldown = cooldown + 1 WHERE id = p_id;
-		SELECT cooldown AS res FROM sea_user_upgrade WHERE id = p_id;
+		UPDATE sea_user_upgrade SET cooldown_factor = cooldown_factor + 1 WHERE id = p_id;
+		SELECT cooldown_factor AS res FROM sea_user_upgrade WHERE id = p_id;
 	END
 $$
 

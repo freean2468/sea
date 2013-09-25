@@ -3,7 +3,7 @@ USE sea;
 DROP TABLE IF EXISTS sea_user_metric;
 
 CREATE TABLE sea.sea_user_metric(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	uv TINYINT UNSIGNED NOT NULL,
 	last_week_uv TINYINT UNSIGNED NOT NULL,
 	this_week_uv TINYINT UNSIGNED NOT NULL,
@@ -32,7 +32,7 @@ CREATE PROCEDURE sea_RetentionRate()
 $$
 
 DROP PROCEDURE IF EXISTS sea_UpdateWeekly $$
-CREATE PROCEDURE sea_UpdateWeekly(IN p_id INT UNSIGNED)
+CREATE PROCEDURE sea_UpdateWeekly(IN p_id INT)
 	BEGIN
 		UPDATE sea.sea_user_metric SET last_week_uv = 0;
 		UPDATE sea.sea_user_metric SET last_week_uv = 1 WHERE this_week_uv = 1;
@@ -48,7 +48,7 @@ CREATE PROCEDURE sea_LastUv()
 $$
 
 DROP PROCEDURE IF EXISTS sea_UpdateUvOn $$
-CREATE PROCEDURE sea_UpdateUvOn(IN p_id INT UNSIGNED)
+CREATE PROCEDURE sea_UpdateUvOn(IN p_id INT)
 	BEGIN
 		UPDATE sea.sea_user_metric SET uv = 1, this_week_uv = 1 WHERE id = p_id;
 	END
@@ -65,7 +65,7 @@ $$
 ## PayingUser(PU)
 #####
 DROP PROCEDURE IF EXISTS sea_UpdatePuOn $$
-CREATE PROCEDURE sea_UpdatePuOn(IN p_id INT UNSIGNED)
+CREATE PROCEDURE sea_UpdatePuOn(IN p_id INT)
 	BEGIN
 		DECLARE user_pu TINYINT(1);
 

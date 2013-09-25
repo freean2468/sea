@@ -10,13 +10,13 @@ enum Result {
 	INVALID_CHARACTER = 7;
 	INVALID_ASSISTANT = 8;
 	INVALID_ITEM = 9;
-	NOT_ENOUGH_HONEY = 10;
+	NOT_ENOUGH_ENERGY = 10;
 	NOT_ENOUGH_COIN = 11;
 	NO_MATCH_WITH_DB = 12;
 	INVALID_REQ_FIELD = 13;
 	INVALID_BATON = 14;
 	INVALID_BATON_RESULT = 15;
-	INVALID_HONEY = 16;
+	INVALID_ENERGY = 16;
 	FULLY_UPGRADED = 17;
 	FAILED_DB_UPDATE = 18;
 	INVALID_SESSION = 19;
@@ -41,11 +41,8 @@ message RegisterAccountReply {
 message SelectCharacterReply {
 } // end
 
-message SelectAssistantReply {
-} // end
-
 message StartGameReply {
-	required int32 honey = 2;
+	required int32 energy = 2;
 	required int64 last_charged_time = 3;
 } // end
 
@@ -55,43 +52,37 @@ message AccountInfo {
 	required int32 lv = 4;
 	required int32 exp = 5;
 	required int32 point = 6;
-	required int32 honey = 7;
+	required int32 energy = 7;
 	required int64 last_charged_time = 8;
 	required int32 selected_character = 9;
-	required int32 selected_assistant = 10;
-	required int32 honey_score = 11;
-	required int32 honey_time = 12;
-	required int32 cooldown = 13;
-	required int32 exp_boost = 14;
-	required int32 item_last = 15;
-	required int32 max_attack = 16;
-	required int32 random = 17;
-	required int32 mileage = 18;
-	required int32 draw = 19;
-	repeated CharacterInfo characters = 20;
-	repeated AssistantInfo assistants = 21;
+	required int32 score_factor = 10;
+	required int32 time_factor = 11;
+	required int32 cooldown_factor = 12;
+	required int32 shield = 13;
+	required int32 item_last = 14;
+	required int32 ghost = 15;
+	required int32 weapon_reinforce = 16;
+	required int32 exp_boost = 17;
+	required int32 max_attack = 18;
+	required int32 bonus_heart = 19;
+	required int32 drop_up = 20;
+	required int32 magnet = 21;
+	required int32 bonus_score = 22;
+	required int32 mileage = 23;
+	required int32 draw = 24;
+	repeated CharacterInfo characters = 25;
 
 	enum ID {
 		ONE = 1;
 		TWO = 2;
 		THREE = 3;
 		FOUR = 4;
-		FIVE = 5;
-		SIX = 6;
-		SEVEN = 7;
-		EIGHT = 8;
-		NINE = 9;
-		TEN = 10;
+		MAX = 5;
 	}
 
 	message CharacterInfo{
 		required ID id = 1;
-		required int32 upgraded = 2;		
-	}
-
-	message AssistantInfo{
-		required ID id = 1;
-		required int32 upgraded = 2;
+		required int32 level = 2;
 	}
 } // end
 
@@ -99,7 +90,7 @@ message LogoutReply {
 } // end
 
 message ChargeInfo {
-	required int32 honey = 2;
+	required int32 energy = 2;
 	required int64 last_charged_time = 3;
 } // end
 
@@ -110,14 +101,14 @@ message RankInfo {
 	message FriendRankInfo {
 		required string k_id = 1;
 		required int32 score = 2;
-		required int32 honey_sended = 3;
+		required int32 bonus_sended = 3;
 	}
 } // end
 
-message PostedHoney {
-	repeated Honey honey = 2;
+message PostedEnergy {
+	repeated Energy bonus = 2;
 
-	message Honey {
+	message Energy {
 		required string sender_k_id = 1;
 		required int64 sended_time = 2;
 	}
@@ -161,19 +152,17 @@ message BuyItemReply {
 	required int32 coin = 3;
 
 	enum Item {
-		EXP_BOOST = 1;
-		LAST_ITEM = 2;
-		MAX_ATTACK = 3;
-
-		MAGNET = 21;
-		COIN_TIME = 22;
-		SCORE_BONUS = 23;
-		HEALTH = 24;
-		IMMORTAL = 25;
-		COOL_DOWN = 26;
-		HONEY_SCORE = 27;
-		LAST_ACTION = 28;
-		MAX = 29;
+		SHIELD = 1;
+		ITEM_LAST = 2;
+		GHOST = 3;
+		WEAPON_REINFORCE = 4;
+		EXP_BOOST = 5;
+		MAX_ATTACK = 6;
+		BONUS_HEART = 7;
+		DROP_UP = 8;
+		MAGNET = 9;
+		BONUS_SCORE = 10;
+		MAX = 11;
 	}
 } // end 
 
@@ -189,37 +178,11 @@ message BuyOrUpgradeCharacterReply {
 		TWO = 2;
 		THREE = 3;
 		FOUR = 4;
-		FIVE = 5;
-		SIX = 6;
-		SEVEN = 7;
-		EIGHT = 8;
-		NINE = 9;
-		TEN = 10;
+		MAX = 5;
 	}
 } // end
 
-message BuyOrUpgradeAssistantReply {
-	required Assistant assistant = 2;
-	required int32 lv = 3;
-	required int32 coin = 4;
-	required int32 mileage = 5;
-	required int32 draw = 6;
-
-	enum Assistant {
-		ONE = 1;
-		TWO = 2;
-		THREE = 3;
-		FOUR = 4;
-		FIVE = 5;
-		SIX = 6;
-		SEVEN = 7;
-		EIGHT = 8;
-		NINE = 9;
-		TEN = 10;
-	}
-} // end
-
-message SendHoneyReply {
+message SendEnergyReply {
 	required int32 mileage = 2;
 	required int32 draw = 3;
 } // end
@@ -228,7 +191,7 @@ message RequestBatonReply {
 	required int32 coin = 2;
 } // end
 
-message AcceptHoneyReply {
+message AcceptEnergyReply {
 } // end
 
 message AcceptBatonReply {

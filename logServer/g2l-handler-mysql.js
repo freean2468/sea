@@ -229,7 +229,23 @@ function UserGamePlayHandler(response, data, logMgr) {
 		logMgr.addLog('ERROR', "Undefined field is detected in UserGamePlayHandler");
 	} else {
 		var procedure = 'sea_AddLogPlay';
-		var params = "'" + msg['k_id'] + "', " + msg['selected_character'] + ", " + msg['selected_assistant'] + ", " + msg['score'] + ", " + msg['enemy_kill'] + ", " + msg['dist'] + ", " + msg['play_time'] + ", " + msg['exp_boost'] + ", " + msg['item_last'] + ", " + msg['max_attack'] + ", " + msg['random'];
+		var params = "'" + msg['k_id'] + "', "
+					+ msg['selected_character'] + ", "
+					+ msg['score'] + ", " 
+					+ msg['enemy_kill'] + ", " 
+					+ msg['dist'] + ", " 
+					+ msg['play_time'] + ", " 
+					+ msg['exp_boost'] + ", " 
+					+ msg['item_last'] + ", " 
+					+ msg['max_attack'] + ", " 
+					+ msg['shield'] + ", "
+					+ msg['ghost'] + ", "
+					+ msg['weapon_reinforce'] + ", "
+					+ msg['bonus_heart'] + ", "
+					+ msg['drop_up'] + ", "
+					+ msg['magnet'] + ", "
+					+ msg['bonus_score']
+					;
 
 		mysql.call(procedure, params, function (results, fields) {
 			var res = results[0][0]['res'];

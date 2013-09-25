@@ -19,12 +19,6 @@ message RetentionRate {
 	required uint32 rr = 2;
 } // end
 
-message PayAssistant {
-	required string k_id = 2;
-	required int32 paid_assistant = 3;
-	required int32 rest_coin = 4;
-} // end
-
 message PayCharacter {
 	required string k_id = 2;
 	required int32 paid_character = 3;
@@ -58,15 +52,20 @@ message PayMoney {
 message UserGamePlay {
 	required string k_id = 2;
 	required int32 selected_character = 3;
-	required int32 selected_assistant = 4;
-	required int32 score = 5;
-	required int32 enemy_kill = 6;
-	required int32 dist = 7;
-	required int32 play_time = 8;
-	required int32 exp_boost = 9;
-	required int32 last_item = 10;
-	required int32 max_attack = 11;
-	required int32 random = 12;
+	required int32 score = 4;
+	required int32 enemy_kill = 5;
+	required int32 dist = 6;
+	required int32 play_time = 7;
+	required int32 exp_boost = 8;
+	required int32 item_last = 9;
+	required int32 max_attack = 10;
+	required int32 shield = 11;
+	required int32 ghost = 12;
+	required int32 weapon_reinforce = 13;
+	required int32 bonus_heart = 14;
+	required int32 drop_up = 15;
+	required int32 magnet = 16;
+	required int32 bonus_score = 17;
 } // end
 
 message UserRegister {

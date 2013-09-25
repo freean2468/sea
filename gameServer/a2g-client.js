@@ -3,7 +3,7 @@ var net = require('net');
 var Proto = require('./a2g-proto').Proto,
 	SessionEvent = require('./a2g-event').SessionEvent;
 
-var SOCKET_COUNT_PER_CLIENT = 10;
+var SOCKET_COUNT_PER_CLIENT = 30;
 
 function Socket(packetMgr) {
 	// property
@@ -119,7 +119,7 @@ function PacketMgr(client) {
 	
 	this.init = function () {
 		this.proto.init();
-		// Constructs factory that interpret packets and
+		// Constructs factory that interprets packets and
 		// Constructs dispatcher to send packet to appropriate handler.
 		this.registerPacketHandler('a2g.SystemMessage', this.proto.a2g_pkg.SystemMessage, this.handler.P_SystemMessage);
 		this.registerPacketHandler('a2g.RegisterSessionReply', this.proto.a2g_pkg.RegisterSessionReply, this.handler.P_RegisterSessionReply);

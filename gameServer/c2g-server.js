@@ -3,7 +3,6 @@ var http = require('http'),
 	cluster = require('cluster'),
 	cp = require('child_process'),
 	numCPUs = require('os').cpus().length;
-	numCPUs = 3;
 
 var build = require('./c2g-proto-build'),
 	LogMgr = require('./log').LogMgr,
