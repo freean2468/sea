@@ -4,10 +4,16 @@ DROP TABLE IF EXISTS sea_user_items;
 
 CREATE TABLE sea.sea_user_items(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	exp_boost TINYINT NOT NULL,
-	item_last TINYINT NOT NULL,
-	max_attack TINYINT NOT NULL,
-	random TINYINT NOT NULL,
+	shield TINYINT UNSIGNED NOT NULL,
+	item_last TINYINT UNSIGNED NOT NULL,
+	ghost TINYINT UNSIGNED NOT NULL,
+	weapon_reinforce TINYINT UNSIGNED NOT NULL,
+	exp_boost TINYINT UNSIGNED NOT NULL,
+	max_attack TINYINT UNSIGNED NOT NULL,
+	bonus_heart TINYINT UNSIGNED NOT NULL,
+	drop_up TINYINT UNSIGNED NOT NULL,
+	magnet TINYINT UNSIGNED NOT NULL,
+	bonus_score TINYINT UNSIGNED NOT NULL,
 
 	INDEX idx_user_items_1 (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -17,7 +23,8 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS sea_LoadItems $$
 CREATE PROCEDURE sea_LoadItems(IN p_id INT)
 	BEGIN
-		SELECT exp_boost, item_last, max_attack, random FROM sea_user_items WHERE id = p_id;
+		SELECT shield, item_last, ghost, weapon_reinforce, exp_boost, max_attack, bonus_heart, drop_up, magnet, bonus_score  
+		FROM sea_user_items WHERE id = p_id;
 	END
 $$
 
@@ -42,10 +49,52 @@ CREATE PROCEDURE sea_UpdateMaxAttack(IN p_id INT, IN p_count TINYINT)
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_UpdateRandom $$
-CREATE PROCEDURE sea_UpdateRandom(IN p_id INT, IN p_random TINYINT)
+DROP PROCEDURE IF EXISTS sea_UpdateShield $$
+CREATE PROCEDURE sea_UpdateShield(IN p_id INT, IN p_count TINYINT)
 	BEGIN
-		UPDATE sea_user_items SET random = p_random WHERE id = p_id;
+		UPDATE sea_user_items SET shield = shiled + p_count WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_UpdateGhost $$
+CREATE PROCEDURE sea_UpdateGhost(IN p_id INT, IN p_count TINYINT)
+	BEGIN
+		UPDATE sea_user_items SET ghost = ghost + p_count WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_UpdateWeaponEnforce $$
+CREATE PROCEDURE sea_UpdateWeaponEnforce(IN p_id INT, IN p_count TINYINT)
+	BEGIN
+		UPDATE sea_user_items SET weapon_reinforce = weapon_reinforce + p_count WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_UpdateBonusHeart $$
+CREATE PROCEDURE sea_UpdateBonusHeart(IN p_id INT, IN p_count TINYINT)
+	BEGIN
+		UPDATE sea_user_items SET bonus_heart = bonus_heart + p_count WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_UpdateDropUp $$
+CREATE PROCEDURE sea_UpdateDropUp(IN p_id INT, IN p_count TINYINT)
+	BEGIN
+		UPDATE sea_user_items SET drop_up = drop_up + p_count WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_UpdateMagnet $$
+CREATE PROCEDURE sea_UpdateMagnet(IN p_id INT, IN p_count TINYINT)
+	BEGIN
+		UPDATE sea_user_items SET magnet = magnet + p_count WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_UpdateBonusScore $$
+CREATE PROCEDURE sea_UpdateBonusScore(IN p_id INT, IN p_count TINYINT)
+	BEGIN
+		UPDATE sea_user_items SET bonus_score = bonus_score + p_count WHERE id = p_id;
 	END
 $$
 

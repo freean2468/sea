@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS sea_user;
 SET foreign_key_checks = 1;
 
 CREATE TABLE sea.sea_user(
-	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id INT UNSIGNED  NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	k_id VARCHAR(40) NOT NULL,
 
 	INDEX idx_user_1 (id),
@@ -36,18 +36,15 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 			SET last_id = LAST_INSERT_ID();
 
 			INSERT sea_user_info(coin, mineral, lv, exp, point, honey, last_charged_time, 
-									selected_character, selected_assistant, invite_count, mileage, draw)
+									selected_character, invite_count, mileage, draw)
 			VALUES (99999, 9999, 1, 0, 0, 9999, UNIX_TIMESTAMP(NOW()), 
-					1, 0, 0, 0, 0);
+					1, 0, 0, 0);
 
-			INSERT sea_user_characters(character_one, character_two, character_three, character_four, character_five, character_six, character_seven, character_eight, character_nine, character_ten)
-			VALUES (1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+			INSERT sea_user_characters(character_one, character_two, character_three, character_four)
+			VALUES (1, 0, 0, 0);
 
-			INSERT sea_user_assistants(assistant_one, assistant_two, assistant_three, assistant_four, assistant_five, assistant_six, assistant_seven, assistant_eight, assistant_nine, assistant_ten)
+			INSERT sea_user_items(shield, item_last, ghost, weapon_reinforce, exp_boost, max_attack, bonus_heart, drop_up, magnet, bonus_score)
 			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
-			INSERT sea_user_items(exp_boost, item_last, max_attack, random)
-			VALUES (0, 0, 0, 0);
 
 			INSERT sea_user_log(total_score, highest_score, last_dist, total_dist, total_kill, play_time)
 			VALUES (0, 0, 0, 0, 0, 0);
@@ -98,11 +95,13 @@ CREATE PROCEDURE sea_DeleteUser(IN p_id INT)
 
 		DELETE FROM sea_user_info WHERE id = p_id;
 		DELETE FROM sea_user_characters WHERE id = p_id;
-		DELETE FROM sea_user_assistants WHERE id = p_id;
 		DELETE FROM sea_user_items WHERE id = p_id;
 		DELETE FROM sea_user_log WHERE id = p_id;
 		DELETE FROM sea_user_metric WHERE id = p_id;
 		DELETE FROM sea_user_upgrade WHERE id = p_id;
+--		DELETE FROM sea_user_energy WHERE id = p_id;
+--		DELETE FROM sea_user_baton WHERE id = p_id;
+--		DELETE FROM sea_user_baton_result WHERE id = p_id;
 
 		DELETE FROM sea_user WHERE id = p_id;
 	END
