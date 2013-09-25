@@ -3,13 +3,13 @@ USE sea;
 DROP TABLE IF EXISTS sea_user_log;
 
 CREATE TABLE sea.sea_user_log(
-	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	total_score BIGINT NOT NULL,
-	highest_score INT NOT NULL,
-	last_dist INT NOT NULL,
-	total_dist BIGINT NOT NULL,
-	total_kill INT NOT NULL,
-	play_time INT NOT NULL,
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	total_score INT UNSIGNED NOT NULL,
+	highest_score INT UNSIGNED NOT NULL,
+	last_dist INT UNSIGNED NOT NULL,
+	total_dist BIGINT UNSIGNED NOT NULL,
+	total_kill INT UNSIGNED NOT NULL,
+	play_time INT UNSIGNED NOT NULL,
 
 	INDEX idx_user_log_1 (id)
 );
@@ -17,16 +17,16 @@ CREATE TABLE sea.sea_user_log(
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sea_LoadHighestScore $$
-CREATE PROCEDURE sea_LoadHighestScore(IN p_id INT)
+CREATE PROCEDURE sea_LoadHighestScore(IN p_id INT UNSIGNED)
 	BEGIN
 		SELECT highest_score AS res FROM sea.sea_user_log WHERE id = p_id;
 	END
 $$
 
 DROP PROCEDURE IF EXISTS sea_UpdateUserLog $$
-CREATE PROCEDURE sea_UpdateUserLog(IN p_id INT, IN p_score INT, IN p_dist INT, IN p_kill INT)
+CREATE PROCEDURE sea_UpdateUserLog(IN p_id INT UNSIGNED, IN p_score INT UNSIGNED, IN p_dist INT UNSIGNED, IN p_kill INT UNSIGNED)
 	BEGIN
-		DECLARE highest INT;
+		DECLARE highest INT UNSIGNED;
 		SELECT highest_score INTO highest FROM sea.sea_user_log WHERE id = p_id;
 
 		IF highest < p_score THEN

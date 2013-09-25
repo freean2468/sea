@@ -26,8 +26,8 @@ $$
 DROP PROCEDURE IF EXISTS sea_CreateUser$$
 CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 	BEGIN
-		DECLARE last_id INT;
-		DECLARE isExist INT;
+		DECLARE last_id INT UNSIGNED;
+		DECLARE isExist INT UNSIGNED;
 
 		SELECT count(*) INTO isExist FROM sea_user WHERE k_id = p_k_id;
 
@@ -35,7 +35,7 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 			INSERT sea_user(k_id) VALUES (p_k_id);
 			SET last_id = LAST_INSERT_ID();
 
-			INSERT sea_user_info(coin, mineral, lv, exp, point, honey, last_charged_time, 
+			INSERT sea_user_info(coin, mineral, lv, exp, point, energy, last_charged_time, 
 									selected_character, invite_count, mileage, draw)
 			VALUES (99999, 9999, 1, 0, 0, 9999, UNIX_TIMESTAMP(NOW()), 
 					1, 0, 0, 0);
@@ -52,7 +52,7 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 			INSERT sea_user_metric(uv, last_week_uv, this_week_uv, pu)
 			VALUES (1, 0, 1, 0);
 
-			INSERT sea_user_upgrade(honey_score, honey_time, cooldown)
+			INSERT sea_user_upgrade(bonus_score, bonus_time, cooldown)
 			VALUES (0, 0, 0);
 
 			SELECT last_id AS res;			
@@ -78,14 +78,14 @@ CREATE PROCEDURE sea_LoadUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 $$
 
 DROP PROCEDURE IF EXISTS sea_LoadUserKId $$
-CREATE PROCEDURE sea_LoadUserKId(IN p_id INT) 
+CREATE PROCEDURE sea_LoadUserKId(IN p_id INT UNSIGNED) 
 	BEGIN
 		SELECT k_id AS res FROM sea_user WHERE id = p_id;
 	END
 $$
 
 DROP PROCEDURE IF EXISTS sea_DeleteUser $$
-CREATE PROCEDURE sea_DeleteUser(IN p_id INT)
+CREATE PROCEDURE sea_DeleteUser(IN p_id INT UNSIGNED)
 	BEGIN
 		DECLARE k_id_copy varchar(40);
 
