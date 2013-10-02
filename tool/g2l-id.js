@@ -11,7 +11,7 @@ var list = [
 	'RetentionRate',
 	'PayCharacter',
 	'PayCoin',
-	'PayHeart',
+	'PayEnergy',
 	'PayItem',
 	'PayMoney',
 	'UserGamePlay',
@@ -20,19 +20,19 @@ var list = [
 ];
 
 var messageId = {
-	AccountLogin: 3535091,
-	ConcurrentUser: 588967,
-	PeakConcurrentUser: 7534626,
-	UniqueVisitor: 589692,
-	RetentionRate: 4587419,
-	PayCharacter: 2620907,
-	PayCoin: 10613532,
-	PayHeart: 9630510,
-	PayItem: 1179605,
-	PayMoney: 1635278,
-	UserGamePlay: 1635188,
-	UserRegister: 7665682,
-	UserUnregister: 2683878,
+	AccountLogin: 2683884,
+	ConcurrentUser: 6683602,
+	PeakConcurrentUser: 2683418,
+	UniqueVisitor: 3668852,
+	RetentionRate: 6682959,
+	PayCharacter: 1572242,
+	PayCoin: 57014259,
+	PayEnergy: 11728187,
+	PayItem: 6749484,
+	PayMoney: 3733917,
+	UserGamePlay: 1767594,
+	UserRegister: 7798091,
+	UserUnregister: 4783518,
 };
 
 exports.list = list;

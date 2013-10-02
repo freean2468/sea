@@ -31,9 +31,9 @@ message PayCoin {
 	required int32 rest_money = 4;
 } // end
 
-message PayHeart {
+message PayEnergy {
 	required string k_id = 2;
-	required int32 paid_heart = 3;
+	required int32 paid_energy = 3;
 	required int32 rest_coin = 4;
 } // end
 

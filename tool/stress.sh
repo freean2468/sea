@@ -24,4 +24,4 @@ done
 #echo "overall working time : $took(s)"
 #echo "avg response time per client : $avg(s)"
 
-exit 0
+echo 'stress has done'

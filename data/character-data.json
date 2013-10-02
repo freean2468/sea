@@ -1,0 +1,335 @@
+{
+"root": [
+	{
+		"id": 1,
+		"name": "bani",
+		"priceType": "coin",
+		"price": 0,
+		"evolve": [
+			{
+				"level": 2,
+				"cost": 200
+			}
+			,
+			{
+				"level": 3,
+				"cost": 300
+			}
+			,
+			{
+				"level": 4,
+				"cost": 400
+			}
+			,
+			{
+				"level": 5,
+				"cost": 500
+			}
+			,
+			{
+				"level": 6,
+				"cost": 600
+			}
+			,
+			{
+				"level": 7,
+				"cost": 700
+			}
+			,
+			{
+				"level": 8,
+				"cost": 800
+			}
+			,
+			{
+				"level": 9,
+				"cost": 900
+			}
+			,
+			{
+				"level": 10,
+				"cost": 1000
+			}
+			,
+			{
+				"level": 11,
+				"cost": 1100
+			}
+			,
+			{
+				"level": 12,
+				"cost": 1200
+			}
+			,
+			{
+				"level": 13,
+				"cost": 1300
+			}
+			,
+			{
+				"level": 14,
+				"cost": 1400
+			}
+			,
+			{
+				"level": 15,
+				"cost": 1500
+			}
+			,
+			{
+				"level": 16,
+				"cost": 1600
+			}
+		]
+	}
+	,
+	{
+		"id": 2,
+		"name": "witnee",
+		"priceType": "coin",
+		"price": 100,
+		"evolve":[
+			{
+				"level": 2,
+				"cost": 200
+			}
+			,
+			{
+				"level": 3,
+				"cost": 300
+			}
+			,
+			{
+				"level": 4,
+				"cost": 400
+			}
+			,
+			{
+				"level": 5,
+				"cost": 500
+			}
+			,
+			{
+				"level": 6,
+				"cost": 600
+			}
+			,
+			{
+				"level": 7,
+				"cost": 700
+			}
+			,
+			{
+				"level": 8,
+				"cost": 800
+			}
+			,
+			{
+				"level": 9,
+				"cost": 900
+			}
+			,
+			{
+				"level": 10,
+				"cost": 1000
+			}
+			,
+			{
+				"level": 11,
+				"cost": 1100
+			}
+			,
+			{
+				"level": 12,
+				"cost": 1200
+			}
+			,
+			{
+				"level": 13,
+				"cost": 1300
+			}
+			,
+			{
+				"level": 14,
+				"cost": 1400
+			}
+			,
+			{
+				"level": 15,
+				"cost": 1500
+			}
+			,
+			{
+				"level": 16,
+				"cost": 1600
+			}
+		]
+	}
+	,
+	{
+		"id": 3,
+		"name": "aena",
+		"priceType": "money",
+		"price": 15,
+		"evolve":[
+			{
+				"level": 2,
+				"cost": 200
+			}
+			,
+			{
+				"level": 3,
+				"cost": 300
+			}
+			,
+			{
+				"level": 4,
+				"cost": 400
+			}
+			,
+			{
+				"level": 5,
+				"cost": 500
+			}
+			,
+			{
+				"level": 6,
+				"cost": 600
+			}
+			,
+			{
+				"level": 7,
+				"cost": 700
+			}
+			,
+			{
+				"level": 8,
+				"cost": 800
+			}
+			,
+			{
+				"level": 9,
+				"cost": 900
+			}
+			,
+			{
+				"level": 10,
+				"cost": 1000
+			}
+			,
+			{
+				"level": 11,
+				"cost": 1100
+			}
+			,
+			{
+				"level": 12,
+				"cost": 1200
+			}
+			,
+			{
+				"level": 13,
+				"cost": 1300
+			}
+			,
+			{
+				"level": 14,
+				"cost": 1400
+			}
+			,
+			{
+				"level": 15,
+				"cost": 1500
+			}
+			,
+			{
+				"level": 16,
+				"cost": 1600
+			}
+		]
+	}
+	,
+	{
+		"id": 4,
+		"name": "dana",
+		"priceType": "money",
+		"price": 30,
+		"evolve":[
+			{
+				"level": 2,
+				"cost": 200
+			}
+			,
+			{
+				"level": 3,
+				"cost": 300
+			}
+			,
+			{
+				"level": 4,
+				"cost": 400
+			}
+			,
+			{
+				"level": 5,
+				"cost": 500
+			}
+			,
+			{
+				"level": 6,
+				"cost": 600
+			}
+			,
+			{
+				"level": 7,
+				"cost": 700
+			}
+			,
+			{
+				"level": 8,
+				"cost": 800
+			}
+			,
+			{
+				"level": 9,
+				"cost": 900
+			}
+			,
+			{
+				"level": 10,
+				"cost": 1000
+			}
+			,
+			{
+				"level": 11,
+				"cost": 1100
+			}
+			,
+			{
+				"level": 12,
+				"cost": 1200
+			}
+			,
+			{
+				"level": 13,
+				"cost": 1300
+			}
+			,
+			{
+				"level": 14,
+				"cost": 1400
+			}
+			,
+			{
+				"level": 15,
+				"cost": 1500
+			}
+			,
+			{
+				"level": 16,
+				"cost": 1600
+			}
+		]
+	}
+]
+}

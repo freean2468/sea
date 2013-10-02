@@ -1,8 +1,8 @@
 USE sea;
 
-DROP TABLE IF EXISTS sea_user_baton_result;
+DROP TABLE IF EXISTS sea_baton_result;
 
-CREATE TABLE sea.sea_user_baton_result (
+CREATE TABLE sea.sea_baton_result (
 	sender_id INT NOT NULL,
 	receiver_id INT NOT NULL,
 	score INT UNSIGNED NOT NULL,
@@ -12,8 +12,8 @@ CREATE TABLE sea.sea_user_baton_result (
 	FOREIGN KEY(sender_id) REFERENCES sea_user(id) ON DELETE CASCADE ON UPDATE RESTRICT,
 	FOREIGN KEY(receiver_id) REFERENCES sea_user(id) ON DELETE CASCADE ON UPDATE RESTRICT,
 
-	INDEX idx_user_baton_result_1(sender_id, receiver_id),
-	INDEX idx_user_baton_result_2(sended_time)
+	INDEX idx_baton_result_1(sender_id, receiver_id),
+	INDEX idx_baton_result_2(sended_time)
 );
 
 DELIMITER $$
@@ -21,7 +21,7 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS sea_AddBatonResult $$
 CREATE PROCEDURE sea_AddBatonResult(IN p_sender_id INT, IN p_receiver_id INT, IN p_score INT UNSIGNED)
 	BEGIN
-		INSERT sea_user_baton_result(sender_id, receiver_id, score, sended_time)
+		INSERT sea_baton_result(sender_id, receiver_id, score, sended_time)
 		VALUES (p_sender_id, p_receiver_id, p_score, UNIX_TIMESTAMP(NOW()));
 	END
 $$
@@ -30,10 +30,10 @@ DROP PROCEDURE IF EXISTS sea_LoadBatonResultScore $$
 CREATE PROCEDURE sea_LoadBatonResultScore(IN p_sender_id INT, IN p_receiver_id INT, IN p_sended_time BIGINT UNSIGNED)
 	BEGIN
 		DECLARE count INT;
-		SELECT COUNT(*) INTO count FROM sea_user_baton_result WHERE sender_id = p_sender_id AND receiver_id = p_receiver_id AND sended_time = p_sended_time;
+		SELECT COUNT(*) INTO count FROM sea_baton_result WHERE sender_id = p_sender_id AND receiver_id = p_receiver_id AND sended_time = p_sended_time;
 
 		IF count > 0 THEN
-			SELECT score FROM sea_user_baton_result WHERE receiver_id = p_receiver_id;
+			SELECT score FROM sea_baton_result WHERE receiver_id = p_receiver_id;
 		else
 			SELECT -1 AS score;
 		END IF;	
@@ -44,10 +44,10 @@ DROP PROCEDURE IF EXISTS sea_LoadBatonResult $$
 CREATE PROCEDURE sea_LoadBatonResult(IN p_receiver_id INT) 
 	BEGIN
 		DECLARE count SMALLINT UNSIGNED;
-		SELECT COUNT(*) INTO count FROM sea_user_baton_result WHERE receiver_id = p_receiver_id;
+		SELECT COUNT(*) INTO count FROM sea_baton_result WHERE receiver_id = p_receiver_id;
 
 		IF count > 0 THEN
-			SELECT sender_id, score, sended_time FROM sea_user_baton_result WHERE receiver_id = p_receiver_id;
+			SELECT sender_id, score, sended_time FROM sea_baton_result WHERE receiver_id = p_receiver_id;
 		else
 			SELECT 0 AS sender_id;
 		END IF;
@@ -57,14 +57,14 @@ $$
 DROP PROCEDURE IF EXISTS sea_DeleteBatonResult $$
 CREATE PROCEDURE sea_DeleteBatonResult(IN p_sender_id INT, IN p_receiver_id INT, IN p_sended_time BIGINT UNSIGNED)
 	BEGIN
-		DELETE FROM sea_user_baton_result WHERE sender_id = p_sender_id AND receiver_id = p_receiver_id AND sended_time = p_sended_time;
+		DELETE FROM sea_baton_result WHERE sender_id = p_sender_id AND receiver_id = p_receiver_id AND sended_time = p_sended_time;
 	END
 $$
 
 DROP PROCEDURE IF EXISTS sea_DeleteExpiredBatonResult $$
 CREATE PROCEDURE sea_DeleteExpiredBatonResult()
 	BEGIN
-		DELETE FROM sea_user_baton_result WHERE SUBDATE(NOW(), INTERVAL 20 DAY) > FROM_UNIXTIME(sended_time);
+		DELETE FROM sea_baton_result WHERE SUBDATE(NOW(), INTERVAL 20 DAY) > FROM_UNIXTIME(sended_time);
 	END
 $$
 

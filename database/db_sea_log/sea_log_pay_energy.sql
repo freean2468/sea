@@ -1,13 +1,13 @@
 USE sea_log;
 
-DROP TABLE IF EXISTS sea_pay_assistant;
+DROP TABLE IF EXISTS sea_pay_energy;
 
-CREATE TABLE sea_log.sea_pay_assistant(
+CREATE TABLE sea_log.sea_pay_energy(
 	id INT NOT NULL AUTO_INCREMENT,
 	k_id VARCHAR(40) NOT NULL,
 	w_date DATE NOT NULL,
 	w_time TIME NOT NULL,
-	paid_assistant SMALLINT NOT NULL,
+	paid_energy SMALLINT NOT NULL,
 	rest_coin MEDIUMINT NOT NULL,
 	PRIMARY KEY (id, w_date)
 )ENGINE=MyISAM
@@ -22,11 +22,11 @@ PARTITION BY RANGE COLUMNS (w_date) (
 
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS sea_AddLogPayAssistant $$
-CREATE PROCEDURE sea_AddLogPayAssistant(IN p_k_id VARCHAR (40) CHARACTER SET utf8, IN p_paid_assistant SMALLINT, IN p_rest_coin MEDIUMINT)
+DROP PROCEDURE IF EXISTS sea_AddLogPayEnergy $$
+CREATE PROCEDURE sea_AddLogPayEnergy(IN p_k_id VARCHAR (40) CHARACTER SET utf8, IN p_paid_energy SMALLINT, IN p_rest_coin MEDIUMINT)
 	BEGIN
-		INSERT sea_pay_assistant(k_id, w_date, w_time, paid_assistant, rest_coin)
-		VALUES (p_k_id, CURDATE(), CURTIME(), p_paid_assistant, p_rest_coin);
+		INSERT sea_pay_energy(k_id, w_date, w_time, paid_energy, rest_coin)
+		VALUES (p_k_id, CURDATE(), CURTIME(), p_paid_energy, p_rest_coin);
 
 		SELECT LAST_INSERT_ID() AS res;
 	END

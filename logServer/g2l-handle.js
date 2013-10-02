@@ -1,19 +1,19 @@
 var handler = require('./g2l-handler');
 
 var handle = {
-	'3535091': handler.AccountLoginHandler,
-	'588967': handler.ConcurrentUserHandler,
-	'7534626': handler.PeakConcurrentUserHandler,
-	'589692': handler.UniqueVisitorHandler,
-	'4587419': handler.RetentionRateHandler,
-	'2620907': handler.PayCharacterHandler,
-	'10613532': handler.PayCoinHandler,
-	'9630510': handler.PayHeartHandler,
-	'1179605': handler.PayItemHandler,
-	'1635278': handler.PayMoneyHandler,
-	'1635188': handler.UserGamePlayHandler,
-	'7665682': handler.UserRegisterHandler,
-	'2683878': handler.UserUnregisterHandler,
+	'2683884': handler.AccountLoginHandler,
+	'6683602': handler.ConcurrentUserHandler,
+	'2683418': handler.PeakConcurrentUserHandler,
+	'3668852': handler.UniqueVisitorHandler,
+	'6682959': handler.RetentionRateHandler,
+	'1572242': handler.PayCharacterHandler,
+	'57014259': handler.PayCoinHandler,
+	'11728187': handler.PayEnergyHandler,
+	'6749484': handler.PayItemHandler,
+	'3733917': handler.PayMoneyHandler,
+	'1767594': handler.UserGamePlayHandler,
+	'7798091': handler.UserRegisterHandler,
+	'4783518': handler.UserUnregisterHandler,
 };
 
 exports.handle = handle;

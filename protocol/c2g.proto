@@ -1,22 +1,17 @@
 package C2G;
 
-enum Pack {
-	BASIC	= 1;
-	MAX	= 2;
-}
-
 message VersionInfo {
-	optional uint64 id = 1 [default=2290025];
+	optional uint64 id = 1 [default=1374569];
 	required string version = 2;
 } // end
 
 message RegisterAccount {
-	optional uint64 id = 1 [default=3276552];
+	optional uint64 id = 1 [default=6354906];
 	required string k_id = 2;
 } // end
 
 message UnregisterAccount {
-	optional uint64 id = 1 [default=3274366];
+	optional uint64 id = 1 [default=2356724];
 	required string k_id = 2;
 } // end
 
@@ -26,31 +21,55 @@ message Login {
 } // end
 
 message Logout {
-	optional uint64 id = 1 [default=1177254];
+	optional uint64 id = 1 [default=389124];
 	required string k_id = 2;
 } // end
 
 message CheckInCharge {
-	optional uint64 id = 1 [default=9303417];
+	optional uint64 id = 1 [default=1372651];
 	required string k_id = 2;
 } // end
 
 message SelectCharacter {
-	optional uint64 id = 1 [default=324879];
+	optional uint64 id = 1 [default=390853];
 	required string k_id = 2;
-	required int32 selected_character = 3;
+	required CharacterId selected_character = 3;
+
+	enum CharacterId {
+		ONE	= 1;
+		TWO = 2;
+		THREE = 3;
+		FOUR = 4;
+		MAX = 5;
+	}
 } // end
 
 message StartGame {
-	optional uint64 id = 1 [default=10353272];
+	optional uint64 id = 1 [default=389330];
 	required string k_id = 2;
-	required int32 selected_character = 3;
+	required CharacterId selected_character = 3;
+
+	enum CharacterId {
+		ONE	= 1;
+		TWO = 2;
+		THREE = 3;
+		FOUR = 4;
+		MAX = 5;
+	}
 } // end
 
 message EndGame {
-	optional uint64 id = 1 [default=6354089];
+	optional uint64 id = 1 [default=1375967];
 	required string k_id = 2;
-	required int32 selected_character = 3;
+	required CharacterId selected_character = 3;
+
+	enum CharacterId {
+		ONE	= 1;
+		TWO = 2;
+		THREE = 3;
+		FOUR = 4;
+		MAX = 5;
+	}
 	required int32 score = 4;
 	required int32 dist = 5;
 	required int32 enemy_kill = 6;
@@ -59,39 +78,39 @@ message EndGame {
 } // end
 
 message LoadRankInfo {
-	optional uint64 id = 1 [default=5371290];
+	optional uint64 id = 1 [default=6420788];
 	required string k_id = 2;
 } // end
 
 message LoadPostedEnergy {
-	optional uint64 id = 1 [default=6356727];
+	optional uint64 id = 1 [default=5439087];
 	required string k_id = 2;
 } // end
 
 message LoadPostedBaton {
-	optional uint64 id = 1 [default=2356356];
+	optional uint64 id = 1 [default=5438714];
 	required string k_id = 2;
 } // end
 
 message LoadPostedBatonResult {
-	optional uint64 id = 1 [default=2421803];
+	optional uint64 id = 1 [default=5438626];
 	required string k_id = 2;
 } // end
 
 message RequestPointReward {
-	optional uint64 id = 1 [default=6419524];
+	optional uint64 id = 1 [default=5501882];
 	required string k_id = 2;
 	required int32 point = 3;
 } // end
 
 message BuyItem {
-	optional uint64 id = 1 [default=10417253];
+	optional uint64 id = 1 [default=5503699];
 	required string k_id = 2;
 	required Item item = 3;
 
 	enum Item {
 		SHIELD = 1;
-		LAST_ITEM = 2;
+		ITEM_LAST = 2;
 		GHOST = 3;
 		WEAPON_REINFORCE = 4;
 		EXP_BOOST = 5;
@@ -105,11 +124,11 @@ message BuyItem {
 } // end
 
 message BuyOrUpgradeCharacter {
-	optional uint64 id = 1 [default=83948486];
+	optional uint64 id = 1 [default=7468656];
 	required string k_id = 2;
-	required ID character = 3;
-
-	enum ID {
+	required CharacterId character = 3;
+	
+	enum CharacterId {
 		ONE	= 1;
 		TWO = 2;
 		THREE = 3;
@@ -119,20 +138,20 @@ message BuyOrUpgradeCharacter {
 } // end
 
 message SendEnergy {
-	optional uint64 id = 1 [default=9433168];
+	optional uint64 id = 1 [default=5502145];
 	required string k_id = 2;
 	required string receiver_k_id = 3;
 } // end
 
 message AcceptEnergy {
-	optional uint64 id = 1 [default=6418607];
+	optional uint64 id = 1 [default=10484584];
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
 } // end
 
 message RequestBaton {
-	optional uint64 id = 1 [default=7469574];
+	optional uint64 id = 1 [default=11532354];
 	required string k_id = 2;
 	required string receiver_k_id = 3;
 	required string map = 4;
@@ -140,62 +159,187 @@ message RequestBaton {
 } // end
 
 message AcceptBaton {
-	optional uint64 id = 1 [default=7470205];
+	optional uint64 id = 1 [default=4520985];
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
-	required int32 selected_character = 5;
+	required CharacterId selected_character = 5;
+
+	enum CharacterId {
+		ONE	= 1;
+		TWO = 2;
+		THREE = 3;
+		FOUR = 4;
+		MAX = 5;
+	}
 } // end
 
 message EndBaton {
-	optional uint64 id = 1 [default=6484309];
+	optional uint64 id = 1 [default=6551479];
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
-	required int32 selected_character = 5;
+	required CharacterId selected_character = 5;
 	required int32 score = 6;
 	required int32 dist = 7;
 	required int32 enemy_kill = 8;
 	required int32 play_time = 9;
 	required int32 coin = 10;
+
+	enum CharacterId {
+		ONE	= 1;
+		TWO = 2;
+		THREE = 3;
+		FOUR = 4;
+		MAX = 5;
+	}
 } // end
 
 message AcceptBatonResult {
-	optional uint64 id = 1 [default=4454546];
+	optional uint64 id = 1 [default=4520520];
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
 } // end
 
-message UpgradeScoreFactor {
-	optional uint64 id = 1 [default=1505516];
+message UpgradeFactor {
+	optional uint64 id = 1 [default=2555106];
 	required string k_id = 2;
-} // end
+	required int32 factor = 3;
 
-message UpgradeTimeFactor {
-	optional uint64 id = 1 [default=5503240];
-	required string k_id = 2;
-} // end
-
-message UpgradeCooldownFactor {
-	optional uint64 id = 1 [default=8518012];
-	required string k_id = 2;
+	enum Factor {
+		SCORE = 1;
+		TIME = 2;
+		UPGRADE = 3;
+		MAX = 4;
+	}
 } // end
 
 message InviteFriend {
-	optional uint64 id = 1 [default=9499241];
+	optional uint64 id = 1 [default=3601985];
 	required string k_id = 2;
 	required string friend_k_id = 3;
 } // end
 
 message LoadReward {
-	optional uint64 id = 1 [default=2553748];
-	required Reward reward = 2;
+	optional uint64 id = 1 [default=2554651];
+	required string k_id = 2;
+	required Reward reward = 3;
 
 	enum Reward {
 		INVITE_10_REWARD = 1;
 		INVITE_15_REWARD = 2;
 		INVITE_30_REWARD = 3;
 		MAX = 4;
+	}
+} // end
+
+message BuyCostume {
+	optional uint64 id = 1 [default=7600427];
+	required string k_id = 2;
+	required CostumeCategory category = 3;
+	required int32 costume_id = 4;
+
+	enum CostumeCategory {
+		HEAD = 1;
+		TOP = 2;
+		BOTTOMS = 3;
+		BACK = 4;
+		MAX = 5;
+	}
+
+	enum CostumeMax {
+		HEAD_MAX = 11;
+		TOP_MAX = 11;
+		BOTTOMS_MAX = 11;
+		BACK_MAX = 11;
+	}
+} // end
+
+message WearCostume {
+	optional uint64 id = 1 [default=3603343];
+	required string k_id = 2;
+	required CostumeCategory category = 3;
+	required int32 costume_id = 4;
+	required CharacterId character_id = 5;
+
+	enum CostumeCategory {
+		HEAD = 1;
+		TOP = 2;
+		BOTTOMS = 3;
+		BACK = 4;
+		MAX = 5;
+	}
+
+	enum CostumeMax {
+		HEAD_MAX = 11;
+		TOP_MAX = 11;
+		BOTTOMS_MAX = 11;
+		BACK_MAX = 11;
+	}
+
+	enum CharacterId {
+		ONE	= 1;
+		TWO = 2;
+		THREE = 3;
+		FOUR = 4;
+		MAX = 5;
+	}
+} // end
+
+message DrawFirst {
+	optional uint64 id = 1 [default=12580588];
+	required string k_id = 2;
+} // end
+
+message DrawSecond {
+	optional uint64 id = 1 [default=9632019];
+	required string k_id = 2;
+	required bool draw = 3;
+} // end
+
+message EquipGhost {
+	optional uint64 id = 1 [default=653848];
+	required string k_id = 2;
+	required Room room_number = 3;
+	required int32 ghost_id = 4;
+
+	enum Room {
+		ROOM_1 = 1;
+		ROOM_2 = 2;
+		ROOM_3 = 3;
+		ROOM_4 = 4;
+		ROOM_5 = 5;
+		MAX = 6;
+	}
+} // end
+
+message UnequipGhost {
+	optional uint64 id = 1 [default=651576];
+	required string k_id = 2;
+	required Room room_number = 3;
+
+	enum Room {
+		ROOM_1 = 1;
+		ROOM_2 = 2;
+		ROOM_3 = 3;
+		ROOM_4 = 4;
+		ROOM_5 = 5;
+		MAX = 6;
+	}
+} // end
+
+message PurchaseRoom {
+	optional uint64 id = 1 [default=3669680];
+	required string k_id = 2;
+	required Room room_number = 3;
+
+	enum Room {
+		ROOM_1 = 1;
+		ROOM_2 = 2;
+		ROOM_3 = 3;
+		ROOM_4 = 4;
+		ROOM_5 = 5;
+		MAX = 6;
 	}
 } // end

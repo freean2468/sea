@@ -2,14 +2,18 @@ var http = require('http'),
 	url = require('url'),
 	cluster = require('cluster'),
 	cp = require('child_process'),
-	numCPUs = require('os').cpus().length;
+	numCPUs = require('os').cpus().length
+	;
 
 var build = require('./c2g-proto-build'),
 	LogMgr = require('./log').LogMgr,
 	rank = cp.fork('./rank.js'),
 	request = require('./g2l-request').request,
 	Client = require('./a2g-client').Client,
-	Router = require('./c2g-router').Router;
+	Router = require('./c2g-router').Router,
+	DataMgr = require('./data').DataMgr,
+	DrawMgr = require('./draw').DrawMgr
+	;
 
 var currentDate = new Date();
 
@@ -20,11 +24,14 @@ function Server() {
 	this.clientList = {};
 	this.server;
 	this.router = new Router();
+	this.dataMgr = new DataMgr();
+	this.drawMgr = new DrawMgr();
 
 	// method
 	this.start = function () {
 		this.logMgr.init('GAME');
 		this.router.init(this.logMgr);
+		this.dataMgr.init();
 
 		var that = this;
 		function onRequest(request, response) {

@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS sea_user_info;
 CREATE TABLE sea.sea_user_info(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	coin MEDIUMINT UNSIGNED NOT NULL,
-	mineral MEDIUMINT UNSIGNED NOT NULL,
+	money MEDIUMINT UNSIGNED NOT NULL,
 	lv TINYINT UNSIGNED NOT NULL,
 	exp MEDIUMINT UNSIGNED NOT NULL,
 	point TINYINT UNSIGNED NOT NULL,
@@ -24,16 +24,19 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS sea_LoadUserInfo $$
 CREATE PROCEDURE sea_LoadUserInfo(IN p_id INT)
 	BEGIN
-		SELECT I.coin, I.mineral, I.lv, I.exp, I.point, I.energy, I.last_charged_time, I.selected_character, I.invite_count, I.mileage, I.draw,
+		SELECT I.coin, I.money, I.lv, I.exp, I.point, I.energy, I.last_charged_time, I.selected_character, I.invite_count, I.mileage, I.draw,
 				IT.shield, IT.item_last, IT.ghost, IT.weapon_reinforce, IT.exp_boost, IT.max_attack, IT.bonus_heart, IT.drop_up, IT.magnet, IT.bonus_score,
 				M.uv, 
 				UG.score_factor, UG.time_factor, UG.cooldown_factor,
-				C.character_one, C.character_two, C.character_three, C.character_four
+				C1.lv AS one, C2.lv AS two, C3.lv AS three, C4.lv AS four
 		FROM sea.sea_user_info AS I
-		INNER JOIN sea.sea_user_characters AS C ON I.id = C.id
-		INNER JOIN sea.sea_user_items AS IT ON I.id = IT.id
-		INNER JOIN sea.sea_user_metric AS M ON I.id = M.id
-		INNER JOIN sea.sea_user_upgrade AS UG ON I.id = UG.id
+		INNER JOIN sea.sea_items AS IT ON p_id = IT.id
+		INNER JOIN sea.sea_metric AS M ON p_id = M.id
+		INNER JOIN sea.sea_upgrade AS UG ON p_id = UG.id
+		INNER JOIN sea.sea_character_1 AS C1 ON p_id = C1.id
+		INNER JOIN sea.sea_character_2 AS C2 ON p_id = C2.id
+		INNER JOIN sea.sea_character_3 AS C3 ON p_id = C3.id
+		INNER JOIN sea.sea_character_4 AS C4 ON p_id = C4.id
 		WHERE I.id = p_id;
 	END
 $$
@@ -49,6 +52,20 @@ DROP PROCEDURE IF EXISTS sea_LoadCoin $$
 CREATE PROCEDURE sea_LoadCoin(IN p_id INT)
 	BEGIN
 		SELECT coin FROM sea.sea_user_info WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_LoadMoney $$
+CREATE PROCEDURE sea_LoadMoney(IN p_id INT)
+	BEGIN
+		SELECT money FROM sea.sea_user_info WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_LoadDraw $$
+CREATE PROCEDURE sea_LoadDraw(IN p_id INT)
+	BEGIN
+		SELECT draw FROM sea.sea_user_info WHERE id = p_id;
 	END
 $$
 
@@ -69,7 +86,7 @@ $$
 DROP PROCEDURE IF EXISTS sea_LoadUserBriefInfo $$
 CREATE PROCEDURE sea_LoadUserBriefInfo(IN p_id INT)
 	BEGIN
-		SELECT coin, lv, exp, mileage, draw FROM sea.sea_user_info WHERE id = p_id;
+		SELECT coin, money, lv, exp, mileage, draw FROM sea.sea_user_info WHERE id = p_id;
 	END
 $$
 
@@ -103,10 +120,17 @@ CREATE PROCEDURE sea_UpdateCoin(IN p_id INT, IN p_coin MEDIUMINT UNSIGNED)
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_UpdateMineral $$
-CREATE PROCEDURE sea_UpdateMineral(IN p_id INT, IN p_mineral MEDIUMINT UNSIGNED)
+DROP PROCEDURE IF EXISTS sea_AddCoin $$
+CREATE PROCEDURE sea_AddCoin(IN p_id INT, IN p_amount MEDIUMINT)
 	BEGIN
-		UPDATE sea_user_info SET mineral = p_mineral WHERE id = p_id;
+		UPDATE sea_user_info SET coin = coin + p_amount WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_UpdateMoney $$
+CREATE PROCEDURE sea_UpdateMoney(IN p_id INT, IN p_money MEDIUMINT UNSIGNED)
+	BEGIN
+		UPDATE sea_user_info SET money = p_money WHERE id = p_id;
 	END
 $$
 

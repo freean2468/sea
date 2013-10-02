@@ -1,6 +1,4 @@
 var enumList = [
-	'Result',
-	'Update',
 ];
 
 exports.enumList = enumList;
@@ -30,6 +28,13 @@ var list = [
 	'UpgradeReply',
 	'InviteFriendReply',
 	'LoadRewardReply',
+	'BuyCostumeReply',
+	'WearCostumeReply',
+	'DrawFirstReply',
+	'DrawSecondReply',
+	'EquipGhostReply',
+	'UnequipGhostReply',
+	'PurchaseRoomReply',
 ];
 
 var messageId = {
@@ -57,6 +62,13 @@ var messageId = {
 	UpgradeReply: 3273468,
 	InviteFriendReply: 5242518,
 	LoadRewardReply: 2291302,
+	BuyCostumeReply: 3273641,
+	WearCostumeReply: 7272548,
+	DrawFirstReply: 1308043,
+	DrawSecondReply: 1044486,
+	EquipGhostReply: 1045496,
+	UnequipGhostReply: 9304396,
+	PurchaseRoomReply: 3338982,
 };
 
 exports.list = list;

@@ -1,0 +1,177 @@
+{
+"root": [
+	{
+		"id": 1,
+		"name": "egg",
+		"draw_rating": 4
+	}
+	,
+	{
+		"id": 2,
+		"name": "umbrella",
+		"draw_rating": 4
+	}
+	,
+	{
+		"id": 3,
+		"name": "casper",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 4,
+		"name": "skeleton",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 5,
+		"name": "virgin",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 6,
+		"name": "devil",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 7,
+		"name": "ahri",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 8,
+		"name": "mangtae",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 9,
+		"name": "dracula",
+		"draw-rating": 3
+	}
+	,
+	{
+		"id": 10,
+		"name": "snow_woman",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 11,
+		"name": "single",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 12,
+		"name": "wolf",
+		"draw-rating": 3
+	}
+	,
+	{
+		"id": 13,
+		"name": "gaonasi",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 14,
+		"name": "kappa",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 15,
+		"name": "daitengu",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 16,
+		"name": "mummy",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 17,
+		"name": "zombie",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 18,
+		"name": "frankenstein",
+		"draw-rating": 2
+	}
+	,
+	{
+		"id": 19,
+		"name": "wood_engraving",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 20,
+		"name": "ohayoko",
+		"draw-rating": 2
+	}
+	,
+	{
+		"id": 21,
+		"name": "witch",
+		"draw-rating": 2
+	}
+	,
+	{
+		"id": 22,
+		"name": "Lucifer",
+		"draw-rating": 1
+	}
+	,
+	{
+		"id": 23,
+		"name": "east_grim_reaper",
+		"draw-rating": 1
+	}
+	,
+	{
+		"id": 24,
+		"name": "west_grim_reaper",
+		"draw-rating": 1
+	}
+	,
+	{
+		"id": 25,
+		"name": "water",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 26,
+		"name": "oni",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 27,
+		"name": "mountain spirit",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 28,
+		"name": "jumping",
+		"draw-rating": 4
+	}
+	,
+	{
+		"id": 29,
+		"name": "beg",
+		"draw-rating": 4
+	}
+]
+}

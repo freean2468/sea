@@ -1,0 +1,108 @@
+{
+"root": [
+	{
+		"id": 1,
+		"type": "coin",
+		"content": "500",
+		"draw_rating": 9
+	}
+	,
+	{
+		"id": 2,
+		"type": "coin",
+		"content": "1000",
+		"draw_rating": 8
+	}
+	,
+	{
+		"id": 3,
+		"type": "coin",
+		"content": "1500",
+		"draw_rating": 7
+	}
+	,
+	{
+		"id": 4,
+		"type": "coin",
+		"content": "2000",
+		"draw_rating": 6
+	}
+	,
+	{
+		"id": 5,
+		"type": "coin",
+		"content": "3000",
+		"draw_rating": 5
+	}
+	,
+	{
+		"id": 6,
+		"type": "item",
+		"content": "1",
+		"draw_rating": 5
+	}
+	,
+	{
+		"id": 7,
+		"type": "item",
+		"content": "2",
+		"draw_rating": 5
+	}
+	,
+	{
+		"id": 8,
+		"type": "item",
+		"content": "3",
+		"draw_rating": 5
+	}
+	,
+	{
+		"id": 9,
+		"type": "item",
+		"content": "4",
+		"draw_rating": 5
+	}
+	,
+	{
+		"id": 10,
+		"type": "item",
+		"content": "5",
+		"draw_rating": 5
+	}
+	,
+	{
+		"id": 11,
+		"type": "item",
+		"content": "6",
+		"draw_rating": 5
+	}
+	,
+	{
+		"id": 12,
+		"type": "item",
+		"content": "7",
+		"draw_rating": 5
+	}
+	,
+	{
+		"id": 13,
+		"type": "item",
+		"content": "8",
+		"draw_rating": 5
+	}
+	,
+	{
+		"id": 14,
+		"type": "item",
+		"content": "9",
+		"draw_rating": 5
+	}
+	,
+	{
+		"id": 15,
+		"type": "item",
+		"content": "10",
+		"draw_rating": 5
+	}
+]
+}

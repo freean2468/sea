@@ -58,19 +58,14 @@ function sort(results) {
 }
 
 function calc () { 
-	var procedure = 'sea_Ranking';
-	var params = '';
-
-	var callback = function (results, fields) {
-		if (results[0] === 0) {
+	mysql.ranking(function (res) {
+		if (res === 0) {
 			log.addLog('DEBUG', 'Something wrong happened in rank calc');
 		}
 		else {
-			sort(results[0]);
+			sort(res);
 		}
-	};
-
-	mysql.call(procedure, params, callback);
+	});
 }
 
 calc();

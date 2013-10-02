@@ -1,35 +1,36 @@
 package G2C;
 
-enum Result {
-	TRUE = 1;
-	INVALID_ACCOUNT	= 2;
-	UNDEFINED_FIELD	= 3;
-	EXISTED_ACCOUNT	= 4;
-	BLOCKED_ACCOUNT	= 5;
-	DUPLICATED_LOGIN = 6;
-	INVALID_CHARACTER = 7;
-	INVALID_ASSISTANT = 8;
-	INVALID_ITEM = 9;
-	NOT_ENOUGH_ENERGY = 10;
-	NOT_ENOUGH_COIN = 11;
-	NO_MATCH_WITH_DB = 12;
-	INVALID_REQ_FIELD = 13;
-	INVALID_BATON = 14;
-	INVALID_BATON_RESULT = 15;
-	INVALID_ENERGY = 16;
-	FULLY_UPGRADED = 17;
-	FAILED_DB_UPDATE = 18;
-	INVALID_SESSION = 19;
-}
-
-enum Update {
-	SUCCESS = 1;
-	FAIL = 2;
-}
-
 message SystemMessage {
 	optional uint64 id = 1 [default=131068445];
 	required Result res = 2;
+
+	enum Result {
+		TRUE = 1;
+		INVALID_ACCOUNT	= 2;
+		UNDEFINED_FIELD	= 3;
+		EXISTED_ACCOUNT	= 4;
+		BLOCKED_ACCOUNT	= 5;
+		DUPLICATED_LOGIN = 6;
+		INVALID_CHARACTER = 7;
+		INVALID_ITEM = 9;
+		NOT_ENOUGH_ENERGY = 10;
+		NOT_ENOUGH_COIN = 11;
+		NOT_ENOUGH_MONEY = 12; 
+		NO_MATCH_WITH_DB = 13;
+		INVALID_BATON = 14;
+		INVALID_BATON_RESULT = 15;
+		INVALID_ENERGY = 16;
+		FULLY_UPGRADED = 17;
+		FAILED_DB_UPDATE = 18;
+		INVALID_SESSION = 19;
+		INVALID_COSTUME_CATEGORY = 20;
+		INVALID_COSTUME_ID = 21;
+		PURCHASE_FIRST = 22;
+		INVALID_UPGRADE = 23;
+		NOT_ENOUGH_DRAW = 24;
+		INVALID_GHOST = 25;
+		CAN_NOT_PURCHASE = 26;
+	}
 } // end
 
 message VersionInfoReply {
@@ -78,17 +79,17 @@ message AccountInfo {
 	required int32 draw = 24;
 	repeated CharacterInfo characters = 25;
 
-	enum ID {
-		ONE = 1;
+	message CharacterInfo{
+		required int32 id = 1;
+		required int32 level = 2;
+	}
+
+	enum CharacterId {
+		ONE	= 1;
 		TWO = 2;
 		THREE = 3;
 		FOUR = 4;
 		MAX = 5;
-	}
-
-	message CharacterInfo{
-		required ID id = 1;
-		required int32 level = 2;
 	}
 } // end
 
@@ -162,34 +163,21 @@ message GameResult {
 
 message BuyItemReply {
 	optional uint64 id = 1 [default=5177005];
-	required Item item = 2;
+	required int32 item = 2;
 	required int32 coin = 3;
-
-	enum Item {
-		SHIELD = 1;
-		ITEM_LAST = 2;
-		GHOST = 3;
-		WEAPON_REINFORCE = 4;
-		EXP_BOOST = 5;
-		MAX_ATTACK = 6;
-		BONUS_HEART = 7;
-		DROP_UP = 8;
-		MAGNET = 9;
-		BONUS_SCORE = 10;
-		MAX = 11;
-	}
 } // end 
 
 message BuyOrUpgradeCharacterReply {
 	optional uint64 id = 1 [default=6158342];
-	required Character character = 2;
+	required CharacterId character = 2;
 	required int32 lv = 3;
 	required int32 coin = 4;
-	required int32 mileage = 5;
-	required int32 draw = 6;
+	required int32 money = 5;
+	required int32 mileage = 6;
+	required int32 draw = 7;
 
-	enum Character {
-		ONE = 1;
+	enum CharacterId {
+		ONE	= 1;
 		TWO = 2;
 		THREE = 3;
 		FOUR = 4;
@@ -221,12 +209,22 @@ message BatonResult {
 	required int32 coin = 2;
 	required int32 total_coin = 3;
 	required Update update = 4;
+
+	enum Update {
+		SUCCESS = 1;
+		FAIL = 2;
+	}
 } // end
 
 message AcceptBatonResultReply {
 	optional uint64 id = 1 [default=4259364];
 	required Update update = 2;
 	required int32 score = 3;
+
+	enum Update {
+		SUCCESS = 1;
+		FAIL = 2;
+	}
 } // end
 
 message UpgradeReply {
@@ -252,5 +250,83 @@ message LoadRewardReply {
 		INVITE_15_REWARD = 2;
 		INVITE_30_REWARD = 3;
 		MAX = 4;
+	}
+} // end
+
+message BuyCostumeReply {
+	optional uint64 id = 1 [default=3273641];
+	required int32 costume_id = 2;
+	required int32 coin = 3;
+	required int32 money = 4;
+	required int32 mileage = 5;
+	required int32 draw = 6;
+} // end
+
+message WearCostumeReply {
+	optional uint64 id = 1 [default=7272548];
+	required int32 costume_id = 2;
+} // end
+
+message DrawFirstReply {
+	optional uint64 id = 1 [default=1308043];
+	required Draw pick = 2;
+	repeated Draw draw_list = 3;
+
+	message Draw {
+		required bool is_ghost = 1;
+		required int32 id = 2;
+	}
+} // end
+
+message DrawSecondReply {
+	optional uint64 id = 1 [default=1044486];
+	required Draw pick = 2;
+
+	message Draw {
+		required bool is_ghost = 1;
+		required int32 id = 2;
+	}
+} // end
+
+message EquipGhostReply {
+	optional uint64 id = 1 [default=1045496];
+	required Room room_number = 2;
+	required int32 ghost_id = 3;
+
+	enum Room {
+		ROOM_1 = 1;
+		ROOM_2 = 2;
+		ROOM_3 = 3;
+		ROOM_4 = 4;
+		ROOM_5 = 5;
+		MAX = 6;
+	}
+} // end
+
+message UnequipGhostReply {
+	optional uint64 id = 1 [default=9304396];
+	required Room room_number = 2;
+
+	enum Room {
+		ROOM_1 = 1;
+		ROOM_2 = 2;
+		ROOM_3 = 3;
+		ROOM_4 = 4;
+		ROOM_5 = 5;
+		MAX = 6;
+	}
+} // end
+
+message PurchaseRoomReply {
+	optional uint64 id = 1 [default=3338982];
+	required Room room_number = 2;
+
+	enum Room {
+		ROOM_1 = 1;
+		ROOM_2 = 2;
+		ROOM_3 = 3;
+		ROOM_4 = 4;
+		ROOM_5 = 5;
+		MAX = 6;
 	}
 } // end

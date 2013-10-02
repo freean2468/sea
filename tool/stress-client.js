@@ -27,6 +27,7 @@ var registerAccount = new build.RegisterAccount(),
 	startGameReply = new build.StartGameReply(),
 	gameResult = new build.GameResult(),
 	logout = new build.Logout(),
+	logoutReply = new build.LogoutReply(),
 	buyItem = new build.BuyItem(),
 	buyItemReply = new build.BuyItemReply(),
 	sendEnergy = new build.SendEnergy(),
@@ -136,6 +137,9 @@ function request(data) {
 				var period = post - pre;
 
 				console.log(logout['k_id'] + " : logout! (" + period + "ms)");
+			} else if (id === logoutReply['id']['low']) {
+				console.log("logoutReply is arrived");
+				process.exit();
 			} else if (id === systemMessage['id']['low']) {
 				msg = build.SystemMessage.decode(res);
 				if (msg['res'] === build.Result['EXISTED_ACCOUNT']) {
