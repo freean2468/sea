@@ -29,6 +29,7 @@ message SystemMessage {
 		NOT_ENOUGH_DRAW = 24;
 		INVALID_GHOST = 25;
 		CAN_NOT_PURCHASE = 26;
+		INVALID_ROOM = 27;
 	}
 } // end
 
@@ -76,14 +77,6 @@ message AccountInfo {
 	message CharacterInfo{
 		required int32 id = 1;
 		required int32 level = 2;
-	}
-
-	enum CharacterId {
-		ONE	= 1;
-		TWO = 2;
-		THREE = 3;
-		FOUR = 4;
-		MAX = 5;
 	}
 } // end
 
@@ -154,20 +147,12 @@ message BuyItemReply {
 } // end 
 
 message BuyOrUpgradeCharacterReply {
-	required CharacterId character = 2;
+	required int32 character = 2;
 	required int32 lv = 3;
 	required int32 coin = 4;
 	required int32 money = 5;
 	required int32 mileage = 6;
 	required int32 draw = 7;
-
-	enum CharacterId {
-		ONE	= 1;
-		TWO = 2;
-		THREE = 3;
-		FOUR = 4;
-		MAX = 5;
-	}
 } // end
 
 message SendEnergyReply {
@@ -261,41 +246,14 @@ message DrawSecondReply {
 } // end
 
 message EquipGhostReply {
-	required Room room_number = 2;
+	required int32 room_number = 2;
 	required int32 ghost_id = 3;
-
-	enum Room {
-		ROOM_1 = 1;
-		ROOM_2 = 2;
-		ROOM_3 = 3;
-		ROOM_4 = 4;
-		ROOM_5 = 5;
-		MAX = 6;
-	}
 } // end
 
 message UnequipGhostReply {
-	required Room room_number = 2;
-
-	enum Room {
-		ROOM_1 = 1;
-		ROOM_2 = 2;
-		ROOM_3 = 3;
-		ROOM_4 = 4;
-		ROOM_5 = 5;
-		MAX = 6;
-	}
+	required int32 room_number = 2;
 } // end
 
 message PurchaseRoomReply {
-	required Room room_number = 2;
-
-	enum Room {
-		ROOM_1 = 1;
-		ROOM_2 = 2;
-		ROOM_3 = 3;
-		ROOM_4 = 4;
-		ROOM_5 = 5;
-		MAX = 6;
-	}
+	required int32 room_number = 2;
 } // end

@@ -28,7 +28,7 @@ CREATE PROCEDURE sea_LoadUserInfo(IN p_id INT)
 				IT.shield, IT.item_last, IT.ghost, IT.weapon_reinforce, IT.exp_boost, IT.max_attack, IT.bonus_heart, IT.drop_up, IT.magnet, IT.bonus_score,
 				M.uv, 
 				UG.score_factor, UG.time_factor, UG.cooldown_factor,
-				C1.lv AS one, C2.lv AS two, C3.lv AS three, C4.lv AS four
+				C1.lv AS _1, C2.lv AS _2, C3.lv AS _3, C4.lv AS _4
 		FROM sea.sea_user_info AS I
 		INNER JOIN sea.sea_items AS IT ON p_id = IT.id
 		INNER JOIN sea.sea_metric AS M ON p_id = M.id

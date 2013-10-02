@@ -26,41 +26,17 @@ message CheckInCharge {
 
 message SelectCharacter {
 	required string k_id = 2;
-	required CharacterId selected_character = 3;
-
-	enum CharacterId {
-		ONE	= 1;
-		TWO = 2;
-		THREE = 3;
-		FOUR = 4;
-		MAX = 5;
-	}
+	required int32 selected_character = 3;
 } // end
 
 message StartGame {
 	required string k_id = 2;
-	required CharacterId selected_character = 3;
-
-	enum CharacterId {
-		ONE	= 1;
-		TWO = 2;
-		THREE = 3;
-		FOUR = 4;
-		MAX = 5;
-	}
+	required int32 selected_character = 3;
 } // end
 
 message EndGame {
 	required string k_id = 2;
-	required CharacterId selected_character = 3;
-
-	enum CharacterId {
-		ONE	= 1;
-		TWO = 2;
-		THREE = 3;
-		FOUR = 4;
-		MAX = 5;
-	}
+	required int32 selected_character = 3;
 	required int32 score = 4;
 	required int32 dist = 5;
 	required int32 enemy_kill = 6;
@@ -110,15 +86,7 @@ message BuyItem {
 
 message BuyOrUpgradeCharacter {
 	required string k_id = 2;
-	required CharacterId character = 3;
-	
-	enum CharacterId {
-		ONE	= 1;
-		TWO = 2;
-		THREE = 3;
-		FOUR = 4;
-		MAX = 5;
-	}
+	required int32 character = 3;
 } // end
 
 message SendEnergy {
@@ -143,35 +111,19 @@ message AcceptBaton {
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
-	required CharacterId selected_character = 5;
-
-	enum CharacterId {
-		ONE	= 1;
-		TWO = 2;
-		THREE = 3;
-		FOUR = 4;
-		MAX = 5;
-	}
+	required int32 selected_character = 5;
 } // end
 
 message EndBaton {
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
-	required CharacterId selected_character = 5;
+	required int32 selected_character = 5;
 	required int32 score = 6;
 	required int32 dist = 7;
 	required int32 enemy_kill = 8;
 	required int32 play_time = 9;
 	required int32 coin = 10;
-
-	enum CharacterId {
-		ONE	= 1;
-		TWO = 2;
-		THREE = 3;
-		FOUR = 4;
-		MAX = 5;
-	}
 } // end
 
 message AcceptBatonResult {
@@ -234,28 +186,13 @@ message WearCostume {
 	required string k_id = 2;
 	required CostumeCategory category = 3;
 	required int32 costume_id = 4;
-	required CharacterId character_id = 5;
+	required int32 character_id = 5;
 
 	enum CostumeCategory {
 		HEAD = 1;
 		TOP = 2;
 		BOTTOMS = 3;
 		BACK = 4;
-		MAX = 5;
-	}
-
-	enum CostumeMax {
-		HEAD_MAX = 11;
-		TOP_MAX = 11;
-		BOTTOMS_MAX = 11;
-		BACK_MAX = 11;
-	}
-
-	enum CharacterId {
-		ONE	= 1;
-		TWO = 2;
-		THREE = 3;
-		FOUR = 4;
 		MAX = 5;
 	}
 } // end
@@ -271,43 +208,16 @@ message DrawSecond {
 
 message EquipGhost {
 	required string k_id = 2;
-	required Room room_number = 3;
+	required int32 room_number = 3;
 	required int32 ghost_id = 4;
-
-	enum Room {
-		ROOM_1 = 1;
-		ROOM_2 = 2;
-		ROOM_3 = 3;
-		ROOM_4 = 4;
-		ROOM_5 = 5;
-		MAX = 6;
-	}
 } // end
 
 message UnequipGhost {
 	required string k_id = 2;
-	required Room room_number = 3;
-
-	enum Room {
-		ROOM_1 = 1;
-		ROOM_2 = 2;
-		ROOM_3 = 3;
-		ROOM_4 = 4;
-		ROOM_5 = 5;
-		MAX = 6;
-	}
+	required int32 room_number = 3;
 } // end
 
 message PurchaseRoom {
 	required string k_id = 2;
-	required Room room_number = 3;
-
-	enum Room {
-		ROOM_1 = 1;
-		ROOM_2 = 2;
-		ROOM_3 = 3;
-		ROOM_4 = 4;
-		ROOM_5 = 5;
-		MAX = 6;
-	}
+	required int32 room_number = 3;
 } // end

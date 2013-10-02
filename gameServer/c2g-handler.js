@@ -156,18 +156,15 @@ function LoginHandler(response, data, session_id, logMgr){
 						rMsg['last_charged_time'] = res['last_charged_time'];
 						rMsg['selected_character'] = res['selected_character'];
 
+						var dataMgr = require('c2g-index').server.dataMgr;
+
 						// character
-						if (res['one'] > 0) {	
-							rMsg['characters'].push({'id':build.AccountInfo.ID['ONE'], 'level':res['one']}); 
-						}
-						if (res['two'] > 0) {	
-							rMsg['characters'].push({'id':build.AccountInfo.ID['TWO'], 'level':res['two']}); 
-						}
-						if (res['three'] > 0) { 
-							rMsg['characters'].push({'id':build.AccountInfo.ID['THREE'], 'level':res['three']});
-						}
-						if (res['four'] > 0) { 
-							rMsg['characters'].push({'id':build.AccountInfo.ID['FOUR'], 'level':res['four']}); 
+						for (var i = 1; i <= dataMgr.characterData.length; ++i) {
+							var lv = res['_' + i];
+
+							if (lv > 0) {
+								rMsg['characters'].push({'id': i, 'level': lv});
+							}
 						}
 
 						// upgrade
@@ -371,31 +368,29 @@ function SelectCharacterHandler(response, data, session_id, logMgr){
 		} 
 
 		mysql.loadUser(msg['k_id'], function (res) {
-			var res = res['res'];
-			var id;
+			var id = res['res'];
 
-			if (res <= 0) {
+			if (id <= 0) {
 				logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 				sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 				write(response, toStream(sysMsg));
 				return ;
 			}
 
-			id = res;
-
 			mysql.selectCharacters(id, function (res) {
-				var selected = msg['selected_character'];
+				var selected = msg['selected_character'];				
+				var dataMgr = require('c2g-index').server.dataMgr;
 
-				if (selected < 0 || build.CharacterId['MAX'] <= selected) {
+				if (selected <= 0 || dataMgr.characterData.length < selected) {
 					logMgr.addLog('ERROR', 'Character Range Over (' + msg['k_id'] + ', ' + 'character : ' + msg['selected_character'] + ')');
 					sysMsg['res'] = build.Result['INVALID_CHARACTER'];
 					write(response, toStream(sysMsg));
 					return;
 				}
 				
-				if (selected === 1 && res['one'] || selected === 2 && res['two'] ||	selected === 3 && res['three'] ||
-					selected === 4 && res['four'] ) 
+				if (res['_' + selected])
 				{
+					mysql.updateSelectedCharacter(id, selected, function (res) {});
 					write(response, toStream(rMsg));
 				} else {
 					logMgr.addLog('ERROR', 'Invalid character (' + msg['k_id'] + ', ' + 'character : ' + msg['selected_character'] + ')');
@@ -982,7 +977,7 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id, logMgr){
 				var dataMgr = require('c2g-index').server.dataMgr;
 				var characterData = dataMgr.getCharacterDataById(character);
 
-				if (build.CharacterId['MAX'] <= character || character <= 0) {
+				if (character <= 0  || dataMgr.characterData.length < character) {
 					logMgr.addLog('ERROR', "Invalid character (" + msg['k_id'] + ", " + character + ")");
 					sysMsg['res'] = build.Result['NO_MATHCH_WITH_DB'];
 					write(response, toStream(sysMsg));
@@ -1985,9 +1980,9 @@ function WearCostumeHandler(response, data, session_id, logMgr) {
 		}
 
 		mysql.loadUser(msg['k_id'], function (res) {
-			var res = res['res'];		
+			var id = res['res'];		
 			
-			if (res <= 0) {
+			if (id <= 0) {
 				logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 				sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 				write(response, toStream(sysMsg));
@@ -2004,13 +1999,13 @@ function WearCostumeHandler(response, data, session_id, logMgr) {
 			}
 
 			if ((msg['category'] === build.WearCostume.CostumeCategory['HEAD'] &&
-				msg['costume_id'] <= 0 || build.WearCostume.CostumeMax['HEAD_MAX'] <= msg['costume_id']) ||
+				msg['costume_id'] <= 0 || dataMgr.costumeData['HEAD'].length < msg['costume_id']) ||
 				(msg['category'] === build.WearCostume.CostumeCategory['TOP'] &&
-				msg['costume_id'] <= 0 || build.WearCostume.CostumeMax['TOP_MAX'] <= msg['costume_id']) ||
+				msg['costume_id'] <= 0 || dataMgr.costumeData['TOP'].length <= msg['costume_id']) ||
 				(msg['category'] === build.WearCostume.CostumeCategory['BOTTOMS'] &&
-				msg['costume_id'] <= 0 || build.WearCostume.CostumeMax['BOTTOMS_MAX'] <= msg['costume_id']) ||
+				msg['costume_id'] <= 0 || dataMgr.costumeData['BOTTOMS'].length <= msg['costume_id']) ||
 				(msg['category'] === build.WearCostume.CostumeCategory['BACK'] &&
-				msg['costume_id'] <= 0 || build.WearCostume.CostumeMax['BACK_MAX'] <= msg['costume_id'])) 
+				msg['costume_id'] <= 0 || dataMgr.costumeData['BACK'].length <= msg['costume_id'])) 
 			{
 				logMgr.addLog('ERROR', 'Invalid costume id');
 				sysMsg['res'] = build.Result['INVALID_COSTUME_ID'];
@@ -2018,14 +2013,13 @@ function WearCostumeHandler(response, data, session_id, logMgr) {
 				return ;
 			}
 
-			if (msg['character_id'] <= 0 || build.WearCostume.CharacterId['MAX'] <= msg['character_id']) {
+			if (msg['character_id'] <= 0 || dataMgr.characterData.length < msg['character_id']) {
 				logMgr.addLog('ERROR', 'Invalid character id');
 				sysMsg['res'] = build.Result['INVALID_CHARACTER'];
 				write(response, toStream(sysMsg));
 				return ;
 			}			
 
-			var id = res;
 			var part = "";
 
 			// TODO : Concern about schema and range of costume_id
@@ -2226,7 +2220,7 @@ function DrawSecondHandler(response, data, session_id, logMgr) {
 		mysql.loadUser(msg['k_id'], function (res) {
 			var id = res['res'];		
 			
-			if (res <= 0) {
+			if (id <= 0) {
 				logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 				sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 				write(response, toStream(sysMsg));
@@ -2329,7 +2323,7 @@ function EquipGhostHandler(response, data, session_id, logMgr) {
 		mysql.loadUser(msg['k_id'], function (res) {
 			var id = res['res'];		
 			
-			if (res <= 0) {
+			if (id <= 0) {
 				logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 				sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 				write(response, toStream(sysMsg));
@@ -2337,9 +2331,17 @@ function EquipGhostHandler(response, data, session_id, logMgr) {
 			}
 			
 			var dataMgr = require('c2g-index').server.dataMgr;
-			if (dataMgr.ghostData.length < msg['ghost_id']) {
+
+			if (msg['ghost_id'] <= 0 || dataMgr.ghostData.length < msg['ghost_id']) {
 				logMgr.addLog('ERROR', '[EquipGhost] Invalid ghost ID from (' + msg['k_id'] + ')');
 				sysMsg['res'] = build.Result['INVALID_GHOST'];
+				write(response, toStream(sysMsg));
+				return ;
+			}
+
+			if (msg['room_number'] <= 0 || dataMgr.roomData.length < msg['room_number']) {
+				logMgr.addLog('ERROR', '[EquipGhost] Invalid room number from (' + msg['k_id'] + ')');
+				sysMsg['res'] = build.Result['INVALID_ROOM'];
 				write(response, toStream(sysMsg));
 				return ;
 			}
@@ -2398,9 +2400,16 @@ function UnequipGhostHandler(response, data, session_id, logMgr) {
 		mysql.loadUser(msg['k_id'], function (res) {
 			var id = res['res'];		
 			
-			if (res <= 0) {
+			if (id <= 0) {
 				logMgr.addLog('ERROR', 'Invalid account (' + msg['k_id'] + ')');
 				sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
+				write(response, toStream(sysMsg));
+				return ;
+			}
+
+			if (msg['room_number'] <= 0 || dataMgr.roomData.length < msg['room_number']) {
+				logMgr.addLog('ERROR', '[EquipGhost] Invalid room number from (' + msg['k_id'] + ')');
+				sysMsg['res'] = build.Result['INVALID_ROOM'];
 				write(response, toStream(sysMsg));
 				return ;
 			}
