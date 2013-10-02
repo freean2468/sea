@@ -16,6 +16,9 @@ echo 'c2g-handle.js has been copied to ../gameServer'
 cp -a g2l-handle.js ../logServer/
 echo 'g2l-handle.js has been copied to ../logServer'
 
+node tweaking.js 'c2g' 'g2c'
+echo 'c2g.cs and g2c.cs has been generated'
+
 cd ${0%/*} 2>/dev/null
 #echo $PWD/${0##*/}
 

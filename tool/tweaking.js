@@ -9,7 +9,7 @@ process.argv.forEach(function(val, index, array) {
 });
 
 for (i = 0; i < arg.length; ++i) {
-	var file = path + arg[i] + "_ut.cs";	
+	var file = path + arg[i] + "_origin.cs";	
 	var output = "";
 	var input = fs.readFileSync(file) + "";
 	
