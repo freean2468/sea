@@ -173,13 +173,6 @@ message BuyCostume {
 		BACK = 4;
 		MAX = 5;
 	}
-
-	enum CostumeMax {
-		HEAD_MAX = 11;
-		TOP_MAX = 11;
-		BOTTOMS_MAX = 11;
-		BACK_MAX = 11;
-	}
 } // end
 
 message WearCostume {

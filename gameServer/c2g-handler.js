@@ -1868,13 +1868,13 @@ function BuyCostumeHandler(response, data, session_id, logMgr) {
 			}
 
 			if ((msg['category'] === build.BuyCostume.CostumeCategory['HEAD'] &&
-				msg['costume_id'] <= 0 || build.BuyCostume.CostumeMax['HEAD_MAX'] <= msg['costume_id']) ||
+				msg['costume_id'] <= 0 || dataMgr.costumeData['HEAD'].length < msg['costume_id']) ||
 				(msg['category'] === build.BuyCostume.CostumeCategory['TOP'] &&
-				msg['costume_id'] <= 0 || build.BuyCostume.CostumeMax['TOP_MAX'] <= msg['costume_id']) ||
+				msg['costume_id'] <= 0 || dataMgr.costumeData['TOP'].length <= msg['costume_id']) ||
 				(msg['category'] === build.BuyCostume.CostumeCategory['BOTTOMS'] &&
-				msg['costume_id'] <= 0 || build.BuyCostume.CostumeMax['BOTTOMS_MAX'] <= msg['costume_id']) ||
+				msg['costume_id'] <= 0 || dataMgr.costumeData['BOTTOMS'].length <= msg['costume_id']) ||
 				(msg['category'] === build.BuyCostume.CostumeCategory['BACK'] &&
-				msg['costume_id'] <= 0 || build.BuyCostume.CostumeMax['BACK_MAX'] <= msg['costume_id'])) 
+				msg['costume_id'] <= 0 || dataMgr.costumeData['BACK'].length <= msg['costume_id'])) 
 			{
 				logMgr.addLog('ERROR', 'Invalid costume id');
 				sysMsg['res'] = build.Result['INVALID_COSTUME_ID'];
