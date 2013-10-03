@@ -31,17 +31,15 @@ message SelectCharacter {
 
 message StartGame {
 	required string k_id = 2;
-	required int32 selected_character = 3;
 } // end
 
 message EndGame {
 	required string k_id = 2;
-	required int32 selected_character = 3;
-	required int32 score = 4;
-	required int32 dist = 5;
-	required int32 enemy_kill = 6;
-	required int32 play_time = 7;
-	required int32 coin = 8;
+	required int32 score = 3;
+	required int32 dist = 4;
+	required int32 enemy_kill = 5;
+	required int32 play_time = 6;
+	required int32 coin = 7;
 } // end
 
 message LoadRankInfo {
@@ -58,11 +56,6 @@ message LoadPostedBaton {
 
 message LoadPostedBatonResult {
 	required string k_id = 2;
-} // end
-
-message RequestPointReward {
-	required string k_id = 2;
-	required int32 point = 3;
 } // end
 
 message BuyItem {
@@ -111,19 +104,17 @@ message AcceptBaton {
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
-	required int32 selected_character = 5;
 } // end
 
 message EndBaton {
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
-	required int32 selected_character = 5;
-	required int32 score = 6;
-	required int32 dist = 7;
-	required int32 enemy_kill = 8;
-	required int32 play_time = 9;
-	required int32 coin = 10;
+	required int32 score = 5;
+	required int32 dist = 6;
+	required int32 enemy_kill = 7;
+	required int32 play_time = 8;
+	required int32 coin = 9;
 } // end
 
 message AcceptBatonResult {
@@ -135,13 +126,6 @@ message AcceptBatonResult {
 message UpgradeFactor {
 	required string k_id = 2;
 	required int32 factor = 3;
-
-	enum Factor {
-		SCORE = 1;
-		TIME = 2;
-		UPGRADE = 3;
-		MAX = 4;
-	}
 } // end
 
 message InviteFriend {

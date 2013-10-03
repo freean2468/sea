@@ -6,9 +6,6 @@ CREATE TABLE sea.sea_user_info(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	coin MEDIUMINT UNSIGNED NOT NULL,
 	money MEDIUMINT UNSIGNED NOT NULL,
-	lv TINYINT UNSIGNED NOT NULL,
-	exp MEDIUMINT UNSIGNED NOT NULL,
-	point TINYINT UNSIGNED NOT NULL,
 	energy TINYINT UNSIGNED NOT NULL,
 	last_charged_time BIGINT UNSIGNED NOT NULL,
 	selected_character TINYINT UNSIGNED NOT NULL,
@@ -24,11 +21,11 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS sea_LoadUserInfo $$
 CREATE PROCEDURE sea_LoadUserInfo(IN p_id INT)
 	BEGIN
-		SELECT I.coin, I.money, I.lv, I.exp, I.point, I.energy, I.last_charged_time, I.selected_character, I.invite_count, I.mileage, I.draw,
-				IT.shield, IT.item_last, IT.ghost, IT.weapon_reinforce, IT.exp_boost, IT.max_attack, IT.bonus_heart, IT.drop_up, IT.magnet, IT.bonus_score,
+		SELECT I.coin, I.money, I.energy, I.last_charged_time, I.selected_character, I.invite_count, I.mileage, I.draw,
+				IT.shield, IT.item_last, IT.ghostify, IT.weapon_reinforce, IT.exp_boost, IT.max_attack, IT.bonus_heart, IT.drop_up, IT.magnet, IT.bonus_score,
 				M.uv, 
 				UG.score_factor, UG.time_factor, UG.cooldown_factor,
-				C1.lv AS _1, C2.lv AS _2, C3.lv AS _3, C4.lv AS _4
+				C1.lv AS _1, C1.exp AS _1_exp, C2.lv AS _2, C2.exp AS _2_exp, C3.lv AS _3, C3.exp AS _3_exp, C4.lv AS _4, C4.exp AS _4_exp
 		FROM sea.sea_user_info AS I
 		INNER JOIN sea.sea_items AS IT ON p_id = IT.id
 		INNER JOIN sea.sea_metric AS M ON p_id = M.id
@@ -86,7 +83,7 @@ $$
 DROP PROCEDURE IF EXISTS sea_LoadUserBriefInfo $$
 CREATE PROCEDURE sea_LoadUserBriefInfo(IN p_id INT)
 	BEGIN
-		SELECT coin, money, lv, exp, mileage, draw FROM sea.sea_user_info WHERE id = p_id;
+		SELECT coin, money, mileage, draw FROM sea.sea_user_info WHERE id = p_id;
 	END
 $$
 
@@ -103,13 +100,6 @@ CREATE PROCEDURE sea_StartGame(IN p_id INT)
 		SELECT selected_character, energy, last_charged_time
 		FROM sea.sea_user_info
 		WHERE id = p_id;
-	END
-$$
-
-DROP PROCEDURE IF EXISTS sea_UpdateLevel $$
-CREATE PROCEDURE sea_UpdateLevel(IN p_id INT, IN p_lv TINYINT UNSIGNED, IN p_exp MEDIUMINT UNSIGNED)
-	BEGIN
-		UPDATE sea_user_info SET lv = p_lv, exp = p_exp WHERE id = p_id;
 	END
 $$
 
@@ -131,13 +121,6 @@ DROP PROCEDURE IF EXISTS sea_UpdateMoney $$
 CREATE PROCEDURE sea_UpdateMoney(IN p_id INT, IN p_money MEDIUMINT UNSIGNED)
 	BEGIN
 		UPDATE sea_user_info SET money = p_money WHERE id = p_id;
-	END
-$$
-
-DROP PROCEDURE IF EXISTS sea_UpdatePoint $$
-CREATE PROCEDURE sea_UpdatePoint(IN p_id INT, IN p_point TINYINT UNSIGNED)
-	BEGIN
-		UPDATE sea_user_info SET point = p_point WHERE id = p_id;
 	END
 $$
 

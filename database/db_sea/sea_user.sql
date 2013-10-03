@@ -35,9 +35,9 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 			INSERT sea_user(k_id) VALUES (p_k_id);
 			SET last_id = LAST_INSERT_ID();
 
-			INSERT sea_user_info(coin, money, lv, exp, point, energy, last_charged_time, 
+			INSERT sea_user_info(coin, money, energy, last_charged_time, 
 									selected_character, invite_count, mileage, draw)
-			VALUES (99999, 9999, 1, 0, 0, 100, UNIX_TIMESTAMP(NOW()), 
+			VALUES (99999, 9999, 100, UNIX_TIMESTAMP(NOW()), 
 					3, 0, 0, 0);
 
 			INSERT sea_user_items(shield, item_last, ghost, weapon_reinforce, exp_boost, max_attack, bonus_heart, drop_up, magnet, bonus_score)
@@ -52,17 +52,17 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 			INSERT sea_user_upgrade(score_factor, time_factor, cooldown_factor)
 			VALUES (0, 0, 0);
 
-			INSERT sea_user_character_1(lv, head, top, bottoms, back)
-			VALUES (0, 0, 0, 0, 0);
+			INSERT sea_user_character_1(lv, exp, head, top, bottoms, back)
+			VALUES (0, 0, 0, 0, 0, 0);
 
-			INSERT sea_user_character_2(lv, head, top, bottoms, back)
-			VALUES (0, 0, 0, 0, 0);
+			INSERT sea_user_character_2(lv, exp, head, top, bottoms, back)
+			VALUES (0, 0, 0, 0, 0, 0);
 
-			INSERT sea_user_character_3(lv, head, top, bottoms, back)
-			VALUES (1, 0, 0, 0, 0);
+			INSERT sea_user_character_3(lv, exp, head, top, bottoms, back)
+			VALUES (1, 0, 0, 0, 0, 0);
 
-			INSERT sea_user_character_4(lv, head, top, bottoms, back)
-			VALUES (0, 0, 0, 0, 0);
+			INSERT sea_user_character_4(lv, exp, head, top, bottoms, back)
+			VALUES (0, 0, 0, 0, 0, 0);
 
 			INSERT sea_costume_head_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)
 			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -124,11 +124,21 @@ CREATE PROCEDURE sea_DeleteUser(IN p_id INT)
 		DELETE FROM sea_user_black WHERE k_id = k_id_copy;
 
 		DELETE FROM sea_user_info WHERE id = p_id;
-		DELETE FROM sea_user_characters WHERE id = p_id;
-		DELETE FROM sea_user_items WHERE id = p_id;
+		DELETE FROM sea_character_1 WHERE id = p_id;
+		DELETE FROM sea_character_2 WHERE id = p_id;
+		DELETE FROM sea_character_3 WHERE id = p_id;
+		DELETE FROM sea_character_4 WHERE id = p_id;
+		DELETE FROM sea_item WHERE id = p_id;
 		DELETE FROM sea_user_log WHERE id = p_id;
-		DELETE FROM sea_user_metric WHERE id = p_id;
-		DELETE FROM sea_user_upgrade WHERE id = p_id;
+		DELETE FROM sea_metric WHERE id = p_id;
+		DELETE FROM sea_upgrade WHERE id = p_id;
+		DELETE FROM sea_ghost_1 WHERE id = p_id;
+		DELETE FROM sea_ghost_2 WHERE id = p_id;
+		DELETE FROM sea_ghost_house WHERE id = p_id;
+		DELETE FROM sea_costume_head_1 WHERE id = p_id;
+		DELETE FROM sea_costume_top_1 WHERE id = p_id;
+		DELETE FROM sea_costume_bottoms_1 WHERE id = p_id;
+		DELETE FROM sea_costume_back_1 WHERE id = p_id;
 --		DELETE FROM sea_user_energy WHERE id = p_id;
 --		DELETE FROM sea_baton WHERE id = p_id;
 --		DELETE FROM sea_baton_result WHERE id = p_id;

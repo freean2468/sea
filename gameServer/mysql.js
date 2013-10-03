@@ -169,12 +169,6 @@ function startGame (id, callback) {
 	call(procedure, params, function (results) { callback(results[0][0]); });
 }
 
-function updateLevel (id, lv, exp, callback) {
-	var procedure = 'sea_UpdateLevel';
-	var params = id + ', ' + lv + ', ' + exp;
-	call(procedure, params, function (results) { callback(results[0][0]); });
-}
-
 function updateCoin (id, coin, callback) {
 	var procedure = 'sea_UpdateCoin';
 	var params = id + ', ' + coin;
@@ -190,12 +184,6 @@ function addCoin (id, amount, callback) {
 function updateMoney (id, money, callback) {
 	var procedure = 'sea_UpdateMoney';
 	var params = id + ', ' + money;
-	call(procedure, params, function (results) { callback(results[0][0]); });
-}
-
-function updatePoint (id, point, callback) {
-	var procedure = 'sea_UpdatePoint';
-	var params = id + ', ' + point;
 	call(procedure, params, function (results) { callback(results[0][0]); });
 }
 
@@ -675,11 +663,9 @@ module.exports = {
 	'loadUserBriefInfo': loadUserBriefInfo,
 	'checkInCharge': checkInCharge,
 	'startGame': startGame,
-	'updateLevel': updateLevel,
 	'updateCoin': updateCoin,
 	'addCoin': addCoin,
 	'updateMoney': updateMoney,
-	'updatePoint': updatePoint,
 	'updateEnergy': updateEnergy,
 	'updateLastChargeTime': updateLastChargeTime,
 	'updateSelectedCharacter': updateSelectedCharacter,

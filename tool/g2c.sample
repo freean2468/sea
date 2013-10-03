@@ -40,6 +40,9 @@ message VersionInfoReply {
 message RegisterAccountReply {
 } // end
 
+message UnregisterAccountReply {
+} // end
+
 message SelectCharacterReply {
 } // end
 
@@ -50,33 +53,31 @@ message StartGameReply {
 
 message AccountInfo {
 	required int32 coin = 2;
-	required int32 mineral = 3;
-	required int32 lv = 4;
-	required int32 exp = 5;
-	required int32 point = 6;
-	required int32 energy = 7;
-	required int64 last_charged_time = 8;
-	required int32 selected_character = 9;
-	required int32 score_factor = 10;
-	required int32 time_factor = 11;
-	required int32 cooldown_factor = 12;
-	required int32 shield = 13;
-	required int32 item_last = 14;
-	required int32 ghost = 15;
-	required int32 weapon_reinforce = 16;
-	required int32 exp_boost = 17;
-	required int32 max_attack = 18;
-	required int32 bonus_heart = 19;
-	required int32 drop_up = 20;
-	required int32 magnet = 21;
-	required int32 bonus_score = 22;
-	required int32 mileage = 23;
-	required int32 draw = 24;
-	repeated CharacterInfo characters = 25;
+	required int32 money = 3;
+	required int32 energy = 4;
+	required int64 last_charged_time = 5;
+	required int32 selected_character = 6;
+	required int32 score_factor = 7;
+	required int32 time_factor = 8;
+	required int32 cooldown_factor = 9;
+	required int32 shield = 10;
+	required int32 item_last = 11;
+	required int32 ghostify = 12;
+	required int32 weapon_reinforce = 13;
+	required int32 exp_boost = 14;
+	required int32 max_attack = 15;
+	required int32 bonus_heart = 16;
+	required int32 drop_up = 17;
+	required int32 magnet = 18;
+	required int32 bonus_score = 19;
+	required int32 mileage = 20;
+	required int32 draw = 21;
+	repeated CharacterInfo characters = 22;
 
-	message CharacterInfo{
+	message CharacterInfo {
 		required int32 id = 1;
 		required int32 level = 2;
+		required int32 exp = 3;
 	}
 } // end
 
@@ -95,12 +96,12 @@ message RankInfo {
 	message FriendRankInfo {
 		required string k_id = 1;
 		required int32 score = 2;
-		required int32 bonus_sended = 3;
+		required bool energy_sended = 3;
 	}
 } // end
 
 message PostedEnergy {
-	repeated Energy bonus = 2;
+	repeated Energy energy = 2;
 
 	message Energy {
 		required string sender_k_id = 1;
@@ -165,6 +166,7 @@ message RequestBatonReply {
 } // end
 
 message AcceptEnergyReply {
+	required int32 energy = 2;
 } // end
 
 message AcceptBatonReply {
@@ -173,12 +175,7 @@ message AcceptBatonReply {
 message BatonResult {
 	required int32 coin = 2;
 	required int32 total_coin = 3;
-	required Update update = 4;
-
-	enum Update {
-		SUCCESS = 1;
-		FAIL = 2;
-	}
+	required bool update = 4;
 } // end
 
 message AcceptBatonResultReply {
@@ -191,7 +188,7 @@ message AcceptBatonResultReply {
 	}
 } // end
 
-message UpgradeReply {
+message UpgradeFactorReply {
 	required int32 coin = 2;
 	required int32 mileage = 3;
 	required int32 draw = 4;

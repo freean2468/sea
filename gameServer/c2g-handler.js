@@ -30,7 +30,7 @@ function VersionInfoHandler(response, data, session_id, logMgr){
 	var sysMsg = new build.SystemMessage();
 
 	if (inspectField(msg) === false) {
-		logMgr.addLog('ERROR', "Undefined field is detected in VersionInfoHandler");
+		logMgr.addLog('ERROR', 'Undefined field is detected in VersionInfoHandler');
 		sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 		write(response, toStream(sysMsg));
 		return ;
@@ -47,7 +47,7 @@ function RegisterAccountHandler(response, data, session_id, logMgr){
 	var sysMsg = new build.SystemMessage();
 
 	if (inspectField(msg) === false) {
-		logMgr.addLog('ERROR', "Undefined field is detected in RegisterAccountHandler");
+		logMgr.addLog('ERROR', 'Undefined field is detected in RegisterAccountHandler');
 		sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 		write(response, toStream(sysMsg));
 		return ;
@@ -73,6 +73,7 @@ function RegisterAccountHandler(response, data, session_id, logMgr){
 
 function UnregisterAccountHandler(response, data, session_id, logMgr){
 	var msg = build.UnregisterAccount.decode(data);
+	var rMsg = new build.UnregisterAccountReply();
 	var sysMsg = new build.SystemMessage();
 	
 	session.toAuthUnregisterSession(msg['k_id'], session_id, function (res) {
@@ -84,23 +85,23 @@ function UnregisterAccountHandler(response, data, session_id, logMgr){
 		}
 
 		if (inspectField(msg) === false) {
-			logMgr.addLog('ERROR', "Undefined field is detected in UnregisterAccountHandler");
+			logMgr.addLog('ERROR', 'Undefined field is detected in UnregisterAccountHandler');
 			sysMsg['res'] = build.Result['UNDEFINED_FIELD'];
 			write(response, toStream(sysMsg));
 			return ;
 		}
 
 		mysql.loadUser(msg['k_id'], function (res) {
-			var res = res['res'];
+			var id = res['res'];
 
-			if (res <= 0) {
+			if (id <= 0) {
 				sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 				logMgr.addLog('ERROR', 'Unregister Invalid Account : ' + msg['k_id'] + ', ' + res);
 				write(response, toStream(sysMsg));
 				return;
 			}
 
-			mysql.deleteUser(function (res) {});
+			mysql.deleteUser(id, function (res) {});
 			logMgr.addLog('SYSTEM', 'UnregisterAccount : ' + msg['k_id']);
 			
 			var UserUnregister = build.UserUnregister;
@@ -149,9 +150,6 @@ function LoginHandler(response, data, session_id, logMgr){
 						// info
 						rMsg['coin'] = res['coin'];
 						rMsg['money'] = res['money'];
-						rMsg['lv'] = res['lv'];
-						rMsg['exp'] = res['exp'];
-						rMsg['point'] = res['point'];
 						rMsg['energy'] = res['energy'];
 						rMsg['last_charged_time'] = res['last_charged_time'];
 						rMsg['selected_character'] = res['selected_character'];
@@ -161,9 +159,10 @@ function LoginHandler(response, data, session_id, logMgr){
 						// character
 						for (var i = 1; i <= dataMgr.characterData.length; ++i) {
 							var lv = res['_' + i];
+							var exp = res['_' + i + '_exp'];
 
 							if (lv > 0) {
-								rMsg['characters'].push({'id': i, 'level': lv});
+								rMsg['characters'].push({'id': i, 'level': lv, 'exp': exp});
 							}
 						}
 
@@ -175,7 +174,7 @@ function LoginHandler(response, data, session_id, logMgr){
 						// item
 						rMsg['shield'] = res['shield'];
 						rMsg['item_last'] = res['item_last'];
-						rMsg['ghost'] = res['ghost'];
+						rMsg['ghostify'] = res['ghostify'];
 						rMsg['weapon_reinforce'] = res['weapon_reinforce'];
 						rMsg['exp_boost'] = res['exp_boost'];
 						rMsg['max_attack'] = res['max_attack'];
@@ -504,9 +503,10 @@ function EndGameHandler(response, data, session_id, logMgr){
 
 			id = res;			
 
-			mysql.loadUserBriefInfo(id, function (res) {
-				var _mileage = res['mileage'] + 5;
-				var _draw = res['draw'];
+			mysql.loadUserInfo(id, function (res) {
+				var info = res;
+				var _mileage = info['mileage'] + 5;
+				var _draw = info['draw'];
 
 				if (_mileage >= 100) {
 					++_draw;
@@ -518,54 +518,54 @@ function EndGameHandler(response, data, session_id, logMgr){
 
 				rMsg['score'] = msg['score'];
 				rMsg['coin'] = msg['coin'];
-				rMsg['total_coin'] = msg['coin'] + res['coin'];
-				rMsg['bonus_score'] = parseInt((msg['score'] + msg['coin']) * (res['lv']/100));
+				rMsg['total_coin'] = msg['coin'] + info['coin'];
+				rMsg['bonus_score'] = parseInt((msg['score'] + msg['coin']) * (info['lv']/100));
 				rMsg['total_score'] = msg['score'] + msg['coin'] + rMsg['bonus_score'];
 				rMsg['mileage'] = _mileage;
 				rMsg['draw'] = _draw;
-				// TODO
-				rMsg['level'] = res['lv'];
-				rMsg['exp'] = res['exp'] + rMsg['total_score'];
+				// TODO				
+				rMsg['level'] = info['_' + info['selected_character']];
+				rMsg['exp'] = info['_' + 'selected_character' + '_exp'] + rMsg['total_score'];
 
 				write(response, toStream(rMsg));
 
 				mysql.updateCoin(id, rMsg['total_coin'], function (res) {});
 				mysql.updateLevel(id, rMsg['level'], rMsg['exp'], function (res) {});
 				mysql.updateUserLog(id, rMsg['total_score'], msg['dist'], msg['enemy_kill'], function (res) {});
-				mysql.loadItems(id, function (res) {
-					var UserGamePlay = build.UserGamePlay;
-					var req = new UserGamePlay();
-					req['k_id'] = msg['k_id'];
-					req['selected_character'] = msg['selected_character'];
-					req['score'] = msg['score'];
-					req['enemy_kill'] = msg['enemy_kill'];
-					req['dist'] = msg['dist'];
-					req['play_time'] = msg['play_time'];
-					req['shield'] = res['shield'];
-					req['ghost'] = res['ghost'];
-					req['weapon_reinforce'] = res['weapon_reinforce'];
-					req['exp_boost'] = res['exp_boost'];
-					req['item_last'] = res['item_last'];
-					req['max_attack'] = res['max_attack'];
-					req['bonus_heart'] = res['bonus_heart'];
-					req['drop_up'] = res['drop_up'];
-					req['magnet'] = res['magnet'];
-					req['bonus_score'] = res['bonus_score'];
 
-					request(req);
+				var UserGamePlay = build.UserGamePlay;
+				var req = new UserGamePlay();
 
-					// FIXME
-					if (res['shield'] > 0) { mysql.updateShield(id, -1, function(res) {}); }
-					if (res['ghostify'] > 0) { mysql.updateGhostify(id, -1, function(res) {}); }
-					if (res['weapon_reinforce'] > 0) { mysql.updateWeaponReinforce(id, -1, function(res) {}); }
-					if (res['exp_boost'] > 0) {	mysql.updateExpBoost(id, -1, function(res) {});	}
-					if (res['item_last'] > 0) {	mysql.updateItemLast(id, -1, function(res) {});	}
-					if (res['max_attack'] > 0) { mysql.updateMaxAttack(id, -1, function(res) {}); }
-					if (res['bonus_heart'] > 0) { mysql.updateBonusHeart(id, -1, function(res) {}); }
-					if (res['drop_up'] > 0) { mysql.updateDropUp(id, -1, function(res) {}); }
-					if (res['magnet'] > 0) { mysql.updateMagnet(id, -1, function(res) {}); }
-					if (res['bonus_score'] > 0) { mysql.updateBonusScore(id, -1, function(res) {});	}
-				});
+				req['k_id'] = msg['k_id'];
+				req['selected_character'] = msg['selected_character'];
+				req['score'] = msg['score'];
+				req['enemy_kill'] = msg['enemy_kill'];
+				req['dist'] = msg['dist'];
+				req['play_time'] = msg['play_time'];
+				req['shield'] = info['shield'];
+				req['ghostify'] = info['ghostify'];
+				req['weapon_reinforce'] = info['weapon_reinforce'];
+				req['exp_boost'] = info['exp_boost'];
+				req['item_last'] = info['item_last'];
+				req['max_attack'] = info['max_attack'];
+				req['bonus_heart'] = info['bonus_heart'];
+				req['drop_up'] = info['drop_up'];
+				req['magnet'] = info['magnet'];
+				req['bonus_score'] = info['bonus_score'];
+
+				request(req);
+
+				// FIXME
+				if (info['shield'] > 0) { mysql.updateShield(id, -1, function(res) {}); }
+				if (info['ghostify'] > 0) { mysql.updateGhostify(id, -1, function(res) {}); }
+				if (info['weapon_reinforce'] > 0) { mysql.updateWeaponReinforce(id, -1, function(res) {}); }
+				if (info['exp_boost'] > 0) {	mysql.updateExpBoost(id, -1, function(res) {});	}
+				if (info['item_last'] > 0) {	mysql.updateItemLast(id, -1, function(res) {});	}
+				if (info['max_attack'] > 0) { mysql.updateMaxAttack(id, -1, function(res) {}); }
+				if (info['bonus_heart'] > 0) { mysql.updateBonusHeart(id, -1, function(res) {}); }
+				if (info['drop_up'] > 0) { mysql.updateDropUp(id, -1, function(res) {}); }
+				if (info['magnet'] > 0) { mysql.updateMagnet(id, -1, function(res) {}); }
+				if (info['bonus_score'] > 0) { mysql.updateBonusScore(id, -1, function(res) {});	}
 			});
 		});
 	});
@@ -850,10 +850,6 @@ function LoadPostedBatonResultHandler(response, data, session_id, logMgr){
 		});
 	});
 } // end LoadPostedBatonResultHandler
-
-function RequestPointRewardHandler(response, data, session_id, logMgr){
-	var msg = build.RequestPointReward.decode(data);
-} // end RequestPointRewardHandler
 
 function BuyItemHandler(response, data, session_id, logMgr){
 	var msg = build.BuyItem.decode(data);
@@ -1215,6 +1211,7 @@ function AcceptEnergyHandler(response, data, session_id, logMgr){
 						}
 
 						mysql.updateEnergy(receiver_id, energy, function(res) {});
+						rMsg['energy'] = energy;
 						write(response, toStream(rMsg));
 					}
 				});
@@ -1326,31 +1323,21 @@ function AcceptBatonHandler(response, data, session_id, logMgr){
 			receiver_id = res;
 
 			mysql.loadUser(msg['sender_k_id'], function (res) {
-				res = res['res'];
+				sender_id = res['res'];
 
-				if (res <= 0) {
+				if (sender_id <= 0) {
 					logMgr.addLog('ERROR', 'Invalid account (' + msg['sender_k_id'] + ')');
 					sysMsg['res'] = build.Result['INVALID_ACCOUNT'];
 					write(response, toStream(sysMsg));
 					return ;
 				}
 
-				sender_id = res;
-
 				mysql.existBaton(sender_id, receiver_id, msg['sended_time'], function (res) {
 					res = res['res'];
 
 					if (res) {
 						mysql.startGame(receiver_id, function (res) {
-							var character = res['selected_character'];
-
-							if (character != msg['selected_character']) {
-								logMgr.addLog('error', "Doesn't match with db (" + character + ": " + msg['selected_character'] + ")" ); 
-								sysMsg['res'] = build.Result['NO_MATCH_WITH_DB'];
-								write(response, toStream(sysMsg));
-							} else {
-								write(response, toStream(rMsg));
-							}
+							write(response, toStream(rMsg));
 						});
 					} else {
 						logMgr.addLog('ERROR', 'Invalid baton (sed:' + sender_id + ', rec:' + receiver_id + ', time: ' + msg['sended_time'] + ')');
@@ -1432,9 +1419,9 @@ function EndBatonHandler(response, data, session_id, logMgr){
 								res = res['res'];
 
 								if (finalScore <= res) {
-									rMsg['update'] = build.Update['FAIL'];										
+									rMsg['update'] = false;
 								} else {
-									rMsg['update'] = build.Update['SUCCESS'];
+									rMsg['update'] = true;
 								}
 
 								write(response, toStream(rMsg));							
@@ -1546,7 +1533,7 @@ function AcceptBatonResultHandler(response, data, session_id, logMgr){
 
 function UpgradeFactorHandler(response, data, session_id, logMgr){
 	var msg = build.UpgradeFactor.decode(data);
-	var rMsg = new build.UpgradeReply();
+	var rMsg = new build.UpgradeFactorReply();
 	var sysMsg = new build.SystemMessage();
 
 	session.toAuthUpdateSession(msg['k_id'], session_id, function (res) {
@@ -2523,7 +2510,6 @@ module.exports = {
 	'LoadPostedEnergyHandler': LoadPostedEnergyHandler,
 	'LoadPostedBatonHandler': LoadPostedBatonHandler,
 	'LoadPostedBatonResultHandler': LoadPostedBatonResultHandler,
-	'RequestPointRewardHandler': RequestPointRewardHandler,
 	'BuyItemHandler': BuyItemHandler,
 	'BuyOrUpgradeCharacterHandler': BuyOrUpgradeCharacterHandler,
 	'SendEnergyHandler': SendEnergyHandler,

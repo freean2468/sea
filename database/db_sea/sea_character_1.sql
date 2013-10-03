@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS sea_character_1;
 CREATE TABLE sea.sea_character_1(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	lv TINYINT UNSIGNED NOT NULL,
+	exp INT UNSIGNED NOT NULL,
 	head TINYINT UNSIGNED NOT NULL,
 	top TINYINT UNSIGNED NOT NULL,
 	bottoms TINYINT UNSIGNED NOT NULL,
@@ -14,6 +15,13 @@ CREATE TABLE sea.sea_character_1(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DELIMITER $$
+
+DROP PROCEDURE IF EXISTS sea_LoadCharacter_1 $$
+CREATE PROCEDURE sea_LoadCharacter_1(IN p_id INT)
+	BEGIN
+		SELECT lv, exp FROM sea_character_1 WHERE id = p_id;
+	END
+$$
 
 DROP PROCEDURE IF EXISTS sea_SelectCharacters $$
 CREATE PROCEDURE sea_SelectCharacters(IN p_id INT)

@@ -43,74 +43,76 @@ message RegisterAccountReply {
 	optional uint64 id = 1 [default=3142601];
 } // end
 
+message UnregisterAccountReply {
+	optional uint64 id = 1 [default=14416633];
+} // end
+
 message SelectCharacterReply {
-	optional uint64 id = 1 [default=54132717];
+	optional uint64 id = 1 [default=45151918];
 } // end
 
 message StartGameReply {
-	optional uint64 id = 1 [default=379718615];
+	optional uint64 id = 1 [default=278724898];
 	required int32 energy = 2;
 	required int64 last_charged_time = 3;
 } // end
 
 message AccountInfo {
-	optional uint64 id = 1 [default=167638434];
+	optional uint64 id = 1 [default=76741253];
 	required int32 coin = 2;
-	required int32 mineral = 3;
-	required int32 lv = 4;
-	required int32 exp = 5;
-	required int32 point = 6;
-	required int32 energy = 7;
-	required int64 last_charged_time = 8;
-	required int32 selected_character = 9;
-	required int32 score_factor = 10;
-	required int32 time_factor = 11;
-	required int32 cooldown_factor = 12;
-	required int32 shield = 13;
-	required int32 item_last = 14;
-	required int32 ghost = 15;
-	required int32 weapon_reinforce = 16;
-	required int32 exp_boost = 17;
-	required int32 max_attack = 18;
-	required int32 bonus_heart = 19;
-	required int32 drop_up = 20;
-	required int32 magnet = 21;
-	required int32 bonus_score = 22;
-	required int32 mileage = 23;
-	required int32 draw = 24;
-	repeated CharacterInfo characters = 25;
+	required int32 money = 3;
+	required int32 energy = 4;
+	required int64 last_charged_time = 5;
+	required int32 selected_character = 6;
+	required int32 score_factor = 7;
+	required int32 time_factor = 8;
+	required int32 cooldown_factor = 9;
+	required int32 shield = 10;
+	required int32 item_last = 11;
+	required int32 ghostify = 12;
+	required int32 weapon_reinforce = 13;
+	required int32 exp_boost = 14;
+	required int32 max_attack = 15;
+	required int32 bonus_heart = 16;
+	required int32 drop_up = 17;
+	required int32 magnet = 18;
+	required int32 bonus_score = 19;
+	required int32 mileage = 20;
+	required int32 draw = 21;
+	repeated CharacterInfo characters = 22;
 
-	message CharacterInfo{
+	message CharacterInfo {
 		required int32 id = 1;
 		required int32 level = 2;
+		required int32 exp = 3;
 	}
 } // end
 
 message LogoutReply {
-	optional uint64 id = 1 [default=17627005];
+	optional uint64 id = 1 [default=1481109953];
 } // end
 
 message ChargeInfo {
-	optional uint64 id = 1 [default=158203204];
+	optional uint64 id = 1 [default=149157351];
 	required int32 energy = 2;
 	required int64 last_charged_time = 3;
 } // end
 
 message RankInfo {
-	optional uint64 id = 1 [default=614723670];
+	optional uint64 id = 1 [default=9108294];
 	required int64 overall_ranking = 2;
 	repeated FriendRankInfo ranking_list = 3;
 	
 	message FriendRankInfo {
 		required string k_id = 1;
 		required int32 score = 2;
-		required int32 bonus_sended = 3;
+		required bool energy_sended = 3;
 	}
 } // end
 
 message PostedEnergy {
-	optional uint64 id = 1 [default=128773];
-	repeated Energy bonus = 2;
+	optional uint64 id = 1 [default=130590];
+	repeated Energy energy = 2;
 
 	message Energy {
 		required string sender_k_id = 1;
@@ -119,7 +121,7 @@ message PostedEnergy {
 } // end
 
 message PostedBaton {
-	optional uint64 id = 1 [default=12122398];
+	optional uint64 id = 1 [default=4127219];
 	repeated Baton baton = 2;
 
 	message Baton {
@@ -131,7 +133,7 @@ message PostedBaton {
 } // end
 
 message PostedBatonResult {
-	optional uint64 id = 1 [default=4128312];
+	optional uint64 id = 1 [default=4191570];
 	repeated BatonResult baton_result = 2;
 	
 	message BatonResult {
@@ -142,7 +144,7 @@ message PostedBatonResult {
 } // end
 
 message GameResult {
-	optional uint64 id = 1 [default=7140324];
+	optional uint64 id = 1 [default=194297];
 	required int32 score = 2;
 	required int32 coin = 3;
 	required int32 bonus_score = 4;
@@ -155,13 +157,13 @@ message GameResult {
 } // end
 
 message BuyItemReply {
-	optional uint64 id = 1 [default=5177005];
+	optional uint64 id = 1 [default=4191111];
 	required int32 item = 2;
 	required int32 coin = 3;
 } // end 
 
 message BuyOrUpgradeCharacterReply {
-	optional uint64 id = 1 [default=6158342];
+	optional uint64 id = 1 [default=6160160];
 	required int32 character = 2;
 	required int32 lv = 3;
 	required int32 coin = 4;
@@ -171,38 +173,34 @@ message BuyOrUpgradeCharacterReply {
 } // end
 
 message SendEnergyReply {
-	optional uint64 id = 1 [default=4191743];
+	optional uint64 id = 1 [default=5176176];
 	required int32 mileage = 2;
 	required int32 draw = 3;
 } // end
 
 message RequestBatonReply {
-	optional uint64 id = 1 [default=7207034];
+	optional uint64 id = 1 [default=1241620];
 	required int32 coin = 2;
 } // end
 
 message AcceptEnergyReply {
-	optional uint64 id = 1 [default=9237532];
+	optional uint64 id = 1 [default=8190199];
+	required int32 energy = 2;
 } // end
 
 message AcceptBatonReply {
-	optional uint64 id = 1 [default=91946967];
+	optional uint64 id = 1 [default=6222682];
 } // end
 
 message BatonResult {
-	optional uint64 id = 1 [default=2226778];
+	optional uint64 id = 1 [default=3274653];
 	required int32 coin = 2;
 	required int32 total_coin = 3;
-	required Update update = 4;
-
-	enum Update {
-		SUCCESS = 1;
-		FAIL = 2;
-	}
+	required bool update = 4;
 } // end
 
 message AcceptBatonResultReply {
-	optional uint64 id = 1 [default=4259364];
+	optional uint64 id = 1 [default=4257084];
 	required Update update = 2;
 	required int32 score = 3;
 
@@ -212,22 +210,22 @@ message AcceptBatonResultReply {
 	}
 } // end
 
-message UpgradeReply {
-	optional uint64 id = 1 [default=3273468];
+message UpgradeFactorReply {
+	optional uint64 id = 1 [default=2291670];
 	required int32 coin = 2;
 	required int32 mileage = 3;
 	required int32 draw = 4;
 } // end
 
 message InviteFriendReply {
-	optional uint64 id = 1 [default=5242518];
+	optional uint64 id = 1 [default=5240240];
 	required int32 invite_count = 2;
 	required int32 mileage = 3;
 	required int32 draw = 4;
 } // end
 
 message LoadRewardReply {
-	optional uint64 id = 1 [default=2291302];
+	optional uint64 id = 1 [default=3273641];
 	required Reward reward = 2;
 
 	enum Reward {
@@ -239,7 +237,7 @@ message LoadRewardReply {
 } // end
 
 message BuyCostumeReply {
-	optional uint64 id = 1 [default=3273641];
+	optional uint64 id = 1 [default=325704];
 	required int32 costume_id = 2;
 	required int32 coin = 3;
 	required int32 money = 4;
@@ -248,12 +246,12 @@ message BuyCostumeReply {
 } // end
 
 message WearCostumeReply {
-	optional uint64 id = 1 [default=7272548];
+	optional uint64 id = 1 [default=6290750];
 	required int32 costume_id = 2;
 } // end
 
 message DrawFirstReply {
-	optional uint64 id = 1 [default=1308043];
+	optional uint64 id = 1 [default=9305604];
 	required Draw pick = 2;
 	repeated Draw draw_list = 3;
 
@@ -264,7 +262,7 @@ message DrawFirstReply {
 } // end
 
 message DrawSecondReply {
-	optional uint64 id = 1 [default=1044486];
+	optional uint64 id = 1 [default=1178264];
 	required Draw pick = 2;
 
 	message Draw {
@@ -274,17 +272,17 @@ message DrawSecondReply {
 } // end
 
 message EquipGhostReply {
-	optional uint64 id = 1 [default=1045496];
+	optional uint64 id = 1 [default=2356551];
 	required int32 room_number = 2;
 	required int32 ghost_id = 3;
 } // end
 
 message UnequipGhostReply {
-	optional uint64 id = 1 [default=9304396];
+	optional uint64 id = 1 [default=8322598];
 	required int32 room_number = 2;
 } // end
 
 message PurchaseRoomReply {
-	optional uint64 id = 1 [default=3338982];
+	optional uint64 id = 1 [default=324416];
 	required int32 room_number = 2;
 } // end

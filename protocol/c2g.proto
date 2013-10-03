@@ -1,17 +1,17 @@
 package C2G;
 
 message VersionInfo {
-	optional uint64 id = 1 [default=1374569];
+	optional uint64 id = 1 [default=391770];
 	required string version = 2;
 } // end
 
 message RegisterAccount {
-	optional uint64 id = 1 [default=6354906];
+	optional uint64 id = 1 [default=1376019];
 	required string k_id = 2;
 } // end
 
 message UnregisterAccount {
-	optional uint64 id = 1 [default=2356724];
+	optional uint64 id = 1 [default=2358542];
 	required string k_id = 2;
 } // end
 
@@ -21,62 +21,54 @@ message Login {
 } // end
 
 message Logout {
-	optional uint64 id = 1 [default=389124];
+	optional uint64 id = 1 [default=389941];
 	required string k_id = 2;
 } // end
 
 message CheckInCharge {
-	optional uint64 id = 1 [default=1372651];
+	optional uint64 id = 1 [default=390853];
 	required string k_id = 2;
 } // end
 
 message SelectCharacter {
-	optional uint64 id = 1 [default=390853];
+	optional uint64 id = 1 [default=1179073];
 	required string k_id = 2;
 	required int32 selected_character = 3;
 } // end
 
 message StartGame {
-	optional uint64 id = 1 [default=389330];
+	optional uint64 id = 1 [default=391039];
 	required string k_id = 2;
-	required int32 selected_character = 3;
 } // end
 
 message EndGame {
-	optional uint64 id = 1 [default=1375967];
+	optional uint64 id = 1 [default=6420788];
 	required string k_id = 2;
-	required int32 selected_character = 3;
-	required int32 score = 4;
-	required int32 dist = 5;
-	required int32 enemy_kill = 6;
-	required int32 play_time = 7;
-	required int32 coin = 8;
+	required int32 score = 3;
+	required int32 dist = 4;
+	required int32 enemy_kill = 5;
+	required int32 play_time = 6;
+	required int32 coin = 7;
 } // end
 
 message LoadRankInfo {
-	optional uint64 id = 1 [default=6420788];
+	optional uint64 id = 1 [default=7468663];
 	required string k_id = 2;
 } // end
 
 message LoadPostedEnergy {
-	optional uint64 id = 1 [default=5439087];
+	optional uint64 id = 1 [default=6420424];
 	required string k_id = 2;
 } // end
 
 message LoadPostedBaton {
-	optional uint64 id = 1 [default=5438714];
+	optional uint64 id = 1 [default=4453821];
 	required string k_id = 2;
 } // end
 
 message LoadPostedBatonResult {
-	optional uint64 id = 1 [default=5438626];
+	optional uint64 id = 1 [default=5501884];
 	required string k_id = 2;
-} // end
-
-message RequestPointReward {
-	optional uint64 id = 1 [default=5501882];
-	required string k_id = 2;
-	required int32 point = 3;
 } // end
 
 message BuyItem {
@@ -131,7 +123,6 @@ message AcceptBaton {
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
-	required int32 selected_character = 5;
 } // end
 
 message EndBaton {
@@ -139,12 +130,11 @@ message EndBaton {
 	required string k_id = 2;
 	required string sender_k_id = 3;
 	required int64 sended_time = 4;
-	required int32 selected_character = 5;
-	required int32 score = 6;
-	required int32 dist = 7;
-	required int32 enemy_kill = 8;
-	required int32 play_time = 9;
-	required int32 coin = 10;
+	required int32 score = 5;
+	required int32 dist = 6;
+	required int32 enemy_kill = 7;
+	required int32 play_time = 8;
+	required int32 coin = 9;
 } // end
 
 message AcceptBatonResult {
@@ -158,13 +148,6 @@ message UpgradeFactor {
 	optional uint64 id = 1 [default=2555106];
 	required string k_id = 2;
 	required int32 factor = 3;
-
-	enum Factor {
-		SCORE = 1;
-		TIME = 2;
-		UPGRADE = 3;
-		MAX = 4;
-	}
 } // end
 
 message InviteFriend {
