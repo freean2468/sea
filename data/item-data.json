@@ -20,7 +20,7 @@
 	,
 	{
 		"id": 4,
-		"name": "WeaponReinforce",
+		"name": "Immortal",
 		"cost": 500
 	}
 	,
@@ -32,32 +32,34 @@
 	,
 	{
 		"id": 6,
-		"name": "MaxAttack",
-		"cost": 400
-	}
-	,
-	{
-		"id": 7,
-		"name": "BonusHeart",
-		"cost": 300
-	}
-	,
-	{
-		"id": 8,
-		"name": "DropUp",
-		"cost": 200
-	}
-	,
-	{
-		"id": 9,
-		"name": "Magnet",
-		"cost": 100
-	}
-	,
-	{
-		"id": 10,
-		"name": "BonusScore",
-		"cost": 200
+		"name": "Random",
+		"cost": 400,
+		"type": [
+			{
+				"id": 6,
+				"name": "MaxAttack"
+			}
+			,
+			{
+				"id": 7,
+				"name": "BonusHeart"
+			}
+			,
+			{
+				"id": 8,
+				"name": "DropUp"
+			}
+			,
+			{
+				"id": 9,
+				"name": "Magnet"
+			}
+			,
+			{
+				"id": 10,
+				"name": "BonusScore"
+			}
+		]
 	}
 ]
 }

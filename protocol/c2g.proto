@@ -79,15 +79,11 @@ message BuyItem {
 	enum Item {
 		SHIELD = 1;
 		ITEM_LAST = 2;
-		GHOST = 3;
-		WEAPON_REINFORCE = 4;
+		GHOSTIFY = 3;
+		IMMORTAL = 4;
 		EXP_BOOST = 5;
-		MAX_ATTACK = 6;
-		BONUS_HEART = 7;
-		DROP_UP = 8;
-		MAGNET = 9;
-		BONUS_SCORE = 10;
-		MAX = 11;
+		RANDOM = 6;
+		MAX = 7;
 	}
 } // end
 

@@ -40,28 +40,28 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 			VALUES (99999, 9999, 100, UNIX_TIMESTAMP(NOW()), 
 					3, 0, 0, 0);
 
-			INSERT sea_user_items(shield, item_last, ghost, weapon_reinforce, exp_boost, max_attack, bonus_heart, drop_up, magnet, bonus_score)
-			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+			INSERT sea_item(shield, item_last, ghostify, immortal, exp_boost, random)
+			VALUES (0, 0, 0, 0, 0, 0);
 
 			INSERT sea_user_log(total_score, highest_score, last_dist, total_dist, total_kill, play_time)
 			VALUES (0, 0, 0, 0, 0, 0);
 
-			INSERT sea_user_metric(uv, last_week_uv, this_week_uv, pu)
+			INSERT sea_metric(uv, last_week_uv, this_week_uv, pu)
 			VALUES (1, 0, 1, 0);
 
-			INSERT sea_user_upgrade(score_factor, time_factor, cooldown_factor)
+			INSERT sea_upgrade(score_factor, time_factor, cooldown_factor)
 			VALUES (0, 0, 0);
 
-			INSERT sea_user_character_1(lv, exp, head, top, bottoms, back)
+			INSERT sea_character_1(lv, exp, head, top, bottoms, back)
 			VALUES (0, 0, 0, 0, 0, 0);
 
-			INSERT sea_user_character_2(lv, exp, head, top, bottoms, back)
+			INSERT sea_character_2(lv, exp, head, top, bottoms, back)
 			VALUES (0, 0, 0, 0, 0, 0);
 
-			INSERT sea_user_character_3(lv, exp, head, top, bottoms, back)
+			INSERT sea_character_3(lv, exp, head, top, bottoms, back)
 			VALUES (1, 0, 0, 0, 0, 0);
 
-			INSERT sea_user_character_4(lv, exp, head, top, bottoms, back)
+			INSERT sea_character_4(lv, exp, head, top, bottoms, back)
 			VALUES (0, 0, 0, 0, 0, 0);
 
 			INSERT sea_costume_head_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)

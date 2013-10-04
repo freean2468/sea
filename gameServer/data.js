@@ -31,22 +31,24 @@ function DataMgr() {
 
 		var root = data['root'];
 
-		for (var obj in root) {
-			var evolve = {};
+		for (var index in root) {
+			var obj = root[index];
+			var evolve = obj['evolve'];
+			var copy = {};
 
-			for (var obj in obj['evolve']) {
-				var level = obj['level'];
-				var cost = obj['cost'];
+			for (var _index in evolve) {
+				var level = evolve[_index]['level'];
+				var cost = evolve[_index]['cost'];
 				
-				evolve[level] = cost;
+				copy[level] = cost;
 			}	
-			
+
 			var bunchOfData = {
 				'id': obj['id'],
 				'name': obj['name'],
 				'priceType': obj['priceType'],
 				'price': obj['price'],
-				'evolve': evolve,
+				'evolve': copy,
 			};
 
 			this.characterData.push(bunchOfData);
@@ -72,8 +74,8 @@ function DataMgr() {
 			var root = data['root'];
 			var bunchOfData = [];
 
-			for (var obj in root) {
-				bunchOfData.push(obj);
+			for (var index in root) {
+				bunchOfData.push(root[index]);
 			}
 
 			that.costumeData[part] = bunchOfData;
@@ -101,8 +103,31 @@ function DataMgr() {
 
 		var root = data['root'];
 
-		for (var obj in root) {
-			this.itemData.push(obj);
+		for (var index in root) {
+			var obj = root[index];
+		
+			if (obj['id'] === 6 && obj['name'] === 'random') {
+				var type = obj['type'];
+				var copy = [];
+				
+				for (var _idx in type) {
+					var id = type[_idx]['id'];
+					var name = type[_idx]['name'];
+
+					copy.push({'id': id, 'name': name});
+				}	
+				
+				var bunchOfData = {
+					'id': obj['id'],
+					'name': obj['name'],
+					'cost': obj['cost'],
+					'type': copy,
+				};
+				
+				this.itemData.push(bunchOfData);
+			} else {
+				this.itemData.push(obj);
+			}
 		}
 	};
 
@@ -122,20 +147,22 @@ function DataMgr() {
 
 		var root = data['root'];
 
-		for (var obj in root) {
-			var upgrade = {};
+		for (var index in root) {
+			var obj = root[index];
+			var upgrade = obj['upgrade']
+			var copy = {};
 
-			for (var obj in obj['evolve']) {
-				var level = obj['level'];
-				var cost = obj['cost'];
+			for (var _index in upgrade) {
+				var level = upgrade[_index]['level'];
+				var cost = upgrade[_index]['cost'];
 				
-				upgrade[level] = cost;
+				copy[level] = cost;
 			}	
 			
 			var bunchOfData = {
 				'id': obj['id'],
 				'name': obj['name'],
-				'upgrade': upgrade,
+				'upgrade': copy,
 			};
 
 			this.upgradeData.push(bunchOfData);
@@ -158,8 +185,8 @@ function DataMgr() {
 
 		var root = data['root'];
 
-		for (var obj in root) {
-			this.ghostData.push(obj);
+		for (var index in root) {
+			this.ghostData.push(root[index]);
 		}
 	};
 
@@ -179,8 +206,8 @@ function DataMgr() {
 
 		var root = data['root'];
 
-		for (var obj in root) {
-			this.drawData.push(obj);
+		for (var index in root) {
+			this.drawData.push(root[index]);
 		}
 	};
 
@@ -220,8 +247,8 @@ function DataMgr() {
 
 		var root = data['root'];
 
-		for (var obj in root) {
-			this.roomData.push(obj);
+		for (var idx in root) {
+			this.roomData.push(root[idx]);
 		}
 	};
 

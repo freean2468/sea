@@ -28,7 +28,7 @@ function AccountLoginHandler(response, data, logMgr) {
 	} else {
 		mysql.addLogLogin(msg['k_id'], function (res) {
 			var res = res['res'];
-			console.log(procedure + ': ' + res);
+			console.log('addLogLogin: ' + res);
 		});
 	}
 
@@ -113,7 +113,7 @@ function PayCharacterHandler(response, data, logMgr) {
 	} else {
 		mysql.addLogPayCharacter(msg['k_id'], msg['paid_character'], msg['rest_coin'], function (res) {
 			var res = res['res'];
-			console.log(procedure + ': ' + res);
+			console.log('addLogPayCharacter: ' + res);
 		});
 	}
 	response.end();
@@ -125,12 +125,9 @@ function PayCoinHandler(response, data, logMgr) {
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PayCoinHandler");
 	} else {
-		var procedure = 'sea_AddLogPayCoin';
-		var params = "'" + msg['k_id'] + "', " + msg['paid_coin'] + ", " + msg['rest_money'];
-
 		mysql.addLogPayCoin(msg['k_id'], msg['paid_coin'], msg['rest_money'], function (res) {
 			var res = res['res'];
-			console.log(procedure + ': ' + res);
+			console.log('addLogPayCoin: ' + res);
 		});
 	}
 	response.end();
@@ -144,7 +141,7 @@ function PayEnergyHandler(response, data, logMgr) {
 	} else {
 		mysql.addLogPayEnergy(msg['k_id'], msg['paid_energy'], msg['rest_coin'], function (res) {
 			var res = res['res'];
-			console.log(procedure + ': ' + res);
+			console.log('addLogPayEnergy: ' + res);
 		});
 	}
 	response.end();
@@ -158,7 +155,7 @@ function PayItemHandler(response, data, logMgr) {
 	} else {
 		mysql.addLogPayItem(msg['k_id'], msg['paid_item'], msg['rest_coin'], function (res) {
 			var res = res['res'];
-			console.log(procedure + ': ' + res);
+			console.log('addLogPayItem: ' + res);
 		});
 	}
 	response.end();
@@ -170,12 +167,9 @@ function PayMoneyHandler(response, data, logMgr) {
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PayMoneyHandler");
 	} else {
-		var procedure = 'sea_AddLogPayMoney';
-		var params = "'" + msg['k_id'] + "', " + msg['paid_money'] + ", " + msg['rest_money'];
-
 		mysql.addLogPayMoney(msg['k_id'], msg['paid_money'], msg['rest_money'], function (res) {
 			var res = res['res'];
-			console.log(procedure + ': ' + res);
+			console.log('addLogPayMoney: ' + res);
 		});
 	}
 	response.end();
@@ -187,9 +181,9 @@ function UserGamePlayHandler(response, data, logMgr) {
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in UserGamePlayHandler");
 	} else {
-		mysql.addLogPlay(msg['k_id'], msg['selected_character'], msg['score'], msg['enemy_kill'], msg['dist'], msg['play_time'], msg['exp_boost'], msg['item_last'], msg['max_attack'], msg['shield'], msg['ghost'], msg['weapon_reinforce'], msg['bonus_heart'], msg['drop_up'], msg['magnet'], msg['bonus_score'], function (res) {
+		mysql.addLogPlay(msg['k_id'], msg['selected_character'], msg['score'], msg['enemy_kill'], msg['dist'], msg['play_time'], msg['exp_boost'], msg['item_last'], msg['shield'], msg['ghostify'], msg['immortal'], msg['random'], function (res) {
 			var res = res['res'];
-			console.log(procedure + ': ' + res);
+			console.log('addLogPlay: ' + res);
 		});
 	}
 	response.end();
@@ -203,7 +197,7 @@ function UserRegisterHandler(response, data, logMgr) {
 	} else {
 		mysql.addLogRegister(msg['k_id'], function (res) {
 			var res = res['res'];
-			console.log(procedure + ': ' + res);		
+			console.log('addLogRegister: ' + res);		
 		});
 	}
 	response.end();
@@ -217,7 +211,7 @@ function UserUnregisterHandler(response, data, logMgr) {
 	} else {
 		mysql.addLogUnregister(msg['k_id'], function (res) {
 			var res = res['res'];
-			console.log(procedure + ': ' + res);
+			console.log('addLogUnregister: ' + res);
 		});
 	}
 	response.end();

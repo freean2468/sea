@@ -58,14 +58,10 @@ message UserGamePlay {
 	required int32 play_time = 7;
 	required int32 exp_boost = 8;
 	required int32 item_last = 9;
-	required int32 max_attack = 10;
-	required int32 shield = 11;
-	required int32 ghost = 12;
-	required int32 weapon_reinforce = 13;
-	required int32 bonus_heart = 14;
-	required int32 drop_up = 15;
-	required int32 magnet = 16;
-	required int32 bonus_score = 17;
+	required int32 shield = 10;
+	required int32 ghostify = 11;
+	required int32 immortal = 12;
+	required int32 random = 13;
 } // end
 
 message UserRegister {

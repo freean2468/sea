@@ -18,5 +18,8 @@ mysql -u root --password=xmongames < ./sea_costume_head_1.sql
 mysql -u root --password=xmongames < ./sea_costume_top_1.sql
 mysql -u root --password=xmongames < ./sea_costume_bottoms_1.sql
 mysql -u root --password=xmongames < ./sea_costume_back_1.sql
+mysql -u root --password=xmongames < ./sea_ghost_1.sql
+mysql -u root --password=xmongames < ./sea_ghost_2.sql
+mysql -u root --password=xmongames < ./sea_ghost_house.sql
 
 echo 'done.'

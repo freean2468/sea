@@ -142,7 +142,7 @@ function request(data) {
 				process.exit();
 			} else if (id === systemMessage['id']['low']) {
 				msg = build.SystemMessage.decode(res);
-				if (msg['res'] === build.Result['EXISTED_ACCOUNT']) {
+				if (msg['res'] === build.SystemMessage.Result['EXISTED_ACCOUNT']) {
 					login['k_id'] = k_id;
 					request(login);
 				}

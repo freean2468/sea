@@ -172,7 +172,7 @@ function startGame (id, callback) {
 function updateCoin (id, coin, callback) {
 	var procedure = 'sea_UpdateCoin';
 	var params = id + ', ' + coin;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function addCoin (id, amount, callback) {
@@ -184,43 +184,43 @@ function addCoin (id, amount, callback) {
 function updateMoney (id, money, callback) {
 	var procedure = 'sea_UpdateMoney';
 	var params = id + ', ' + money;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function updateEnergy (id, energy, callback) {
 	var procedure = 'sea_UpdateEnergy';
 	var params = id + ', ' + energy;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function updateLastChargeTime (id, last, callback) {
 	var procedure = 'sea_UpdateLastChargeTime';
 	var params = id + ', ' + last;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function updateSelectedCharacter (id, selected, callback) {
 	var procedure = 'sea_UpdateSelectedCharacter';
 	var params = id + ', ' + selected;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function updateInviteCount (id, count, callback) {
 	var procedure = 'sea_UpdateInviteCount';
 	var params = id + ', ' + count;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function updateMileage (id, mileage, callback) {
 	var procedure = 'sea_UpdateMileage';
 	var params = id + ', ' + mileage;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function updateDraw (id, draw, callback) {
 	var procedure = 'sea_UpdateDraw';
 	var params = id + ', ' + draw;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 // sea_baton.sql
@@ -316,25 +316,25 @@ function selectCharacterCostumes (id, target, callback) {
 function updateCharacterHead (id, costume, target, callback) {
 	var procedure = 'sea_UpdateCharacter_' + target + '_Head';
 	var params = id + ', ' + costume;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function updateCharacterTop (id, costume, target, callback) {
 	var procedure = 'sea_UpdateCharacter_' + target + '_Top';
 	var params = id + ', ' + costume;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function updateCharacterBottoms (id, costume, target, callback) {
 	var procedure = 'sea_UpdateCharacter_' + target + '_Bottoms';
 	var params = id + ', ' + costume;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function updateCharacterBack (id, costume, target, callback) {
 	var procedure = 'sea_UpdateCharacter_' + target + '_Back';
 	var params = id + ', ' + costume;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 // sea_costume_head.sql
@@ -436,7 +436,7 @@ function loadGhosts (id, callback) {
 function updateGhost (id, amount, target, callback) {
 	var procedure = 'sea_UpdateGhost_' + target;
 	var params = id + ', ' + amount;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 // sea_ghost_house.sql
@@ -476,60 +476,36 @@ function loadItems (id, callback) {
 function updateExpBoost (id, amount, callback) {
 	var procedure = 'sea_UpdateExpBoost';
 	var params = id + ', ' + amount;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function updateItemLast (id, amount, callback) {
 	var procedure = 'sea_UpdateItemLast';
 	var params = id + ', ' + amount;
-	call(procedure, params, function (results) { callback(results[0][0]); });
-}
-
-function updateMaxAttack (id, amount, callback) {
-	var procedure = 'sea_UpdateMaxAttack';
-	var params = id + ', ' + amount;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function updateShield (id, amount, callback) {
 	var procedure = 'sea_UpdateShield';
 	var params = id + ', ' + amount;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function updateGhostify (id, amount, callback) {
 	var procedure = 'sea_UpdateGhostify';
 	var params = id + ', ' + amount;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
-function updateWeaponReinforce (id, amount, callback) {
-	var procedure = 'sea_UpdateWeaponReinforce';
+function updateImmortal (id, amount, callback) {
+	var procedure = 'sea_UpdateImmortal';
 	var params = id + ', ' + amount;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
-function updateBonusHeart (id, amount, callback) {
-	var procedure = 'sea_UpdateBonusHeart';
-	var params = id + ', ' + amount;
-	call(procedure, params, function (results) { callback(results[0][0]); });
-}
-
-function updateDropUp (id, amount, callback) {
-	var procedure = 'sea_UpdateDropUp';
-	var params = id + ', ' + amount;
-	call(procedure, params, function (results) { callback(results[0][0]); });
-}
-
-function updateMagnet (id, amount, callback) {
-	var procedure = 'sea_UpdateMagnet';
-	var params = id + ', ' + amount;
-	call(procedure, params, function (results) { callback(results[0][0]); });
-}
-
-function updateBonusScore (id, amount, callback) {
-	var procedure = 'sea_UpdateBonusScore';
-	var params = id + ', ' + amount;
+function updateRandom (id, type, callback) {
+	var procedure = 'sea_UpdateRandom';
+	var params = id + ', ' + type;
 	call(procedure, params, function (results) { callback(results[0][0]); });
 }
 
@@ -544,7 +520,7 @@ function retentionRate (callback) {
 function updateWeekly (id, callback) {
 	var procedure = 'sea_UpdateWeekly';
 	var params = id;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function lastUv (callback) {
@@ -556,19 +532,19 @@ function lastUv (callback) {
 function updateUvOn (id, callback) {
 	var procedure = 'sea_UpdateUvOn';
 	var params = id;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function updateUvOff (id, callback) {
 	var procedure = 'sea_UpdateUvOff';
 	var params = id;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(); });
 }
 
 function updatePuOn (id, callback) {
 	var procedure = 'sea_UpdatePuOn';
 	var params = id;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(); });
 }
 
 // sea_upgrade.sql
@@ -634,7 +610,7 @@ function loadHighestScore (id, callback) {
 function updateUserLog (id, score, dist, kill, callback) {
 	var procedure = 'sea_UpdateUserLog';
 	var params = id + ', ' + score + ', ' + dist + ', ' + kill;
-	call(procedure, params, function (results) { callback(results[0][0]); });
+	call(procedure, params, function () { callback(true); });
 }
 
 function ranking (callback) {
@@ -723,14 +699,10 @@ module.exports = {
 	'loadItems': loadItems,
 	'updateExpBoost': updateExpBoost,
 	'updateItemLast': updateItemLast,
-	'updateMaxAttack': updateMaxAttack,
 	'updateShield': updateShield,
 	'updateGhostify': updateGhostify,
-	'updateWeaponReinforce': updateWeaponReinforce,
-	'updateBonusHeart': updateBonusHeart,
-	'updateDropUp': updateDropUp,
-	'updateMagnet': updateMagnet,
-	'updateBonusScore': updateBonusScore,
+	'updateImmortal': updateImmortal,
+	'updateRandom': updateRandom,
 
 	'retentionRate': retentionRate,
 	'updateWeekly': updateWeekly,

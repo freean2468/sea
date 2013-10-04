@@ -69,40 +69,5 @@
 		"content": "5",
 		"draw_rating": 5
 	}
-	,
-	{
-		"id": 11,
-		"type": "item",
-		"content": "6",
-		"draw_rating": 5
-	}
-	,
-	{
-		"id": 12,
-		"type": "item",
-		"content": "7",
-		"draw_rating": 5
-	}
-	,
-	{
-		"id": 13,
-		"type": "item",
-		"content": "8",
-		"draw_rating": 5
-	}
-	,
-	{
-		"id": 14,
-		"type": "item",
-		"content": "9",
-		"draw_rating": 5
-	}
-	,
-	{
-		"id": 15,
-		"type": "item",
-		"content": "10",
-		"draw_rating": 5
-	}
 ]
 }

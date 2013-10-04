@@ -55,6 +55,13 @@ message StartGameReply {
 	optional uint64 id = 1 [default=278724898];
 	required int32 energy = 2;
 	required int64 last_charged_time = 3;
+	repeated Item used_item_list = 4;
+
+	message Item {
+		required int32 id = 1;
+		required bool on = 2;
+		required int32 rest = 3;
+	}
 } // end
 
 message AccountInfo {
@@ -70,16 +77,12 @@ message AccountInfo {
 	required int32 shield = 10;
 	required int32 item_last = 11;
 	required int32 ghostify = 12;
-	required int32 weapon_reinforce = 13;
+	required int32 immortal = 13;
 	required int32 exp_boost = 14;
-	required int32 max_attack = 15;
-	required int32 bonus_heart = 16;
-	required int32 drop_up = 17;
-	required int32 magnet = 18;
-	required int32 bonus_score = 19;
-	required int32 mileage = 20;
-	required int32 draw = 21;
-	repeated CharacterInfo characters = 22;
+	required int32 random = 15;
+	required int32 mileage = 16;
+	required int32 draw = 17;
+	repeated CharacterInfo characters = 18;
 
 	message CharacterInfo {
 		required int32 id = 1;
@@ -158,8 +161,22 @@ message GameResult {
 
 message BuyItemReply {
 	optional uint64 id = 1 [default=4191111];
-	required int32 item = 2;
+	required Item item = 2;
 	required int32 coin = 3;
+
+	enum Item {
+		SHIELD = 1;
+		ITEM_LAST = 2;
+		GHOSTIFY = 3;
+		IMMORTAL = 4;
+		EXP_BOOST = 5;
+		MAX_ATTACK = 6;
+		BONUS_HEART = 7;
+		DROP_UP = 8;
+		MAGNET = 9;
+		BONUS_SCORE = 10;
+		MAX = 11;
+	}
 } // end 
 
 message BuyOrUpgradeCharacterReply {
@@ -201,13 +218,8 @@ message BatonResult {
 
 message AcceptBatonResultReply {
 	optional uint64 id = 1 [default=4257084];
-	required Update update = 2;
+	required bool update = 2;
 	required int32 score = 3;
-
-	enum Update {
-		SUCCESS = 1;
-		FAIL = 2;
-	}
 } // end
 
 message UpgradeFactorReply {

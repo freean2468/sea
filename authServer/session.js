@@ -15,11 +15,15 @@ function SessionMgr(logMgr) {
 		var sessionId = UUID();
 
 		if (this.sessionList[kId] !== undefined && this.sessionList[kId] !== null) {
-			this.logMgr.addLog('ERROR', 'Duplicated Auth. (' + kId + ')');
-			return false;
+			//this.logMgr.addLog('ERROR', 'Duplicated Auth. (' + kId + ')');
+			//return false;
+			this.logMgr.addLog('AUTH', 'Reregister session. (' + kId + ', ' + sessionId + ')');
+			this.sessionList[kId] = null;
+			clearTimeout(this.timerList[kId]);
+			this.timerList[kId] = null;
+		} else {
+			this.logMgr.addLog('AUTH', 'Register new session. (' + kId + ', ' + sessionId + ')');
 		}
-
-		this.logMgr.addLog('AUTH', 'Register new session. (' + kId + ', ' + sessionId + ')');
 		this.sessionList[kId] = sessionId;
 		this.setExpiration(kId, sessionId);
 
