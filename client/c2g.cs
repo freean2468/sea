@@ -414,32 +414,20 @@ namespace C2G
       [global::ProtoBuf.ProtoEnum(Name=@"ITEM_LAST", Value=2)]
       ITEM_LAST = 2,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"GHOST", Value=3)]
-      GHOST = 3,
+      [global::ProtoBuf.ProtoEnum(Name=@"GHOSTIFY", Value=3)]
+      GHOSTIFY = 3,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"WEAPON_REINFORCE", Value=4)]
-      WEAPON_REINFORCE = 4,
+      [global::ProtoBuf.ProtoEnum(Name=@"IMMORTAL", Value=4)]
+      IMMORTAL = 4,
             
       [global::ProtoBuf.ProtoEnum(Name=@"EXP_BOOST", Value=5)]
       EXP_BOOST = 5,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"MAX_ATTACK", Value=6)]
-      MAX_ATTACK = 6,
+      [global::ProtoBuf.ProtoEnum(Name=@"RANDOM", Value=6)]
+      RANDOM = 6,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"BONUS_HEART", Value=7)]
-      BONUS_HEART = 7,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"DROP_UP", Value=8)]
-      DROP_UP = 8,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"MAGNET", Value=9)]
-      MAGNET = 9,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"BONUS_SCORE", Value=10)]
-      BONUS_SCORE = 10,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"MAX", Value=11)]
-      MAX = 11
+      [global::ProtoBuf.ProtoEnum(Name=@"MAX", Value=7)]
+      MAX = 7
     }
   
     private global::ProtoBuf.IExtension extensionObject;
