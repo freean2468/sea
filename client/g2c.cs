@@ -280,120 +280,134 @@ namespace G2C
       get { return _id; }
       set { _id = value; }
     }
+    private int _lv;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"lv", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int lv
+    {
+      get { return _lv; }
+      set { _lv = value; }
+    }
+    private int _exp;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"exp", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int exp
+    {
+      get { return _exp; }
+      set { _exp = value; }
+    }
     private int _coin;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"coin", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"coin", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int coin
     {
       get { return _coin; }
       set { _coin = value; }
     }
     private int _money;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"money", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"money", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int money
     {
       get { return _money; }
       set { _money = value; }
     }
     private int _energy;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"energy", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"energy", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int energy
     {
       get { return _energy; }
       set { _energy = value; }
     }
     private long _last_charged_time;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"last_charged_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(7, IsRequired = true, Name=@"last_charged_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public long last_charged_time
     {
       get { return _last_charged_time; }
       set { _last_charged_time = value; }
     }
     private int _selected_character;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"selected_character", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(8, IsRequired = true, Name=@"selected_character", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int selected_character
     {
       get { return _selected_character; }
       set { _selected_character = value; }
     }
     private int _score_factor;
-    [global::ProtoBuf.ProtoMember(7, IsRequired = true, Name=@"score_factor", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(9, IsRequired = true, Name=@"score_factor", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int score_factor
     {
       get { return _score_factor; }
       set { _score_factor = value; }
     }
     private int _time_factor;
-    [global::ProtoBuf.ProtoMember(8, IsRequired = true, Name=@"time_factor", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(10, IsRequired = true, Name=@"time_factor", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int time_factor
     {
       get { return _time_factor; }
       set { _time_factor = value; }
     }
     private int _cooldown_factor;
-    [global::ProtoBuf.ProtoMember(9, IsRequired = true, Name=@"cooldown_factor", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(11, IsRequired = true, Name=@"cooldown_factor", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int cooldown_factor
     {
       get { return _cooldown_factor; }
       set { _cooldown_factor = value; }
     }
     private int _shield;
-    [global::ProtoBuf.ProtoMember(10, IsRequired = true, Name=@"shield", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(12, IsRequired = true, Name=@"shield", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int shield
     {
       get { return _shield; }
       set { _shield = value; }
     }
     private int _item_last;
-    [global::ProtoBuf.ProtoMember(11, IsRequired = true, Name=@"item_last", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(13, IsRequired = true, Name=@"item_last", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int item_last
     {
       get { return _item_last; }
       set { _item_last = value; }
     }
     private int _ghostify;
-    [global::ProtoBuf.ProtoMember(12, IsRequired = true, Name=@"ghostify", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(14, IsRequired = true, Name=@"ghostify", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int ghostify
     {
       get { return _ghostify; }
       set { _ghostify = value; }
     }
     private int _immortal;
-    [global::ProtoBuf.ProtoMember(13, IsRequired = true, Name=@"immortal", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(15, IsRequired = true, Name=@"immortal", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int immortal
     {
       get { return _immortal; }
       set { _immortal = value; }
     }
     private int _exp_boost;
-    [global::ProtoBuf.ProtoMember(14, IsRequired = true, Name=@"exp_boost", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(16, IsRequired = true, Name=@"exp_boost", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int exp_boost
     {
       get { return _exp_boost; }
       set { _exp_boost = value; }
     }
     private int _random;
-    [global::ProtoBuf.ProtoMember(15, IsRequired = true, Name=@"random", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(17, IsRequired = true, Name=@"random", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int random
     {
       get { return _random; }
       set { _random = value; }
     }
     private int _mileage;
-    [global::ProtoBuf.ProtoMember(16, IsRequired = true, Name=@"mileage", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(18, IsRequired = true, Name=@"mileage", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int mileage
     {
       get { return _mileage; }
       set { _mileage = value; }
     }
     private int _draw;
-    [global::ProtoBuf.ProtoMember(17, IsRequired = true, Name=@"draw", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(19, IsRequired = true, Name=@"draw", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int draw
     {
       get { return _draw; }
       set { _draw = value; }
     }
     private readonly global::System.Collections.Generic.List<G2C.AccountInfo.CharacterInfo> _characters = new global::System.Collections.Generic.List<G2C.AccountInfo.CharacterInfo>();
-    [global::ProtoBuf.ProtoMember(18, Name=@"characters", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(20, Name=@"characters", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<G2C.AccountInfo.CharacterInfo> characters
     {
       get { return _characters; }
@@ -417,13 +431,6 @@ namespace G2C
     {
       get { return _level; }
       set { _level = value; }
-    }
-    private int _exp;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"exp", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int exp
-    {
-      get { return _exp; }
-      set { _exp = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

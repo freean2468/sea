@@ -23,8 +23,9 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _version;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"version", DataFormat = global::ProtoBuf.DataFormat.Default)]
+
+    private string _version = @"0.1.2";
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"version", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string version
     {
       get { return _version; }
@@ -73,13 +74,6 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -123,13 +117,6 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -147,13 +134,6 @@ namespace C2G
     {
       get { return _id; }
       set { _id = value; }
-    }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -173,15 +153,8 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private int _selected_character;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"selected_character", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"selected_character", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int selected_character
     {
       get { return _selected_character; }
@@ -205,13 +178,6 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -230,43 +196,36 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private int _score;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"score", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"score", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int score
     {
       get { return _score; }
       set { _score = value; }
     }
     private int _dist;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"dist", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"dist", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int dist
     {
       get { return _dist; }
       set { _dist = value; }
     }
     private int _enemy_kill;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"enemy_kill", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"enemy_kill", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int enemy_kill
     {
       get { return _enemy_kill; }
       set { _enemy_kill = value; }
     }
     private int _play_time;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"play_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"play_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int play_time
     {
       get { return _play_time; }
       set { _play_time = value; }
     }
     private int _coin;
-    [global::ProtoBuf.ProtoMember(7, IsRequired = true, Name=@"coin", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"coin", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int coin
     {
       get { return _coin; }
@@ -290,13 +249,6 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -314,13 +266,6 @@ namespace C2G
     {
       get { return _id; }
       set { _id = value; }
-    }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -340,13 +285,6 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -364,13 +302,6 @@ namespace C2G
     {
       get { return _id; }
       set { _id = value; }
-    }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -390,15 +321,8 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private C2G.BuyItem.Item _item;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"item", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"item", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public C2G.BuyItem.Item item
     {
       get { return _item; }
@@ -448,15 +372,8 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private int _character;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"character", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"character", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int character
     {
       get { return _character; }
@@ -480,15 +397,8 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private string _receiver_k_id;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"receiver_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"receiver_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string receiver_k_id
     {
       get { return _receiver_k_id; }
@@ -512,22 +422,15 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private string _sender_k_id;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"sender_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"sender_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string sender_k_id
     {
       get { return _sender_k_id; }
       set { _sender_k_id = value; }
     }
     private long _sended_time;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public long sended_time
     {
       get { return _sended_time; }
@@ -551,29 +454,22 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private string _receiver_k_id;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"receiver_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"receiver_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string receiver_k_id
     {
       get { return _receiver_k_id; }
       set { _receiver_k_id = value; }
     }
     private string _map;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"map", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"map", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string map
     {
       get { return _map; }
       set { _map = value; }
     }
     private int _score;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"score", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"score", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int score
     {
       get { return _score; }
@@ -597,22 +493,15 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private string _sender_k_id;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"sender_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"sender_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string sender_k_id
     {
       get { return _sender_k_id; }
       set { _sender_k_id = value; }
     }
     private long _sended_time;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public long sended_time
     {
       get { return _sended_time; }
@@ -636,57 +525,50 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private string _sender_k_id;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"sender_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"sender_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string sender_k_id
     {
       get { return _sender_k_id; }
       set { _sender_k_id = value; }
     }
     private long _sended_time;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public long sended_time
     {
       get { return _sended_time; }
       set { _sended_time = value; }
     }
     private int _score;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"score", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"score", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int score
     {
       get { return _score; }
       set { _score = value; }
     }
     private int _dist;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"dist", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"dist", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int dist
     {
       get { return _dist; }
       set { _dist = value; }
     }
     private int _enemy_kill;
-    [global::ProtoBuf.ProtoMember(7, IsRequired = true, Name=@"enemy_kill", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"enemy_kill", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int enemy_kill
     {
       get { return _enemy_kill; }
       set { _enemy_kill = value; }
     }
     private int _play_time;
-    [global::ProtoBuf.ProtoMember(8, IsRequired = true, Name=@"play_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(7, IsRequired = true, Name=@"play_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int play_time
     {
       get { return _play_time; }
       set { _play_time = value; }
     }
     private int _coin;
-    [global::ProtoBuf.ProtoMember(9, IsRequired = true, Name=@"coin", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(8, IsRequired = true, Name=@"coin", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int coin
     {
       get { return _coin; }
@@ -710,22 +592,15 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private string _sender_k_id;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"sender_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"sender_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string sender_k_id
     {
       get { return _sender_k_id; }
       set { _sender_k_id = value; }
     }
     private long _sended_time;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public long sended_time
     {
       get { return _sended_time; }
@@ -749,15 +624,8 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private int _factor;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"factor", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"factor", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int factor
     {
       get { return _factor; }
@@ -781,15 +649,8 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private string _friend_k_id;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"friend_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"friend_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string friend_k_id
     {
       get { return _friend_k_id; }
@@ -813,15 +674,8 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private C2G.LoadReward.Reward _reward;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"reward", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"reward", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public C2G.LoadReward.Reward reward
     {
       get { return _reward; }
@@ -862,22 +716,15 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private C2G.BuyCostume.CostumeCategory _category;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"category", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"category", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public C2G.BuyCostume.CostumeCategory category
     {
       get { return _category; }
       set { _category = value; }
     }
     private int _costume_id;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"costume_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"costume_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int costume_id
     {
       get { return _costume_id; }
@@ -921,29 +768,22 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private C2G.WearCostume.CostumeCategory _category;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"category", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"category", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public C2G.WearCostume.CostumeCategory category
     {
       get { return _category; }
       set { _category = value; }
     }
     private int _costume_id;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"costume_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"costume_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int costume_id
     {
       get { return _costume_id; }
       set { _costume_id = value; }
     }
     private int _character_id;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"character_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"character_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int character_id
     {
       get { return _character_id; }
@@ -987,13 +827,6 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1012,15 +845,8 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private bool _draw;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"draw", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"draw", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public bool draw
     {
       get { return _draw; }
@@ -1044,22 +870,15 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private int _room_number;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"room_number", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"room_number", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int room_number
     {
       get { return _room_number; }
       set { _room_number = value; }
     }
     private int _ghost_id;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"ghost_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"ghost_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int ghost_id
     {
       get { return _ghost_id; }
@@ -1083,15 +902,8 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private int _room_number;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"room_number", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"room_number", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int room_number
     {
       get { return _room_number; }
@@ -1115,15 +927,8 @@ namespace C2G
       get { return _id; }
       set { _id = value; }
     }
-    private string _k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string k_id
-    {
-      get { return _k_id; }
-      set { _k_id = value; }
-    }
     private int _room_number;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"room_number", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"room_number", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public int room_number
     {
       get { return _room_number; }
