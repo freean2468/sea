@@ -13,7 +13,9 @@ process.argv.forEach(function(val, index, array) {
 	}
 });
 
-var registerAccount = new build.RegisterAccount(),
+var versionInfo = new build.VersionInfo(),
+	versionInfoReply = new build.VersionInfoReply(),
+	registerAccount = new build.RegisterAccount(),
 	registerAccountReply = new build.RegisterAccountReply(),
 	login = new build.Login(),
 	loadRankInfo = new build.LoadRankInfo(),
@@ -56,9 +58,7 @@ var k_id = require('./kid-table').table[idx];
 
 var pre = new Date().getTime();
 
-registerAccount['k_id'] = k_id;
-
-request(registerAccount);
+request(versionInfo);
 
 function fetchCookie(res) {
 	var cookies = {};
@@ -88,40 +88,35 @@ function request(data) {
 			var res = util.toArrBuf(new Buffer(stream, 'hex'));
 			var id = util.fetchId(res);
 
-			if (id === registerAccountReply['id']['low']) {
+			if (id === versionInfoReply['id']['low']) {
+				registerAccount['k_id'] = k_id;
+				request(registerAccount);
+			} else if (id === registerAccountReply['id']['low']) {
 				login['k_id'] = k_id;
 				request(login);
+				console.log('requested Login');
 			} else if (id === accountInfo['id']['low']) {
 				var cookies = fetchCookie(response);
 				piece = cookies['piece'];
-				loadRankInfo['k_id'] = k_id;
 				request(loadRankInfo);				
 			} else if (id === rankInfo['id']['low']) {
-				loadPostedEnergy['k_id'] = k_id;
 				request(loadPostedEnergy);
 			} else if (id === postedEnergy['id']['low']) {
-				loadPostedBaton['k_id'] = k_id;
 				request(loadPostedBaton);
 			} else if (id === postedBaton['id']['low']) {
 				msg = build.PostedBaton.decode(res);
-				loadPostedBatonResult['k_id'] = k_id;
 				request(loadPostedBatonResult);
 			} else if (id === postedBatonResult['id']['low']) {
-				checkInCharge['k_id'] = k_id;
 				request(checkInCharge);
 			}
 			else if (id === chargeInfo['id']['low']) {
-				buyItem['k_id'] = k_id;
 				buyItem['item'] = Math.floor(Math.random() * (build.BuyItem.Item['MAX']-1)) + 1;
 				request(buyItem);
 			}
-			else if (id === buyItemReply['id']['low']){
-				startGame['k_id'] = k_id;
-				startGame['selected_character'] = 1;
+			else if (id === buyItemReply['id']['low']) {
 				request(startGame);
 			}
 			else if (id === startGameReply['id']['low']) {
-				endGame['k_id'] = k_id;
 				endGame['dist'] = Math.floor(Math.random() * 100);
 				endGame['enemy_kill'] = Math.floor(Math.random() * 10);
 				endGame['selected_character'] = 1;
@@ -131,12 +126,11 @@ function request(data) {
 				request(endGame);
 			}
 			else if (id === gameResult['id']['low']) {
-				logout['k_id'] = k_id;
 				request(logout);
 				var post = new Date().getTime();
 				var period = post - pre;
 
-				console.log(logout['k_id'] + " : logout! (" + period + "ms)");
+				console.log(login['k_id'] + " : logout! (" + period + "ms)");
 			} else if (id === logoutReply['id']['low']) {
 				console.log("logoutReply is arrived");
 				process.exit();

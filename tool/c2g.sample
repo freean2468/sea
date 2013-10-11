@@ -1,7 +1,6 @@
 package C2G;
 
 message VersionInfo {
-	required string version = 2;
 } // end
 
 message RegisterAccount {
@@ -9,7 +8,6 @@ message RegisterAccount {
 } // end
 
 message UnregisterAccount {
-	required string k_id = 2;
 } // end
 
 message Login {
@@ -17,50 +15,40 @@ message Login {
 } // end
 
 message Logout {
-	required string k_id = 2;
 } // end
 
 message CheckInCharge {
-	required string k_id = 2;
 } // end
 
 message SelectCharacter {
-	required string k_id = 2;
-	required int32 selected_character = 3;
+	required int32 selected_character = 2;
 } // end
 
 message StartGame {
-	required string k_id = 2;
 } // end
 
 message EndGame {
-	required string k_id = 2;
-	required int32 score = 3;
-	required int32 dist = 4;
-	required int32 enemy_kill = 5;
-	required int32 play_time = 6;
-	required int32 coin = 7;
+	required int32 score = 2;
+	required int32 dist = 3;
+	required int32 enemy_kill = 4;
+	required int32 play_time = 5;
+	required int32 coin = 6;
 } // end
 
 message LoadRankInfo {
-	required string k_id = 2;
 } // end
 
 message LoadPostedEnergy {
-	required string k_id = 2;
 } // end
 
 message LoadPostedBaton {
-	required string k_id = 2;
 } // end
 
 message LoadPostedBatonResult {
-	required string k_id = 2;
 } // end
 
 message BuyItem {
-	required string k_id = 2;
-	required Item item = 3;
+	required Item item = 2;
 
 	enum Item {
 		SHIELD = 1;
@@ -74,64 +62,54 @@ message BuyItem {
 } // end
 
 message BuyOrUpgradeCharacter {
-	required string k_id = 2;
-	required int32 character = 3;
+	required int32 character = 2;
 } // end
 
 message SendEnergy {
-	required string k_id = 2;
-	required string receiver_k_id = 3;
+	required string receiver_k_id = 2;
 } // end
 
 message AcceptEnergy {
-	required string k_id = 2;
-	required string sender_k_id = 3;
-	required int64 sended_time = 4;
+	required string sender_k_id = 2;
+	required int64 sended_time = 3;
 } // end
 
 message RequestBaton {
-	required string k_id = 2;
-	required string receiver_k_id = 3;
-	required string map = 4;
-	required int32 score = 5;
+	required string receiver_k_id = 2;
+	required string map = 3;
+	required int32 score = 4;
 } // end
 
 message AcceptBaton {
-	required string k_id = 2;
-	required string sender_k_id = 3;
-	required int64 sended_time = 4;
+	required string sender_k_id = 2;
+	required int64 sended_time = 3;
 } // end
 
 message EndBaton {
-	required string k_id = 2;
-	required string sender_k_id = 3;
-	required int64 sended_time = 4;
-	required int32 score = 5;
-	required int32 dist = 6;
-	required int32 enemy_kill = 7;
-	required int32 play_time = 8;
-	required int32 coin = 9;
+	required string sender_k_id = 2;
+	required int64 sended_time = 3;
+	required int32 score = 4;
+	required int32 dist = 5;
+	required int32 enemy_kill = 6;
+	required int32 play_time = 7;
+	required int32 coin = 8;
 } // end
 
 message AcceptBatonResult {
-	required string k_id = 2;
-	required string sender_k_id = 3;
-	required int64 sended_time = 4;
+	required string sender_k_id = 2;
+	required int64 sended_time = 3;
 } // end
 
 message UpgradeFactor {
-	required string k_id = 2;
-	required int32 factor = 3;
+	required int32 factor = 2;
 } // end
 
 message InviteFriend {
-	required string k_id = 2;
-	required string friend_k_id = 3;
+	required string friend_k_id = 2;
 } // end
 
 message LoadReward {
-	required string k_id = 2;
-	required Reward reward = 3;
+	required Reward reward = 2;
 
 	enum Reward {
 		INVITE_10_REWARD = 1;
@@ -142,9 +120,8 @@ message LoadReward {
 } // end
 
 message BuyCostume {
-	required string k_id = 2;
-	required CostumeCategory category = 3;
-	required int32 costume_id = 4;
+	required CostumeCategory category = 2;
+	required int32 costume_id = 3;
 
 	enum CostumeCategory {
 		HEAD = 1;
@@ -156,10 +133,9 @@ message BuyCostume {
 } // end
 
 message WearCostume {
-	required string k_id = 2;
-	required CostumeCategory category = 3;
-	required int32 costume_id = 4;
-	required int32 character_id = 5;
+	required CostumeCategory category = 2;
+	required int32 costume_id = 3;
+	required int32 character_id = 4;
 
 	enum CostumeCategory {
 		HEAD = 1;
@@ -171,26 +147,21 @@ message WearCostume {
 } // end
 
 message DrawFirst {
-	required string k_id = 2;
 } // end
 
 message DrawSecond {
-	required string k_id = 2;
-	required bool draw = 3;
+	required bool draw = 2;
 } // end
 
 message EquipGhost {
-	required string k_id = 2;
-	required int32 room_number = 3;
-	required int32 ghost_id = 4;
+	required int32 room_number = 2;
+	required int32 ghost_id = 3;
 } // end
 
 message UnequipGhost {
-	required string k_id = 2;
-	required int32 room_number = 3;
+	required int32 room_number = 2;
 } // end
 
 message PurchaseRoom {
-	required string k_id = 2;
-	required int32 room_number = 3;
+	required int32 room_number = 2;
 } // end

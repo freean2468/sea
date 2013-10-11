@@ -35,9 +35,9 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 			INSERT sea_user(k_id) VALUES (p_k_id);
 			SET last_id = LAST_INSERT_ID();
 
-			INSERT sea_user_info(coin, money, energy, last_charged_time, 
+			INSERT sea_user_info(lv, exp, coin, money, energy, last_charged_time, 
 									selected_character, invite_count, mileage, draw)
-			VALUES (99999, 9999, 100, UNIX_TIMESTAMP(NOW()), 
+			VALUES (1, 0, 99999, 9999, 100, UNIX_TIMESTAMP(NOW()), 
 					3, 0, 0, 0);
 
 			INSERT sea_item(shield, item_last, ghostify, immortal, exp_boost, random)
@@ -52,17 +52,17 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 			INSERT sea_upgrade(score_factor, time_factor, cooldown_factor)
 			VALUES (0, 0, 0);
 
-			INSERT sea_character_1(lv, exp, head, top, bottoms, back)
-			VALUES (0, 0, 0, 0, 0, 0);
+			INSERT sea_character_1(lv, head, top, bottoms, back)
+			VALUES (0, 0, 0, 0, 0);
 
-			INSERT sea_character_2(lv, exp, head, top, bottoms, back)
-			VALUES (0, 0, 0, 0, 0, 0);
+			INSERT sea_character_2(lv, head, top, bottoms, back)
+			VALUES (0, 0, 0, 0, 0);
 
-			INSERT sea_character_3(lv, exp, head, top, bottoms, back)
-			VALUES (1, 0, 0, 0, 0, 0);
+			INSERT sea_character_3(lv, head, top, bottoms, back)
+			VALUES (1, 0, 0, 0, 0);
 
-			INSERT sea_character_4(lv, exp, head, top, bottoms, back)
-			VALUES (0, 0, 0, 0, 0, 0);
+			INSERT sea_character_4(lv, head, top, bottoms, back)
+			VALUES (0, 0, 0, 0, 0);
 
 			INSERT sea_costume_head_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)
 			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -76,10 +76,10 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 			INSERT sea_costume_back_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)
 			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-			INSERT sea_ghost_house(slot_1, slot_2, slot_3, slot_4, slot_5)
-			VALUES (0, -1, -1, -1. -1);
+			INSERT sea_ghost_house(room_1, room_2, room_3, room_4, room_5)
+			VALUES (0, -1, -1, -1, -1);
 
-			INSERT sea_ghost_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _13, _14, _15, _16, _17, _18, _19, _20)
+			INSERT sea_ghost_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20)
 			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 			INSERT sea_ghost_2(_21, _22, _23, _24, _25, _26, _27, _28, _29, _30)

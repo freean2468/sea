@@ -1,10 +1,19 @@
 var fs = require('fs');
-
 var protoFileList = [];
+var version = '';
+var parameter = '';
+var idList = [];
 
 process.argv.forEach(function(val, index, array) {
-	if (index >= 2) {
+	if (val[0] === '-') {
+		parameter = val;
+		return;
+	}
+
+	if (parameter === '-proto') {
 		protoFileList.push(val);
+	} else if (parameter === '-version') {
+		version = val;
 	}
 });
 
@@ -99,6 +108,7 @@ function fetchMessage(stream, index) {
 			id *= -1;
 		}
 
+		idList.push(id);
 		msgWithIdList.push({'message': chunk, 'id': id});
 
 		listOutput += '\t\'' + chunk + '\',' + '\n';
@@ -151,6 +161,9 @@ function fetchMessage(stream, index) {
 
 		if (line.search('message') != -1 && filter === false) {
 			var idLine = '\t' + 'optional uint64 id = 1 [default=' + msgWithIdList[messageCount++].id + '];' + '\n';
+			if (line.search('VersionInfo ') !== -1) {
+				idLine += '\t' + 'optional string version = 2 [default=\"' + version + '\"];' + '\n';
+			}
 			protoFile += idLine;
 			filter = true;
 		}
@@ -192,6 +205,12 @@ function hash(serial) {
 	}
 
 	serial |= 0xf000;
+
+	// Duplicated
+	while (idList.indexOf(serial) !== -1) {
+		console.log('Id of message is duplicated, so regenerate.');
+		serial = hash(serial);
+	}
 
 	return serial;
 }

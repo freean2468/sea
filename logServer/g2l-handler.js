@@ -20,8 +20,9 @@ function inspectField(msg) {
 	return true;
 }
 
-function AccountLoginHandler(response, data, logMgr) {
+function AccountLoginHandler(response, data) {
 	var msg = build.AccountLogin.decode(data);
+	var logMgr = require('./g2l-index').server.logMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in AccountLoginHandler");
@@ -35,8 +36,9 @@ function AccountLoginHandler(response, data, logMgr) {
 	response.end();
 } // end AccountLoginHandler
 
-function ConcurrentUserHandler(response, data, logMgr) {
+function ConcurrentUserHandler(response, data) {
 	var msg = build.ConcurrentUser.decode(data);
+	var logMgr = require('./g2l-index').server.logMgr;
 	
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in ConcurrentUserHandler");
@@ -52,8 +54,9 @@ function ConcurrentUserHandler(response, data, logMgr) {
 	response.end();
 } // end ConcurrentUserHandler
 
-function PeakConcurrentUserHandler(response, data, logMgr) {
+function PeakConcurrentUserHandler(response, data) {
 	var msg = build.PeakConcurrentUser.decode(data);
+	var logMgr = require('./g2l-index').server.logMgr;
 	
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PeakConcurrentUserHandler");
@@ -71,8 +74,9 @@ function PeakConcurrentUserHandler(response, data, logMgr) {
 	response.end();
 } // end PeakConcurrentUserHandler
 
-function UniqueVisitorHandler(response, data, logMgr) {
+function UniqueVisitorHandler(response, data) {
 	var msg = build.UniqueVisitor.decode(data);
+	var logMgr = require('./g2l-index').server.logMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in UniqueVisitorHandler");
@@ -88,8 +92,9 @@ function UniqueVisitorHandler(response, data, logMgr) {
 	response.end();
 } // end UniqueVisitorHandler
 
-function RetentionRateHandler(response, data, logMgr) {
+function RetentionRateHandler(response, data) {
 	var msg = build.RetentionRate.decode(data);
+	var logMgr = require('./g2l-index').server.logMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in RetentionRateHandler");
@@ -105,8 +110,9 @@ function RetentionRateHandler(response, data, logMgr) {
 	response.end();
 } // end RetentionRateHandler
 
-function PayCharacterHandler(response, data, logMgr) {
+function PayCharacterHandler(response, data) {
 	var msg = build.PayCharacter.decode(data);
+	var logMgr = require('./g2l-index').server.logMgr;
 	
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PayCharacterHandler");
@@ -119,8 +125,9 @@ function PayCharacterHandler(response, data, logMgr) {
 	response.end();
 } // end PayCharacterHandler
 
-function PayCoinHandler(response, data, logMgr) {
+function PayCoinHandler(response, data) {
 	var msg = build.PayCoin.decode(data);
+	var logMgr = require('./g2l-index').server.logMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PayCoinHandler");
@@ -133,8 +140,9 @@ function PayCoinHandler(response, data, logMgr) {
 	response.end();
 } // end PayCoinHandler
 
-function PayEnergyHandler(response, data, logMgr) {
+function PayEnergyHandler(response, data) {
 	var msg = build.PayEnergy.decode(data);
+	var logMgr = require('./g2l-index').server.logMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PayHeartHandler");
@@ -147,8 +155,9 @@ function PayEnergyHandler(response, data, logMgr) {
 	response.end();
 } // end PayEnergyHandler
 
-function PayItemHandler(response, data, logMgr) {
+function PayItemHandler(response, data) {
 	var msg = build.PayItem.decode(data);
+	var logMgr = require('./g2l-index').server.logMgr;
 	
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PayItemHandler");
@@ -161,8 +170,9 @@ function PayItemHandler(response, data, logMgr) {
 	response.end();
 } // end PayItemHandler
 
-function PayMoneyHandler(response, data, logMgr) {
+function PayMoneyHandler(response, data) {
 	var msg = build.PayMoney.decode(data);
+	var logMgr = require('./g2l-index').server.logMgr;
 	
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PayMoneyHandler");
@@ -175,8 +185,9 @@ function PayMoneyHandler(response, data, logMgr) {
 	response.end();
 } // end PayMoneyHandler
 
-function UserGamePlayHandler(response, data, logMgr) {
+function UserGamePlayHandler(response, data) {
 	var msg = build.UserGamePlay.decode(data);
+	var logMgr = require('./g2l-index').server.logMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in UserGamePlayHandler");
@@ -189,8 +200,9 @@ function UserGamePlayHandler(response, data, logMgr) {
 	response.end();
 } // end UserGamePlayHandler
 
-function UserRegisterHandler(response, data, logMgr) {
+function UserRegisterHandler(response, data) {
 	var msg = build.UserRegister.decode(data);
+	var logMgr = require('./g2l-index').server.logMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in UserRegisterHandler");
@@ -203,8 +215,9 @@ function UserRegisterHandler(response, data, logMgr) {
 	response.end();
 } // end UserRegisterHandler
 
-function UserUnregisterHandler(response, data, logMgr) {
+function UserUnregisterHandler(response, data) {
 	var msg = build.UserUnregister.decode(data);
+	var logMgr = require('./g2l-index').server.logMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in UserUnregisterHandler");

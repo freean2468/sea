@@ -169,6 +169,18 @@ function startGame (id, callback) {
 	call(procedure, params, function (results) { callback(results[0][0]); });
 }
 
+function updateLv (id, lv, callback) {
+	var procedure = 'sea_UpdateLv';
+	var params = id + ', ' + lv;
+	call(procedure, params, function () { callback(true); });
+}
+
+function updateExp (id, exp, callback) {
+	var procedure = 'sea_UpdateExp';
+	var params = id + ', ' + exp;
+	call(procedure, params, function () { callback(true); });
+}
+
 function updateCoin (id, coin, callback) {
 	var procedure = 'sea_UpdateCoin';
 	var params = id + ', ' + coin;
@@ -639,6 +651,8 @@ module.exports = {
 	'loadUserBriefInfo': loadUserBriefInfo,
 	'checkInCharge': checkInCharge,
 	'startGame': startGame,
+	'updateLv': updateLv,
+	'updateExp': updateExp,
 	'updateCoin': updateCoin,
 	'addCoin': addCoin,
 	'updateMoney': updateMoney,

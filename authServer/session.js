@@ -6,7 +6,8 @@ var	MINUTE = require('../common/define').MINUTE,
 
 function SessionMgr(logMgr) {
 	// property
-	this.sessionList = {};
+	this.sessionInfoList = {}; // key : session, value : kId
+	this.sessionList = {}; // key : kId, value : session
 	this.timerList = {};
 	this.logMgr = logMgr;
 
@@ -14,59 +15,63 @@ function SessionMgr(logMgr) {
 	this.registerSession = function (kId) {
 		var sessionId = UUID();
 
-		if (this.sessionList[kId] !== undefined && this.sessionList[kId] !== null) {
+		if (typeof this.sessionList[kId] !== 'undefined' && this.sessionList[kId] !== null) {
 			//this.logMgr.addLog('ERROR', 'Duplicated Auth. (' + kId + ')');
 			//return false;
-			this.logMgr.addLog('AUTH', 'Reregister session. (' + kId + ', ' + sessionId + ')');
+			var _sessionId = this.sessionList[kId];
+			this.logMgr.addLog('AUTH', 'Re-register session for ' + kId + ' before is ' + _sessionId + ')');
 			this.sessionList[kId] = null;
-			clearTimeout(this.timerList[kId]);
-			this.timerList[kId] = null;
+			this.sessionInfoList[_sessionId] = null;
+			clearTimeout(this.timerList[_sessionId]);
+			this.timerList[_sessionId] = null;
 		} else {
 			this.logMgr.addLog('AUTH', 'Register new session. (' + kId + ', ' + sessionId + ')');
 		}
 		this.sessionList[kId] = sessionId;
-		this.setExpiration(kId, sessionId);
+		this.sessionInfoList[sessionId] = kId;
+		this.setExpiration(sessionId);
 
 		return sessionId;
 	};
 
-	this.unregisterSession = function (kId, sessionId) {
-		var _sessionId = this.sessionList[kId];
+	this.unregisterSession = function (sessionId) {
+		var _kId = this.sessionInfoList[sessionId];
 
-		if (_sessionId !== null && _sessionId === sessionId) {
-			this.sessionList[kId] = null;
-			clearTimeout(this.timerList[kId]);
-			this.timerList[kId] = null;
+		if (_kId !== null && typeof _kId !== 'undefined') {
+			this.sessionList[_kId] = null;
+			this.sessionInfoList[sessionId] = null;
+			clearTimeout(this.timerList[sessionId]);
+			this.timerList[sessionId] = null;
 			
-			this.logMgr.addLog('AUTH', 'Unregister session. (' +kId + ', ' + sessionId + ')');
-			return true;
+			this.logMgr.addLog('AUTH', 'Unregister session. (session: ' + sessionId + ', kId : ' + _kId + ')');
+			return _kId;
 		} else {
-			this.logMgr.addLog('ERROR', 'A wrong access was detected in unregisterSession. (' + kId + ', ' + sessionId + ')');
+			this.logMgr.addLog('ERROR', 'A wrong access was detected in unregisterSession. (' + sessionId + ')');
 			return false;
 		}
 	};
 
-	this.setExpiration = function (kId, sessionId) {
+	this.setExpiration = function (sessionId) {
 		var that = this;
-		var callback = function (kId) {
-			that.unregisterSession(kId, sessionId);
+		var callback = function (sessionId) {
+			that.unregisterSession(sessionId);
 		};
 
-		var timerId = setTimeout(callback, EXPIRATION, kId);
+		var timerId = setTimeout(callback, EXPIRATION, sessionId);
 
-		this.timerList[kId] = timerId;
+		this.timerList[sessionId] = timerId;
 	};
 
-	this.updateSession = function (kId, sessionId) {
-		var _sessionId = this.sessionList[kId];
+	this.updateSession = function (sessionId) {
+		var _kId = this.sessionInfoList[sessionId];
 
-		if (_sessionId !== null && _sessionId === sessionId) {
-			clearTimeout(this.timerList[kId]);
-			this.setExpiration(kId, sessionId);
+		if (_kId !== null && typeof _kId !== 'undefined') {
+			clearTimeout(this.timerList[sessionId]);
+			this.setExpiration(sessionId);
 //			this.logMgr.addLog('AUTH', 'Update session. (' + kId + ', ' + sessionId + ')');
-			return true;
+			return _kId;
 		} else {
-			this.logMgr.addLog('ERROR', 'A wrong access was detected in updateSession. (' + kId + ', ' + sessionId + ')');
+			this.logMgr.addLog('ERROR', 'A wrong access was detected in updateSession. (' + sessionId + ')');
 			return false;
 		}
 	};

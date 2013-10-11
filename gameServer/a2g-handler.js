@@ -1,17 +1,17 @@
 function processSystemMessageReply(client, socket, data) {
-	client.sessionEvent.systemMessage(data.k_id, data.res);
+	client.sessionEvent.systemMessage(data.callback_id, data.res);
 }
 
 function processRegisterSessionReply(client, socket, data) {
-	client.sessionEvent.register(data.k_id, data.session_id);
+	client.sessionEvent.register(data.callback_id, data.session_id);
 }
 
 function processUnregisterSessionReply(client, socket, data) {
-	client.sessionEvent.unregister(data.k_id);
+	client.sessionEvent.unregister(data.callback_id, data.k_id);
 }
 
 function processUpdateSessionReply(client, socket, data) {
-	client.sessionEvent.update(data.k_id);
+	client.sessionEvent.update(data.callback_id, data.k_id);
 }
 
 module.exports = {

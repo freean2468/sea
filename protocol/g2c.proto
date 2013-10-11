@@ -66,28 +66,29 @@ message StartGameReply {
 
 message AccountInfo {
 	optional uint64 id = 1 [default=76741253];
-	required int32 coin = 2;
-	required int32 money = 3;
-	required int32 energy = 4;
-	required int64 last_charged_time = 5;
-	required int32 selected_character = 6;
-	required int32 score_factor = 7;
-	required int32 time_factor = 8;
-	required int32 cooldown_factor = 9;
-	required int32 shield = 10;
-	required int32 item_last = 11;
-	required int32 ghostify = 12;
-	required int32 immortal = 13;
-	required int32 exp_boost = 14;
-	required int32 random = 15;
-	required int32 mileage = 16;
-	required int32 draw = 17;
-	repeated CharacterInfo characters = 18;
+	required int32 lv = 2;
+	required int32 exp = 3;
+	required int32 coin = 4;
+	required int32 money = 5;
+	required int32 energy = 6;
+	required int64 last_charged_time = 7;
+	required int32 selected_character = 8;
+	required int32 score_factor = 9;
+	required int32 time_factor = 10;
+	required int32 cooldown_factor = 11;
+	required int32 shield = 12;
+	required int32 item_last = 13;
+	required int32 ghostify = 14;
+	required int32 immortal = 15;
+	required int32 exp_boost = 16;
+	required int32 random = 17;
+	required int32 mileage = 18;
+	required int32 draw = 19;
+	repeated CharacterInfo characters = 20;
 
 	message CharacterInfo {
 		required int32 id = 1;
 		required int32 level = 2;
-		required int32 exp = 3;
 	}
 } // end
 

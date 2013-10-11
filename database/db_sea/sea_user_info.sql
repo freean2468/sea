@@ -4,6 +4,8 @@ DROP TABLE IF EXISTS sea_user_info;
 
 CREATE TABLE sea.sea_user_info(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	lv TINYINT UNSIGNED NOT NULL,
+	exp MEDIUMINT UNSIGNED NOT NULL,
 	coin MEDIUMINT UNSIGNED NOT NULL,
 	money MEDIUMINT UNSIGNED NOT NULL,
 	energy TINYINT UNSIGNED NOT NULL,
@@ -21,11 +23,11 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS sea_LoadUserInfo $$
 CREATE PROCEDURE sea_LoadUserInfo(IN p_id INT)
 	BEGIN
-		SELECT I.coin, I.money, I.energy, I.last_charged_time, I.selected_character, I.invite_count, I.mileage, I.draw,
+		SELECT I.lv, I.exp, I.coin, I.money, I.energy, I.last_charged_time, I.selected_character, I.invite_count, I.mileage, I.draw,
 				IT.shield, IT.item_last, IT.ghostify, IT.immortal, IT.exp_boost, IT.random,
 				M.uv, 
 				UG.score_factor, UG.time_factor, UG.cooldown_factor,
-				C1.lv AS _1, C1.exp AS _1_exp, C2.lv AS _2, C2.exp AS _2_exp, C3.lv AS _3, C3.exp AS _3_exp, C4.lv AS _4, C4.exp AS _4_exp
+				C1.lv AS _1, C2.lv AS _2, C3.lv AS _3, C4.lv AS _4
 		FROM sea.sea_user_info AS I
 		INNER JOIN sea.sea_item AS IT ON p_id = IT.id
 		INNER JOIN sea.sea_metric AS M ON p_id = M.id
@@ -102,6 +104,20 @@ CREATE PROCEDURE sea_StartGame(IN p_id INT)
 		FROM sea.sea_user_info AS I
 		INNER JOIN sea.sea_item AS IT ON p_id = IT.id
 		WHERE I.id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_UpdateLv $$
+CREATE PROCEDURE sea_UpdateLv(IN p_id INT, IN p_lv TINYINT UNSIGNED)
+	BEGIN
+		UPDATE sea_user_info SET lv = p_lv WHERE id = p_id;		
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_UpdateExp $$
+CREATE PROCEDURE sea_UpdateExp(IN p_id INT, IN p_exp MEDIUMINT UNSIGNED)
+	BEGIN
+		UPDATE sea_user_info SET exp = p_exp WHERE id = p_id;		
 	END
 $$
 

@@ -35,7 +35,7 @@ function Router() {
 
 		if (typeof handle[id] === 'function') {	
 			var sessionId = this.fetchSessionId(request);
-			handle[id](response, data, sessionId, this.logMgr);
+			handle[id](response, data, sessionId);
 		} else {
 			this.logMgr.addLog('ERROR', 'No request handler found for ' + pathname);
 			response.writeHead(404, {'Content-Type': 'text/plain'});

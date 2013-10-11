@@ -2,7 +2,7 @@ package A2G;
 
 message SystemMessage {
 	required Result res = 1;
-	required string k_id = 2;
+	required string callback_id = 2;
 
 	enum Result {
 		DUPLICATED_LOGIN = 1;
@@ -11,14 +11,16 @@ message SystemMessage {
 } // end
 
 message RegisterSessionReply {
-	required string k_id = 1;
+	required string callback_id = 1;
 	required string session_id = 2;
 } // end
 
 message UnregisterSessionReply {
-	required string k_id = 1;
+	required string callback_id = 1;
+	required string k_id = 2;
 } // end
 
 message UpdateSessionReply {
-	required string k_id = 1;
+	required string callback_id = 1;
+	required string k_id = 2;
 } // end

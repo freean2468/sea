@@ -23,7 +23,7 @@ function Server() {
 			});
 
 			request.addListener('end', function end() {
-				route(handle, pathname, response, postData, this.logMgr);
+				route(handle, pathname, response, postData);
 			});
 		}
 		

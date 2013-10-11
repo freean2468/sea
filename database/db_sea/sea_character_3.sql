@@ -5,7 +5,6 @@ DROP TABLE IF EXISTS sea_character_3;
 CREATE TABLE sea.sea_character_3(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	lv TINYINT UNSIGNED NOT NULL,
-	exp INT UNSIGNED NOT NULL,
 	head TINYINT UNSIGNED NOT NULL,
 	top TINYINT UNSIGNED NOT NULL,
 	bottoms TINYINT UNSIGNED NOT NULL,
@@ -19,7 +18,7 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS sea_LoadCharacter_3 $$
 CREATE PROCEDURE sea_LoadCharacter_3(IN p_id INT)
 	BEGIN
-		SELECT lv, exp FROM sea_character_3 WHERE id = p_id;
+		SELECT lv FROM sea_character_3 WHERE id = p_id;
 	END
 $$
 

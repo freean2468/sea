@@ -1,14 +1,14 @@
 var log = require('./log'),
 	util = require('../common/util');
 
-function resRoute(handle, pathname, response, postData, logMgr) {
+function resRoute(handle, pathname, response, postData) {
 	var stream = util.decrypt(postData);
 	var data = util.toArrBuf(new Buffer(stream, 'hex'));
 
 	id = util.fetchId(data);
 
 	if (typeof handle[id] === 'function') {
-		handle[id](response, data, logMgr);
+		handle[id](response, data);
 	}
 //	else if (postData && typeof handle[data['id']] === 'function')
 //	{
