@@ -44,13 +44,17 @@ function Server() {
 
 			request.setEncoding('utf8');
 
-			request.addListener('data', function data(postDataChunk) {
+			request.addListener('data', function (postDataChunk) {
 				postData += postDataChunk;
 				//console.log('Received POST data chunk \'' + postDataChunk + '\'.');
 			});
 
-			request.addListener('end', function end() {
+			request.addListener('end', function () {
 				that.router.route(request, pathname, response, postData);
+			});
+
+			request.addListener('error', function (e) {
+				that.logMgr.addLog('SYSTEM', 'problem with request: ' + e.message);
 			});
 		}
 

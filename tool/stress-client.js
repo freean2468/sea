@@ -63,7 +63,7 @@ var timerId = 0;
 
 function setTimer(packet) {
 	timerId = setTimeout(function () {
-		console.log(packet + ' sended then, was not received any response from server (' + idx + ')');
+		console.log(packet + ' sended then, was not received any response from server (' + (k_id) + ')');
 	}, DELAY);
 };
 
@@ -154,7 +154,7 @@ function request(data) {
 				var post = new Date().getTime();
 				var period = post - pre;
 
-				console.log('idx: ' + idx + ', ' + login['k_id'] + ' : logout! (' + period + 'ms)');
+				console.log('idx: ' + idx + ', ' + k_id + ' : logout! (' + period + 'ms)');
 			} else if (id === logoutReply['id']['low']) {
 				process.exit();
 			} else if (id === systemMessage['id']['low']) {
@@ -192,7 +192,7 @@ function request(data) {
 	var req = http.request(opts, callback);
 
 	req.on('error', function(e) {
-		console.log('problem with request: ' + e.message);
+		console.log('(' + k_Id + ') problem with request: ' + e.message);
 	});
 	
 	// write the data
