@@ -107,7 +107,6 @@ function request(data) {
 				login['k_id'] = k_id;
 				setTimer('log');
 				request(login);
-				console.log('requested Login');
 			} else if (id === accountInfo['id']['low']) {
 				clearTimeout(timerId);
 				var cookies = fetchCookie(response);
@@ -155,7 +154,7 @@ function request(data) {
 				var post = new Date().getTime();
 				var period = post - pre;
 
-				console.log('idx: ' + ', ' + login['k_id'] + ' : logout! (' + period + 'ms)');
+				console.log('idx: ' + idx + ', ' + login['k_id'] + ' : logout! (' + period + 'ms)');
 			} else if (id === logoutReply['id']['low']) {
 				process.exit();
 			} else if (id === systemMessage['id']['low']) {
