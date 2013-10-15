@@ -127,7 +127,7 @@ function request(data) {
 				request(loadPostedBatonResult);
 			} else if (id === postedBatonResult['id']['low']) {
 				clearTimeout(timerId);
-				setTImer('checkInCharge');
+				setTimer('checkInCharge');
 				request(checkInCharge);
 			} else if (id === chargeInfo['id']['low']) {
 				clearTimeout(timerId);
