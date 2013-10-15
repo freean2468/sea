@@ -1,25 +1,25 @@
 var fs = require('fs');
-var PATH = './LOG/';
 
-function LogMgr(currentDate) {
+function LogMgr(path, currentDate) {
 	// property
 	this.currentDate = currentDate;
 	this.owner = '';
 	this.currentDate;
 	this.startTime;
 	this.fullPath;
+	this.path = path;
 
 	// method
 	this.init = function (owner) {
 		this.owner = owner;
 		this.startTime = this.getDateTime();
-		this.fullPath = PATH + owner + '-' + this.startTime + '/';
+		this.fullPath = path + owner + '-' + this.startTime + '/';
 		this.mkdirLog();
 	};
 
 	this.mkdirLog = function () {
-		if (!fs.existsSync(PATH)) {
-			fs.mkdirSync(PATH);
+		if (!fs.existsSync(this.path)) {
+			fs.mkdirSync(this.path);
 		}
 		if (!fs.existsSync(this.fullPath)) {
 			fs.mkdirSync(this.fullPath);

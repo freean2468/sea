@@ -20,7 +20,7 @@ var versionInfo = new build.VersionInfo(),
 	login = new build.Login(),
 	loadRankInfo = new build.LoadRankInfo(),
 	accountInfo = new build.AccountInfo(),
-	rankInfo = new build.RankInfo(),
+//	rankInfo = new build.RankInfo(),
 	unregisterAccount = new build.UnregisterAccount(),
 	checkInCharge = new build.CheckInCharge(),
 	startGame = new build.StartGame(),
@@ -58,6 +58,16 @@ var k_id = require('./kid-table').table[idx];
 
 var pre = new Date().getTime();
 
+var DELAY = 10000;
+var timerId = 0;
+
+function setTimer(packet) {
+	timerId = setTimeout(function () {
+		console.log(packet + ' sended then, was not received any response from server (' + idx + ')');
+	}, DELAY);
+};
+
+setTimer('versionInfo');
 request(versionInfo);
 
 function fetchCookie(res) {
@@ -84,60 +94,76 @@ function request(data) {
 
 		response.on('end', function() {
 			var stream = util.decrypt(res_data);
-
 			var res = util.toArrBuf(new Buffer(stream, 'hex'));
 			var id = util.fetchId(res);
 
 			if (id === versionInfoReply['id']['low']) {
+				clearTimeout(timerId);
 				registerAccount['k_id'] = k_id;
+				setTimer('registerAccount');
 				request(registerAccount);
 			} else if (id === registerAccountReply['id']['low']) {
+				clearTimeout(timerId);
 				login['k_id'] = k_id;
+				setTimer('log');
 				request(login);
 				console.log('requested Login');
 			} else if (id === accountInfo['id']['low']) {
+				clearTimeout(timerId);
 				var cookies = fetchCookie(response);
 				piece = cookies['piece'];
-				request(loadRankInfo);				
-			} else if (id === rankInfo['id']['low']) {
+//				request(loadRankInfo);				
+//			} else if (id === rankInfo['id']['low']) {
+				setTimer('loadPostedEnergy');
 				request(loadPostedEnergy);
 			} else if (id === postedEnergy['id']['low']) {
+				clearTimeout(timerId);
+				setTimer('loadPostedBaton');
 				request(loadPostedBaton);
 			} else if (id === postedBaton['id']['low']) {
+				clearTimeout(timerId);
 				msg = build.PostedBaton.decode(res);
+				setTimer('loadPostedBatonResult');
 				request(loadPostedBatonResult);
 			} else if (id === postedBatonResult['id']['low']) {
+				clearTimeout(timerId);
+				setTImer('checkInCharge');
 				request(checkInCharge);
-			}
-			else if (id === chargeInfo['id']['low']) {
+			} else if (id === chargeInfo['id']['low']) {
+				clearTimeout(timerId);
 				buyItem['item'] = Math.floor(Math.random() * (build.BuyItem.Item['MAX']-1)) + 1;
+				setTimer('buyItem');
 				request(buyItem);
-			}
-			else if (id === buyItemReply['id']['low']) {
+			} else if (id === buyItemReply['id']['low']) {
+				clearTimeout(timerId);
+				setTimer('startGame');
 				request(startGame);
-			}
-			else if (id === startGameReply['id']['low']) {
+			} else if (id === startGameReply['id']['low']) {
+				clearTimeout(timerId);
 				endGame['dist'] = Math.floor(Math.random() * 100);
 				endGame['enemy_kill'] = Math.floor(Math.random() * 10);
 				endGame['selected_character'] = 1;
 				endGame['score'] = Math.floor(Math.random() * 1000) + 1;
 				endGame['play_time'] = Math.floor(Math.random() * 1000) + 1;
 				endGame['coin'] = Math.floor(Math.random() * 1000) + 1;
+				setTimer('endGame');
 				request(endGame);
-			}
-			else if (id === gameResult['id']['low']) {
+			} else if (id === gameResult['id']['low']) {
+				clearTimeout(timerId);
+				setTimer('logout');
 				request(logout);
 				var post = new Date().getTime();
 				var period = post - pre;
 
-				console.log(login['k_id'] + " : logout! (" + period + "ms)");
+				console.log('idx: ' + ', ' + login['k_id'] + ' : logout! (' + period + 'ms)');
 			} else if (id === logoutReply['id']['low']) {
-				console.log("logoutReply is arrived");
 				process.exit();
 			} else if (id === systemMessage['id']['low']) {
+				clearTimeout(timerId);
 				msg = build.SystemMessage.decode(res);
 				if (msg['res'] === build.SystemMessage.Result['EXISTED_ACCOUNT']) {
 					login['k_id'] = k_id;
+					setTimer('login');
 					request(login);
 				}
 			}

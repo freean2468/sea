@@ -1,4 +1,4 @@
-var mysql = require('./mysql');
+var mysqlMgr = require('../common/mysql').mysqlMgr;
 var mongodb = require('./mongodb');
 
 var count = 0;
@@ -58,7 +58,7 @@ function sort(results) {
 }
 
 function calc () { 
-	mysql.ranking(function (res) {
+	mysqlMgr.ranking(function (res) {
 		if (res === 0) {
 			log.addLog('DEBUG', 'Something wrong happened in rank calc');
 		}

@@ -6,26 +6,28 @@ var http = require('http'),
 	;
 
 var build = require('./c2g-proto-build'),
-	LogMgr = require('./log').LogMgr,
-	rank = cp.fork('./rank.js'),
+	LogMgr = require('../common/log').LogMgr,
+//	rank = cp.fork('./rank.js'),
 	request = require('./g2l-request').request,
 	Client = require('./a2g-client').Client,
 	Router = require('./c2g-router').Router,
 	DataMgr = require('./data').DataMgr,
-	DrawMgr = require('./draw').DrawMgr
+	DrawMgr = require('./draw').DrawMgr,
+	MysqlMgr = require('../common/mysql').MysqlMgr
 	;
 
 var currentDate = new Date();
 
 function Server() {
 	// property
-	this.rankingList = [];
-	this.logMgr = new LogMgr(currentDate);
+//	this.rankingList = [];
+	this.logMgr = new LogMgr('../gameServer/LOG/', currentDate);
 	this.clientList = {};
 	this.server;
 	this.router = new Router();
 	this.dataMgr = new DataMgr();
 	this.drawMgr = new DrawMgr();
+	this.mysqlMgrList = {};
 
 	// method
 	this.start = function () {
@@ -55,11 +57,11 @@ function Server() {
 		if (cluster.isMaster) {		
 	//		metric();	
 
-			rank.on('message', function(m) {
-				this.rankingList = m;
-			});
-
-			console.log('rank calc has started.');	
+//			rank.on('message', function(m) {
+//				this.rankingList = m;
+//			});
+//
+//			console.log('rank calc has started.');	
 
 			for (var i = 0; i < numCPUs; ++i) {
 				cluster.fork();
@@ -79,11 +81,16 @@ function Server() {
 			client.init();
 
 			this.clientList[process.pid] = client;
+			this.mysqlMgrList[process.pid] = new MysqlMgr('sea', numCPUs);
 		}
 	};
 
 	this.getClient = function () {
 		return this.clientList[process.pid];
+	};
+
+	this.getMysqlMgr = function () {
+		return this.mysqlMgrList[process.pid];
 	};
 }
 

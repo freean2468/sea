@@ -1,7 +1,10 @@
 // Load the TCP Library
-var net = require('net');
-var log = require('./log');
-var session = require('./session');
+var net = require('net'),
+	LogMgr = require('../common/log').LogMgr,
+	session = require('./session')
+	;
+
+var currentDate = new Date();
 
 function Client(socket) {
 	// Property
@@ -16,14 +19,14 @@ function Server(router) {
 	// Property
 	this.router = router;
 	this.sessionMgr;
-	this.logMgr = new log.LogMgr();
+	this.logMgr = new LogMgr('../authServer/LOG/', currentDate);
 	this.server;
 	this.clientList = {};
 
 	// Method
 	this.create = function () {
 		this.router.init();
-		this.logMgr.init();
+		this.logMgr.init('AUTH');
 		this.sessionMgr = new session.SessionMgr(this.logMgr);
 		var that = this;
 

@@ -1,9 +1,4 @@
-var mysql = require('./mysql');
 var build = require('./g2l-proto-build');
-var assert = require('assert');
-var toStream = require('../common/util').toStream;
-var UUID = require('../common/util').UUID;
-var convertMS2S = require('../common/util').convertMS2S;
 
 function write(res, stream) {
 	res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':stream.length});
@@ -23,11 +18,12 @@ function inspectField(msg) {
 function AccountLoginHandler(response, data) {
 	var msg = build.AccountLogin.decode(data);
 	var logMgr = require('./g2l-index').server.logMgr;
+	var mysqlMgr = require('./g2l-index').server.mysqlMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in AccountLoginHandler");
 	} else {
-		mysql.addLogLogin(msg['k_id'], function (res) {
+		mysqlMgr.addLogLogin(msg['k_id'], function (res) {
 			var res = res['res'];
 			console.log('addLogLogin: ' + res);
 		});
@@ -39,13 +35,14 @@ function AccountLoginHandler(response, data) {
 function ConcurrentUserHandler(response, data) {
 	var msg = build.ConcurrentUser.decode(data);
 	var logMgr = require('./g2l-index').server.logMgr;
+	var mysqlMgr = require('./g2l-index').server.mysqlMgr;
 	
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in ConcurrentUserHandler");
 	} else {
 		var ccu = msg['ccu'];
 		
-		mysql.addConcurrentUser(ccu, function (res) {
+		mysqlMgr.addConcurrentUser(ccu, function (res) {
 			if (res['res'] !== 0) {
 				console.log("CCU : " + ccu);
 			}
@@ -57,14 +54,15 @@ function ConcurrentUserHandler(response, data) {
 function PeakConcurrentUserHandler(response, data) {
 	var msg = build.PeakConcurrentUser.decode(data);
 	var logMgr = require('./g2l-index').server.logMgr;
+	var mysqlMgr = require('./g2l-index').server.mysqlMgr;
 	
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PeakConcurrentUserHandler");
 	} else {
-		mysql.peakConcurrentUser(function (res) {
+		mysqlMgr.peakConcurrentUser(function (res) {
 			var pccu = res['res'];
 				
-			mysql.addPeakConcurrentUser(pccu, function (res) {
+			mysqlMgr.addPeakConcurrentUser(pccu, function (res) {
 				if (res['res'] !== 0) {
 					console.log("PCCU : " + pccu);
 				}
@@ -77,13 +75,14 @@ function PeakConcurrentUserHandler(response, data) {
 function UniqueVisitorHandler(response, data) {
 	var msg = build.UniqueVisitor.decode(data);
 	var logMgr = require('./g2l-index').server.logMgr;
+	var mysqlMgr = require('./g2l-index').server.mysqlMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in UniqueVisitorHandler");
 	} else {
 		var uv = msg['uv'];
 
-		mysql.addUniqueVisitor(uv, function (res) {
+		mysqlMgr.addUniqueVisitor(uv, function (res) {
 			if (res['res'] !== 0) {
 				console.log("UV : " + uv);
 			}
@@ -95,13 +94,14 @@ function UniqueVisitorHandler(response, data) {
 function RetentionRateHandler(response, data) {
 	var msg = build.RetentionRate.decode(data);
 	var logMgr = require('./g2l-index').server.logMgr;
+	var mysqlMgr = require('./g2l-index').server.mysqlMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in RetentionRateHandler");
 	} else {
 		var rr = msg['rr'];
 
-		mysql.addRetentionRate(rr, function (res) {
+		mysqlMgr.addRetentionRate(rr, function (res) {
 			if (res['res'] !== 0) {
 				console.log("RR : " + rr);
 			}
@@ -113,11 +113,12 @@ function RetentionRateHandler(response, data) {
 function PayCharacterHandler(response, data) {
 	var msg = build.PayCharacter.decode(data);
 	var logMgr = require('./g2l-index').server.logMgr;
+	var mysqlMgr = require('./g2l-index').server.mysqlMgr;
 	
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PayCharacterHandler");
 	} else {
-		mysql.addLogPayCharacter(msg['k_id'], msg['paid_character'], msg['rest_coin'], function (res) {
+		mysqlMgr.addLogPayCharacter(msg['k_id'], msg['paid_character'], msg['rest_coin'], function (res) {
 			var res = res['res'];
 			console.log('addLogPayCharacter: ' + res);
 		});
@@ -128,11 +129,12 @@ function PayCharacterHandler(response, data) {
 function PayCoinHandler(response, data) {
 	var msg = build.PayCoin.decode(data);
 	var logMgr = require('./g2l-index').server.logMgr;
+	var mysqlMgr = require('./g2l-index').server.mysqlMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PayCoinHandler");
 	} else {
-		mysql.addLogPayCoin(msg['k_id'], msg['paid_coin'], msg['rest_money'], function (res) {
+		mysqlMgr.addLogPayCoin(msg['k_id'], msg['paid_coin'], msg['rest_money'], function (res) {
 			var res = res['res'];
 			console.log('addLogPayCoin: ' + res);
 		});
@@ -143,11 +145,12 @@ function PayCoinHandler(response, data) {
 function PayEnergyHandler(response, data) {
 	var msg = build.PayEnergy.decode(data);
 	var logMgr = require('./g2l-index').server.logMgr;
+	var mysqlMgr = require('./g2l-index').server.mysqlMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PayHeartHandler");
 	} else {
-		mysql.addLogPayEnergy(msg['k_id'], msg['paid_energy'], msg['rest_coin'], function (res) {
+		mysqlMgr.addLogPayEnergy(msg['k_id'], msg['paid_energy'], msg['rest_coin'], function (res) {
 			var res = res['res'];
 			console.log('addLogPayEnergy: ' + res);
 		});
@@ -158,11 +161,12 @@ function PayEnergyHandler(response, data) {
 function PayItemHandler(response, data) {
 	var msg = build.PayItem.decode(data);
 	var logMgr = require('./g2l-index').server.logMgr;
+	var mysqlMgr = require('./g2l-index').server.mysqlMgr;
 	
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PayItemHandler");
 	} else {
-		mysql.addLogPayItem(msg['k_id'], msg['paid_item'], msg['rest_coin'], function (res) {
+		mysqlMgr.addLogPayItem(msg['k_id'], msg['paid_item'], msg['rest_coin'], function (res) {
 			var res = res['res'];
 			console.log('addLogPayItem: ' + res);
 		});
@@ -173,11 +177,12 @@ function PayItemHandler(response, data) {
 function PayMoneyHandler(response, data) {
 	var msg = build.PayMoney.decode(data);
 	var logMgr = require('./g2l-index').server.logMgr;
+	var mysqlMgr = require('./g2l-index').server.mysqlMgr;
 	
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in PayMoneyHandler");
 	} else {
-		mysql.addLogPayMoney(msg['k_id'], msg['paid_money'], msg['rest_money'], function (res) {
+		mysqlMgr.addLogPayMoney(msg['k_id'], msg['paid_money'], msg['rest_money'], function (res) {
 			var res = res['res'];
 			console.log('addLogPayMoney: ' + res);
 		});
@@ -188,11 +193,12 @@ function PayMoneyHandler(response, data) {
 function UserGamePlayHandler(response, data) {
 	var msg = build.UserGamePlay.decode(data);
 	var logMgr = require('./g2l-index').server.logMgr;
+	var mysqlMgr = require('./g2l-index').server.mysqlMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in UserGamePlayHandler");
 	} else {
-		mysql.addLogPlay(msg['k_id'], msg['selected_character'], msg['score'], msg['enemy_kill'], msg['dist'], msg['play_time'], msg['exp_boost'], msg['item_last'], msg['shield'], msg['ghostify'], msg['immortal'], msg['random'], function (res) {
+		mysqlMgr.addLogPlay(msg['k_id'], msg['selected_character'], msg['score'], msg['enemy_kill'], msg['dist'], msg['play_time'], msg['exp_boost'], msg['item_last'], msg['shield'], msg['ghostify'], msg['immortal'], msg['random'], function (res) {
 			var res = res['res'];
 			console.log('addLogPlay: ' + res);
 		});
@@ -203,11 +209,12 @@ function UserGamePlayHandler(response, data) {
 function UserRegisterHandler(response, data) {
 	var msg = build.UserRegister.decode(data);
 	var logMgr = require('./g2l-index').server.logMgr;
+	var mysqlMgr = require('./g2l-index').server.mysqlMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in UserRegisterHandler");
 	} else {
-		mysql.addLogRegister(msg['k_id'], function (res) {
+		mysqlMgr.addLogRegister(msg['k_id'], function (res) {
 			var res = res['res'];
 			console.log('addLogRegister: ' + res);		
 		});
@@ -218,11 +225,12 @@ function UserRegisterHandler(response, data) {
 function UserUnregisterHandler(response, data) {
 	var msg = build.UserUnregister.decode(data);
 	var logMgr = require('./g2l-index').server.logMgr;
+	var mysqlMgr = require('./g2l-index').server.mysqlMgr;
 
 	if (inspectField(msg) === false) {
 		logMgr.addLog('ERROR', "Undefined field is detected in UserUnregisterHandler");
 	} else {
-		mysql.addLogUnregister(msg['k_id'], function (res) {
+		mysqlMgr.addLogUnregister(msg['k_id'], function (res) {
 			var res = res['res'];
 			console.log('addLogUnregister: ' + res);
 		});

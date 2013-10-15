@@ -1,28 +1,35 @@
-var log = require('./log'),
-	util = require('../common/util');
+var util = require('../common/util'),
+	handle = require('./g2l-handle').handle
+	;
 
-function resRoute(handle, pathname, response, postData) {
-	var stream = util.decrypt(postData);
-	var data = util.toArrBuf(new Buffer(stream, 'hex'));
+function Router() {
+	// property
+	this.logMgr;
+	
+	// method
+	this.init = function (logMgr) {
+		this.logMgr = logMgr;
+	};
 
-	id = util.fetchId(data);
+	this.route = function (pathname, response, postData) {
+		var stream = util.decrypt(postData);
+		var data = util.toArrBuf(new Buffer(stream, 'hex'));
 
-	if (typeof handle[id] === 'function') {
-		handle[id](response, data);
-	}
-//	else if (postData && typeof handle[data['id']] === 'function')
-//	{
-//		console.log('POST methods routing in resRoute');
-//		console.log(data);
-//		handle[data['id']](response, data);
-//	}	
-	else
-	{
-		logMgr.addLog('ERROR', 'No request handler found for ' + pathname);
-		response.writeHead(404, {'Content-Type': 'text/plain'});
-		response.write('404 Not found');
-		response.end();
-	}
+		id = util.fetchId(data);
+
+		if (typeof handle[id] === 'function') {
+			handle[id](response, data);
+		}
+		else
+		{
+			this.logMgr.addLog('ERROR', 'No request handler found for ' + pathname);
+			response.writeHead(404, {'Content-Type': 'text/plain'});
+			response.write('404 Not found');
+			response.end();
+		}
+	};
 }
 
-exports.resRoute = resRoute;
+module.exports = {
+	'Router': Router,
+};

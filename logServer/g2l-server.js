@@ -1,14 +1,27 @@
 var http = require('http'),
-	url = require('url');
+	url = require('url')
+	;
 
-var LogMgr = require('./log').LogMgr;
+var LogMgr = require('../common/log').LogMgr,
+	MysqlMgr = require('../common/mysql').MysqlMgr,
+	Router = require('./g2l-router').Router
+	;
+
+var currentDate = new Date();
 
 function Server() {
 	// property
-	this.logMgr = new LogMgr();
+	this.logMgr = new LogMgr('../logServer/LOG/', currentDate);
+	this.mysqlMgr = new MysqlMgr('sea_log', 1);
+	this.router = new Router();
 
 	// method
-	this.start = function (route, handle) {
+	this.start = function () {
+		this.router.init(this.logMgr);		
+		this.logMgr.init('LOG');
+
+		var that = this;
+
 		function onRequest(request, response) {
 			var postData = '';
 			var pathname = url.parse(request.url).pathname;
@@ -23,11 +36,9 @@ function Server() {
 			});
 
 			request.addListener('end', function end() {
-				route(handle, pathname, response, postData);
+				that.router.route(pathname, response, postData);
 			});
 		}
-		
-		this.logMgr.init('LOG');
 
 		server = http.createServer(onRequest)
 		server.timeout = 0;

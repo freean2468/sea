@@ -1,5 +1,4 @@
 var util = require('../common/util');
-
 var handle = require('./c2g-handle').handle;
 
 function Router() {
