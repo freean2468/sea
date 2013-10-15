@@ -192,7 +192,7 @@ function request(data) {
 	var req = http.request(opts, callback);
 
 	req.on('error', function(e) {
-		console.log('(' + k_Id + ') problem with request: ' + e.message);
+		console.log('(' + k_id + ') problem with request: ' + e.message);
 	});
 	
 	// write the data
