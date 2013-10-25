@@ -125,6 +125,7 @@ function PacketMgr(client) {
 		this.registerPacketHandler('a2g.RegisterSessionReply', this.proto.a2g_pkg.RegisterSessionReply, this.handler.P_RegisterSessionReply);
 		this.registerPacketHandler('a2g.UnregisterSessionReply', this.proto.a2g_pkg.UnregisterSessionReply, this.handler.P_UnregisterSessionReply);
 		this.registerPacketHandler('a2g.UpdateSessionReply', this.proto.a2g_pkg.UpdateSessionReply, this.handler.P_UpdateSessionReply);
+		this.registerPacketHandler('a2g.UpdateEndGameSessionReply', this.proto.a2g_pkg.UpdateEndGameSessionReply, this.handler.P_UpdateEndGameSessionReply);
 	}
 
 	// size + data = header(id) + body(protobuf)

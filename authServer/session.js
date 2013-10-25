@@ -10,6 +10,7 @@ function SessionMgr(logMgr) {
 	this.sessionList = {}; // key : kId, value : session
 	this.timerList = {};
 	this.logMgr = logMgr;
+	this.traceList = {};
 
 	// method
 	this.registerSession = function (kId) {
@@ -24,6 +25,10 @@ function SessionMgr(logMgr) {
 			this.sessionInfoList[_sessionId] = null;
 			clearTimeout(this.timerList[_sessionId]);
 			this.timerList[_sessionId] = null;
+
+			if (typeof this.traceList[sessionId] !== 'undefined' && this.traceList[sessionId] !== null) {
+				this.traceList[_sessionId] = null;
+			}
 		} else {
 			this.logMgr.addLog('AUTH', 'Register new session. (' + kId + ', ' + sessionId + ')');
 		}
@@ -74,6 +79,38 @@ function SessionMgr(logMgr) {
 			this.logMgr.addLog('ERROR', 'A wrong access was detected in updateSession. (' + sessionId + ')');
 			return false;
 		}
+	};
+
+	this.updateEndGameSession = function (sessionId) {
+		var _kId = this.sessionInfoList[sessionId];
+
+		if (_kId !== null && typeof _kId !== 'undefined') {
+			var traceData = this.traceList[sessionId];
+
+			this.traceList[sessionId] = null;
+			clearTimeout(this.timerList[sessionId]);
+			this.setExpiration(sessionId);
+//			this.logMgr.addLog('AUTH', 'Update session. (' + kId + ', ' + sessionId + ')');
+			return {
+				'k_id': _kId, 
+				'start_game': traceData['start_game'], 
+				'double_exp': traceData['double_exp'],
+			};
+		} else {
+			this.logMgr.addLog('ERROR', 'A wrong access was detected in updateSession. (' + sessionId + ')');
+			return false;
+		}
+	};
+
+	this.traceStartGame = function (data) {
+		var sessionId = data['session_id'];
+		var startTime = data['start_time'];
+		var doubleExp = data['double_exp'];
+
+		this.traceList[sessionId] = {
+			'start_time': startTime,
+			'double_exp': doubleExp,
+		};
 	};
 
 	this.CCU = function () {

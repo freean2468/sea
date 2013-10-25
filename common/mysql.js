@@ -217,8 +217,8 @@ function MysqlMgr(db, cluster) {
 		this.call(procedure, params, function (results) { callback(results[0][0]); });
 	};
 
-	this.loadMoney = function (id, callback) {
-		var procedure = 'sea_LoadMoney';
+	this.loadCash = function (id, callback) {
+		var procedure = 'sea_LoadCash';
 		var params = id;
 		this.call(procedure, params, function (results) { callback(results[0][0]); });
 	};
@@ -283,9 +283,9 @@ function MysqlMgr(db, cluster) {
 		this.call(procedure, params, function (results) { callback(results[0][0]); });
 	};
 
-	this.updateMoney = function (id, money, callback) {
-		var procedure = 'sea_UpdateMoney';
-		var params = id + ', ' + money;
+	this.updateCash = function (id, cash, callback) {
+		var procedure = 'sea_UpdateCash';
+		var params = id + ', ' + cash;
 		this.call(procedure, params, function () { callback(true); });
 	};
 
@@ -410,7 +410,7 @@ function MysqlMgr(db, cluster) {
 	};
 
 	this.selectCharacterCostumes = function (id, target, callback) {
-		var procedure = 'sea_SelectCharacters_' + target + '_Costumes';
+		var procedure = 'sea_SelectCharacter_' + target + '_Costumes';
 		var params = id;
 		this.call(procedure, params, function (results) { callback(results[0][0]); });
 	};
@@ -439,67 +439,25 @@ function MysqlMgr(db, cluster) {
 		this.call(procedure, params, function () { callback(true); });
 	};
 
-	// sea_costume_head.sql
+	// sea_costume_1~3.sql
 
-	this.selectCostumeHead = function (id, callback) {
-		var procedure = 'sea_SelectCostumeHead';
+	this.selectCostume = function (id, callback) {
+		var procedure = 'sea_SelectCostume';
 		var params = id;
 		this.call(procedure, params, function (results) { callback(results[0][0]); });
 	};
 
-	this.onCostumeHead = function (id, target, callback) {
-		var procedure = 'sea_OnCostumeHead_' + target;
-		var params = id;
-		this.call(procedure, params, function (results) { callback(results[0][0]); });
-	};
-
-	// sea_costume_top.sql
-
-	this.selectCostumeTop = function (id, callback) {
-		var procedure = 'sea_SelectCostumeTop';
-		var params = id;
-		this.call(procedure, params, function (results) { callback(results[0][0]); });
-	};
-
-	this.onCostumeTop = function (id, target, callback) {
-		var procedure = 'sea_OnCostumeTop_' + target;
-		var params = id;
-		this.call(procedure, params, function (results) { callback(results[0][0]); });
-	};
-
-	// sea_costume_bottoms.sql
-
-	this.selectCostumeBottoms = function (id, callback) {
-		var procedure = 'sea_SelectCostumeBottoms';
-		var params = id;
-		this.call(procedure, params, function (results) { callback(results[0][0]); });
-	};
-
-	this.onCostumeBottoms = function (id, target, callback) {
-		var procedure = 'sea_OnCostumeBottoms_' + target;
-		var params = id;
-		this.call(procedure, params, function (results) { callback(results[0][0]); });
-	};
-
-	// sea_costume_back.sql
-
-	this.selectCostumeBack = function (id, callback) {
-		var procedure = 'sea_SelectCostumeBack';
-		var params = id;
-		this.call(procedure, params, function (results) { callback(results[0][0]); });
-	};
-
-	this.onCostumeBack = function (id, target, callback) {
-		var procedure = 'sea_OnCostumeBack_' + target;
+	this.onCostume = function (id, target, callback) {
+		var procedure = 'sea_OnCostume_' + target;
 		var params = id;
 		this.call(procedure, params, function (results) { callback(results[0][0]); });
 	};
 
 	// sea_energy.sql
 
-	this.addEnergy = function (sender, receiver, callback) {
+	this.addEnergy = function (sender, receiver, amount, callback) {
 		var procedure = 'sea_AddEnergy';
-		var params = sender + ', ' + receiver;
+		var params = sender + ', ' + receiver + ', ' + amount;
 		this.call(procedure, params, function (results) { callback(results[0][0]); });
 	};
 
@@ -549,8 +507,8 @@ function MysqlMgr(db, cluster) {
 		this.call(procedure, params, function (results) { callback(results[0][0]); });
 	};
 
-	this.purchaseRoom = function (id, target, callback) {
-		var procedure = 'sea_PurchaseRoom_' + target;
+	this.purchaseHouse = function (id, target, callback) {
+		var procedure = 'sea_PurchaseHouse_' + target;
 		var params = id;
 		this.call(procedure, params, function (results) { callback(results[0][0]); });
 	};
@@ -562,7 +520,7 @@ function MysqlMgr(db, cluster) {
 	};
 
 	this.removeGhostFrom = function (id, target, callback) {
-		var procedure = 'sea_FromGhostFrom_' + target;
+		var procedure = 'sea_RemoveGhostFrom_' + target;
 		var params = id;
 		this.call(procedure, params, function (results) { callback(results[0][0]); });
 	};
@@ -575,32 +533,8 @@ function MysqlMgr(db, cluster) {
 		this.call(procedure, params, function (results) { callback(results[0][0]); });
 	};
 
-	this.updateExpBoost = function (id, amount, callback) {
-		var procedure = 'sea_UpdateExpBoost';
-		var params = id + ', ' + amount;
-		this.call(procedure, params, function () { callback(true); });
-	};
-
-	this.updateItemLast = function (id, amount, callback) {
-		var procedure = 'sea_UpdateItemLast';
-		var params = id + ', ' + amount;
-		this.call(procedure, params, function () { callback(true); });
-	};
-
-	this.updateShield = function (id, amount, callback) {
-		var procedure = 'sea_UpdateShield';
-		var params = id + ', ' + amount;
-		this.call(procedure, params, function () { callback(true); });
-	};
-
-	this.updateGhostify = function (id, amount, callback) {
-		var procedure = 'sea_UpdateGhostify';
-		var params = id + ', ' + amount;
-		this.call(procedure, params, function () { callback(true); });
-	};
-
-	this.updateImmortal = function (id, amount, callback) {
-		var procedure = 'sea_UpdateImmortal';
+	this.updateItem = function (id, amount, target, callback) {
+		var procedure = 'sea_UpdateItem_' + target;
 		var params = id + ', ' + amount;
 		this.call(procedure, params, function () { callback(true); });
 	};
@@ -649,32 +583,6 @@ function MysqlMgr(db, cluster) {
 		this.call(procedure, params, function () { callback(); });
 	};
 
-	// sea_upgrade.sql
-
-	this.loadUpgrade = function (id, callback) {
-		var procedure = 'sea_LoadUpgrade';
-		var params = id;
-		this.call(procedure, params, function (results) { callback(results[0][0]); });
-	};
-
-	this.upgradeScoreFactor = function (id, callback) {
-		var procedure = 'sea_UpgradeScoreFactor';
-		var params = id;
-		this.call(procedure, params, function (results) { callback(results[0][0]); });
-	};
-
-	this.upgradeTimeFactor = function (id, callback) {
-		var procedure = 'sea_UpgradeTimeFactor';
-		var params = id;
-		this.call(procedure, params, function (results) { callback(results[0][0]); });
-	};
-
-	this.upgradeCooldownFactor = function (id, callback) {
-		var procedure = 'sea_UpgradeCooldownFactor';
-		var params = id;
-		this.call(procedure, params, function (results) { callback(results[0][0]); });
-	};
-
 	// sea_user_black.sql
 
 	this.getBlackCount = function (callback) {
@@ -721,6 +629,50 @@ function MysqlMgr(db, cluster) {
 		this.call(procedure, params, function (results) { callback(results[0]); });
 	};
 
+	// sea_evolution.sql
+	
+	this.acceptEvolution = function (sender_id, receiver_id, character_id, callback) {
+		var procedure = 'sea_AcceptEvolution';
+		var params = sender_id + ', ' + receiver_id + ', ' + character_id;
+		this.call(procedure, params, function () { callback(true); });
+	};
+
+	this.addEvolution = function (sender_id, receiver_id, character_id, callback) {
+		var procedure = 'sea_AddEvolution';
+		var params = sender_id + ', ' + receiver_id + ', ' + character_id;
+		this.call(procedure, params, function () { callback(true); });
+	};
+	
+	this.existEvolution = function (sender_id, receiver_id, character_id, callback) {
+		var procedure = 'sea_ExistEvolution';
+		var params = sender_id + ', ' + receiver_id + ', ' + character_id;
+		this.call(procedure, params, function (results) { callback(results[0][0]); });
+	};
+
+	this.loadEvolutionProgress = function (sender_id, character_id, callback) {
+		var procedure = 'sea_LoadEvolutionProgress';
+		var params = sender_id + ', ' + character_id;
+		this.call(procedure, params, function (results) { callback(results[0]); });
+	};
+
+	this.loadEvolutionByReceiverId = function (receiver_id, callback) {
+		var procedure = 'sea_LoadEvolutionByReceiverId';
+		var params = receiver_id;
+		this.call(procedure, params, function (results) { callback(results[0]); });
+	};
+
+	this.deleteExpiredEvolution = function (callback) {
+		var procedure = 'sea_DeleteExpiredEvolution';
+		var params = '';
+		this.call(procedure, params, function () { callback(true); });
+	};
+
+	this.deleteEvolution = function (sender_id, character_id, callback) {
+		var procedure = 'sea_DeleteEvolution';
+		var params = sender_id + ', ' + character_id;
+		this.call(procedure, params, function () { callback(true); });
+	};
+
 	//
 	//
 	
@@ -750,9 +702,9 @@ function MysqlMgr(db, cluster) {
 		this.call(procedure, params, function (results, fields) { callback(results[0][0]); });
 	};
 
-	this.addLogPayCoin = function (k_id, coin, money, callback) {
+	this.addLogPayCoin = function (k_id, coin, rest, callback) {
 		var procedure = 'sea_AddLogPayCoin';
-		var params = "'" + k_id + "', " + coin + ', ' + money;
+		var params = "'" + k_id + "', " + coin + ', ' + rest;
 		this.call(procedure, params, function (results, fields) { callback(results[0][0]); });
 	};
 
@@ -768,8 +720,8 @@ function MysqlMgr(db, cluster) {
 		this.call(procedure, params, function (results, fields) { callback(results[0][0]); });
 	};
 
-	this.addLogPayMoney = function (k_id, paid, rest, callback) {
-		var procedure = 'sea_AddLogPayMoney';
+	this.addLogPayCash = function (k_id, paid, rest, callback) {
+		var procedure = 'sea_AddLogPayCash';
 		var params = "'" + k_id + "', " + paid + ', ' + rest;
 		this.call(procedure, params, function (results, fields) { callback(results[0][0]); });
 	};

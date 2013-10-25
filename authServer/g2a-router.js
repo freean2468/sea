@@ -27,6 +27,8 @@ function Router(proto) {
 		this.registerPacketHandler('g2a.RegisterSession', this.proto.g2a_pkg.RegisterSession, handler.P_RegisterSession);
 		this.registerPacketHandler('g2a.UnregisterSession', this.proto.g2a_pkg.UnregisterSession, handler.P_UnregisterSession);
 		this.registerPacketHandler('g2a.UpdateSession', this.proto.g2a_pkg.UpdateSession, handler.P_UpdateSession);
+		this.registerPacketHandler('g2a.UpdateEndGameSession', this.proto.g2a_pkg.UpdateEndGameSession, handler.P_UpdateEndGameSession);
+		this.registerPacketHandler('g2a.TraceStartGame', this.proto.g2a_pkg.TraceStartGame, handler.P_TraceStartGame);
 	};
 
 	this.processPacket = function (server, socket, data) {

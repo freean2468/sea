@@ -14,3 +14,14 @@ message UpdateSession {
 	required string callback_id = 1;
 	required string session_id = 2;
 } // end
+
+message TraceStartGame {
+	required string session_id = 1;
+	required int64 start_time = 2;
+	required bool double_exp = 3;
+} // end
+
+message UpdateEndGameSession {
+	required string callback_id = 1;
+	required string session_id = 2;
+} // end

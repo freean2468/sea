@@ -1,0 +1,339 @@
+{
+"root": [
+{
+"Costume_ID" : 1, 
+"Costume_Name" : "애나 기본 상의", 
+"Costume_Set_ID" : 1, 
+"Costume_Type" : 1, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "일꾼 코스프레", 
+"Costume_Description2" : "애나 기본 상의"
+}
+,
+{
+"Costume_ID" : 2, 
+"Costume_Name" : "애나 기본 하의", 
+"Costume_Set_ID" : 1, 
+"Costume_Type" : 2, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "일꾼 코스프레", 
+"Costume_Description2" : "애나 기본 하의"
+}
+,
+{
+"Costume_ID" : 3, 
+"Costume_Name" : "바니 기본 상의", 
+"Costume_Set_ID" : 2, 
+"Costume_Type" : 1, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "여사장 포스", 
+"Costume_Description2" : "바니 기본 상의"
+}
+,
+{
+"Costume_ID" : 4, 
+"Costume_Name" : "바니 기본 하의", 
+"Costume_Set_ID" : 2, 
+"Costume_Type" : 2, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "여사장 포스", 
+"Costume_Description2" : "바니 기본 하의"
+}
+,
+{
+"Costume_ID" : 5, 
+"Costume_Name" : "위트니 기본 상의", 
+"Costume_Set_ID" : 3, 
+"Costume_Type" : 1, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "섹시함 폭발", 
+"Costume_Description2" : "위트니 기본 상의"
+}
+,
+{
+"Costume_ID" : 6, 
+"Costume_Name" : "위트니 기본 하의", 
+"Costume_Set_ID" : 3, 
+"Costume_Type" : 2, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "섹시함 폭발", 
+"Costume_Description2" : "위트니 기본 하의"
+}
+,
+{
+"Costume_ID" : 7, 
+"Costume_Name" : "다나 기본 상의", 
+"Costume_Set_ID" : 4, 
+"Costume_Type" : 1, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "귀여움 장착", 
+"Costume_Description2" : "다나 기본 상의"
+}
+,
+{
+"Costume_ID" : 8, 
+"Costume_Name" : "다나 기본 하의", 
+"Costume_Set_ID" : 4, 
+"Costume_Type" : 2, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "귀여움 장착", 
+"Costume_Description2" : "다나 기본 하의"
+}
+,
+{
+"Costume_ID" : 9, 
+"Costume_Name" : "할로윈 모자", 
+"Costume_Set_ID" : 5, 
+"Costume_Type" : 0, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "가", 
+"Costume_Description2" : "할로윈 파티의 완성"
+}
+,
+{
+"Costume_ID" : 10, 
+"Costume_Name" : "할로윈 의상 상의", 
+"Costume_Set_ID" : 5, 
+"Costume_Type" : 1, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "나", 
+"Costume_Description2" : "할로윈 파티의 기본"
+}
+,
+{
+"Costume_ID" : 11, 
+"Costume_Name" : "할로윈 의상 하의", 
+"Costume_Set_ID" : 5, 
+"Costume_Type" : 2, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "가", 
+"Costume_Description2" : "할로윈 파티의 중심"
+}
+,
+{
+"Costume_ID" : 12, 
+"Costume_Name" : "호박 헬멧", 
+"Costume_Set_ID" : 6, 
+"Costume_Type" : 0, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "나", 
+"Costume_Description2" : "안전제일주의"
+}
+,
+{
+"Costume_ID" : 13, 
+"Costume_Name" : "카우걸 유령 모자", 
+"Costume_Set_ID" : 7, 
+"Costume_Type" : 0, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "가", 
+"Costume_Description2" : "가"
+}
+,
+{
+"Costume_ID" : 14, 
+"Costume_Name" : "카우걸 체크 남방", 
+"Costume_Set_ID" : 7, 
+"Costume_Type" : 1, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "나", 
+"Costume_Description2" : "나"
+}
+,
+{
+"Costume_ID" : 15, 
+"Costume_Name" : "카우걸 미니스커트", 
+"Costume_Set_ID" : 7, 
+"Costume_Type" : 2, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "가", 
+"Costume_Description2" : "가"
+}
+,
+{
+"Costume_ID" : 16, 
+"Costume_Name" : "빨간 두건", 
+"Costume_Set_ID" : 8, 
+"Costume_Type" : 0, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "나", 
+"Costume_Description2" : "나"
+}
+,
+{
+"Costume_ID" : 17, 
+"Costume_Name" : "빨간 망토", 
+"Costume_Set_ID" : 8, 
+"Costume_Type" : 1, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "가", 
+"Costume_Description2" : "가"
+}
+,
+{
+"Costume_ID" : 18, 
+"Costume_Name" : "빨간 치마", 
+"Costume_Set_ID" : 8, 
+"Costume_Type" : 2, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "나", 
+"Costume_Description2" : "나"
+}
+,
+{
+"Costume_ID" : 19, 
+"Costume_Name" : "상크미 머리핀", 
+"Costume_Set_ID" : 9, 
+"Costume_Type" : 0, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "가", 
+"Costume_Description2" : "가"
+}
+,
+{
+"Costume_ID" : 20, 
+"Costume_Name" : "상크미 교복 남방", 
+"Costume_Set_ID" : 9, 
+"Costume_Type" : 1, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "나", 
+"Costume_Description2" : "나"
+}
+,
+{
+"Costume_ID" : 21, 
+"Costume_Name" : "상크미 교복 치마", 
+"Costume_Set_ID" : 9, 
+"Costume_Type" : 2, 
+"Costume_Coin" : 0.00, 
+"Costume_Score" : 0.00, 
+"Costume_Exp" : 0.00, 
+"Costume_Drop_Prob" : 0.00, 
+"Time_Reduce" : 0, 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Costume_Description1" : "가", 
+"Costume_Description2" : "가"
+}
+]
+}

@@ -4,32 +4,35 @@ message SystemMessage {
 	required Result res = 2;
 
 	enum Result {
-		TRUE = 1;
-		INVALID_ACCOUNT	= 2;
-		UNDEFINED_FIELD	= 3;
-		EXISTED_ACCOUNT	= 4;
-		BLOCKED_ACCOUNT	= 5;
-		DUPLICATED_LOGIN = 6;
-		INVALID_CHARACTER = 7;
-		INVALID_ITEM = 9;
-		NOT_ENOUGH_ENERGY = 10;
-		NOT_ENOUGH_COIN = 11;
-		NOT_ENOUGH_MONEY = 12; 
-		NO_MATCH_WITH_DB = 13;
-		INVALID_BATON = 14;
-		INVALID_BATON_RESULT = 15;
-		INVALID_ENERGY = 16;
-		FULLY_UPGRADED = 17;
-		FAILED_DB_UPDATE = 18;
-		INVALID_SESSION = 19;
-		INVALID_COSTUME_CATEGORY = 20;
-		INVALID_COSTUME_ID = 21;
-		PURCHASE_FIRST = 22;
-		INVALID_UPGRADE = 23;
-		NOT_ENOUGH_DRAW = 24;
-		INVALID_GHOST = 25;
-		CAN_NOT_PURCHASE = 26;
-		INVALID_ROOM = 27;
+		INVALID_ACCOUNT = 1;
+		EXISTING_ACCOUNT = 2;
+		BLOCKED_ACCOUNT	= 3;
+
+		UNDEFINED_FIELD	= 20;
+
+		NOT_ENOUGH_ENERGY = 40;
+		NOT_ENOUGH_CASH = 41;
+		NOT_ENOUGH_COIN = 42; 
+		NOT_ENOUGH_DRAW = 43;
+
+		FAILED_DB_UPDATE = 60;
+
+		FULLY_UPGRADED = 80;
+
+		NOT_HAVING = 100;
+		ALREADY_HAVING = 101;
+
+		INVALID_BATON = 120;
+		INVALID_BATON_RESULT = 121;
+		INVALID_CHARACTER = 122;
+		INVALID_ITEM = 123;
+		INVALID_SESSION = 124;
+		INVALID_COSTUME_ID = 125;
+		INVALID_GHOST = 126;
+		INVALID_HOUSE_ID = 127;
+		INVALID_EVOLUTION = 128;
+
+		WRONG_APPROACH = 140;
 	}
 } // end
 
@@ -62,22 +65,19 @@ message AccountInfo {
 	required int32 lv = 2;
 	required int32 exp = 3;
 	required int32 coin = 4;
-	required int32 money = 5;
+	required int32 cash = 5;
 	required int32 energy = 6;
 	required int64 last_charged_time = 7;
 	required int32 selected_character = 8;
-	required int32 score_factor = 9;
-	required int32 time_factor = 10;
-	required int32 cooldown_factor = 11;
-	required int32 shield = 12;
-	required int32 item_last = 13;
-	required int32 ghostify = 14;
-	required int32 immortal = 15;
-	required int32 exp_boost = 16;
-	required int32 random = 17;
-	required int32 mileage = 18;
-	required int32 draw = 19;
-	repeated CharacterInfo characters = 20;
+	required int32 item_1 = 9;
+	required int32 item_2 = 10;
+	required int32 item_3 = 11;
+	required int32 item_4 = 12;
+	required int32 item_5 = 13;
+	required int32 random = 14;
+	required int32 mileage = 15;
+	required int32 draw = 16;
+	repeated CharacterInfo characters = 17;
 
 	message CharacterInfo {
 		required int32 id = 1;
@@ -104,72 +104,32 @@ message RankInfo {
 	}
 } // end
 
-message PostedEnergy {
-	repeated Energy energy = 2;
-
-	message Energy {
-		required string sender_k_id = 1;
-		required int64 sended_time = 2;
-	}
-} // end
-
-message PostedBaton {
-	repeated Baton baton = 2;
-
-	message Baton {
-		required string sender_k_id = 1;
-		required string map_name = 2;
-		required int32 last_score = 3;
-		required int64 sended_time = 4;
-	}
-} // end
-
-message PostedBatonResult {
-	repeated BatonResult baton_result = 2;
-	
-	message BatonResult {
-		required string sender_k_id = 1;
-		required int32 acquisition_score = 2;
-		required int64 sended_time = 3;
-	}
-} // end
-
 message GameResult {
 	required int32 score = 2;
-	required int32 coin = 3;
-	required int32 bonus_score = 4;
-	required int32 total_score = 5;
-	required int32 level = 6;
-	required int32 exp = 7;
-	required int32 total_coin = 8;
-	required int32 mileage = 9;
-	required int32 draw = 10;
+	required int32 bonus_score = 3;
+	required int32 total_score = 4;
+	required int32 coin = 5;
+	required int32 bonus_coin = 6;
+	required int32 total_coin = 7;
+	required int32 level = 8;
+	required int32 exp = 9;
+	required int32 bonus_exp = 10;
+	required int32 total_exp = 11;
+	required int32 mileage = 12;
+	required int32 total_mileage = 13;
+	required int32 draw = 14;
 } // end
 
 message BuyItemReply {
-	required Item item = 2;
+	required int32 item = 2;
 	required int32 coin = 3;
-
-	enum Item {
-		SHIELD = 1;
-		ITEM_LAST = 2;
-		GHOSTIFY = 3;
-		IMMORTAL = 4;
-		EXP_BOOST = 5;
-		MAX_ATTACK = 6;
-		BONUS_HEART = 7;
-		DROP_UP = 8;
-		MAGNET = 9;
-		BONUS_SCORE = 10;
-		MAX = 11;
-	}
 } // end 
 
 message BuyOrUpgradeCharacterReply {
 	required int32 character = 2;
 	required int32 lv = 3;
 	required int32 coin = 4;
-	required int32 money = 5;
+	required int32 cash = 5;
 	required int32 mileage = 6;
 	required int32 draw = 7;
 } // end
@@ -201,12 +161,6 @@ message AcceptBatonResultReply {
 	required int32 score = 3;
 } // end
 
-message UpgradeFactorReply {
-	required int32 coin = 2;
-	required int32 mileage = 3;
-	required int32 draw = 4;
-} // end
-
 message InviteFriendReply {
 	required int32 invite_count = 2;
 	required int32 mileage = 3;
@@ -227,7 +181,7 @@ message LoadRewardReply {
 message BuyCostumeReply {
 	required int32 costume_id = 2;
 	required int32 coin = 3;
-	required int32 money = 4;
+	required int32 cash = 4;
 	required int32 mileage = 5;
 	required int32 draw = 6;
 } // end
@@ -256,14 +210,65 @@ message DrawSecondReply {
 } // end
 
 message EquipGhostReply {
-	required int32 room_number = 2;
-	required int32 ghost_id = 3;
+	required int32 ghost_id = 2;	
+	required int32 house_id = 3;
 } // end
 
 message UnequipGhostReply {
-	required int32 room_number = 2;
+	required int32 house_id = 2;
 } // end
 
-message PurchaseRoomReply {
-	required int32 room_number = 2;
+message PurchaseHouseReply {
+	required int32 house_id = 2;
+	required int32 coin = 3;
+	required int32 cash = 4;
+} // end
+
+message RequestEvolutionReply {
+	required int32 coin = 2;
+} // end
+
+message AcceptEvolutionReply {
+} // end
+
+message EvolutionProgress {
+	repeated Progress progress = 2;
+
+	message Progress {
+		required int32 character_id = 1;
+		repeated string accepted_k_id = 2;
+		required int32 lv = 3;
+	}
+} // end
+
+message Postbox {
+	repeated Energy energy = 2;
+	repeated Baton baton = 3;
+	repeated BatonResult baton_result = 4;
+	repeated Evolution evolution = 5;
+
+	message Energy {
+		required string sender_k_id = 1;
+		required int32 amount = 2;
+		required int64 sended_time = 3;
+	}
+
+	message Baton {
+		required string sender_k_id = 1;
+		required string map_name = 2;
+		required int32 last_score = 3;
+		required int64 sended_time = 4;
+	}
+	
+	message BatonResult {
+		required string sender_k_id = 1;
+		required int32 acquisition_score = 2;
+		required int64 sended_time = 3;
+	}
+
+	message Evolution {
+		required string sender_k_id = 1;
+		required int32 character_id = 2;
+		required int64 sended_time = 3;
+	}
 } // end

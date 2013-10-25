@@ -4,11 +4,11 @@ DROP TABLE IF EXISTS sea_item;
 
 CREATE TABLE sea.sea_item(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	shield TINYINT UNSIGNED NOT NULL,
-	item_last TINYINT UNSIGNED NOT NULL,
-	ghostify TINYINT UNSIGNED NOT NULL,
-	immortal TINYINT UNSIGNED NOT NULL,
-	exp_boost TINYINT UNSIGNED NOT NULL,
+	_1 TINYINT UNSIGNED NOT NULL,
+	_2 TINYINT UNSIGNED NOT NULL,
+	_3 TINYINT UNSIGNED NOT NULL,
+	_4 TINYINT UNSIGNED NOT NULL,
+	_5 TINYINT UNSIGNED NOT NULL,
 	random TINYINT UNSIGNED NOT NULL,
 
 	INDEX idx_item_1 (id)
@@ -19,43 +19,43 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS sea_LoadItems $$
 CREATE PROCEDURE sea_LoadItems(IN p_id INT)
 	BEGIN
-		SELECT shield, item_last, ghostify, immortal, exp_boost, random
+		SELECT _1, _2, _3, _4, _5, random
 		FROM sea_item WHERE id = p_id;
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_UpdateShield $$
-CREATE PROCEDURE sea_UpdateShield(IN p_id INT, IN p_amount TINYINT)
+DROP PROCEDURE IF EXISTS sea_UpdateItem_1 $$
+CREATE PROCEDURE sea_UpdateItem_1(IN p_id INT, IN p_amount TINYINT)
 	BEGIN
-		UPDATE sea_item SET shield = shield + p_amount WHERE id = p_id;
+		UPDATE sea_item SET _1 = _1 + p_amount WHERE id = p_id;
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_UpdateItemLast $$
-CREATE PROCEDURE sea_UpdateItemLast(IN p_id INT, IN p_amount TINYINT)
+DROP PROCEDURE IF EXISTS sea_UpdateItem_2 $$
+CREATE PROCEDURE sea_UpdateItem_2(IN p_id INT, IN p_amount TINYINT)
 	BEGIN
-		UPDATE sea_item SET item_last = item_last + p_amount WHERE id = p_id;
+		UPDATE sea_item SET _2 = _2 + p_amount WHERE id = p_id;
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_UpdateGhostify $$
-CREATE PROCEDURE sea_UpdateGhostify(IN p_id INT, IN p_amount TINYINT)
+DROP PROCEDURE IF EXISTS sea_UpdateItem_3 $$
+CREATE PROCEDURE sea_UpdateItem_3(IN p_id INT, IN p_amount TINYINT)
 	BEGIN
-		UPDATE sea_item SET ghostify = ghostify + p_amount WHERE id = p_id;
+		UPDATE sea_item SET _3 = _3 + p_amount WHERE id = p_id;
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_UpdateImmortal $$
-CREATE PROCEDURE sea_UpdateImmortal(IN p_id INT, IN p_amount TINYINT)
+DROP PROCEDURE IF EXISTS sea_UpdateItem_4 $$
+CREATE PROCEDURE sea_UpdateItem_4(IN p_id INT, IN p_amount TINYINT)
 	BEGIN
-		UPDATE sea_item SET immortal = immortal + p_amount WHERE id = p_id;
+		UPDATE sea_item SET _4 = _4 + p_amount WHERE id = p_id;
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_UpdateExpBoost $$
-CREATE PROCEDURE sea_UpdateExpBoost(IN p_id INT, IN p_amount TINYINT)
+DROP PROCEDURE IF EXISTS sea_UpdateItem_5 $$
+CREATE PROCEDURE sea_UpdateItem_5(IN p_id INT, IN p_amount TINYINT)
 	BEGIN
-		UPDATE sea_item SET exp_boost = exp_boost + p_amount WHERE id = p_id;
+		UPDATE sea_item SET _5 = _5 + p_amount WHERE id = p_id;
 	END
 $$
 

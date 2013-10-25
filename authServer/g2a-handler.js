@@ -57,8 +57,37 @@ function processUpdateSession(server, socket, data) {
 	server.router.proto.sendPacket(socket, msg);
 }
 
+function processTraceStartGame(server, socket, data) {
+	server.sessionMgr.traceStartGame(data);
+}
+
+function processUpdateEndGameSession(server, socket, data) {
+    var UpdateEndGameSessionReply = server.router.proto.packetMaker('a2g.UpdateEndGameSessionReply');
+    var msg = new UpdateEndGameSessionReply;
+
+	var traceData = server.sessionMgr.updateEndGameSession(data.session_id);
+
+	if (traceData === false) {
+		var SystemMessage = server.router.proto.packetMaker('a2g.SystemMessage');
+		msg = null;
+		msg = new SystemMessage;
+
+		msg.res = SystemMessage.Result['INVALID_SESSION'];
+	} else {
+		msg.k_id = traceData['k_id'];
+		msg.start_time = traceData['start_time'];
+		msg.double_exp = traceData['double_exp'];
+	}
+
+	msg.callback_id = data.callback_id;
+
+	server.router.proto.sendPacket(socket, msg);
+}
+
 module.exports = {
-	"P_RegisterSession": processRegisterSession,
-	"P_UnregisterSession": processUnregisterSession,
-	"P_UpdateSession": processUpdateSession,
+	'P_RegisterSession': processRegisterSession,
+	'P_UnregisterSession': processUnregisterSession,
+	'P_UpdateSession': processUpdateSession,
+	'P_TraceStartGame': processTraceStartGame,
+	'P_UpdateEndGameSession': processUpdateEndGameSession,
 };

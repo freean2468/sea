@@ -1,0 +1,107 @@
+{
+"root": [
+{
+"ID" : 1, 
+"Boost_Item_Type" : 0, 
+"Boost_Item_Cost" : 100, 
+"Boost_Item_Description" : "한 번의 공격을 막아주는 보호막을 가진다.", 
+"Price_Coin" : -1
+}
+,
+{
+"ID" : 2, 
+"Boost_Item_Type" : 1, 
+"Boost_Item_Cost" : 100, 
+"Boost_Item_Description" : "아이템이 발동되는 지속 시간이 증가한다.", 
+"Price_Coin" : -1
+}
+,
+{
+"ID" : 3, 
+"Boost_Item_Type" : 2, 
+"Boost_Item_Cost" : 100, 
+"Boost_Item_Description" : "다시 살아나 일정 거리를 전진한다.", 
+"Price_Coin" : -1
+}
+,
+{
+"ID" : 4, 
+"Boost_Item_Type" : 3, 
+"Boost_Item_Cost" : 100, 
+"Boost_Item_Description" : "무적상태로 게임을 시작한다.", 
+"Price_Coin" : -1
+}
+,
+{
+"ID" : 5, 
+"Boost_Item_Type" : 4, 
+"Boost_Item_Cost" : 100, 
+"Boost_Item_Description" : "획득하는 경험치를 2배로 늘려준다.", 
+"Price_Coin" : -1
+}
+,
+{
+"ID" : 6, 
+"Boost_Item_Type" : 5, 
+"Boost_Item_Cost" : 100, 
+"Boost_Item_Description" : "흡입 공격력을 늘려준다.", 
+"Price_Coin" : -1
+}
+,
+{
+"ID" : 7, 
+"Boost_Item_Type" : 6, 
+"Boost_Item_Cost" : 100, 
+"Boost_Item_Description" : "발사 공격력을 늘려준다.", 
+"Price_Coin" : -1
+}
+,
+{
+"ID" : 8, 
+"Boost_Item_Type" : 7, 
+"Boost_Item_Cost" : 100, 
+"Boost_Item_Description" : "공격 사정거리가 늘어난다.", 
+"Price_Coin" : -1
+}
+,
+{
+"ID" : 9, 
+"Boost_Item_Type" : 8, 
+"Boost_Item_Cost" : 100, 
+"Boost_Item_Description" : "흡입 가능 지속시간이 늘어난다.", 
+"Price_Coin" : -1
+}
+,
+{
+"ID" : 10, 
+"Boost_Item_Type" : 9, 
+"Boost_Item_Cost" : 100, 
+"Boost_Item_Description" : "최대 HP가 1개 증가해서 게임을 시작한다.", 
+"Price_Coin" : -1
+}
+,
+{
+"ID" : 11, 
+"Boost_Item_Type" : 10, 
+"Boost_Item_Cost" : 100, 
+"Boost_Item_Description" : "게임 내에 아이템 드랍 확률이 증가한다.", 
+"Price_Coin" : -1
+}
+,
+{
+"ID" : 12, 
+"Boost_Item_Type" : 11, 
+"Boost_Item_Cost" : 100, 
+"Boost_Item_Description" : "자석 기능을 보유하고 게임을 시작한다.", 
+"Price_Coin" : -1
+}
+,
+{
+"ID" : 13, 
+"Boost_Item_Type" : 12, 
+"Boost_Item_Cost" : 100, 
+"Boost_Item_Description" : "게임 결과에서 추가 점수 15%를 얻는다.", 
+"Price_Coin" : -1
+}
+]
+}

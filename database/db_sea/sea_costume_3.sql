@@ -1,0 +1,21 @@
+USE sea;
+
+DROP TABLE IF EXISTS sea_costume_3;
+
+CREATE TABLE sea.sea_costume_3 (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	_21 TINYINT(1) UNSIGNED NOT NULL,
+
+	INDEX idx_costume_3 (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS sea_OnCostume_21 $$
+CREATE PROCEDURE sea_OnCostume_21(IN p_id INT)
+	BEGIN
+		UPDATE sea_costume_21 SET _21 = 1 WHERE id = p_id;
+	END
+$$
+
+DELIMITER ;

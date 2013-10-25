@@ -35,12 +35,12 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 			INSERT sea_user(k_id) VALUES (p_k_id);
 			SET last_id = LAST_INSERT_ID();
 
-			INSERT sea_user_info(lv, exp, coin, money, energy, last_charged_time, 
+			INSERT sea_user_info(lv, exp, coin, cash, energy, last_charged_time, 
 									selected_character, invite_count, mileage, draw)
 			VALUES (1, 0, 99999, 9999, 100, UNIX_TIMESTAMP(NOW()), 
 					3, 0, 0, 0);
 
-			INSERT sea_item(shield, item_last, ghostify, immortal, exp_boost, random)
+			INSERT sea_item(_1, _2, _3, _4, _5, random)
 			VALUES (0, 0, 0, 0, 0, 0);
 
 			INSERT sea_user_log(total_score, highest_score, last_dist, total_dist, total_kill, play_time)
@@ -48,9 +48,6 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 
 			INSERT sea_metric(uv, last_week_uv, this_week_uv, pu)
 			VALUES (1, 0, 1, 0);
-
-			INSERT sea_upgrade(score_factor, time_factor, cooldown_factor)
-			VALUES (0, 0, 0);
 
 			INSERT sea_character_1(lv, head, top, bottoms, back)
 			VALUES (0, 0, 0, 0, 0);
@@ -64,20 +61,17 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 			INSERT sea_character_4(lv, head, top, bottoms, back)
 			VALUES (0, 0, 0, 0, 0);
 
-			INSERT sea_costume_head_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)
+			INSERT sea_costume_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)
 			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-			INSERT sea_costume_top_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)
+			INSERT sea_costume_2(_11, _12, _13, _14, _15, _16, _17, _18, _19, _20)
 			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-			INSERT sea_costume_bottoms_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)
-			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+			INSERT sea_costume_3(_21)
+			VALUES (0);
 
-			INSERT sea_costume_back_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)
-			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
-			INSERT sea_ghost_house(room_1, room_2, room_3, room_4, room_5)
-			VALUES (0, -1, -1, -1, -1);
+			INSERT sea_ghost_house(_1, _2, _3, _4, _5, _1_time, _2_time, _3_time, _4_time, _5_time)
+			VALUES (0, -1, -1, -1, -1, 0, 0, 0, 0, 0);
 
 			INSERT sea_ghost_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20)
 			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -131,7 +125,6 @@ CREATE PROCEDURE sea_DeleteUser(IN p_id INT)
 		DELETE FROM sea_item WHERE id = p_id;
 		DELETE FROM sea_user_log WHERE id = p_id;
 		DELETE FROM sea_metric WHERE id = p_id;
-		DELETE FROM sea_upgrade WHERE id = p_id;
 		DELETE FROM sea_ghost_1 WHERE id = p_id;
 		DELETE FROM sea_ghost_2 WHERE id = p_id;
 		DELETE FROM sea_ghost_house WHERE id = p_id;

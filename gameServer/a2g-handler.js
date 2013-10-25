@@ -14,9 +14,14 @@ function processUpdateSessionReply(client, socket, data) {
 	client.sessionEvent.update(data.callback_id, data.k_id);
 }
 
+function processUpdateEndGameSessionReply(client, socket, data) {
+	client.sessionEvent.trace(data.callback_id, data.k_id, data.start_time, data.double_exp);
+}
+
 module.exports = {
-	"P_SystemMessage": processSystemMessageReply,
-	"P_RegisterSessionReply": processRegisterSessionReply,
-	"P_UnregisterSessionReply": processUnregisterSessionReply,
-	"P_UpdateSessionReply": processUpdateSessionReply,
+	'P_SystemMessage': processSystemMessageReply,
+	'P_RegisterSessionReply': processRegisterSessionReply,
+	'P_UnregisterSessionReply': processUnregisterSessionReply,
+	'P_UpdateSessionReply': processUpdateSessionReply,
+	'P_UpdateEndGameSessionReply': processUpdateEndGameSessionReply,
 };

@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS sea_energy;
 CREATE TABLE sea.sea_energy(
 	sender_id INT NOT NULL,
 	receiver_id INT NOT NULL,
+	amount TINYINT UNSIGNED NOT NULL,
 	sended_time BIGINT UNSIGNED NOT NULL,
 
 	PRIMARY KEY(sender_id, receiver_id, sended_time),
@@ -18,10 +19,10 @@ CREATE TABLE sea.sea_energy(
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sea_AddEnergy $$
-CREATE PROCEDURE sea_AddEnergy(IN p_sender_id INT, IN p_receiver_id INT)
+CREATE PROCEDURE sea_AddEnergy(IN p_sender_id INT, IN p_receiver_id INT, IN p_amount TINYINT UNSIGNED)
 	BEGIN
-		INSERT sea_energy(sender_id, receiver_id, sended_time)
-		VALUES (p_sender_id, p_receiver_id, UNIX_TIMESTAMP(NOW()));
+		INSERT sea_energy(sender_id, receiver_id, amount, sended_time)
+		VALUES (p_sender_id, p_receiver_id, p_amount, UNIX_TIMESTAMP(NOW()));
 	END
 $$
 
@@ -32,7 +33,7 @@ CREATE PROCEDURE sea_LoadEnergyBySender(IN p_sender_id INT)
 		SELECT COUNT(*) INTO count FROM sea_energy WHERE sender_id = p_sender_id;
 
 		IF count > 0 THEN
-			SELECT receiver_id, sended_time FROM sea_energy WHERE sender_id = p_sender_id;
+			SELECT receiver_id, amount, sended_time FROM sea_energy WHERE sender_id = p_sender_id;
 		else
 			SELECT 0 AS receiver_id;
 		END IF;
@@ -46,7 +47,7 @@ CREATE PROCEDURE sea_LoadEnergyByReceiver(IN p_receiver_id INT)
 		SELECT COUNT(*) INTO count FROM sea_energy WHERE receiver_id = p_receiver_id;
 
 		IF count > 0 THEN
-			SELECT sender_id, sended_time  FROM sea_energy WHERE receiver_id = p_receiver_id;
+			SELECT sender_id, amount, sended_time  FROM sea_energy WHERE receiver_id = p_receiver_id;
 		ELSE
 			SELECT 0 AS sender_id;
 		END IF;

@@ -2,7 +2,7 @@ USE sea;
 
 DROP TABLE IF EXISTS sea_character_1;
 
-CREATE TABLE sea.sea_character_1(
+CREATE TABLE sea.sea_character_1 (
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	lv TINYINT UNSIGNED NOT NULL,
 	head TINYINT UNSIGNED NOT NULL,
@@ -25,12 +25,12 @@ $$
 DROP PROCEDURE IF EXISTS sea_SelectCharacters $$
 CREATE PROCEDURE sea_SelectCharacters(IN p_id INT)
 	BEGIN
-		SELECT ONE.lv AS _1, TWO.lv AS _2, THREE.lv AS _3, FOUR.lv AS _4 
-		FROM sea_character_1 AS ONE
-		INNER JOIN sea.sea_character_2 AS TWO ON p_id = TWO.id
-		INNER JOIN sea.sea_character_3 AS THREE ON p_id = THREE.id
-		INNER JOIN sea.sea_character_4 AS FOUR ON p_id = FOUR.id
-		WHERE ONE.id = p_id;
+		SELECT _1.lv AS _1, _2.lv AS _2, _3.lv AS _3, _4.lv AS _4 
+		FROM sea_character_1 AS _1
+		INNER JOIN sea.sea_character_2 AS _2 ON p_id = _2.id
+		INNER JOIN sea.sea_character_3 AS _3 ON p_id = _3.id
+		INNER JOIN sea.sea_character_4 AS _4 ON p_id = _4.id
+		WHERE _1.id = p_id;
 	END
 $$
 
@@ -39,7 +39,7 @@ CREATE PROCEDURE sea_AddCharacter_1(IN p_id INT)
 	BEGIN
 		DECLARE res TINYINT UNSIGNED;
 		UPDATE sea_character_1 SET res = lv + 1, lv = lv + 1 WHERE id = p_id;
-		SELECT res AS res;
+		SELECT res;
 	END
 $$
 

@@ -38,6 +38,13 @@ var SessionEvent = function () {
 		callback(k_id);
 		delete this.list[callback_id];
 	};
+
+	this.trace = function (callback_id, k_id, start_time, double_exp) {
+		var callback = this.list[callback_id];
+
+		callback(k_id, start_time, double_exp);
+		delete this.list[callback_id];
+	};
 };
 
 module.exports = {

@@ -33,31 +33,18 @@ message EndGame {
 	required int32 enemy_kill = 4;
 	required int32 play_time = 5;
 	required int32 coin = 6;
+	required int32 mileage = 7;
 } // end
 
 message LoadRankInfo {
 } // end
 
-message LoadPostedEnergy {
-} // end
-
-message LoadPostedBaton {
-} // end
-
-message LoadPostedBatonResult {
-} // end
-
 message BuyItem {
-	required Item item = 2;
+	required int32 item = 2;
 
-	enum Item {
-		SHIELD = 1;
-		ITEM_LAST = 2;
-		GHOSTIFY = 3;
-		IMMORTAL = 4;
-		EXP_BOOST = 5;
-		RANDOM = 6;
-		MAX = 7;
+	enum Limit {
+		MIN = 1;
+		MAX = 6;
 	}
 } // end
 
@@ -100,10 +87,6 @@ message AcceptBatonResult {
 	required int64 sended_time = 3;
 } // end
 
-message UpgradeFactor {
-	required int32 factor = 2;
-} // end
-
 message InviteFriend {
 	required string friend_k_id = 2;
 } // end
@@ -120,30 +103,12 @@ message LoadReward {
 } // end
 
 message BuyCostume {
-	required CostumeCategory category = 2;
-	required int32 costume_id = 3;
-
-	enum CostumeCategory {
-		HEAD = 1;
-		TOP = 2;
-		BOTTOMS = 3;
-		BACK = 4;
-		MAX = 5;
-	}
+	required int32 costume_id = 2;
 } // end
 
 message WearCostume {
-	required CostumeCategory category = 2;
-	required int32 costume_id = 3;
-	required int32 character_id = 4;
-
-	enum CostumeCategory {
-		HEAD = 1;
-		TOP = 2;
-		BOTTOMS = 3;
-		BACK = 4;
-		MAX = 5;
-	}
+	required int32 costume_id = 2;
+	required int32 character_id = 3;
 } // end
 
 message DrawFirst {
@@ -154,14 +119,30 @@ message DrawSecond {
 } // end
 
 message EquipGhost {
-	required int32 room_number = 2;
-	required int32 ghost_id = 3;
+	required int32 ghost_id = 2;
+	required int32 house_id = 3;
 } // end
 
 message UnequipGhost {
-	required int32 room_number = 2;
+	required int32 house_id = 2;
 } // end
 
-message PurchaseRoom {
-	required int32 room_number = 2;
+message PurchaseHouse {
+	required int32 house_id = 2;
+} // end
+
+message RequestEvolution {
+	required string receiver_k_id = 2;
+	required int32 character_id = 3;
+} // end
+
+message AcceptEvolution {
+	required string sender_k_id = 2;
+	required int32 character_id = 3;
+} // end
+
+message LoadEvolutionProgress {
+} // end
+
+message LoadPostbox {
 } // end

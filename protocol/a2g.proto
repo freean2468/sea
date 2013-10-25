@@ -24,3 +24,10 @@ message UpdateSessionReply {
 	required string callback_id = 1;
 	required string k_id = 2;
 } // end
+
+message UpdateEndGameSessionReply {
+	required string callback_id = 1;
+	required string k_id = 2;
+	required int64 start_time = 3;
+	required bool double_exp = 4;
+} // end

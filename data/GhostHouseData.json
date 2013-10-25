@@ -1,0 +1,63 @@
+{
+"root": [
+{
+"House_ID" : 1, 
+"House_Name" : "어디서나 볼 수 있는 흉가", 
+"House_Image" : "House_Image_01", 
+"House_Description" : "뭐없다", 
+"Price_Coin" : 0, 
+"Price_Cash" : 0, 
+"Match_Card_ID" : 1, 
+"Match_Card_Bonus_Effect_Type" : 2, 
+"Match_Card_Bonus_Effect_Value" : 0.20
+}
+,
+{
+"House_ID" : 2, 
+"House_Name" : "마녀가 살던 버려진 집", 
+"House_Image" : "House_Image_02", 
+"House_Description" : "세련됐다", 
+"Price_Coin" : 3000, 
+"Price_Cash" : 0, 
+"Match_Card_ID" : 2, 
+"Match_Card_Bonus_Effect_Type" : 3, 
+"Match_Card_Bonus_Effect_Value" : 0.20
+}
+,
+{
+"House_ID" : 3, 
+"House_Name" : "멋쟁이 하우스", 
+"House_Image" : "House_Image_03", 
+"House_Description" : "멋지다", 
+"Price_Coin" : 0, 
+"Price_Cash" : 10, 
+"Match_Card_ID" : 3, 
+"Match_Card_Bonus_Effect_Type" : 3, 
+"Match_Card_Bonus_Effect_Value" : 0.20
+}
+,
+{
+"House_ID" : 4, 
+"House_Name" : "최고의 하우스", 
+"House_Image" : "House_Image_04", 
+"House_Description" : "최고다", 
+"Price_Coin" : 0, 
+"Price_Cash" : 20, 
+"Match_Card_ID" : 4, 
+"Match_Card_Bonus_Effect_Type" : 3, 
+"Match_Card_Bonus_Effect_Value" : 0.20
+}
+,
+{
+"House_ID" : 5, 
+"House_Name" : "비닐 하우스", 
+"House_Image" : "House_Image_05", 
+"House_Description" : "덥다", 
+"Price_Coin" : 0, 
+"Price_Cash" : 30, 
+"Match_Card_ID" : 5, 
+"Match_Card_Bonus_Effect_Type" : 3, 
+"Match_Card_Bonus_Effect_Value" : 0.20
+}
+]
+}

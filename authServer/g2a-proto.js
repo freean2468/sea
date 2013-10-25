@@ -39,10 +39,13 @@ function Proto () {
 		this.addMaker('a2g.RegisterSessionReply', this.a2g_pkg.RegisterSessionReply);
 		this.addMaker('a2g.UnregisterSessionReply', this.a2g_pkg.UnregisterSessionReply);
 		this.addMaker('a2g.UpdateSessionReply', this.a2g_pkg.UpdateSessionReply);
+		this.addMaker('a2g.UpdateEndGameSessionReply', this.a2g_pkg.UpdateEndGameSessionReply);
 		//----
 		this.addMaker('g2a.RegisterSession', this.g2a_pkg.RegisterSession);
 		this.addMaker('g2a.UnregisterSession', this.g2a_pkg.UnregisterSession);
-		this.addMaker('a2g.UpdateSession', this.g2a_pkg.UpdateSession);
+		this.addMaker('g2a.UpdateSession', this.g2a_pkg.UpdateSession);
+		this.addMaker('g2a.TraceStartGame', this.g2a_pkg.TraceStartGame);
+		this.addMaker('g2a.UpdateEndGameSession', this.g2a_pkg.UpdateEndGameSession);
 	};
 
 	this.packetMaker = function (name) {

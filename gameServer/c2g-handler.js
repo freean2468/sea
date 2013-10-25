@@ -3,7 +3,8 @@ var build = require('./c2g-proto-build'),
 	toStream = require('../common/util').toStream,
 	convertMS2S = require('../common/util').convertMS2S,
 	request = require('./g2l-request').request,
-	session = require('./session')
+	session = require('./session'),
+	define = require('../common/define');
 	;
 
 function write(res, stream) {
@@ -12,9 +13,14 @@ function write(res, stream) {
 	res.end();
 }
 
-function inspectField(msg) {
+function inspectField(response, msg) {
 	for (var val in msg) {
 		if (typeof msg[val + ''] === 'undefined') {
+			var server = require('./c2g-index').server;
+			var logMgr = server.logMgr;
+			var sysMsg = new build.SystemMessage();
+			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
+			write(response, toStream(sysMsg));
 			return false;
 		}
 	}
@@ -29,10 +35,8 @@ function VersionInfoHandler(response, data, session_id){
 	var logMgr = server.logMgr;
 	var mysqlMgr = server.getMysqlMgr();
 
-	if (inspectField(msg) === false) {
+	if (inspectField(response, msg) === false) {
 		logMgr.addLog('ERROR', 'Undefined field is detected in [VersionInfoHandler]');
-		sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-		write(response, toStream(sysMsg));
 		return ;
 	}
 
@@ -50,10 +54,8 @@ function RegisterAccountHandler(response, data, session_id){
 	var logMgr = server.logMgr;
 	var mysqlMgr = server.getMysqlMgr();
 
-	if (inspectField(msg) === false) {
+	if (inspectField(response, msg) === false) {
 		logMgr.addLog('ERROR', 'Undefined field is detected in [RegisterAccountHandler]');
-		sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-		write(response, toStream(sysMsg));
 		return ;
 	} 
 
@@ -62,7 +64,7 @@ function RegisterAccountHandler(response, data, session_id){
 
 		if (id === 0) {
 			logMgr.addLog('ERROR', 'Already exsisting account : ' + msg['k_id']);
-			sysMsg['res'] = build.SystemMessage.Result['EXISTED_ACCOUNT'];
+			sysMsg['res'] = build.SystemMessage.Result['EXISTING_ACCOUNT'];
 			write(response, toStream(sysMsg));
 			return ;
 		}
@@ -95,15 +97,12 @@ function UnregisterAccountHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [UnregisterAccountHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
 		mysqlMgr.loadUser(kId, function (res) {
-			mysqlMgr = server.getMysqlMgr();
 			var id = res['res'];
 
 			if (id <= 0) {
@@ -113,6 +112,7 @@ function UnregisterAccountHandler(response, data, session_id){
 				return ;
 			}
 
+			mysqlMgr = server.getMysqlMgr();
 			mysqlMgr.deleteUser(id, function (res) {
 				logMgr.addLog('SYSTEM', 'UnregisterAccount : ' + kId);
 				
@@ -135,10 +135,8 @@ function LoginHandler(response, data, session_id){
 	var logMgr = server.logMgr;
 	var mysqlMgr = server.getMysqlMgr();
 
-	if (inspectField(msg) === false) {
+	if (inspectField(response, msg) === false) {
 		logMgr.addLog('ERROR', 'Undefined field is detected in [LoginHandler]');
-		sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-		write(response, toStream(sysMsg));
 		return ;
 	}
 		
@@ -171,12 +169,12 @@ function LoginHandler(response, data, session_id){
 //						write(response, toStream(sysMsg));
 //						return ;
 //					}
-
+					
 					// info
 					rMsg['lv'] = info['lv'];
 					rMsg['exp'] = info['exp'];
 					rMsg['coin'] = info['coin'];
-					rMsg['money'] = info['money'];
+					rMsg['cash'] = info['cash'];
 					rMsg['energy'] = info['energy'];
 					rMsg['last_charged_time'] = info['last_charged_time'];
 					rMsg['selected_character'] = info['selected_character'];
@@ -192,23 +190,18 @@ function LoginHandler(response, data, session_id){
 						}
 					}
 
-					// upgrade
-					rMsg['score_factor'] = info['score_factor'];
-					rMsg['time_factor'] = info['time_factor'];
-					rMsg['cooldown_factor'] = info['cooldown_factor'];
-
 					// item
-					rMsg['shield'] = info['shield'];
-					rMsg['item_last'] = info['item_last'];
-					rMsg['ghostify'] = info['ghostify'];
-					rMsg['immortal'] = info['immortal'];
-					rMsg['exp_boost'] = info['exp_boost'];
+					rMsg['item_1'] = info['item_1'];
+					rMsg['item_2'] = info['item_2'];
+					rMsg['item_3'] = info['item_3'];
+					rMsg['item_4'] = info['item_4'];
+					rMsg['item_5'] = info['item_5'];
 					rMsg['random'] = info['random'];
 					
 					var _mileage = info['mileage'];
 					var _draw = info['draw'];
 
-					var _callback = function (mileage, draw) {
+					var _lastCall = function (mileage, draw) {
 						rMsg['mileage'] = _mileage;
 						rMsg['draw'] = _draw;
 						
@@ -226,10 +219,10 @@ function LoginHandler(response, data, session_id){
 						mysqlMgr.updateUvOn(id, function (res) {
 							_mileage = info['mileage'] + 5;
 
-							var _callback_2 = function (mileage, draw) {
+							var _callback_1 = function (mileage, draw) {
 								mysqlMgr = server.getMysqlMgr();
 								mysqlMgr.updateMileage(id, mileage, function (res) {
-									_callback(mileage, draw);							
+									_lastCall(mileage, draw);							
 								});
 							};
 
@@ -239,14 +232,14 @@ function LoginHandler(response, data, session_id){
 
 								mysqlMgr = server.getMysqlMgr();
 								mysqlMgr.updateDraw(id, _draw, function (res) {
-									_callback_2(_mileage, _draw);
+									_callback_1(_mileage, _draw);
 								});
 							} else {
-								_callback_2(_mileage, _draw);
+								_callback_1(_mileage, _draw);
 							}
 						});
 					} else {
-						_callback(_mileage, _draw);
+						_lastCall(_mileage, _draw);
 					}
 				});
 			});
@@ -277,10 +270,8 @@ function LogoutHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [LogoutHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 		
@@ -318,10 +309,8 @@ function CheckInChargeHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [CheckInChargeHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		} 
 
@@ -344,13 +333,17 @@ function CheckInChargeHandler(response, data, session_id){
 				var now = new Date().getTime();
 				now = convertMS2S(now);
 
+				var _lastCall = function () {
+					write(response, toStream(rMsg));
+				};
+
 				if (energyMax === energy) {
 					rMsg['energy'] = energyMax;
 					rMsg['last_charged_time'] = now;
 
 					mysqlMgr = server.getMysqlMgr();
 					mysqlMgr.updateLastChargeTime(id, now, function (res) {
-						write(response, toStream(rMsg));
+						_lastCall();
 					});
 				} else {
 					var diff = now - last;
@@ -369,18 +362,18 @@ function CheckInChargeHandler(response, data, session_id){
 						mysqlMgr.updateLastChargeTime(id, uptodate, function (res) {
 							mysqlMgr = server.getMysqlMgr();
 							mysqlMgr.updateEnergy(id, energy, function (res) {
-								write(response, toStream(rMsg));
+								_lastCall();
 							});
 						});
 					} else {
 						if (energy === 0) {
-							rMsg['energy'] = ChargeInfo.Pack['ZERO'];
+							rMsg['energy'] = 0;
 						} else {
 							rMsg['energy'] = energy;
 						}
 						
 						rMsg['last_charged_time'] = last;
-						write(response, toStream(rMsg));
+						_lastCall();
 					} // end else
 				} // end else
 			}); // end mysqlMgr()
@@ -405,10 +398,8 @@ function SelectCharacterHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [SelectCharacterHandle]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		} 
 
@@ -442,8 +433,8 @@ function SelectCharacterHandler(response, data, session_id){
 						write(response, toStream(rMsg));
 					});
 				} else {
-					logMgr.addLog('ERROR', '[SelectCharacter] Invalid character (' + kId + ', ' + 'character : ' + msg['selected_character'] + ')');
-					sysMsg['res'] = build.SystemMessage.Result['INVALID_CHARACTER'];
+					logMgr.addLog('ERROR', '[SelectCharacter] This user (' + kId + ') does not have this character (' + selected + ')');
+					sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 					write(response, toStream(sysMsg));
 				}
 			});
@@ -458,6 +449,14 @@ function StartGameHandler(response, data, session_id){
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 
+	var doubleExp = false;
+
+	var startTrace = function () {
+		var now = new Date();
+
+		session.toAuthTraceStartGame(session_id, convertMS2S(now.getTime()), doubleExp);
+	};
+
 	session.toAuthUpdateSession(session_id, function (res) {
 		var kId = res;
 
@@ -468,10 +467,8 @@ function StartGameHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [StartGameHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -499,88 +496,89 @@ function StartGameHandler(response, data, session_id){
 					logMgr.addLog('system', '[StartGame] Not enough energy : ' + kId);
 					sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_ENERGY'];
 					write(response, toStream(sysMsg));
-				} else {
-					if (energy == energyMax) {
-						last = new Date().getTime();	
-						last = convertMS2S(last);
-					}
-					energy -= 1;
+					return ;
+				}
 
-					rMsg['energy'] = energy;
-					rMsg['last_charged_time'] = last;
-				
+				if (energy == energyMax) {
+					last = new Date().getTime();	
+					last = convertMS2S(last);
+				}
+				energy -= 1;
+
+				rMsg['energy'] = energy;
+				rMsg['last_charged_time'] = last;
+			
+				mysqlMgr = server.getMysqlMgr();
+				mysqlMgr.updateLastChargeTime(id, last, function (res) {
 					mysqlMgr = server.getMysqlMgr();
-					mysqlMgr.updateLastChargeTime(id, last, function (res) {
-						mysqlMgr = server.getMysqlMgr();
-						mysqlMgr.updateEnergy(id, energy, function (res) {
-							var dataMgr = server.dataMgr;
-							var itemData = dataMgr.itemData;
-							var _callback = function () {
-								write(response, toStream(rMsg));
+					mysqlMgr.updateEnergy(id, energy, function (res) {
+						var dataMgr = server.dataMgr;
+						var itemData = dataMgr.itemData;
+
+						var procedureCallList = [];
+
+						for (var i = 0; i < 4; ++i) {
+							var item = itemData[i];
+							var itemId = item['ID'];
+							var on = false;
+							var amount = info['_'+itemId];
+							var rest = amount;
+
+							if (amount > 0) {
+								procedureCallList.push(itemId);
+								rest = amount - 1;
+								on = true;
+							}
+
+							rMsg['used_item_list'].push({'id': itemId,  'on': on, 'rest': rest});
+						}
+
+						if (info['random'] !== 0) {
+							procedureCallList.push(itemId);
+
+							var item = itemData.getItemDataById([info['random']]);
+							var itemId = item['ID'];
+							rMsg['user_item_list'].push({'id': itemId, 'on': true, 'rest': 0});
+						}
+
+						if (procedureCallList.length === 0) {
+							startTrace();
+							write(response, toStream(rMsg));
+							return ;
+						}
+
+						var lastCallTrigger = procedureCallList.length;
+
+						var wrap = function (idx) {
+							var _lastCall = function (idx) {
+								++idx;
+
+								if (idx === lastCallTrigger) {
+									startTrace();
+									write(response, toStream(rMsg));
+								} else {
+									wrap(idx);
+								}
 							};
 
-							var procedureCallList = [];
+							var item = dataMgr.getItemDataById(procedureCallList[idx]);
+							var itemId = item['ID'];
 
-							for (var i = 0; i < itemData.length; ++i) {
-								var item = itemData[i];
-								var name = item['name'];
-								var now = info[name];
-								var on = false;
-								var rest = now;
-								var item_id = i + 1;
-
-								if (now > 0) {
-									procedureCallList.push(i);
-									rest -= 1;
-									on = true;
-									
-									if (name === 'Random') {
-										rest = 0;
-										item_id = now;
-									}
-								}
-
-								rMsg['used_item_list'].push({'id': item_id,  'on': on, 'rest': rest});
+							mysqlMgr = server.getMysqlMgr();
+							if (5 < itemId) {
+								mysqlMgr.updateRandom(id, 0, function (res) { 
+									_lastCall(idx);
+								});
+							} else {
+								mysqlMgr.updateItem(id, -1, itemId, function (res) { 
+									_lastCall(idx);
+								});
 							}
+						};
 
-							if (procedureCallList.length === 0) {
-								_callback();
-								return ;
-							}
-
-							for (var i = 0; i < procedureCallList.length; ++i) {
-								var item = itemData[procedureCallList[i]];
-								var name = item['name'];
-								if (info[name] <= 0) {
-									console.log('==============');
-									console.log(id);
-									console.log(item);
-									console.log(info);
-									console.log('==============');
-								}
-								var procedure = 'update' + name;
-								
-								function wrap(idx) {
-									mysqlMgr = server.getMysqlMgr();
-									if (name === 'Random') {
-										mysqlMgr.updateRandom(id, 0, function (res) { 
-											if (procedureCallList.length === idx+1) {
-												_callback();
-											}
-										});
-									} else {
-										mysqlMgr[procedure](id, -1, function (res) { 
-											if (procedureCallList.length === idx+1) {
-												_callback();
-											}
-										});
-									}
-								}
-								wrap(i);
-							}
-						});
+						wrap(0);
 					});
-				}
+				});
 			});
 		}); // end sea_LoadUser
 	});
@@ -593,7 +591,7 @@ function EndGameHandler(response, data, session_id){
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 
-	session.toAuthUpdateSession(session_id, function (res) {
+	session.toAuthUpdateEndGameSession(session_id, function (res) {
 		var kId = res;
 
 		if (kId === false) {
@@ -603,10 +601,8 @@ function EndGameHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [EndGameHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -624,60 +620,193 @@ function EndGameHandler(response, data, session_id){
 			mysqlMgr = server.getMysqlMgr();
 			mysqlMgr.loadUserInfo(id, function (res) {
 				var info = res;
-				var _mileage = info['mileage'] + 5;
-				var _draw = info['draw'];
-				var _callback = function () {
+				var _lastCall = function () {
 					write(response, toStream(rMsg));
 				};
 
+				var selectedCharacter = info['selected_character'];
+
+				// TODO : Detecting Cheating
 				mysqlMgr = server.getMysqlMgr();
-				if (_mileage >= 100) {
-					++_draw;
-					_mileage -= 100;
-					mysqlMgr.updateDraw(id, _draw, function (res) { });
-				}
+				mysqlMgr.selectCharacters(id, function (res) {
+					var characterLevel = res['_' + selectedCharacter];
+					var dataMgr = require('./c2g-index').server.dataMgr;
+					var characterData = dataMgr.getCharacterDataByIdAndLv(selectedCharacter, characterLevel);
+					// Character bonus coefficient
+					var characterScoreCoefficient = characterData['Char_Score'];
+					var characterExpCoefficient = characterData['Char_Exp'];
+					var characterCoinCoefficient = characterData['Char_Coin'];
 
-				mysqlMgr.updateMileage(id, _mileage, function (res) { });
+					mysqlMgr = server.getMysqlMgr();
+					mysqlMgr.loadGhostHouse(id, function (res) {
+						var ghostHouseInfo = res;
 
-				rMsg['score'] = msg['score'];
-				rMsg['coin'] = msg['coin'];
-				rMsg['total_coin'] = msg['coin'] + info['coin'];
-				rMsg['bonus_score'] = msg['score'] + msg['coin'];
-				rMsg['total_score'] = msg['score'] + msg['coin'] + rMsg['bonus_score'];
-				rMsg['mileage'] = _mileage;
-				rMsg['draw'] = _draw;
+						// House & ghost card match bonus coefficient
+						var houseMatchCardScoreCoefficient = 0;
+						var houseMatchCardExpCoefficient = 0;
+						var houseMatchCardCoinCoefficient = 0;
+						var E_Match_Card = define.E_Match_Card;
 
-				// FIXME
-				rMsg['level'] = info['lv'];
-				rMsg['exp'] = info['exp'] + 1;
+						// ghost card bonus coefficient
+						var ghostCardScoreCoefficient = 0;
+						var ghostCardExpCoefficient = 0;
+						var ghostCardCoinCoefficient = 0;
+						
+						for (var i = 0; i < ghostHouseInfo.length / 2; ++i) {
+							var ghostCard = ghostHouseInfo['_' + i];
+							
+							if (ghostCard !== -1) {
+								var ghostHouseData = dataMgr.getHouseDataById(i);
 
-				if (rMsg['level'] * 10 <= rMsg['exp']) {
-					rMsg['exp'] = 0;
-					rMsg['level'] += 1;
-					mysqlMgr.updateLv(id, rMsg['level'], function (res) { });
-				}
+								if (ghostHouseData['Match_Card_ID'] === ghostCard) {
+									var type = ghostHouseData['Match_Card_Bonus_Effect_Type'];
+									var value = ghostHouseData['Match_Card_Bonus_Effect_Value'];
 
-				mysqlMgr.updateExp(id, rMsg['exp'], function (res) { });
-				mysqlMgr.updateCoin(id, rMsg['total_coin'], function (res) { _callback(); });
-				mysqlMgr.updateUserLog(id, rMsg['total_score'], msg['dist'], msg['enemy_kill'], function (res) {});
+									if (E_Match_Card[type] === 'Add_Score') {
+										houseMatchCardScoreCoefficient += value;
+									} else if (E_Match_Card[type] === 'Add_Coin') {
+										houseMatchCardCoinCoefficient += value;
+									} else if (E_Match_Card[type] === 'Add_Exp') {
+										houseMatchCardExpCoefficient += value;
+									}
+								}
 
-				var UserGamePlay = build.UserGamePlay;
-				var req = new UserGamePlay();
+								var ghostCardData = dataMgr.getGhostDataById(ghostCard);
 
-				req['k_id'] = kId;
-				req['selected_character'] = info['selected_character'];
-				req['score'] = msg['score'];
-				req['enemy_kill'] = msg['enemy_kill'];
-				req['dist'] = msg['dist'];
-				req['play_time'] = msg['play_time'];
-				req['shield'] = info['shield'];
-				req['ghostify'] = info['ghostify'];
-				req['immortal'] = info['immortal'];
-				req['exp_boost'] = info['exp_boost'];
-				req['item_last'] = info['item_last'];
-				req['random'] = info['random'];
+								ghostCardScoreCoefficient += ghostCardData['Card_Score'];
+								ghostCardExpCoefficient += ghostCardData['Card_Exp'];
+								ghostCardCoinCoefficient += ghostCardData['Card_Coin'];
+							}
+						}
 
-				request(req);
+						mysqlMgr = server.getMysqlMgr();
+						mysqlMgr.selectCharacterCostumes(id, selectedCharacter, function (res) {
+							var costumeHead = res['head'];
+							var costumeTop = res['top'];
+							var costumeBottoms = res['bottoms'];
+							var costumeBack = res['back'];
+
+							// costume bonus coefficient
+							var costumeScoreCoefficient = 0;
+							var costumeExpCoefficient = 0;
+							var costumeCoinCoefficient = 0;
+
+							if (costumeHead !== 0) {
+								var data = dataMgr.getCostumeDataById(costumeHead);
+								costumeScoreCoefficient += data['Costume_Score'];
+								costumeExpCoefficient += data['Costume_Exp'];
+								costumeCoinCoefficient += data['Costume_Coin'];
+							}
+
+							if (costumeTop !== 0) {
+								var data = dataMgr.getCostumeDataById(costumeTop);
+								costumeScoreCoefficient += data['Costume_Score'];
+								costumeExpCoefficient += data['Costume_Exp'];
+								costumeCoinCoefficient += data['Costume_Coin'];
+							}
+
+							if (costumeBottoms !== 0) {
+								var data = dataMgr.getCostumeDataById(costumeBottoms);
+								costumeScoreCoefficient += data['Costume_Score'];
+								costumeExpCoefficient += data['Costume_Exp'];
+								costumeCoinCoefficient += data['Costume_Coin'];
+							}
+
+							if (costumeBack !== 0) {
+								var data = dataMgr.getCostumeDataById(costumeBack);
+								costumeScoreCoefficient += data['Costume_Score'];
+								costumeExpCoefficient += data['Costume_Exp'];
+								costumeCoinCoefficient += data['Costume_Coin'];
+							}							
+
+							// Score Reward
+							var scoreReward = msg['score'];
+							var bonusScore = scoreReward * (characterScoreCoefficient + houseMatchCardScoreCoefficient + ghostCardScoreCoefficient + costumeScoreCoefficient);
+
+							rMsg['score'] = scoreReward;
+							rMsg['bonus_score'] = bonusScore;
+							rMsg['total_score'] = scoreReward + bonusScore;
+
+							// Mileage Reward
+							var mileage = info['mileage'];
+							var draw = info['draw'];
+							var mileageReward = msg['mileage'];
+
+							mileage += mileageReward;
+
+							mysqlMgr = server.getMysqlMgr();
+							if (100 <= mileage) {
+								++draw;
+								mileage -= 100;
+								mysqlMgr.updateDraw(id, draw, function (res) { });
+							}
+
+							mysqlMgr.updateMileage(id, mileage, function (res) { });
+
+							rMsg['mileage'] = mileageReward;
+							rMsg['total_mileage'] = mileage;
+							rMsg['draw'] = draw;				
+
+							// Coin Reward
+							var coin = info['coin'];
+							var coinReward = msg['coin'];
+							var bonusCoin = coinReward * (characterCoinCoefficient + houseMatchCardCoinCoefficient + ghostCardCoinCoefficient + costumeCoinCoefficient);
+
+							coin += coinReward + bonusCoin;
+
+							rMsg['coin'] = coinReward;
+							rMsg['bonus_coin'] = bonusCoin;
+							rMsg['total_coin'] = coin;
+
+							// Exp Reward
+							// TODO : Computing item Bonus Exp.
+							var lv = info['lv'];
+							var exp = info['exp'];
+							var expReward = msg['dist'] * 0.1;
+							var bonusExp = expReward * (characterExpCoefficient + houseMatchCardExpCoefficient + ghostCardExpCoefficient + costumeExpCoefficient);
+							var dataMgr = require('./c2g-index').server.dataMgr;
+							var levelTable = dataMgr.getLevelData(lv);
+
+							exp += expReward + bonusExp;
+
+							if (levelTable !== false) {
+								while (levelTable['Exp'] <= exp) {
+									exp -= levelTable['Exp'];
+									++lv;					
+									levelTable = dataMgr.getLevelData(lv);
+								}
+							}
+
+							rMsg['level'] = lv;
+							rMsg['exp'] = expReward;
+							rMsg['bonus_exp'] = bonusExp;
+							rMsg['total_exp'] = exp;
+
+							mysqlMgr.updateExp(id, exp, function (res) {								
+								mysqlMgr.updateCoin(id, coin, function (res) { _lastCall(); });
+							});
+							mysqlMgr.updateUserLog(id, rMsg['total_score'], msg['dist'], msg['enemy_kill'], function (res) {});
+
+							var UserGamePlay = build.UserGamePlay;
+							var req = new UserGamePlay();
+
+							req['k_id'] = kId;
+							req['selected_character'] = info['selected_character'];
+							req['score'] = msg['score'];
+							req['enemy_kill'] = msg['enemy_kill'];
+							req['dist'] = msg['dist'];
+							req['play_time'] = msg['play_time'];
+							req['shield'] = info['item_1'];
+							req['item_last'] = info['item_2'];
+							req['ghostify'] = info['item_3'];
+							req['immortal'] = info['item_4'];
+							req['exp_boost'] = info['item_5'];
+							req['random'] = info['random'];
+
+							request(req);
+						});
+					});
+				});
 			});
 		});
 	});
@@ -700,10 +829,8 @@ function LoadRankInfoHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [LoadRankInfoHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -785,9 +912,9 @@ function LoadRankInfoHandler(response, data, session_id){
 	});
 } // end LoadRankInfoHandler
 
-function LoadPostedEnergyHandler(response, data, session_id){
-	var msg = build.LoadPostedEnergy.decode(data);
-	var rMsg = new build.PostedEnergy();
+function LoadPostboxHandler(response, data, session_id){
+	var msg = build.LoadPostbox.decode(data);
+	var rMsg = new build.Postbox();
 	var sysMsg = new build.SystemMessage();
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
@@ -796,16 +923,14 @@ function LoadPostedEnergyHandler(response, data, session_id){
 		var kId = res;
 
 		if (kId === false) {
-			logMgr.addLog('ERROR', '[LoadPostedEnergy] Unauthenticated client accessed : (' + session_id + ')');
+			logMgr.addLog('ERROR', '[LoadPostbox] Unauthenticated client accessed : (' + session_id + ')');
 			sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
-			logMgr.addLog('ERROR', 'Undefined field is detected in [LoadPostedEnergyHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
+		if (inspectField(response, msg) === false) {
+			logMgr.addLog('ERROR', 'Undefined field is detected in [LoadPostbox]');
 			return ;
 		}
 
@@ -814,169 +939,168 @@ function LoadPostedEnergyHandler(response, data, session_id){
 			var id = res['res'];
 		
 			if (id <= 0) {
-				logMgr.addLog('ERROR', '[LoadPostedEnergy] Invalid account (' + kId + ')');
+				logMgr.addLog('ERROR', '[LoadPostbox] Invalid account (' + kId + ')');
 				sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 				write(response, toStream(sysMsg));
 				return ;
 			}
 
-			mysqlMgr = server.getMysqlMgr();
-			mysqlMgr.loadEnergyByReceiver(id, function (res) {
-				var sender_id = res[0]['sender_id'];
+			var _callback_4 = function () {
+				mysqlMgr = server.getMysqlMgr();
+				mysqlMgr.loadEvolutionByReceiverId(id, function (res) {
+					var sender_id = res[0]['sender_id'];
 
-				if (sender_id === 0) {
-					write(response, toStream(rMsg));	
-				} else {
+					if (sender_id === 0) {
+						write(response, toStream(rMsg));
+						return;
+					}
+
 					var list = res;
-					var count = 0;
+					var lastCallTrigger = list.length;
+					
+					var wrap = function (idx) {
+						var accepted = list[idx]['accepted'];
 
-					for (var i = 0, l = list.length; i < l; ++i) {
+						var _lastCall = function (idx) {
+							++idx;
+
+							if (idx === lastCallTrigger) {
+								write(response, toStream(rMsg));
+							} else {
+								wrap(idx);
+							}
+						};
+
+						if (accepted === 1) {
+							_lastCall(idx);
+							return ;
+						}
+
 						mysqlMgr = server.getMysqlMgr();
-						mysqlMgr.loadUserKId(list[i]['sender_id'], function (res) {
-							var res = res['res'];
-							
-							rMsg['energy'].push({'sender_k_id':res, 'sended_time':list[count]['sended_time']});
-							++count;
-							if (count === l) {
-								write(response, toStream(rMsg));
-							}
-						});						
+						mysqlMgr.loadUserKId(list[idx]['sender_id'], function (res) {
+							var sender_k_id = res['res'];
+							var item = list[idx];
+
+							rMsg['evolution'].push({'sender_k_id': sender_k_id, 'character_id': item['character_id'], 'sended_time': item['sended_time']});
+
+							_lastCall(idx);
+						});
+					};
+
+					wrap(0);
+				});
+			};
+
+			var _callback_3 = function () {
+				mysqlMgr = server.getMysqlMgr();
+				mysqlMgr.loadBatonResult(id, function (res) {
+					var sender_id = res[0]['sender_id'];
+
+					if (sender_id === 0) {
+						_callback_4();
+						return;
 					}
-				}
-			});
-		});
-	});
-} // end LoadPostedEnergyHandler
 
-function LoadPostedBatonHandler(response, data, session_id){
-	var msg = build.LoadPostedBaton.decode(data);
-	var rMsg = new build.PostedBaton();
-	var sysMsg = new build.SystemMessage();
-	var server = require('./c2g-index').server;
-	var logMgr = server.logMgr;
-
-	session.toAuthUpdateSession(session_id, function (res) {
-		var kId = res;
-
-		if (kId === false) {
-			logMgr.addLog('ERROR', '[LoadPostedBaton] Unauthenticated client accessed : (' + session_id + ')');
-			sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
-			write(response, toStream(sysMsg));
-			return ;
-		}
-
-		if (inspectField(msg) === false) {
-			logMgr.addLog('ERROR', 'Undefined field is detected in [LoadPostedBatonHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
-			return ;
-		}
-
-		var mysqlMgr = server.getMysqlMgr();
-		mysqlMgr.loadUser(kId, function (res) {
-			var id = res['res'];
-		
-			if (id <= 0) {
-				logMgr.addLog('ERROR', '[LoadPostedBaton] Invalid account (' + kId + ')');
-				sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-				write(response, toStream(sysMsg));
-				return ;
-			}
-
-			mysqlMgr = server.getMysqlMgr();
-			mysqlMgr.loadBaton(id, function (res) {
-				var sender_id = res[0]['sender_id'];
-
-				if (sender_id === 0) {
-					write(response, toStream(rMsg));	
-				} else {
 					var list = res;
-					var count = 0;
+					var nextCallTrigger = list.length;
 
-					mysqlMgr = server.getMysqlMgr();
-					for (var i = 0, l = list.length; i < l; ++i) {
-						mysqlMgr.loadUserKId(list[i]['sender_id'], function (res) {
-							var res = res['res'];
-							var cp = list[count];
-							rMsg['baton'].push({'sender_k_id':res, 'map_name':cp['map'], 'last_score':cp['score'], 'sended_time':cp['sended_time']});
-							++count;
-
-							if (count === l) {
-								write(response, toStream(rMsg));
-							}
-						});						
-					}
-				}
-			});
-		});
-	});
-} // end LoadPostedBatonHandler
-
-function LoadPostedBatonResultHandler(response, data, session_id){
-	var msg = build.LoadPostedBatonResult.decode(data);
-	var rMsg = new build.PostedBatonResult();
-	var sysMsg = new build.SystemMessage();
-	var server = require('./c2g-index').server;
-	var logMgr = server.logMgr;
-
-	session.toAuthUpdateSession(session_id, function (res) {
-		var kId = res;
-
-		if (kId === false) {
-			logMgr.addLog('ERROR', '[LoadPostedBatonResult] Unauthenticated client accessed : (' + session_id + ')');
-			sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
-			write(response, toStream(sysMsg));
-			return ;
-		}
-
-		if (inspectField(msg) === false) {
-			logMgr.addLog('ERROR', 'Undefined field is detected in [LoadPostedBatonResultHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
-			return ;
-		}
-
-		var mysqlMgr = server.getMysqlMgr();
-		mysqlMgr.loadUser(kId, function (res) {
-			var id = res['res'];
-		
-			if (id <= 0) {
-				logMgr.addLog('ERROR', '[LoadPostedBatonResult] Invalid account (' + kId + ')');
-				sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-				write(response, toStream(sysMsg));
-				return ;
-			}
-
-			mysqlMgr = server.getMysqlMgr();
-			mysqlMgr.loadBatonResult(id, function (res) {
-				var sender_id = res[0]['sender_id'];
-
-				if (sender_id === 0) {
-					write(response, toStream(rMsg));	
-				} else {
-					var list = res;
-					var count = 0;
-
-					mysqlMgr = server.getMysqlMgr();
-					for (var i = 0, l = list.length; i < l; ++i) {
-						mysqlMgr.loadUserKId(list[i]['sender_id'], function (res) {
-							var temp = res[0]['res'];
-							var cp = list[count];
+					var wrap = function (idx) {
+						mysqlMgr = server.getMysqlMgr();
+						mysqlMgr.loadUserKId(list[idx]['sender_id'], function (res) {
+							var temp = res['res'];
+							var cp = list[idx];
 							
 							rMsg['baton_result'].push({'sender_k_id':temp, 'acquisition_score':cp['score'], 'sended_time':cp['sended_time']});
 
-							++count;
-
-							if (count === l) {
-								write(response, toStream(rMsg));
+							++idx;
+							if (idx === nextCallTrigger) {
+								console.log('callback_4');
+								_callback_4();
+							} else {
+								wrap(idx);
 							}
-						});						
+						});
+					};
+
+					wrap(0);
+				});
+			};
+
+			var _callback_2 = function () {
+				mysqlMgr = server.getMysqlMgr();
+				mysqlMgr.loadBaton(id, function (res) {
+					var sender_id = res[0]['sender_id'];
+
+					if (sender_id === 0) {
+						_callback_3();
+						return;
 					}
-				}
-			});
+
+					var list = res;
+					var nextCallTrigger = list.length;
+
+					var wrap = function (idx) {
+						mysqlMgr = server.getMysqlMgr();
+						mysqlMgr.loadUserKId(list[idx]['sender_id'], function (res) {
+							var res = res['res'];
+							var cp = list[idx];
+							rMsg['baton'].push({'sender_k_id':res, 'map_name':cp['map'], 'last_score':cp['score'], 'sended_time':cp['sended_time']});
+
+							++idx;
+							if (idx === nextCallTrigger) {
+								console.log('callback_3');
+								_callback_3();
+							} else {
+								wrap(idx);
+							}
+						});
+					};
+
+					wrap(0);
+				});
+			};
+
+			var _callback_1 = function () {
+				mysqlMgr = server.getMysqlMgr();
+				mysqlMgr.loadEnergyByReceiver(id, function (res) {
+					var sender_id = res[0]['sender_id'];
+
+					if (sender_id === 0) {
+						_callback_2();						
+						return;
+					}
+					
+					var list = res;
+					var nextCallTrigger = list.length;
+
+					var wrap = function (idx) {
+						mysqlMgr = server.getMysqlMgr();
+						mysqlMgr.loadUserKId(list[idx]['sender_id'], function (res) {
+							var res = res['res'];
+							
+							rMsg['energy'].push({
+								'sender_k_id': res,
+								'amount': list[idx]['amount'],
+								'sended_time': list[idx]['sended_time'],
+							});
+							
+							++idx;
+							if (idx === nextCallTrigger) {
+								_callback_2();
+							} else {
+								wrap(idx);
+							}
+						});
+					};
+
+					wrap(0);
+				});
+			};
+
+			_callback_1();
 		});
 	});
-} // end LoadPostedBatonResultHandler
+} // end LoadPostboxHandler
 
 function BuyItemHandler(response, data, session_id){
 	var msg = build.BuyItem.decode(data);
@@ -996,10 +1120,8 @@ function BuyItemHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [BuyItemHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -1018,26 +1140,28 @@ function BuyItemHandler(response, data, session_id){
 			mysqlMgr.loadUserBriefInfo(id, function(res) {
 				var coin = res['coin'];
 				var dataMgr = require('./c2g-index').server.dataMgr;
-				var itemData = dataMgr.getItemDataById(msg['item']);
-				var cost = itemData['cost'];
+				var itemId = msg['item'];
+				var itemData = dataMgr.getItemDataById(itemId);
 
-				if (coin < cost) {
+				if (itemId < build.BuyItem.Limit['MIN']	|| build.BuyItem.Limit['MAX'] < itemId) {
+					logMgr.addLog('ERROR', '[BuyItem] Invalid item (' + kId + ', ' + itemId + ')');
+					sysMsg['res'] = build.SystemMessage.Result['INVALID_ITEM'];
+					write(response, toStream(sysMsg));
+					return;
+				}
+
+				var priceCoin = itemData['Price_Coin'];
+
+				if (coin < priceCoin) {
 					logMgr.addLog('SYSTEM', '[BuyItem] Not enough coin (' + kId + ')');
 					sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
 					write(response, toStream(sysMsg));
 					return;
 				}
 
-				if (typeof itemData === 'undefined') {
-					logMgr.addLog('ERROR', '[BuyItem] Invalid item (' + kId + ', ' + msg['item'] + ')');
-					sysMsg['res'] = build.SystemMessage.Result['INVALID_ITEM'];
-					write(response, toStream(sysMsg));
-					return;
-				}
-
 				var _mileage = res['mileage'] + 5;
 				var _draw = res['draw'];
-				var _callback = function () {
+				var _lastCall = function () {
 					write(response, toStream(rMsg));
 				};
 
@@ -1052,39 +1176,34 @@ function BuyItemHandler(response, data, session_id){
 
 				rMsg['mileage'] = _mileage;
 				rMsg['draw'] = _draw;
+				rMsg['coin'] = coin - priceCoin;
 
-				if (build.BuyItem['RANDOM'] !== msg['item']) {
+				if (itemId < build.BuyItem.Limit['MAX']) {
 					rMsg['item'] = msg['item'];
 		
-					procedure = 'update' + itemData['name'];
-					mysqlMgr[procedure](id, 1, function (res) { 
-						coin -= cost;
-
+					mysqlMgr.updateItem(id, 1, itemData['ID'], function (res) { 
 						mysqlMgr = server.getMysqlMgr();
-						mysqlMgr.updateCoin(id, coin, function (res) {
-							rMsg['coin'] = coin;
-							_callback();
+						mysqlMgr.updateCoin(id, rMsg['coin'], function (res) {
+							_lastCall();
 						}); 
 					});
 				} else {
-					var typeList = itemData['type'];
-					var length = typeList.length;
-					var item = Math.floor(Math.random * length);
-					var data = typeList[item];
+					var length = dataMgr.itemData.length;
+					var itemId = Math.floor(Math.random() * length) + 1;
+					var itemData = dataMgr.getItemDataById(itemId);
 												
-					rMsg['item'] = data['id'];
+					rMsg['item'] = itemData['ID'];
 					
-					mysqlMgr.updateRandom(id, data['id'], function (res) {
+					mysqlMgr.updateRandom(id, itemData['ID'], function (res) {
 						if (res !== 0) {
-							coin -= (cost/2);								
+							rMsg['coin'] -= (priceCoin/2);								
 						} else {
-							coin -= cost;
+							rMsg['coin'] -= priceCoin;
 						}
 
 						mysqlMgr = server.getMysqlMgr();
-						mysqlMgr.updateCoin(id, coin, function (res) {
-							rMsg['coin'] = coin;
-							_callback();
+						mysqlMgr.updateCoin(id, rMsg['coin'], function (res) {
+							_lastCall();
 						});
 					});
 				}
@@ -1110,10 +1229,8 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [BuyOrUpgradeCharacterHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		} 
 		
@@ -1130,10 +1247,18 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 
 			mysqlMgr = server.getMysqlMgr();
 			mysqlMgr.selectCharacters(id, function (res) {
-				res = res;
-				var character = msg['character'];						
+				var character = msg['character'];
+				var lv = res['_' + character];
+				
+				if (lv === 5 || lv === 10 || lv === 15) {
+					logMgr.addLog('SYSTEM', '[BuyOrUpgradeCharacter] wrong approach detected (' + k_id + ')');
+					sysMsg['res'] = build.SystemMessage.Result['WRONG_APPROACH'];
+					write(response, toStream(sysMsg));
+					return ;
+				}
+
 				var dataMgr = require('./c2g-index').server.dataMgr;
-				var characterData = dataMgr.getCharacterDataById(character);
+				var characterData = dataMgr.getCharacterDataByIdAndlv(character, lv);
 
 				if (character <= 0  || dataMgr.characterData.length < character) {
 					logMgr.addLog('ERROR', '[BuyOrUpgradeCharacter] Invalid character (' + kId + ', ' + character + ')');
@@ -1143,104 +1268,87 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 					return;
 				}
 
-				var lv = res['_' + character];
-				var lvMax = 16;
-
-				if (lv >= lvMax) {
+				if (dataMgr.characterData[character].length <= lv) {
 					logMgr.addLog('ERROR', '[BuyOrUpgradeCharacter] The character is fully upgraded. (' + kId + ')');
 					sysMsg['res'] = build.SystemMessage.Result['FULLY_UPGRADED'];
 					write(response, toStream(sysMsg));
-				} else if (lv < 0) {
-					logMgr.addLog('ERROR', '[BuyOrUpgradeCharacter] Upgrade value can not not be less than 0.(' + kId + ')');
-					sysMsg['res'] = build.SystemMessage.Result['NO_MATCH_WITH_DB'];
-					write(response, toStream(sysMsg));
-				} else {
+					return;
+				}
+
+				mysqlMgr = server.getMysqlMgr();
+				mysqlMgr.loadUserBriefInfo(id, function (res) {
+					var priceCoin = characterData['Price_Coin'];
+					var priceCash = characterData['Price_Cash'];
+					var coin = res['coin'];
+					var cash = res['cash'];
+
+					if (0 < priceCoin && coin < priceCoin) {
+						logMgr.addLog('SYSTEM', '[BuyOrUpgradeCharacter] Not enough coin (' + kId + ')');
+						sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
+						write(response, toStream(sysMsg));
+						return ;
+					}
+
+					if (0 < priceCash && cash < priceCahs) {
+						logMgr.addLog('SYSTEM', '[BuyOrUpgradeCharacter] Not enough cash (' + kId + ')');
+						sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_CASH'];
+						write(response, toStream(sysMsg));
+						return ;
+					}
+
 					mysqlMgr = server.getMysqlMgr();
-					mysqlMgr.loadUserBriefInfo(id, function (res) {
-						var pay;
-						var coin = res['coin'];
-						var money = res['money'];
+					mysqlMgr.addCharacter(id, character, function (res) {
+						var newLv = res['res'];
 
-						if (characterData['priceType'] === 'coin') {
-							pay = coin;	
-						} else {
-							pay = money;
-						}
-
-						var price = 0;
-						
-						if (lv === 0) {
-							price = characterData['price'];
-						} else {
-							price = characterData['evolve'][lv + 1];
-						}
-
-						if (pay < price) {			
-							if (characterData['priceType'] === 'coin') {
-								logMgr.addLog('SYSTEM', '[BuyOrUpgradeCharacter] Not enough coin (' + kId + ')');
-								sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
-							} else {
-								logMgr.addLog('SYSTEM', '[BuyOrUpgradeCharacter] Not enough money (' + kId + ')');
-								sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_MONEY'];
-							}
+						if (newLv !== lv + 1) {
+							logMgr.addLog('ERROR', '[BuyOrUpgradeCharacter] Failed to upgrade on DB(' + kId + ', ' + character + ')');
+							sysMsg['res'] = build.SystemMessage.Result['FAILED_DB_UPDATE'];
 							write(response, toStream(sysMsg));
-							return ;
+							return;
 						}
 
-						pay -= price;
-						
 						mysqlMgr = server.getMysqlMgr();
-						// TODO : concern about evolve and upgrade
-						mysqlMgr.addCharacter(id, character, function (res) {
-							var newLv = res['res'];
+						mysqlMgr.loadMileageAndDraw(id, function (res) {
+							var _res = res;
+							var _mileage = _res['mileage'];
+							var _draw = _res['draw'];
+							var _lastCall = function () {								
+								write(response, toStream(rMsg));
+							};
 
-							if (newLv !== lv + 1) {
-								logMgr.addLog('ERROR', '[BuyOrUpgradeCharacter] Failed to upgrade on DB(' + kId + ', ' + character + ')');
-								sysMsg['res'] = build.SystemMessage.Result['FAILED_DB_UPDATE'];
-								write(response, toStream(sysMsg));
-								return;
+							if (newLv === 1) {
+								_mileage += 30;
+							} else {
+								_mileage += 10;
 							}
 
 							mysqlMgr = server.getMysqlMgr();
-							mysqlMgr.loadMileageAndDraw(id, function (res) {
-								var _res = res;
-								var _mileage = _res['mileage'];
-								var _draw = _res['draw'];
-								var _callback = function () {								
-									write(response, toStream(rMsg));										
-								};
+							if (_mileage >= 100) {
+								++_draw;
+								_mileage -= 100;
+								mysqlMgr.updateDraw(id, _draw, function (res) { });
+							}
 
-								mysqlMgr = server.getMysqlMgr();
-								if (newLv === 1) {
-									_mileage += 30;
+							mysqlMgr.updateMileage(id, _mileage, function (res) { });
 
-									if (_mileage >= 100) {
-										++_draw;
-										_mileage -= 100;
-										mysqlMgr.updateDraw(id, _draw, function (res) { });
-									}
+							rMsg['mileage'] = _mileage;
+							rMsg['draw'] = _draw;
+							rMsg['character'] = character;
+							rMsg['lv'] = newLv;
+							rMsg['coin'] = coin - priceCoin;
+							rMsg['cash'] = cash - priceCash;
 
-									mysqlMgr.updateMileage(id, _mileage, function (res) { });
-								} 
-
-								rMsg['mileage'] = _mileage;
-								rMsg['draw'] = _draw;
-								rMsg['character'] = character;
-								rMsg['lv'] = newLv;
-
-								if (characterData['priceType'] === 'coin') {
-									rMsg['coin'] = pay;
-									rMsg['money'] = money;
-									mysqlMgr.updateCoin(id, pay, function (res) { _callback(); });		
-								} else {
-									rMsg['coin'] = coin;
-									rMsg['money'] = pay;
-									mysqlMgr.updateMoney(id, pay, function (res) { _callback(); });
-								}
-							});
+							if (0 < priceCoin && 0 < priceCash) {
+								mysqlMgr.updateCoin(id, pay, function (res) { });
+								mysqlMgr.updateCash(id, pay, function (res) { _lastCall(); });
+							} else if (0 < priceCoin) {
+								mysqlMgr.updateCoin(id, pay, function (res) { _lastCall(); });
+							} else if (0 < priceCash) {
+								mysqlMgr.updateCash(id, pay, function (res) { _lastCall(); });
+							}
 						});
 					});
-				}
+				});
 			});
 		});
 	});
@@ -1263,10 +1371,8 @@ function SendEnergyHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [SendEnergyHandle]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -1295,12 +1401,12 @@ function SendEnergyHandler(response, data, session_id){
 				mysqlMgr = server.getMysqlMgr();
 				mysqlMgr.loadMileageAndDraw(sender_id, function (res) {
 					var _res = res;
-					var _callback = function () {
+					var _lastCall = function () {
 						write(response, toStream(rMsg));
 					};
 
 					mysqlMgr = server.getMysqlMgr();
-					mysqlMgr.addEnergy(sender_id, receiver_id, function(res) { });
+					mysqlMgr.addEnergy(sender_id, receiver_id, 1, function(res) { });
 						
 					var _mileage = _res['mileage'] + 10;
 					var _draw = _res['draw'];
@@ -1314,7 +1420,7 @@ function SendEnergyHandler(response, data, session_id){
 					rMsg['mileage'] = _mileage;
 					rMsg['draw'] = _draw;
 
-					mysqlMgr.updateMileage(id, _mileage, function (res) { _callback(); });
+					mysqlMgr.updateMileage(id, _mileage, function (res) { _lastCall(); });
 				});
 			});
 		});
@@ -1338,10 +1444,8 @@ function AcceptEnergyHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [AcceptEnergyHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -1383,7 +1487,7 @@ function AcceptEnergyHandler(response, data, session_id){
 					procedure = 'sea_UpdateEnergy';
 					
 					if (res + 1 > energyMax) {
-						energy = 99;		
+						energy = energyMax;		
 					} else {
 						energy = res + 1;
 					}
@@ -1416,10 +1520,8 @@ function RequestBatonHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', '[RequestBaton] Undefined field is detected in RequestBatonHandler');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -1458,15 +1560,15 @@ function RequestBatonHandler(response, data, session_id){
 					}
 
 					var restCoin = coin - batonRequestCost;
-					var _callback = function () {
+					var _lastCall = function () {
 						write(response, toStream(rMsg));					
 					};
 
 					rMsg['coin'] = restCoin;
 					
 					mysqlMgr = server.getMysqlMgr();
-					mysqlMgr.updateCoin(sender_id, restCoin, function (res) { })
-					mysqlMgr.addBaton(sender_id, receiver_id, msg['score'], msg['map'], function (res) { _callback(); });
+					mysqlMgr.updateCoin(sender_id, restCoin, function (res) { });
+					mysqlMgr.addBaton(sender_id, receiver_id, msg['score'], msg['map'], function (res) { _lastCall(); });
 				});
 			});
 		});
@@ -1490,10 +1592,8 @@ function AcceptBatonHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [AcceptBatonHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -1557,10 +1657,8 @@ function EndBatonHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [EndBatonHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -1603,8 +1701,8 @@ function EndBatonHandler(response, data, session_id){
 						mysqlMgr.loadCoin(receiver_id, function (res) {
 							var coin = res['coin'];							
 							var finalScore = msg['score'] + score;
-							var _callback = function () {
-								write(response, toStream(rMsg));									
+							var _lastCall = function () {
+								write(response, toStream(rMsg));
 							};
 
 							rMsg['coin'] = msg['coin'];
@@ -1623,7 +1721,7 @@ function EndBatonHandler(response, data, session_id){
 
 							mysqlMgr.updateCoin(receiver_id, rMsg['total_coin'], function (res) { });
 							mysqlMgr.addBatonResult(receiver_id, sender_id, finalScore, function (res) { });
-							mysqlMgr.deleteBaton(sender_id, receiver_id, msg['sended_time'], function (res) { _callback(); });
+							mysqlMgr.deleteBaton(sender_id, receiver_id, msg['sended_time'], function (res) { _lastCall(); });
 						});
 					}
 				});
@@ -1649,10 +1747,8 @@ function AcceptBatonResultHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [AcceptBatonResultHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -1716,253 +1812,6 @@ function AcceptBatonResultHandler(response, data, session_id){
 	});
 } // end AcceptBatonResultHandler
 
-function UpgradeFactorHandler(response, data, session_id){
-	var msg = build.UpgradeFactor.decode(data);
-	var rMsg = new build.UpgradeFactorReply();
-	var sysMsg = new build.SystemMessage();
-	var server = require('./c2g-index').server;
-	var logMgr = server.logMgr;
-
-	session.toAuthUpdateSession(session_id, function (res) {
-		var kId = res;
-
-		if (kId === false) {
-			logMgr.addLog('ERROR', '[UpgradeFactor] Unauthenticated client accessed : (' + session_id + ')');
-			sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
-			write(response, toStream(sysMsg));
-			return ;
-		}
-
-		if (inspectField(msg) === false) {
-			logMgr.addLog('ERROR', 'Undefined field is detected in [UpgradeScoreFactorHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
-			return ;
-		}
-
-		var mysqlMgr = server.getMysqlMgr();
-		mysqlMgr.loadUser(kId, function (res) {
-			var id = res['res'];		
-			
-			if (id <= 0) {
-				logMgr.addLog('ERROR', '[UpgradeFactor] Invalid account (' + kId + ')');
-				sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-				write(response, toStream(sysMsg));
-				return ;
-			}
-
-			var mysqlMgr = server.getMysqlMgr();
-			mysqlMgr.loadUpgrade(id, function (res) {
-				var scoreFactor = res['score_factor'];
-				var timeFactor = res['time_factor'];
-				var cooldownFactor = res['cooldown_factor'];
-				var scoreFactorMax = 19;
-				var timeFactorMax = 19;
-				var cooldownFactorMax = 19;
-				var _callback = function() {
-					write(response, toStream(rMsg));						
-				};
-
-				if (msg['factor'] === build.UpgradeFactor.Factor['SCORE']) {
-					if (scoreFactor >= scoreFactorMax) {
-						logMgr.addLog('ERROR', '[UpgradeFactor] score_factor is fully upgraded. (' + kId + ')');
-						sysMsg['res'] = build.SystemMessage.Result['FULLY_UPGRADED'];
-						write(response, toStream(sysMsg));
-						return ;
-					}
-					
-					if (scoreFactor < 0) {
-						logMgr.addLog('ERROR', '[UpgradeFactor] Upgrade value can not not be less than 0.(' + kId + ')');
-						sysMsg['res'] = build.SystemMessage.Result['NO_MATCH_WITH_DB'];
-						write(response, toStream(sysMsg));
-						return ;
-					}
-
-					mysqlMgr = server.getMysqlMgr();
-					mysqlMgr.loadCoin(id, function (res) {
-						var coin = res['coin'];
-						var dataMgr = server.dataMgr;
-						var upgradeData = dataMgr.getUpgradeDataById(1);
-						var cost = upgradeData['upgrade'][scoreFactor + 1];
-
-						if (coin < cost) {
-							logMgr.addLog('SYSTEM', '[UpgradeFactor] Not enough coin (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
-							write(response, toStream(sysMsg));
-							return ;
-						}
-
-						coin -= cost;
-
-						mysqlMgr = server.getMysqlMgr();
-						mysqlMgr.upgradeScoreFactor(id, function (res) {
-							res = res['res'];
-
-							if (res !== scoreFactor + 1) {
-								logMgr.addLog('ERROR', '[UpgradeFactor] Failed to upgrade scoreFactor on DB(' + kId + ', ' + bonusScore + ")");
-								sysMsg['res'] = build.SystemMessage.Result['FAILED_DB_UPDATE'];
-								write(response, toStream(sysMsg));
-								return ;
-							}
-
-							mysqlMgr = server.getMysqlMgr();
-							mysqlMgr.updateCoin(id, coin, function (res) { });
-							mysqlMgr.loadMileageAndDraw(id, function (res) {
-								var _mileage = res['mileage'] + 5;
-								var _draw = res['draw'];
-								
-								mysqlMgr = server.getMysqlMgr();
-								if (_mileage >= 100) {
-									++_draw;
-									_mileage -= 100;
-									mysqlMgr.updateDraw(id, _draw, function (res) { });
-								}
-
-								rMsg['mileage'] = _mileage;
-								rMsg['draw'] = _draw;
-								rMsg['coin'] = coin;
-
-								mysqlMgr.updateMileage(id, _mileage, function (res) { _callback(); });
-							});
-						});
-					});
-				} else if (msg['factor'] === build.UpgradeFactor.Factor['TIME']) {
-					if (timeFactor >= timeFactorMax) {
-						logMgr.addLog('ERROR', '[UpgradeFactor] timeFactor is fully upgraded. (' + kId + ')');
-						sysMsg['res'] = build.SystemMessage.Result['FULLY_UPGRADED'];
-						write(response, toStream(sysMsg));
-						return ;
-					} 
-					
-					if (timeFactor < 0) {
-						logMgr.addLog('ERROR', '[UpgradeFactor] Upgrade value can not not be less than 0.(' + kId + ')');
-						sysMsg['res'] = build.SystemMessage.Result['NO_MATCH_WITH_DB'];
-						write(response, toStream(sysMsg));
-						return ;
-					}
-
-					mysqlMgr = server.getMysqlMgr();
-					mysqlMgr.loadCoin(id, function (res) {
-						var coin = res['coin'];
-						var dataMgr = server.dataMgr;
-						var upgradeData = dataMgr.getUpgradeDataById(2);
-						var cost = upgradeData['upgrade'][timeFactor + 1];
-
-						if (coin < cost) {
-							logMgr.addLog('SYSTEM', '[UpgradeFactor] Not enough coin (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
-							write(response, toStream(sysMsg));
-							return ;
-						}
-
-						coin -= cost;
-
-						mysqlMgr = server.getMysqlMgr();
-						mysqlMgr.upgradeTimeFactor(id, function (res) {
-							res = res['res'];
-
-							if (res !== timeFactor + 1) {
-								logMgr.addLog('ERROR', '[UpgradeFactor] Failed to upgrade timeFactor on DB(' + kId + ', ' + timeFactor + ')');
-								sysMsg['res'] = build.SystemMessage.Result['FAILED_DB_UPDATE'];
-								write(response, toStream(sysMsg));
-								return ;
-							}
-
-							mysqlMgr = server.getMysqlMgr();
-							mysqlMgr.updateCoin(id, coin, function (res) { });
-							mysqlMgr.loadMileageAndDraw(id, function (res) {
-								var _mileage = res['mileage'] + 15;
-								var _draw = res['draw'];
-
-								mysqlMgr = server.getMysqlMgr();
-								if (_mileage >= 100) {
-									++_draw;
-									_mileage -= 100;
-									mysqlMgr.updateDraw(id, _draw, function (res) { });
-								}
-
-								rMsg['mileage'] = _mileage;
-								rMsg['draw'] = _draw;
-								rMsg['coin'] = coin;
-
-								mysqlMgr.updateMileage(id, _mileage, function (res) { _callback(); });
-							});
-						});
-					});
-				} else if (msg['factor'] === build.UpgradeFactor.Factor['COOLDOWN']) {
-					if (cooldownFactor >= cooldownFactorMax) {
-						logMgr.addLog('ERROR', '[UpgradeFactor] cooldownFactor is fully upgraded. (' + kId + ')');
-						sysMsg['res'] = build.SystemMessage.Result['FULLY_UPGRADED'];
-						write(response, toStream(sysMsg));
-						return ;
-					}
-					
-					if (cooldownFactor < 0) {
-						logMgr.addLog('ERROR', '[UpgradeFactor] Upgrade value can not not be less than 0.(' + kId + ')');
-						sysMsg['res'] = build.SystemMessage.Result['NO_MATCH_WITH_DB'];
-						write(response, toStream(sysMsg));
-						return ;
-					}
-					
-					mysqlMgr = server.getMysqlMgr();
-					mysqlMgr.loadCoin(id, function (res) {
-						var coin = res['coin'];
-						var dataMgr = server.dataMgr;
-						var upgradeData = dataMgr.getUpgradeDataById(3);
-						var cost = upgradeData['upgrade'][cooldownFactor + 1];
-
-						if (coin < cost) {
-							logMgr.addLog('SYSTEM', '[UpgradeFactor] Not enough coin (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
-							write(response, toStream(sysMsg));
-							return ;
-						}
-
-						coin -= cost;
-
-						mysqlMgr = server.getMysqlMgr();
-						mysqlMgr.upgradeCooldownFactor(id, function (res) {
-							res = re['res'];
-
-							if (res !== cooldown + 1) {
-								logMgr.addLog('ERROR', '[UpgradeFactor] Failed to upgrade cooldownFactor on DB(' + kId + ', ' + cooldownFactor + ')');
-								sysMsg['res'] = build.SystemMessage.Result['FAILED_DB_UPDATE'];
-								write(response, toStream(sysMsg));
-								return ;
-							}
-
-							mysqlMgr = server.getMysqlMgr();
-							mysqlMgr.updateCoin(id, coin, function (res) { });
-							mysqlMgr.loadMileageAndDraw(id, function (res) {
-								var _mileage = res['mileage'] + 15;
-								var _draw = res['draw'];
-
-								mysqlMgr = server.getMysqlMgr();
-								if (_mileage >= 100) {
-									++_draw;
-									_mileage -= 100;
-									mysqlMgr.updateDraw(id, _draw, function (res) { });
-								}
-
-								rMsg['mileage'] = _mileage;
-								rMsg['draw'] = _draw;
-								rMsg['coin'] = coin;
-
-								mysqlMgr.updateMileage(id, _mileage, function (res) { _callback(); });
-							});
-						});
-					});
-				} else {
-					logMgr.addLog('ERROR', '[UpgradeFactor] Invalid upgrade (' + kId + ')');
-					sysMsg['res'] = build.SystemMessage.Result['INVALID_UPGRADE'];
-					write(response, toStream(sysMsg));
-					return ;
-				}
-			});
-		});
-	});
-} // end UpgradeFactorHandler
-
 function InviteFriendHandler(response, data, session_id){
 	var msg = build.InviteFriend.decode(data);
 	var rMsg = new build.InviteFriendReply();
@@ -1980,10 +1829,8 @@ function InviteFriendHandler(response, data, session_id){
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [InviteFriendHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -2059,10 +1906,8 @@ function BuyCostumeHandler(response, data, session_id) {
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [BuyCostumeHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -2079,102 +1924,70 @@ function BuyCostumeHandler(response, data, session_id) {
 
 			var dataMgr = server.dataMgr;
 
-			if (msg['category'] <= 0 || build.BuyCostume.CostumeCategory['MAX'] <= msg['category']) {
-				logMgr.addLog('ERROR', '[BuyCostume] Invalid costume category');
-				sysMsg['res'] = build.SystemMessage.Result['INVALID_COSTUME_CATEGORY'];
-				write(response, toStream(sysMsg));
-				return ;
-			}
-
-			if ((msg['category'] === build.BuyCostume.CostumeCategory['HEAD'] &&
-				msg['costume_id'] <= 0 || dataMgr.costumeData['HEAD'].length < msg['costume_id']) ||
-				(msg['category'] === build.BuyCostume.CostumeCategory['TOP'] &&
-				msg['costume_id'] <= 0 || dataMgr.costumeData['TOP'].length <= msg['costume_id']) ||
-				(msg['category'] === build.BuyCostume.CostumeCategory['BOTTOMS'] &&
-				msg['costume_id'] <= 0 || dataMgr.costumeData['BOTTOMS'].length <= msg['costume_id']) ||
-				(msg['category'] === build.BuyCostume.CostumeCategory['BACK'] &&
-				msg['costume_id'] <= 0 || dataMgr.costumeData['BACK'].length <= msg['costume_id'])) 
-			{
+			if (msg['costume_id'] <= 0 || dataMgr.costumeData.length <= msg['costume_id']) {
 				logMgr.addLog('ERROR', '[BuyCostume] Invalid costume id');
 				sysMsg['res'] = build.SystemMessage.Result['INVALID_COSTUME_ID'];
 				write(response, toStream(sysMsg));
 				return ;
 			}
 
-			var costumeData = dataMgr.getCostumeDataByCategoryAndId(msg['category'], msg['costume_id']);
-			var priceType = costumeData['priceType'];
-			var price = costumeData['price'];
+			var costumeData = dataMgr.getCostumeDataById(msg['costume_id']);
+			var priceCash = costumeData['Price_Cash'];
+			var priceCoin = costumeData['Price_Coin'];
 
 			mysqlMgr = server.getMysqlMgr();
 			mysqlMgr.loadUserBriefInfo(id, function (res) {
-				var pay;
+				var coin = res['coin'];
+				var cash = res['cash'];
 
-				if (priceType === 'coin') {
-					pay = res['coin'];
-				} else {
-					pay = res['money'];
+				if (0 < priceCoin && coin < priceCoin) {
+					logMgr.addLog('SYSTEM', '[BuyCostume] Not enough coin (' + kId + ')');
+					sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
+					write(response, toStream(sysMsg));
+					return ;										
 				}
 
-				if (pay < cost) {								
-					if (priceType === 'coin') {
-						logMgr.addLog('SYSTEM', '[BuyCostume] Not enough coin (' + kId + ')');
-						sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
-					} else {
-						logMgr.addLog('SYSTEM', '[BuyCostume] Not enough money (' + kId + ')');
-						sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_MONEY'];
-					}
+				if (0 < priceCash && cash < priceCash) {
+					logMgr.addLog('SYSTEM', '[BuyCostume] Not enough cash (' + kId + ')');
+					sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_CASH'];
 					write(response, toStream(sysMsg));
 					return ;
-				} else {
-					// TODO : Concern about schema and range of costume_id
-					if (msg['category'] === build.BuyCostume.CostumeCategory['HEAD']) {
-						procedure = 'sea_OnCostumeHead';
-					} else if (msg['category'] === build.BuyCostume.CostumeCategory['TOP']) {
-						procedure = 'sea_OnCostumeTop';
-					} else if (msg['category'] === build.BuyCostume.CostumeCategory['BOTTOMS']) {
-						procedure = 'sea_OnCostumeBottoms';
-					} else if (msg['category'] === build.BuyCostume.CostumeCategory['BACK']) {
-						procedure = 'sea_OnCostumeBack';
-					}
-
-					params = id;
-					mysql = server.getMysqlMgr();
-					mysqlMgr[procedure](id, msg['costume_id'], function (res) {
-						rMsg['costume_id'] = msg['costume_id'];
-						var _callback = function () {
-							write(response, toStream(rMsg));
-						};
-
-						if (priceType === 'coin') {
-							rMsg['coin'] = pay - cost;
-							rMsg['money'] = res['money'];
-						} else {
-							rMsg['money'] = pay - cost;
-							rMsg['coin'] = res['coin'];
-						}
-						
-						var _mileage = res['mileage'] + 5;
-						var _draw = res['draw'];
-
-						mysql = server.getMysqlMgr();
-						if (_mileage >= 100) {
-							++_draw;
-							_mileage -= 100;
-							mysqlMgr.updateDraw(id, _draw, function (res) { });
-						}
-						
-						rMsg['mileage'] = _mileage;
-						rMsg['draw'] = _draw;
-
-						mysqlMgr.updateMileage(id, _mileage, function (res) { });
-
-						if (priceType === 'coin') {
-							mysqlMgr.updateCoin(id, rMsg['coin'], function (res) { _callback(); });
-						} else {							
-							mysqlMgr.updateMoney(id, rMsg['money'], function (res) { _callback(); });
-						}
-					});
 				}
+
+				mysql = server.getMysqlMgr();
+				mysqlMgr.onCostume(id, msg['costume_id'], function (res) {
+					rMsg['costume_id'] = msg['costume_id'];
+					var _lastCall = function () {
+						write(response, toStream(rMsg));
+					};
+
+					rMsg['cash'] = res['cash'] - priceCash;
+					rMsg['coin'] = res['coin'] - priceCoin;
+					
+					var _mileage = res['mileage'] + 5;
+					var _draw = res['draw'];
+
+					mysql = server.getMysqlMgr();
+					if (_mileage >= 100) {
+						++_draw;
+						_mileage -= 100;
+						mysqlMgr.updateDraw(id, _draw, function (res) { });
+					}
+					
+					rMsg['mileage'] = _mileage;
+					rMsg['draw'] = _draw;
+
+					mysqlMgr.updateMileage(id, _mileage, function (res) { });
+
+					if (0 < priceCoin && 0 < priceCash) {
+						mysqlMgr.updateCoin(id, rMsg['coin'], function (res) {});
+						mysqlMgr.updateCash(id, rMsg['cash'], function (res) { _lastCall(); });
+					} else if (0 < priceCoin) {
+						mysqlMgr.updateCoin(id, rMsg['coin'], function (res) { _lastCall(); });
+					} else if (0 < priceCash) {
+						mysqlMgr.updateCash(id, rMsg['cash'], function (res) { _lastCall(); });
+					}
+				});
 			});
 		});
 	});
@@ -2197,10 +2010,8 @@ function WearCostumeHandler(response, data, session_id) {
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [WearCostumeHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -2217,22 +2028,7 @@ function WearCostumeHandler(response, data, session_id) {
 
 			var dataMgr = server.dataMgr;
 
-			if (msg['category'] <= 0 || build.WearCostume.CostumeCategory['MAX'] <= msg['category']) {
-				logMgr.addLog('ERROR', '[WearCostume] Invalid costume category');
-				sysMsg['res'] = build.SystemMessage.Result['INVALID_COSTUME_CATEGORY'];
-				write(response, toStream(sysMsg));
-				return ;
-			}
-
-			if ((msg['category'] === build.WearCostume.CostumeCategory['HEAD'] &&
-				msg['costume_id'] <= 0 || dataMgr.costumeData['HEAD'].length < msg['costume_id']) ||
-				(msg['category'] === build.WearCostume.CostumeCategory['TOP'] &&
-				msg['costume_id'] <= 0 || dataMgr.costumeData['TOP'].length <= msg['costume_id']) ||
-				(msg['category'] === build.WearCostume.CostumeCategory['BOTTOMS'] &&
-				msg['costume_id'] <= 0 || dataMgr.costumeData['BOTTOMS'].length <= msg['costume_id']) ||
-				(msg['category'] === build.WearCostume.CostumeCategory['BACK'] &&
-				msg['costume_id'] <= 0 || dataMgr.costumeData['BACK'].length <= msg['costume_id'])) 
-			{
+			if (msg['costume_id'] <= 0 || dataMgr.costumeData.length <= msg['costume_id']) {
 				logMgr.addLog('ERROR', '[WearCostume] Invalid costume id');
 				sysMsg['res'] = build.SystemMessage.Result['INVALID_COSTUME_ID'];
 				write(response, toStream(sysMsg));
@@ -2248,30 +2044,15 @@ function WearCostumeHandler(response, data, session_id) {
 
 			var part = "";
 
-			// TODO : Concern about schema and range of costume_id
-			if (msg['category'] === build.WearCostume.CostumeCategory['HEAD']) {
-				procedure = 'sea_SelectCostumeHead';
-				part = "Head";
-			} else if (msg['category'] === build.WearCostume.CostumeCategory['TOP']) {
-				procedure = 'sea_SelectCostumeTop';
-				part = "Top";
-			} else if (msg['category'] === build.WearCostume.CostumeCategory['BOTTOMS']) {
-				procedure = 'sea_SelectCostumeBottoms';
-				part = "Bottom";
-			} else if (msg['category'] === build.WearCostume.CostumeCategory['BACK']) {
-				procedure = 'sea_SelectCostumeBack';
-				part = "Back";
-			}
-
 			mysqlMgr = server.getMysqlMgr();
-			mysqlMgr[procedure](id, function (res) {
-				var costumeData = dataMgr.getCostumeDataByCategoryAndId(msg['category'], msg['costume_id']);
-				var costumeColumn = '_' + costumeData['id'];
+			mysqlMgr.selectCostume(id, function (res) {
+				var costumeData = dataMgr.getCostumeDataById(msg['costume_id']);
+				var costumeColumn = '_' + costumeData['ID'];
 				var costume = res[costumeColumn];
 
-				if (costume === 0 || costume === undefined) {
+				if (costume === null || typeof costume === 'undefined') {
 					logMgr.addLog('ERROR', '[WearCostume] This user (' + kId + ') does not have this costume(' + costume + ')');
-					sysMsg['res'] = build.SystemMessage.Result['PURCHASE_FIRST'];
+					sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 					write(response, toStream(sysMsg));
 					return ;
 				}
@@ -2280,12 +2061,12 @@ function WearCostumeHandler(response, data, session_id) {
 				mysqlMgr.selectCharacters(id, function (res) {
 					if (res['_' + msg['character_id']] === 0) {
 						logMgr.addLog('ERROR', '[WearCostume] This user  (' + kId + ') does not have this character(' + msg['character_id'] + ')');
-						sysMsg['res'] = build.SystemMessage.Result['PURCHASE_FIRST'];
+						sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 						write(response, toStream(sysMsg));
 						return ;
 					}
 					
-					procedure = 'updateCharacter' +  part;
+					procedure = 'updateCharacter' + costumeData['Costume_Type'];
 
 					mysqlMgr = server.getMysqlMgr();
 					mysqlMgr[procedure](id, msg['costume_id'], msg['character_id'], function (res) {
@@ -2315,10 +2096,8 @@ function DrawFirstHandler(response, data, session_id) {
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [DrawFirstHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -2399,7 +2178,7 @@ function DrawFirstHandler(response, data, session_id) {
 					}
 				}
 				
-				var _callback = function () {
+				var _lastCall = function () {
 					write(response, toStream(rMsg));
 				};
 					
@@ -2409,16 +2188,16 @@ function DrawFirstHandler(response, data, session_id) {
 				mysqlMgr.updateDraw(id, res, -1, function (res) { });
 
 				if (isGhost) {
-					mysqlMgr.updateGhost(id, pick['id'], function (res) { _callback(); });
+					mysqlMgr.updateGhost(id, pick['id'], function (res) { _lastCall(); });
 				} else {
 					if (pick['type'] === 'coin') {
-						mysqlMgr.addCoin(id, pick['content'], function (res) { _callback(); });
+						mysqlMgr.addCoin(id, pick['content'], function (res) { _lastCall(); });
 					} else {
-						if (pick['content'] === 1) { mysqlMgr.updateShield(id, 1, function(res) { _callback(); }); }
-						else if (pick['content'] === 2) { mysqlMgr.updateGhostify(id, 1, function(res) { _callback(); }); }
-						else if (pick['content'] === 3) { mysqlMgr.updateImmortal(id, 1, function(res) { _callback(); }); }
-						else if (pick['content'] === 4) { mysqlMgr.updateExpBoost(id, 1, function(res) { _callback(); }); }
-						else if (pick['content'] === 5) { mysqlMgr.updateItemLast(id, 1, function(res) { _callback(); }); }
+						if (pick['content'] === 1) { mysqlMgr.updateShield(id, 1, function(res) { _lastCall(); }); }
+						else if (pick['content'] === 2) { mysqlMgr.updateGhostify(id, 1, function(res) { _lastCall(); }); }
+						else if (pick['content'] === 3) { mysqlMgr.updateImmortal(id, 1, function(res) { _lastCall(); }); }
+						else if (pick['content'] === 4) { mysqlMgr.updateExpBoost(id, 1, function(res) { _lastCall(); }); }
+						else if (pick['content'] === 5) { mysqlMgr.updateItemLast(id, 1, function(res) { _lastCall(); }); }
 					}
 				}
 
@@ -2447,10 +2226,8 @@ function DrawSecondHandler(response, data, session_id) {
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [DrawSecondHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -2466,10 +2243,10 @@ function DrawSecondHandler(response, data, session_id) {
 			}
 
 			mysql = server.getMysqlMgr();
-			mysqlMgr.loadMoney(id, function (res) {
+			mysqlMgr.loadCash(id, function (res) {
 				if (res < 10) {
-					logMgr.addLog('ERROR', '[DrawSecond] Not enough money (' + kId + ')');
-					sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_MONEY'];
+					logMgr.addLog('ERROR', '[DrawSecond] Not enough cash (' + kId + ')');
+					sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_CASH'];
 					write(response, toStream(sysMsg));
 					return ;
 				}
@@ -2513,24 +2290,24 @@ function DrawSecondHandler(response, data, session_id) {
 				rMsg['pick']['id'] = pick['id'];
 				rMsg['pick']['is_ghost'] = isGhost;
 
-				var _callback = function () {
+				var _lastCall = function () {
 					write(response, toStream(rMsg));
 				};
 
 				mysqlMgr = server.getMysqlMgr();
-				mysqlMgr.updateMoney(id, res - 10, function (res) { });
+				mysqlMgr.updateCash(id, res - 10, function (res) { });
 
 				if (isGhost) {
-					mysqlMgr.updateGhost(id, pick['id'], function (res) { _callback(); });
+					mysqlMgr.updateGhost(id, pick['id'], function (res) { _lastCall(); });
 				} else {
 					if (pick['type'] === 'coin') {
-						mysqlMgr.addCoin(id, pick['content'], function (res) { _callback(); });
+						mysqlMgr.addCoin(id, pick['content'], function (res) { _lastCall(); });
 					} else {
-						if (pick['content'] === 1) { mysqlMgr.updateShield(id, 1, function(res) { _callback(); }); }
-						else if (pick['content'] === 2) { mysqlMgr.updateGhostify(id, 1, function(res) { _callback(); }); }
-						else if (pick['content'] === 3) { mysqlMgr.updateImmortal(id, 1, function(res) { _callback(); }); }
-						else if (pick['content'] === 4) { mysqlMgr.updateExpBoost(id, 1, function(res) { _callback(); }); }
-						else if (pick['content'] === 5) { mysqlMgr.updateItemLast(id, 1, function(res) { _callback(); }); }
+						if (pick['content'] === 1) { mysqlMgr.updateShield(id, 1, function(res) { _lastCall(); }); }
+						else if (pick['content'] === 2) { mysqlMgr.updateGhostify(id, 1, function(res) { _lastCall(); }); }
+						else if (pick['content'] === 3) { mysqlMgr.updateImmortal(id, 1, function(res) { _lastCall(); }); }
+						else if (pick['content'] === 4) { mysqlMgr.updateExpBoost(id, 1, function(res) { _lastCall(); }); }
+						else if (pick['content'] === 5) { mysqlMgr.updateItemLast(id, 1, function(res) { _lastCall(); }); }
 					}
 				}
 			});
@@ -2555,10 +2332,8 @@ function EquipGhostHandler(response, data, session_id) {
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [EquipGhostHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -2582,20 +2357,20 @@ function EquipGhostHandler(response, data, session_id) {
 				return ;
 			}
 
-			if (msg['room_number'] <= 0 || dataMgr.roomData.length < msg['room_number']) {
+			if (msg['house_id'] <= 0 || dataMgr.roomData.length < msg['house_id']) {
 				logMgr.addLog('ERROR', '[EquipGhost] Invalid room number from (' + kId + ')');
-				sysMsg['res'] = build.SystemMessage.Result['INVALID_ROOM'];
+				sysMsg['res'] = build.SystemMessage.Result['INVALID_HOUSE_ID'];
 				write(response, toStream(sysMsg));
 				return ;
 			}
 
 			mysqlMgr = server.getMysqlMgr();
 			mysqlMgr.loadGhostHouse(id, function (res) {
-				var room = res['room_' + msg['room_number']];
+				var room = res['room_' + msg['house_id']];
 
 				if (room === -1) {
 					logMgr.addLog('ERROR', '[EquipGhost] This user(' + kId + ') trying to equip a ghost on closed room');
-					sysMsg['res'] = build.SystemMessage.Result['PURCHASE_FIRST'];
+					sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 					write(response, toStream(sysMsg));
 					return ;
 				}
@@ -2606,14 +2381,14 @@ function EquipGhostHandler(response, data, session_id) {
 
 					if (ghost <= 0) {
 						logMgr.addLog('ERROR', '[EquipGhost] This user(' + kId + ') does not have this ghost');
-						sysMsg['res'] = build.SystemMessage.Result['INVALID_GHOST'];
+						sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 						write(response, toStream(sysMsg));
 						return ;						
 					}
 
 					mysqlMgr = server.getMysqlMgr();
-					mysqlMgr.setGhostTo(id, msg['ghost_id'], msg['room_number'], function (res) {
-						rMsg['room_number'] = msg['room_number'];
+					mysqlMgr.setGhostTo(id, msg['ghost_id'], msg['house_id'], function (res) {
+						rMsg['house_id'] = msg['house_id'];
 						rMsg['ghost_id'] = msg['ghost_id'];
 						write(response, toStream(rMsg));
 					});
@@ -2640,10 +2415,8 @@ function UnequipGhostHandler(response, data, session_id) {
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
+		if (inspectField(response, msg) === false) {
 			logMgr.addLog('ERROR', 'Undefined field is detected in [UnequipGhostHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
 			return ;
 		}
 
@@ -2658,27 +2431,27 @@ function UnequipGhostHandler(response, data, session_id) {
 				return ;
 			}
 
-			if (msg['room_number'] <= 0 || dataMgr.roomData.length < msg['room_number']) {
+			if (msg['house_id'] <= 0 || dataMgr.roomData.length < msg['house_id']) {
 				logMgr.addLog('ERROR', '[UnequipGhost] Invalid room number from (' + kId + ')');
-				sysMsg['res'] = build.SystemMessage.Result['INVALID_ROOM'];
+				sysMsg['res'] = build.SystemMessage.Result['INVALID_HOUSE_ID'];
 				write(response, toStream(sysMsg));
 				return ;
 			}
 
 			mysqlMgr = server.getMysqlMgr();
 			mysqlMgr.loadGhostHouse(id, function (res) {
-				var room = res['room_' + msg['room_number']];
+				var room = res['room_' + msg['house_id']];
 
 				if (room === -1) {
 					logMgr.addLog('ERROR', '[UnequipGhost] This user(' + kId + ') trying to unequip a ghost from closed room');
-					sysMsg['res'] = build.SystemMessage.Result['PURCHASE_FIRST'];
+					sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 					write(response, toStream(sysMsg));
 					return ;
 				}
 
 				mysqlMgr = server.getMysqlMgr();
-				mysqlMgr.removeGhostFrom(id, msg['room_number'], function (res) {
-					rMsg['room_number'] = msg['room_number'];
+				mysqlMgr.removeGhostFrom(id, msg['house_id'], function (res) {
+					rMsg['house_id'] = msg['house_id'];
 					write(response, toStream(rMsg));
 				});
 			});
@@ -2686,9 +2459,9 @@ function UnequipGhostHandler(response, data, session_id) {
 	});
 } // end UnequipGhostHandler
 
-function PurchaseRoomHandler(response, data, session_id) {
-	var msg = build.PurchaseRoom.decode(data);
-	var rMsg = new build.PurchaseRoomReply();
+function PurchaseHouseHandler(response, data, session_id) {
+	var msg = build.PurchaseHouse.decode(data);
+	var rMsg = new build.PurchaseHouseReply();
 	var sysMsg = new build.SystemMessage();
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
@@ -2697,16 +2470,14 @@ function PurchaseRoomHandler(response, data, session_id) {
 		var kId = res;
 
 		if (kId === false) {
-			logMgr.addLog('ERROR', '[PurchaseRoom] Unauthenticated client accessed : (' + session_id + ')');
+			logMgr.addLog('ERROR', '[PurchaseHouse] Unauthenticated client accessed : (' + session_id + ')');
 			sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
 			write(response, toStream(sysMsg));
 			return ;
 		}
 
-		if (inspectField(msg) === false) {
-			logMgr.addLog('ERROR', 'Undefined field is detected in [PurchaseRoomHandler]');
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
+		if (inspectField(response, msg) === false) {
+			logMgr.addLog('ERROR', 'Undefined field is detected in [PurchaseHouseHandler]');
 			return ;
 		}
 
@@ -2715,62 +2486,323 @@ function PurchaseRoomHandler(response, data, session_id) {
 			var id = res['res'];		
 			
 			if (id <= 0) {
-				logMgr.addLog('ERROR', '[PurchaseRoom] Invalid account (' + kId + ')');
+				logMgr.addLog('ERROR', '[PurchaseHouse] Invalid account (' + kId + ')');
 				sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 				write(response, toStream(sysMsg));
 				return ;
 			}
 
+			var dataMgr = require('./c2g-index').server.dataMgr;
+			houseData = dataMgr.getHouseDataById(msg['house_id']);
+
+			if (msg['house_id'] <= 0 || houseData.length <= msg['house_id']) {
+				logMgr.addLog('ERROR', '[PurchaseHouse] This user(' + kId + ') already has this house');
+				sysMsg['res'] = build.SystemMessage.Result['INVALID_HOUSE_ID'];
+				write(response, toStream(sysMsg));
+				return ;				
+			}
+
 			var mysqlMgr = server.getMysqlMgr();
 			mysqlMgr.loadGhostHouse(id, function (res) {
-				var room = res['room_' + msg['room_number']];
+				var house = res['house_' + msg['house_id']];			
 
-				if (room !== -1) {
-					logMgr.addLog('ERROR', '[PurchaseRoom] This user(' + kId + ') already has this room');
-					sysMsg['res'] = build.SystemMessage.Result['CAN_NOT_PURCHASE'];
+				if (house !== -1) {
+					logMgr.addLog('ERROR', '[PurchaseHouse] This user(' + kId + ') already has this house');
+					sysMsg['res'] = build.SystemMessage.Result['ALREADY_HAVING'];
 					write(response, toStream(sysMsg));
 					return ;
 				}
 				
 				mysqlMgr = server.getMysqlMgr();
 				mysq.loadUserBriefInfo(id, function (res) {
-					var dataMgr = require('./c2g-index').server.dataMgr;
-					room = dataMgr.getRoomDataById(msg['room_number']);		
-					var value = room['content'];
+					var coin = res['coin'];
+					var cash = res['cash'];
 
-					if (room['type'] === 'coin' && res['coin'] < value) {
-						logMgr.addLog('ERROR', '[PurchaseRoom] user(' + kId + ') not enough coin');
+					var priceCoin = house['Price_Coin'];
+					var priceCash = house['Price_Cash'];
+
+					if (0 < priceCoin && coin < priceCoin) {
+						logMgr.addLog('ERROR', '[PurchaseHouse] user(' + kId + ') not enough coin');
 						sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
 						write(response, toStream(sysMsg));
 						return ;							
-					} else if (room['type'] === 'money' && res['money'] < value) {
-						logMgr.addLog('ERROR', '[PurchaseRoom] user(' + kId + ') not enough coin');
-						sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
+					} 
+					
+					if (0 < priceCash && cash < priceCash) {
+						logMgr.addLog('ERROR', '[PurchaseHouse] user(' + kId + ') not enough cash');
+						sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_CASH'];
 						write(response, toStream(sysMsg));
 						return ;
 					}
 
-					rMsg['room_number'] = msg['room_number'];
+					rMsg['house_id'] = msg['house_id'];
+					rMsg['coin'] = coin - priceCoin;
+					rMsg['cash'] = cash - priceCash;
 					
-					var _callback = function () {
+					var _lastCall = function () {
 						write(response, toStream(rMsg));							
 					};
 
 					mysqlMgr = server.getMysqlMgr();
-					if (room['type'] === 'coin') {
-						mysqlMgr.updateCoin(id, res['coin'] - value, function (res) { });
-					} else if (room['type'] === 'money') {
-						mysqlMgr.updateMoney(id, res['money'] - value, function (res) { });
-					} else {
-						assert.equal(1, 0);
+
+					if (0 < priceCoin) {
+						mysqlMgr.updateCoin(id, rMsg['coin'], function (res) { });
+					}
+
+					if (0 < priceCash) {
+						mysqlMgr.updateCash(id, rMsg['cash'], function (res) { });
 					}
 					
-					mysqlMgr.purchaseRoom(id, msg['room_number'], function (res) { _callback(); });
+					mysqlMgr.purchaseHouse(id, msg['house_id'], function (res) { _lastCall(); });
 				});
 			});
 		});
 	});
-} // end PurchaseRoomHandler
+} // end PurchaseHouseHandler
+
+function RequestEvolutionHandler(response, data, session_id){
+	var msg = build.RequestEvolution.decode(data);
+	var rMsg = new build.RequestEvolutionReply();
+	var sysMsg = new build.SystemMessage();
+	var server = require('./c2g-index').server;
+	var logMgr = server.logMgr;
+
+	session.toAuthUpdateSession(session_id, function (res) {
+		var kId = res;
+
+		if (kId === false) {
+			logMgr.addLog('ERROR', '[RequestEvolution] Unauthenticated client accessed : (' + session_id + ')');
+			sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+			write(response, toStream(sysMsg));
+			return ;
+		}
+
+		if (inspectField(response, msg) === false) {
+			logMgr.addLog('ERROR', '[RequestEvolution] Undefined field is detected in RequestEvolutionHandler');
+			return ;
+		}
+
+		var mysqlMgr = server.getMysqlMgr();
+		mysqlMgr.loadUser(kId, function (res) {
+			var sender_id = res['res'];		
+
+			if (sender_id <= 0) {
+				logMgr.addLog('ERROR', '[RequestEvolution] Invalid account (' + kId + ')');
+				sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
+				write(response, toStream(sysMsg));
+				return ;
+			}
+
+			var procedure = 'sea_LoadCharacter_' + msg['character_id'];
+			mysqlMgr = server.getMysqlMgr();
+			mysqlMgr[procedure](sender_id, function(res) {
+				var lv = res['lv'];
+				
+				if (!(lv === 5 || lv === 10 || lv === 15)) {
+					logMgr.addLog('SYSTEM', '[RequestEvolution] wrong approach detected (' + k_id + ')');
+					sysMsg['res'] = build.SystemMessage.Result['WRONG_APPROACH'];
+					write(response, toStream(sysMsg));
+					return ;
+				}
+
+				mysqlMgr = server.getMysqlMgr();
+				mysqlMgr.loadUser(msg['receiver_k_id'], function(res) {
+					var receiver_id = res['res'];
+
+					if (receiver_id <= 0) {
+						logMgr.addLog('ERROR', '[RequestEvolution] Invalid account (' + msg['receiver_k_id'] + ')');
+						sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
+						write(response, toStream(sysMsg));
+						return ;
+					}
+
+					mysqlMgr = server.getMysqlMgr();
+					mysqlMgr.loadCoin(sender_id, function (res) {
+						var coin = res['coin'];
+						var evolveRequestCost = 1000;
+
+						if (coin < evolveRequestCost) {
+							logMgr.addLog('SYSTEM', '[RequestEvolution] Not enough coin (' + k_id + ')');
+							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
+							write(response, toStream(sysMsg));
+							return ;
+						}
+
+						var restCoin = coin - evolveRequestCost;
+						var _lastCall = function () {
+							write(response, toStream(rMsg));
+						};
+
+						rMsg['coin'] = restCoin;
+						
+						mysqlMgr = server.getMysqlMgr();
+						mysqlMgr.updateCoin(sender_id, restCoin, function (res) { });
+
+						mysqlMgr.addEvolution(sender_id, receiver_id, msg['character_id'], function (res) { _lastCall(); });
+					});
+				});
+			});
+		});
+	});
+} // end RequestEvolutionHandler
+
+function AcceptEvolutionHandler(response, data, session_id){
+	var msg = build.AcceptEvolution.decode(data);
+	var rMsg = new build.AcceptEvolutionReply();
+	var sysMsg = new build.SystemMessage();
+	var server = require('./c2g-index').server;
+	var logMgr = server.logMgr;
+
+	session.toAuthUpdateSession(session_id, function (res) {
+		var kId = res;
+
+		if (kId === false) {
+			logMgr.addLog('ERROR', '[AcceptEvolution] Unauthenticated client accessed : (' + session_id + ')');
+			sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+			write(response, toStream(sysMsg));
+			return ;
+		}
+
+		if (inspectField(response, msg) === false) {
+			logMgr.addLog('ERROR', 'Undefined field is detected in [AcceptEvolutionHandler]');
+			return ;
+		}
+
+		mysqlMgr = server.getMysqlMgr();
+		mysqlMgr.loadUser(kId, function (res) {
+			var receiver_id = res['res'];
+		
+			if (receiver_id <= 0) {
+				logMgr.addLog('ERROR', '[AcceptEvolution] Invalid account (' + kId + ')');
+				sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
+				write(response, toStream(sysMsg));
+				return ;
+			}
+
+			mysqlMgr = server.getMysqlMgr();
+			mysqlMgr.loadUser(msg['sender_k_id'], function (res) {
+				var sender_id = res['res'];
+
+				if (sender_id <= 0) {
+					logMgr.addLog('ERROR', '[AcceptEvolution] Invalid account (' + msg['sender_k_id'] + ')');
+					sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
+					write(response, toStream(sysMsg));
+					return ;
+				}
+
+				mysqlMgr = server.getMysqlMgr();
+				mysqlMgr.existEvolution(sender_id, receiver_id, function (res) {
+					res = res['res'];
+
+					if (!res) {
+						logMgr.addLog('ERROR', '[AcceptEvolution] Invalid evolution (sed:' + sender_id + ', rec:' + receiver_id + ')');
+						sysMsg['res'] = build.SystemMessage.Result['INVALID_EVOLUTION'];
+						write(response, toStream(sysMsg));
+						return ;
+					}
+
+					mysqlMgr = server.getMysqlMgr();
+					mysqlMgr.acceptEvolution(sender_id, receiver_id, character_id, function (res) {
+						write(response, toStream(rMsg));
+					});
+				});
+			});
+		});
+	});
+} // end AcceptEvolutionHandler
+
+function LoadEvolutionProgressHandler(response, data, session_id){
+	var msg = build.LoadEvolutionProgress.decode(data);
+	var rMsg = new build.EvolutionProgress();
+	var sysMsg = new build.SystemMessage();
+	var server = require('./c2g-index').server;
+	var logMgr = server.logMgr;
+
+	session.toAuthUpdateSession(session_id, function (res) {
+		var kId = res;
+
+		if (kId === false) {
+			logMgr.addLog('ERROR', '[LoadEvolutionProgress] Unauthenticated client accessed : (' + session_id + ')');
+			sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+			write(response, toStream(sysMsg));
+			return ;
+		}
+
+		if (inspectField(response, msg) === false) {
+			logMgr.addLog('ERROR', '[LoadEvolutionProgress] Undefined field is detected in LoadEvolutionProgressHandler');
+			return ;
+		}
+
+		var mysqlMgr = server.getMysqlMgr();
+		mysqlMgr.loadUser(kId, function (res) {
+			var sender_id = res['res'];		
+
+			if (sender_id <= 0) {
+				logMgr.addLog('ERROR', '[LoadEvolutionProgress] Invalid account (' + kId + ')');
+				sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
+				write(response, toStream(sysMsg));
+				return ;
+			}
+
+			var dataMgr = require('./c2g-index').server.dataMgr;
+			var lastCallTrigger = dataMgr.characterData.length;
+
+			var wrap = function (idx) {
+				var characterId = (idx + 1);
+				var procedure = 'sea_LoadCharacter_' + characterId;
+				mysqlMgr = server.getMysqlMgr();
+				mysqlMgr[procedure](sender_id, function(res) {
+					var lv = res;
+
+					mysqlMgr = server.getMysqlMgr();
+					mysqlMgr.loadEvolutionProgress(sender_id, characterId, function(res) {
+						var list = res;
+						var acceptedList = [];
+						var newLevel = lv;
+						var i = 0;
+
+						for (; i < list.length; ++i) {
+							if (list[i]['accepted'] === 1) {
+								acceptedList.push(list[i]);
+							}
+						}
+						
+
+						var _lastCall = function (idx) {
+							++idx;
+
+							if (idx === lastCallTrigger) {
+								write(response, toStream(rMsg));
+							} else {
+								wrap(idx);
+							}
+						};
+
+						var _callback_1 = function () {
+							newLevel = lv + 1;
+							procedure = 'sea_AddCharacter_' + characterId;
+							mysqlMgr = server.getMysqlMgr();
+							mysqlMgr[procedure](sender_id, function (res) { });
+							mysqlMgr.deleteEvolution(sender_id, characterId, function (res) { _lastCall(idx); });
+						};
+
+						if (accepted === 1 && lv === 5) {
+							_callback_1();
+						} else if (accepted === 2 && lv === 10) {
+							_callback_1();
+						} else if (accepted === 3 && lv === 15) {
+							_callback_1();
+						} else {
+							_lastCall(idx);
+						}
+					});
+				});
+			};
+
+			wrap(0);
+		});
+	});
+} // end LoadEvolutionProgressHandler
 
 module.exports = {
 	'VersionInfoHandler': VersionInfoHandler,
@@ -2783,9 +2815,7 @@ module.exports = {
 	'StartGameHandler': StartGameHandler,
 	'EndGameHandler': EndGameHandler,
 	'LoadRankInfoHandler': LoadRankInfoHandler,
-	'LoadPostedEnergyHandler': LoadPostedEnergyHandler,
-	'LoadPostedBatonHandler': LoadPostedBatonHandler,
-	'LoadPostedBatonResultHandler': LoadPostedBatonResultHandler,
+	'LoadPostboxHandler': LoadPostboxHandler,
 	'BuyItemHandler': BuyItemHandler,
 	'BuyOrUpgradeCharacterHandler': BuyOrUpgradeCharacterHandler,
 	'SendEnergyHandler': SendEnergyHandler,
@@ -2794,7 +2824,6 @@ module.exports = {
 	'AcceptBatonHandler': AcceptBatonHandler,
 	'EndBatonHandler': EndBatonHandler,
 	'AcceptBatonResultHandler': AcceptBatonResultHandler,
-	'UpgradeFactorHandler': UpgradeFactorHandler,
 	'InviteFriendHandler': InviteFriendHandler,
 	'LoadRewardHandler': LoadRewardHandler,
 	'BuyCostumeHandler': BuyCostumeHandler,
@@ -2803,5 +2832,8 @@ module.exports = {
 	'DrawSecondHandler': DrawSecondHandler,
 	'EquipGhostHandler': EquipGhostHandler,
 	'UnequipGhostHandler': UnequipGhostHandler,
-	'PurchaseRoomHandler': PurchaseRoomHandler,
+	'PurchaseHouseHandler': PurchaseHouseHandler,
+	'RequestEvolutionHandler': RequestEvolutionHandler,
+	'AcceptEvolutionHandler': AcceptEvolutionHandler,
+	'LoadEvolutionProgressHandler': LoadEvolutionProgressHandler,
 };
