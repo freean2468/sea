@@ -231,7 +231,7 @@ message EvolutionProgress {
 
 message Postbox {
 	repeated Energy energy = 2;
-	repeated Evolution evolution = 2;
+	repeated Evolution evolution = 3;
 
 	message Energy {
 		required string sender_k_id = 1;
