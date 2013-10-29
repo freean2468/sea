@@ -16,7 +16,7 @@ namespace C2G
     public VersionInfo() {}
     
 
-    private ulong _id = (ulong)391770;
+    private ulong _id = (ulong)9303303;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -24,7 +24,7 @@ namespace C2G
       set { _id = value; }
     }
 
-    private string _version = @"0.1.2";
+    private string _version = @"0.1.3";
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"version", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string version
     {
@@ -42,7 +42,7 @@ namespace C2G
     public RegisterAccount() {}
     
 
-    private ulong _id = (ulong)1376019;
+    private ulong _id = (ulong)4324600;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -67,7 +67,7 @@ namespace C2G
     public UnregisterAccount() {}
     
 
-    private ulong _id = (ulong)2358542;
+    private ulong _id = (ulong)2357184;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -110,7 +110,7 @@ namespace C2G
     public Logout() {}
     
 
-    private ulong _id = (ulong)389941;
+    private ulong _id = (ulong)391770;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -128,7 +128,7 @@ namespace C2G
     public CheckInCharge() {}
     
 
-    private ulong _id = (ulong)390853;
+    private ulong _id = (ulong)3340343;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -146,7 +146,7 @@ namespace C2G
     public SelectCharacter() {}
     
 
-    private ulong _id = (ulong)1179073;
+    private ulong _id = (ulong)391313;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -171,7 +171,7 @@ namespace C2G
     public StartGame() {}
     
 
-    private ulong _id = (ulong)391039;
+    private ulong _id = (ulong)1372651;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -189,7 +189,7 @@ namespace C2G
     public EndGame() {}
     
 
-    private ulong _id = (ulong)6420788;
+    private ulong _id = (ulong)6419430;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -249,7 +249,7 @@ namespace C2G
     public LoadRankInfo() {}
     
 
-    private ulong _id = (ulong)7468663;
+    private ulong _id = (ulong)9434386;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -267,7 +267,7 @@ namespace C2G
     public BuyItem() {}
     
 
-    private ulong _id = (ulong)5436810;
+    private ulong _id = (ulong)11402687;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -303,7 +303,7 @@ namespace C2G
     public BuyOrUpgradeCharacter() {}
     
 
-    private ulong _id = (ulong)7467298;
+    private ulong _id = (ulong)7404500;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -328,7 +328,7 @@ namespace C2G
     public SendEnergy() {}
     
 
-    private ulong _id = (ulong)2489592;
+    private ulong _id = (ulong)9434986;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -353,7 +353,7 @@ namespace C2G
     public AcceptEnergy() {}
     
 
-    private ulong _id = (ulong)3470937;
+    private ulong _id = (ulong)4453192;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -385,164 +385,19 @@ namespace C2G
     public RequestBaton() {}
     
 
-    private ulong _id = (ulong)3472750;
+    private ulong _id = (ulong)6487776;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
       get { return _id; }
       set { _id = value; }
     }
-    private string _receiver_k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"receiver_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string receiver_k_id
+    private int _character_id;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"character_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int character_id
     {
-      get { return _receiver_k_id; }
-      set { _receiver_k_id = value; }
-    }
-    private string _map;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"map", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string map
-    {
-      get { return _map; }
-      set { _map = value; }
-    }
-    private int _score;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"score", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int score
-    {
-      get { return _score; }
-      set { _score = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"AcceptBaton")]
-  public partial class AcceptBaton : global::ProtoBuf.IExtensible
-  {
-    public AcceptBaton() {}
-    
-
-    private ulong _id = (ulong)3534913;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public ulong id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private string _sender_k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"sender_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string sender_k_id
-    {
-      get { return _sender_k_id; }
-      set { _sender_k_id = value; }
-    }
-    private long _sended_time;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public long sended_time
-    {
-      get { return _sended_time; }
-      set { _sended_time = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"EndBaton")]
-  public partial class EndBaton : global::ProtoBuf.IExtensible
-  {
-    public EndBaton() {}
-    
-
-    private ulong _id = (ulong)1505624;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public ulong id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private string _sender_k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"sender_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string sender_k_id
-    {
-      get { return _sender_k_id; }
-      set { _sender_k_id = value; }
-    }
-    private long _sended_time;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public long sended_time
-    {
-      get { return _sended_time; }
-      set { _sended_time = value; }
-    }
-    private int _score;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"score", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int score
-    {
-      get { return _score; }
-      set { _score = value; }
-    }
-    private int _dist;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"dist", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int dist
-    {
-      get { return _dist; }
-      set { _dist = value; }
-    }
-    private int _enemy_kill;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"enemy_kill", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int enemy_kill
-    {
-      get { return _enemy_kill; }
-      set { _enemy_kill = value; }
-    }
-    private int _play_time;
-    [global::ProtoBuf.ProtoMember(7, IsRequired = true, Name=@"play_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int play_time
-    {
-      get { return _play_time; }
-      set { _play_time = value; }
-    }
-    private int _coin;
-    [global::ProtoBuf.ProtoMember(8, IsRequired = true, Name=@"coin", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int coin
-    {
-      get { return _coin; }
-      set { _coin = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"AcceptBatonResult")]
-  public partial class AcceptBatonResult : global::ProtoBuf.IExtensible
-  {
-    public AcceptBatonResult() {}
-    
-
-    private ulong _id = (ulong)1569529;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public ulong id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private string _sender_k_id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"sender_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string sender_k_id
-    {
-      get { return _sender_k_id; }
-      set { _sender_k_id = value; }
-    }
-    private long _sended_time;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public long sended_time
-    {
-      get { return _sended_time; }
-      set { _sended_time = value; }
+      get { return _character_id; }
+      set { _character_id = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -555,7 +410,7 @@ namespace C2G
     public InviteFriend() {}
     
 
-    private ulong _id = (ulong)7533273;
+    private ulong _id = (ulong)3473212;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -580,7 +435,7 @@ namespace C2G
     public LoadReward() {}
     
 
-    private ulong _id = (ulong)2555567;
+    private ulong _id = (ulong)3470935;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -622,7 +477,7 @@ namespace C2G
     public BuyCostume() {}
     
 
-    private ulong _id = (ulong)7535719;
+    private ulong _id = (ulong)7470654;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -647,7 +502,7 @@ namespace C2G
     public WearCostume() {}
     
 
-    private ulong _id = (ulong)7534631;
+    private ulong _id = (ulong)2486858;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -679,7 +534,7 @@ namespace C2G
     public DrawFirst() {}
     
 
-    private ulong _id = (ulong)1570213;
+    private ulong _id = (ulong)13496872;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -697,7 +552,7 @@ namespace C2G
     public DrawSecond() {}
     
 
-    private ulong _id = (ulong)5566939;
+    private ulong _id = (ulong)9499341;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -722,7 +577,7 @@ namespace C2G
     public EquipGhost() {}
     
 
-    private ulong _id = (ulong)588139;
+    private ulong _id = (ulong)520980;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -754,7 +609,7 @@ namespace C2G
     public UnequipGhost() {}
     
 
-    private ulong _id = (ulong)586959;
+    private ulong _id = (ulong)522803;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -779,7 +634,7 @@ namespace C2G
     public PurchaseHouse() {}
     
 
-    private ulong _id = (ulong)15859063;
+    private ulong _id = (ulong)3536908;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -804,7 +659,7 @@ namespace C2G
     public RequestEvolution() {}
     
 
-    private ulong _id = (ulong)1375509;
+    private ulong _id = (ulong)3538726;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -836,7 +691,7 @@ namespace C2G
     public AcceptEvolution() {}
     
 
-    private ulong _id = (ulong)4649758;
+    private ulong _id = (ulong)4585601;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -868,7 +723,7 @@ namespace C2G
     public LoadEvolutionProgress() {}
     
 
-    private ulong _id = (ulong)1635192;
+    private ulong _id = (ulong)7599702;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -886,7 +741,7 @@ namespace C2G
     public LoadPostbox() {}
     
 
-    private ulong _id = (ulong)1637005;
+    private ulong _id = (ulong)1572854;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
