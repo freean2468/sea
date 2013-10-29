@@ -14,7 +14,7 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS sea_GetBlackCount $$
 CREATE PROCEDURE sea_GetBlackCount()
 	BEGIN
-		SELECT COUNT(ID) FROM sea_user_black;
+		SELECT COUNT(ID) AS res FROM sea_user_black;
 	END
 $$
 
@@ -35,7 +35,10 @@ $$
 DROP PROCEDURE IF EXISTS sea_IsBlack $$
 CREATE PROCEDURE sea_IsBlack(IN p_k_id varchar(40) CHARACTER SET utf8)
 	BEGIN
-		IF (SELECT k_id FROM sea_user_black WHERE k_id = p_k_id) THEN
+		DECLARE count TINYINT UNSIGNED;
+		SELECT COUNT(k_id) INTO count FROM sea_user_black WHERE k_id = p_k_id;
+
+		IF (0 < count) THEN
 			SELECT 1 AS res;
 		ELSE
 			SELECT 0 AS res;

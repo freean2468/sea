@@ -18,17 +18,10 @@ CREATE TABLE sea.sea_evolution (
 
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS sea_AcceptEvolution $$
-CREATE PROCEDURE sea_AcceptEvolution(IN p_sender_id INT, IN p_receiver_id INT, IN p_character_id TINYINT UNSIGNED)
-	BEGIN
-		UPDATE sea_evolution SET accepted = 1 WHERE sender_id = p_sender_id AND receiver_id = p_receiver_id AND character_id = p_character_id;
-	END
-$$
-
 DROP PROCEDURE IF EXISTS sea_AddEvolution $$
 CREATE PROCEDURE sea_AddEvolution(IN p_sender_id INT, IN p_receiver_id INT, IN p_character_id TINYINT UNSIGNED)
 	BEGIN
-		INSERT sea_AddEvolution(sender_id, receiver_id, character_id, sended_time, accepted)
+		INSERT sea_evolution(sender_id, receiver_id, character_id, sended_time, accepted)
 		VALUES (p_sender_id, p_receiver_id, p_character_id, UNIX_TIMESTAMP(NOW()), 0);
 	END
 $$
@@ -44,6 +37,13 @@ CREATE PROCEDURE sea_ExistEvolution(IN p_sender_id INT, IN p_receiver_id INT, IN
 		ELSE
 			SELECT 0 AS res;
 		END IF;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_AcceptEvolution $$
+CREATE PROCEDURE sea_AcceptEvolution(IN p_sender_id INT, IN p_receiver_id INT, IN p_character_id TINYINT UNSIGNED)
+	BEGIN
+		UPDATE sea_evolution SET accepted = 1 WHERE sender_id = p_sender_id AND receiver_id = p_receiver_id AND character_id = p_character_id;
 	END
 $$
 
@@ -68,17 +68,17 @@ CREATE PROCEDURE sea_LoadEvolutionByReceiverId(IN p_receiver_id INT)
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_DeleteExpiredEvolution $$
-CREATE PROCEDURE sea_DeleteExpiredEvolution()
-	BEGIN
-		DELETE FROM sea_evolution WHERE SUBDATE(NOW(), INTERVAL 20 DAY) > FROM_UNIXTIME(sended_time);
-	END
-$$
-
 DROP PROCEDURE IF EXISTS sea_DeleteEvolution $$
 CREATE PROCEDURE sea_DeleteEvolution(IN p_sender_id INT, IN p_character_id INT UNSIGNED)
 	BEGIN
 		DELETE FROM sea_evolution WHERE sender_id = p_sender_id AND character_id = p_character_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_DeleteExpiredEvolution $$
+CREATE PROCEDURE sea_DeleteExpiredEvolution()
+	BEGIN
+		DELETE FROM sea_evolution WHERE SUBDATE(NOW(), INTERVAL 20 DAY) > FROM_UNIXTIME(sended_time);
 	END
 $$
 

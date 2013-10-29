@@ -1,4 +1,4 @@
-node message-id-gen.js -proto 'g2c' 'c2g' 'g2l' -version '0.1.2'
+node message-id-gen.js -proto 'g2c' 'c2g' 'g2l'
 
 node proto-build-gen.js 'c2g' 'g2c' 'c2g' 'g2l'
 cp -a c2g-proto-build.js ../gameServer/

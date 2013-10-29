@@ -2,7 +2,7 @@ var SECOND = 1000;
 var MINUTE = SECOND * 60;
 var weekday = Array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
 
-var Parts = [
+var E_Parts = [
 	'Head',
 	'Top',
 	'Pants',
@@ -33,7 +33,7 @@ module.exports = {
 	'SECOND': SECOND,
 	'MINUTE': MINUTE,
 	'weekday': weekday,
-	'Parts': Parts,
+	'E_Parts': E_Parts,
 	'E_Item': E_Item,
 	'E_Match_Card': E_Match_Card,
 };

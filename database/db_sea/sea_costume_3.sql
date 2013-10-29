@@ -5,6 +5,15 @@ DROP TABLE IF EXISTS sea_costume_3;
 CREATE TABLE sea.sea_costume_3 (
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	_21 TINYINT(1) UNSIGNED NOT NULL,
+	_22 TINYINT(1) UNSIGNED NOT NULL,
+	_23 TINYINT(1) UNSIGNED NOT NULL,
+	_24 TINYINT(1) UNSIGNED NOT NULL,
+	_25 TINYINT(1) UNSIGNED NOT NULL,
+	_26 TINYINT(1) UNSIGNED NOT NULL,
+	_27 TINYINT(1) UNSIGNED NOT NULL,
+	_28 TINYINT(1) UNSIGNED NOT NULL,
+	_29 TINYINT(1) UNSIGNED NOT NULL,
+	_30 TINYINT(1) UNSIGNED NOT NULL,
 
 	INDEX idx_costume_3 (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -14,8 +23,70 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS sea_OnCostume_21 $$
 CREATE PROCEDURE sea_OnCostume_21(IN p_id INT)
 	BEGIN
-		UPDATE sea_costume_21 SET _21 = 1 WHERE id = p_id;
+		UPDATE sea_costume_3 SET _21 = 1 WHERE id = p_id;
 	END
 $$
 
+DROP PROCEDURE IF EXISTS sea_OnCostume_22 $$
+CREATE PROCEDURE sea_OnCostume_22(IN p_id INT)
+	BEGIN
+		UPDATE sea_costume_3 SET _22 = 1 WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_OnCostume_23 $$
+CREATE PROCEDURE sea_OnCostume_23(IN p_id INT)
+	BEGIN
+		UPDATE sea_costume_3 SET _23 = 1 WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_OnCostume_24 $$
+CREATE PROCEDURE sea_OnCostume_24(IN p_id INT)
+	BEGIN
+		UPDATE sea_costume_3 SET _24 = 1 WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_OnCostume_25 $$
+CREATE PROCEDURE sea_OnCostume_25(IN p_id INT)
+	BEGIN
+		UPDATE sea_costume_3 SET _25 = 1 WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_OnCostume_26 $$
+CREATE PROCEDURE sea_OnCostume_26(IN p_id INT)
+	BEGIN
+		UPDATE sea_costume_3 SET _26 = 1 WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_OnCostume_27 $$
+CREATE PROCEDURE sea_OnCostume_27(IN p_id INT)
+	BEGIN
+		UPDATE sea_costume_3 SET _27 = 1 WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_OnCostume_28 $$
+CREATE PROCEDURE sea_OnCostume_28(IN p_id INT)
+	BEGIN
+		UPDATE sea_costume_3 SET _28 = 1 WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_OnCostume_29 $$
+CREATE PROCEDURE sea_OnCostume_29(IN p_id INT)
+	BEGIN
+		UPDATE sea_costume_3 SET _29 = 1 WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_OnCostume_30 $$
+CREATE PROCEDURE sea_OnCostume_30(IN p_id INT)
+	BEGIN
+		UPDATE sea_costume_3 SET _30 = 1 WHERE id = p_id;
+	END
+$$
 DELIMITER ;

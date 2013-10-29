@@ -25,9 +25,8 @@ $$
 DROP PROCEDURE IF EXISTS sea_AddCharacter_3 $$
 CREATE PROCEDURE sea_AddCharacter_3(IN p_id INT)
 	BEGIN
-		DECLARE res TINYINT UNSIGNED;
-		UPDATE sea_character_3 SET res = lv + 1, lv = lv + 1 WHERE id = p_id;
-		SELECT res AS res;
+		UPDATE sea_character_3 SET lv = lv + 1 WHERE id = p_id;
+		SELECT lv FROM sea_character_3 WHERE id = p_id;
 	END
 $$
 

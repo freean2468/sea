@@ -27,38 +27,31 @@ CREATE PROCEDURE sea_LoadGhostHouse(IN p_id INT)
 	END
 $$
 
-DROP PROCEDURE IF EXISTS sea_PurchaseHouse_1 $$
-CREATE PROCEDURE sea_PurchaseHouse_1(IN p_id INT)
-	BEGIN
-		UPDATE sea_ghost_house SET _1 = 0, _1_time = 0 WHERE id = p_id;
-	END
-$$
-
 DROP PROCEDURE IF EXISTS sea_PurchaseHouse_2 $$
 CREATE PROCEDURE sea_PurchaseHouse_2(IN p_id INT)
 	BEGIN
-		UPDATE sea_ghost_house SET _2 = 0, _2_time = 0 WHERE id = p_id;
+		UPDATE sea_ghost_house SET _2 = 0 WHERE id = p_id;
 	END
 $$
 
 DROP PROCEDURE IF EXISTS sea_PurchaseHouse_3 $$
 CREATE PROCEDURE sea_PurchaseHouse_3(IN p_id INT)
 	BEGIN
-		UPDATE sea_ghost_house SET _3 = 0, _3_time = 0 WHERE id = p_id;
+		UPDATE sea_ghost_house SET _3 = 0 WHERE id = p_id;
 	END
 $$
 
 DROP PROCEDURE IF EXISTS sea_PurchaseHouse_4 $$
 CREATE PROCEDURE sea_PurchaseHouse_4(IN p_id INT)
 	BEGIN
-		UPDATE sea_ghost_house SET _4 = 0, _4_time = 0 WHERE id = p_id;
+		UPDATE sea_ghost_house SET _4 = 0 WHERE id = p_id;
 	END
 $$
 
 DROP PROCEDURE IF EXISTS sea_PurchaseHouse_5 $$
 CREATE PROCEDURE sea_PurchaseHouse_5(IN p_id INT)
 	BEGIN
-		UPDATE sea_ghost_house SET _5 = 0, _5_time = 0 WHERE id = p_id;
+		UPDATE sea_ghost_house SET _5 = 0 WHERE id = p_id;
 	END
 $$
 

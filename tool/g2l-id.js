@@ -20,19 +20,19 @@ var list = [
 ];
 
 var messageId = {
-	AccountLogin: 2683884,
-	ConcurrentUser: 6683602,
-	PeakConcurrentUser: 2683418,
-	UniqueVisitor: 3668852,
-	RetentionRate: 6682959,
-	PayCharacter: 1572242,
-	PayCoin: 57014259,
-	PayEnergy: 11728187,
-	PayItem: 6749484,
-	PayMoney: 3733917,
-	UserGamePlay: 1767594,
-	UserRegister: 7798091,
-	UserUnregister: 4783518,
+	AccountLogin: 5632015,
+	ConcurrentUser: 1634406,
+	PeakConcurrentUser: 15922294,
+	UniqueVisitor: 3600600,
+	RetentionRate: 651571,
+	PayCharacter: 6681968,
+	PayCoin: 10680691,
+	PayEnergy: 3667218,
+	PayItem: 6682325,
+	PayMoney: 7664756,
+	UserGamePlay: 1703442,
+	UserRegister: 16839580,
+	UserUnregister: 1703457,
 };
 
 exports.list = list;

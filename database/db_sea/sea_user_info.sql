@@ -26,7 +26,9 @@ CREATE PROCEDURE sea_LoadUserInfo(IN p_id INT)
 		SELECT I.lv, I.exp, I.coin, I.cash, I.energy, I.last_charged_time, I.selected_character, I.invite_count, I.mileage, I.draw,
 				IT._1 AS item_1, IT._2 AS item_2, IT._3 AS item_3, IT._4 AS item_4, IT._5 AS item_5, IT.random,
 				M.uv, 
-				C1.lv AS _1, C2.lv AS _2, C3.lv AS _3, C4.lv AS _4
+				C1.lv AS _1, C2.lv AS _2, C3.lv AS _3, C4.lv AS _4,
+				GH._1 AS house_1, GH._2 AS house_2, GH._3 AS house_3, GH._4 AS house_4, GH._5 AS house_5,
+				UL.highest_score
 		FROM sea.sea_user_info AS I
 		INNER JOIN sea.sea_item AS IT ON p_id = IT.id
 		INNER JOIN sea.sea_metric AS M ON p_id = M.id
@@ -34,14 +36,23 @@ CREATE PROCEDURE sea_LoadUserInfo(IN p_id INT)
 		INNER JOIN sea.sea_character_2 AS C2 ON p_id = C2.id
 		INNER JOIN sea.sea_character_3 AS C3 ON p_id = C3.id
 		INNER JOIN sea.sea_character_4 AS C4 ON p_id = C4.id
+		INNER JOIN sea.sea_ghost_house AS GH ON p_id = GH.id
+		INNER JOIN sea.sea_user_log AS UL ON p_id = UL.id
 		WHERE I.id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_LoadSelectedCharacter $$
+CREATE PROCEDURE sea_LoadSelectedCharacter(IN p_id INT)
+	BEGIN
+		SELECT selected_character FROM sea.sea_user_info WHERE id = p_id;
 	END
 $$
 
 DROP PROCEDURE IF EXISTS sea_LoadEnergy $$
 CREATE PROCEDURE sea_LoadEnergy(IN p_id INT)
 	BEGIN
-		SELECT energy AS res FROM sea.sea_user_info WHERE id = p_id;
+		SELECT energy FROM sea.sea_user_info WHERE id = p_id;
 	END
 $$
 
@@ -69,7 +80,7 @@ $$
 DROP PROCEDURE IF EXISTS sea_LoadInviteCountWithMileageAndDraw $$
 CREATE PROCEDURE sea_LoadInviteCountWithMileageAndDraw(IN p_id INT)
 	BEGIN
-		SELECT invite_count, mileage, draw AS res FROM sea.sea_user_info WHERE id = p_id;
+		SELECT invite_count, mileage, draw FROM sea.sea_user_info WHERE id = p_id;
 	END
 $$
 
@@ -130,6 +141,7 @@ DROP PROCEDURE IF EXISTS sea_AddCoin $$
 CREATE PROCEDURE sea_AddCoin(IN p_id INT, IN p_amount MEDIUMINT)
 	BEGIN
 		UPDATE sea_user_info SET coin = coin + p_amount WHERE id = p_id;
+		SELECT coin FROM sea_user_info WHERE id = p_id;
 	END
 $$
 

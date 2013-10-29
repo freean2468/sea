@@ -37,7 +37,7 @@ message SystemMessage {
 } // end
 
 message VersionInfoReply {
-	required string version = 2;
+	optional string version = 2 [default="0.1.3"];
 } // end
 
 message RegisterAccountReply {
@@ -77,7 +77,8 @@ message AccountInfo {
 	required int32 random = 14;
 	required int32 mileage = 15;
 	required int32 draw = 16;
-	repeated CharacterInfo characters = 17;
+	required int32 highest_score = 17;
+	repeated CharacterInfo characters = 18;
 
 	message CharacterInfo {
 		required int32 id = 1;
@@ -141,24 +142,11 @@ message SendEnergyReply {
 
 message RequestBatonReply {
 	required int32 coin = 2;
+	required int32 cash = 3;
 } // end
 
 message AcceptEnergyReply {
 	required int32 energy = 2;
-} // end
-
-message AcceptBatonReply {
-} // end
-
-message BatonResult {
-	required int32 coin = 2;
-	required int32 total_coin = 3;
-	required bool update = 4;
-} // end
-
-message AcceptBatonResultReply {
-	required bool update = 2;
-	required int32 score = 3;
 } // end
 
 message InviteFriendReply {
@@ -243,26 +231,11 @@ message EvolutionProgress {
 
 message Postbox {
 	repeated Energy energy = 2;
-	repeated Baton baton = 3;
-	repeated BatonResult baton_result = 4;
-	repeated Evolution evolution = 5;
+	repeated Evolution evolution = 2;
 
 	message Energy {
 		required string sender_k_id = 1;
 		required int32 amount = 2;
-		required int64 sended_time = 3;
-	}
-
-	message Baton {
-		required string sender_k_id = 1;
-		required string map_name = 2;
-		required int32 last_score = 3;
-		required int64 sended_time = 4;
-	}
-	
-	message BatonResult {
-		required string sender_k_id = 1;
-		required int32 acquisition_score = 2;
 		required int64 sended_time = 3;
 	}
 

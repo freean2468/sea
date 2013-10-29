@@ -117,6 +117,7 @@ function request(data) {
 			} else if (id === chargeInfo['id']['low']) {
 				clearTimeout(timerId);
 				buyItem['item'] = Math.floor(Math.random() * build.BuyItem.Limit['MAX']) + 1;
+				console.log('buyItem : ' + buyItem['item']);
 				setTimer('buyItem');
 				console.log(buyItem);
 				request(buyItem);

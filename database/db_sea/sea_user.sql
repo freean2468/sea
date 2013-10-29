@@ -19,7 +19,7 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS sea_GetUserCount $$
 CREATE PROCEDURE sea_GetUserCount()
 	BEGIN
-		SELECT COUNT(ID) FROM sea_user;
+		SELECT COUNT(ID) AS res FROM sea_user;
 	END
 $$
 
@@ -56,27 +56,30 @@ CREATE PROCEDURE sea_CreateUser(IN p_k_id varchar(40) CHARACTER SET utf8)
 			VALUES (0, 0, 0, 0, 0);
 
 			INSERT sea_character_3(lv, head, top, bottoms, back)
-			VALUES (1, 0, 0, 0, 0);
+			VALUES (1, 22, 1, 2, 0);
 
 			INSERT sea_character_4(lv, head, top, bottoms, back)
 			VALUES (0, 0, 0, 0, 0);
 
 			INSERT sea_costume_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)
-			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+			VALUES (1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
 
 			INSERT sea_costume_2(_11, _12, _13, _14, _15, _16, _17, _18, _19, _20)
 			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-			INSERT sea_costume_3(_21)
-			VALUES (0);
+			INSERT sea_costume_3(_21, _22, _23, _24, _25, _26, _27, _28, _29, _30)
+			VALUES (0, 1, 0, 0, 0, 0, 0, 0, 0, 0);
 
 			INSERT sea_ghost_house(_1, _2, _3, _4, _5, _1_time, _2_time, _3_time, _4_time, _5_time)
 			VALUES (0, -1, -1, -1, -1, 0, 0, 0, 0, 0);
 
-			INSERT sea_ghost_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20)
-			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+			INSERT sea_ghost_1(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)
+			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-			INSERT sea_ghost_2(_21, _22, _23, _24, _25, _26, _27, _28, _29, _30)
+			INSERT sea_ghost_2(_11, _12, _13, _14, _15, _16, _17, _18, _19, _20)
+			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+			INSERT sea_ghost_3(_21, _22, _23, _24, _25, _26, _27, _28, _29, _30)
 			VALUES (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 			SELECT last_id AS res;			

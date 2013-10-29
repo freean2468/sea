@@ -25,9 +25,20 @@ $$
 DROP PROCEDURE IF EXISTS sea_AddCharacter_2 $$
 CREATE PROCEDURE sea_AddCharacter_2(IN p_id INT)
 	BEGIN
-		DECLARE res TINYINT UNSIGNED;
-		UPDATE sea_character_2 SET res = lv + 1, lv = lv + 1 WHERE id = p_id;
-		SELECT res AS res;
+		UPDATE sea_character_2 SET lv = lv + 1 WHERE id = p_id;
+		SELECT lv FROM sea_character_2 WHERE id = p_id;
+	END
+$$
+
+DROP PROCEDURE IF EXISTS sea_CreateCharacter_2_BasicCostumes $$
+CREATE PROCEDURE sea_CreateCharacter_2_BasicCostumes(IN p_id INT)
+	BEGIN
+		CALL sea.sea_OnCostume_5(p_id);
+		CALL sea.sea_OnCostume_6(p_id);
+		CALL sea.sea_OnCostume_24(p_id);
+		CALL sea.sea_UpdateCharacter_2_Top(p_id, 5);
+		CALL sea.sea_UpdateCharacter_2_Bottoms(p_id, 6);
+		CALL sea.sea_UpdateCharacter_2_Head(p_id, 24);
 	END
 $$
 

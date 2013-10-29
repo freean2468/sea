@@ -79,7 +79,8 @@ function DataMgr() {
 		for (var index in root) {
 			var item = root[index];
 			this.costumeData.push({
-				'ID': item['Costume_Set_ID'],
+				'ID': item['Costume_ID'],
+				'Set_ID': item['Costume_Set_ID'],
 				'Price_Coin': item['Price_Coin'],
 				'Price_Cash': item['Price_Cash'],
 				'Costume_Type': item['Costume_Type'],
