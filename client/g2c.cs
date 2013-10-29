@@ -119,8 +119,9 @@ namespace G2C
       get { return _id; }
       set { _id = value; }
     }
-    private string _version;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"version", DataFormat = global::ProtoBuf.DataFormat.Default)]
+
+    private string _version = @"0.1.3";
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"version", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string version
     {
       get { return _version; }
@@ -373,8 +374,15 @@ namespace G2C
       get { return _draw; }
       set { _draw = value; }
     }
+    private int _highest_score;
+    [global::ProtoBuf.ProtoMember(17, IsRequired = true, Name=@"highest_score", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int highest_score
+    {
+      get { return _highest_score; }
+      set { _highest_score = value; }
+    }
     private readonly global::System.Collections.Generic.List<G2C.AccountInfo.CharacterInfo> _characters = new global::System.Collections.Generic.List<G2C.AccountInfo.CharacterInfo>();
-    [global::ProtoBuf.ProtoMember(17, Name=@"characters", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(18, Name=@"characters", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<G2C.AccountInfo.CharacterInfo> characters
     {
       get { return _characters; }
@@ -775,6 +783,13 @@ namespace G2C
       get { return _coin; }
       set { _coin = value; }
     }
+    private int _cash;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"cash", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int cash
+    {
+      get { return _cash; }
+      set { _cash = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -805,102 +820,13 @@ namespace G2C
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"AcceptBatonReply")]
-  public partial class AcceptBatonReply : global::ProtoBuf.IExtensible
-  {
-    public AcceptBatonReply() {}
-    
-
-    private ulong _id = (ulong)3208944;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public ulong id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"BatonResult")]
-  public partial class BatonResult : global::ProtoBuf.IExtensible
-  {
-    public BatonResult() {}
-    
-
-    private ulong _id = (ulong)8189189;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public ulong id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private int _coin;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"coin", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int coin
-    {
-      get { return _coin; }
-      set { _coin = value; }
-    }
-    private int _total_coin;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"total_coin", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int total_coin
-    {
-      get { return _total_coin; }
-      set { _total_coin = value; }
-    }
-    private bool _update;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"update", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public bool update
-    {
-      get { return _update; }
-      set { _update = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"AcceptBatonResultReply")]
-  public partial class AcceptBatonResultReply : global::ProtoBuf.IExtensible
-  {
-    public AcceptBatonResultReply() {}
-    
-
-    private ulong _id = (ulong)8255542;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public ulong id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private bool _update;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"update", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public bool update
-    {
-      get { return _update; }
-      set { _update = value; }
-    }
-    private int _score;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"score", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int score
-    {
-      get { return _score; }
-      set { _score = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"InviteFriendReply")]
   public partial class InviteFriendReply : global::ProtoBuf.IExtensible
   {
     public InviteFriendReply() {}
     
 
-    private ulong _id = (ulong)6224776;
+    private ulong _id = (ulong)6223418;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -939,7 +865,7 @@ namespace G2C
     public LoadRewardReply() {}
     
 
-    private ulong _id = (ulong)4259362;
+    private ulong _id = (ulong)193285;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -981,7 +907,7 @@ namespace G2C
     public BuyCostumeReply() {}
     
 
-    private ulong _id = (ulong)4257084;
+    private ulong _id = (ulong)9239350;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -1034,7 +960,7 @@ namespace G2C
     public WearCostumeReply() {}
     
 
-    private ulong _id = (ulong)2291670;
+    private ulong _id = (ulong)3208394;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -1059,7 +985,7 @@ namespace G2C
     public DrawFirstReply() {}
     
 
-    private ulong _id = (ulong)2291302;
+    private ulong _id = (ulong)4258269;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -1115,7 +1041,7 @@ namespace G2C
     public DrawSecondReply() {}
     
 
-    private ulong _id = (ulong)5306409;
+    private ulong _id = (ulong)5240700;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -1164,7 +1090,7 @@ namespace G2C
     public EquipGhostReply() {}
     
 
-    private ulong _id = (ulong)4321608;
+    private ulong _id = (ulong)1243519;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -1196,7 +1122,7 @@ namespace G2C
     public UnequipGhostReply() {}
     
 
-    private ulong _id = (ulong)4323518;
+    private ulong _id = (ulong)7273008;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -1221,7 +1147,7 @@ namespace G2C
     public PurchaseHouseReply() {}
     
 
-    private ulong _id = (ulong)1177254;
+    private ulong _id = (ulong)5307594;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -1260,7 +1186,7 @@ namespace G2C
     public RequestEvolutionReply() {}
     
 
-    private ulong _id = (ulong)33029775;
+    private ulong _id = (ulong)6288932;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -1285,7 +1211,7 @@ namespace G2C
     public AcceptEvolutionReply() {}
     
 
-    private ulong _id = (ulong)4323783;
+    private ulong _id = (ulong)7274368;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -1303,7 +1229,7 @@ namespace G2C
     public EvolutionProgress() {}
     
 
-    private ulong _id = (ulong)3338982;
+    private ulong _id = (ulong)326084;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -1359,7 +1285,7 @@ namespace G2C
     public Postbox() {}
     
 
-    private ulong _id = (ulong)324419;
+    private ulong _id = (ulong)10351731;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public ulong id
     {
@@ -1373,22 +1299,8 @@ namespace G2C
       get { return _energy; }
     }
   
-    private readonly global::System.Collections.Generic.List<G2C.Postbox.Baton> _baton = new global::System.Collections.Generic.List<G2C.Postbox.Baton>();
-    [global::ProtoBuf.ProtoMember(3, Name=@"baton", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<G2C.Postbox.Baton> baton
-    {
-      get { return _baton; }
-    }
-  
-    private readonly global::System.Collections.Generic.List<G2C.Postbox.BatonResult> _baton_result = new global::System.Collections.Generic.List<G2C.Postbox.BatonResult>();
-    [global::ProtoBuf.ProtoMember(4, Name=@"baton_result", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<G2C.Postbox.BatonResult> baton_result
-    {
-      get { return _baton_result; }
-    }
-  
     private readonly global::System.Collections.Generic.List<G2C.Postbox.Evolution> _evolution = new global::System.Collections.Generic.List<G2C.Postbox.Evolution>();
-    [global::ProtoBuf.ProtoMember(5, Name=@"evolution", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(3, Name=@"evolution", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<G2C.Postbox.Evolution> evolution
     {
       get { return _evolution; }
@@ -1412,75 +1324,6 @@ namespace G2C
     {
       get { return _amount; }
       set { _amount = value; }
-    }
-    private long _sended_time;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public long sended_time
-    {
-      get { return _sended_time; }
-      set { _sended_time = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Baton")]
-  public partial class Baton : global::ProtoBuf.IExtensible
-  {
-    public Baton() {}
-    
-    private string _sender_k_id;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"sender_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string sender_k_id
-    {
-      get { return _sender_k_id; }
-      set { _sender_k_id = value; }
-    }
-    private string _map_name;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"map_name", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string map_name
-    {
-      get { return _map_name; }
-      set { _map_name = value; }
-    }
-    private int _last_score;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"last_score", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int last_score
-    {
-      get { return _last_score; }
-      set { _last_score = value; }
-    }
-    private long _sended_time;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public long sended_time
-    {
-      get { return _sended_time; }
-      set { _sended_time = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"BatonResult")]
-  public partial class BatonResult : global::ProtoBuf.IExtensible
-  {
-    public BatonResult() {}
-    
-    private string _sender_k_id;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"sender_k_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string sender_k_id
-    {
-      get { return _sender_k_id; }
-      set { _sender_k_id = value; }
-    }
-    private int _acquisition_score;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"acquisition_score", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int acquisition_score
-    {
-      get { return _acquisition_score; }
-      set { _acquisition_score = value; }
     }
     private long _sended_time;
     [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"sended_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
