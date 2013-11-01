@@ -25,9 +25,9 @@ namespace C2G
       set { _id = value; }
     }
 
-    private string _version = @"0.1.3";
+    private string _version = @"0.1.4";
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"version", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(@"0.1.3")]
+    [global::System.ComponentModel.DefaultValue(@"0.1.4")]
     public string version
     {
       get { return _version; }
