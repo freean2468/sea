@@ -30,17 +30,11 @@ var User = function(name) {
 
 var test_1 = new User('unit_test_1');
 var test_2 = new User('unit_test_2');
+var mysqlMgr = new MysqlMgr('sea', 1);
 var second = 0;
 
 suite('Stored Procedure in MySQL', function() {
-	var mysqlMgr = null;
-
 	suite('#1. Creating an account.', function() {
-		suiteSetup(function(done){
-			mysqlMgr = new MysqlMgr('sea', 1);
-			done();
-		});
-
 		suite('#1-1. sea_user.sql', function() {
 			suite('# sea_CreateUser', function() {			
 				test('should not return 0', function(done) {
@@ -50,9 +44,7 @@ suite('Stored Procedure in MySQL', function() {
 						done();
 					});
 				});
-			});
 
-			suite('# sea_CreateUser', function() {			
 				test('should not return 0', function(done) {
 					mysqlMgr.createUser(test_2.name, function(res) {
 						var res = res['res'];
@@ -85,9 +77,7 @@ suite('Stored Procedure in MySQL', function() {
 						done();
 					});
 				});
-			});
 
-			suite('# sea_LoadUser', function() {
 				test('should not return 0', function(done) {
 					mysqlMgr.loadUser(test_2.name, function(res) {
 						var res = res['res'];
@@ -1941,10 +1931,5 @@ suite('Stored Procedure in MySQL', function() {
 				});
 			});
 		});
-	});
-
-	teardown(function(done){
-		
-		done();
 	});
 });

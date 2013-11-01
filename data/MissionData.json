@@ -1,0 +1,912 @@
+{
+"root": [
+{
+"Mission_ID" : 1, 
+"Mission_Name" : "게임 플레이 5회", 
+"Mission_Type" : 0, 
+"Mission_Description" : "하루에 5번이라도 게임 하지 않으면 손가락에 가시가 돋는다.", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 2, 
+"Mission_Name" : "게임 플레이 10회", 
+"Mission_Type" : 0, 
+"Mission_Description" : "하루 10번 정도는 게임해줘야 어디서 한다고 이야기 할 수 있지!", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 3, 
+"Mission_Name" : "게임 플레이 20회", 
+"Mission_Type" : 0, 
+"Mission_Description" : "나에게 배터리를 좀 보내줘! 20번 하려면 아직 좀 부족해!", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 4, 
+"Mission_Name" : "게임 플레이 30회", 
+"Mission_Type" : 0, 
+"Mission_Description" : "오늘 하루 게임 30번 플레이하기", 
+"Mission_Reward_Type" : 1, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 5, 
+"Mission_Name" : "보스 10번 격파", 
+"Mission_Type" : 0, 
+"Mission_Description" : "오늘 하루 보스 유령 10번 물리치기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 6, 
+"Mission_Name" : "보스 20번 격파", 
+"Mission_Type" : 0, 
+"Mission_Description" : "오늘 하루 보스 유령 20번 물리치기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 7, 
+"Mission_Name" : "보스 30번 격파", 
+"Mission_Type" : 0, 
+"Mission_Description" : "오늘 하루 보스 유령 30번 물리치기", 
+"Mission_Reward_Type" : 1, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 8, 
+"Mission_Name" : "유령 잡지 않고 게임 종료", 
+"Mission_Type" : 0, 
+"Mission_Description" : "유령을 한 마리도 잡지 않고 게임 종료하기", 
+"Mission_Reward_Type" : 3, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 9, 
+"Mission_Name" : "친구 1명 초대하기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "오늘 1명의 친구를 유령의 집으로 초대하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 10, 
+"Mission_Name" : "친구 3명 초대하기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "오늘 3명의 친구를 유령의 집으로 초대하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 11, 
+"Mission_Name" : "친구 5명 초대하기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "오늘 5명의 친구를 유령의 집으로 초대하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 12, 
+"Mission_Name" : "10만점 달성하기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "한 번의 유령 잡이로 10만점 달성하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 13, 
+"Mission_Name" : "20만점 달성하기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "한 번의 유령 잡이로 20만점 달성하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 14, 
+"Mission_Name" : "30만점 달성하기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "한 번의 유령 잡이로 30만점 달성하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 15, 
+"Mission_Name" : "유령 카드 1회 뽑기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "스타일있게 유령 카드 1회 뽑기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 16, 
+"Mission_Name" : "유령 카드 3회 뽑기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "호쾌하게 유령 카드 3회 뽑기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 17, 
+"Mission_Name" : "유령 카드 5회 뽑기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "뒤도 돌아보지 않고 유령 카드 5회 뽑기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 18, 
+"Mission_Name" : "유령 카드 '꽝' 뽑기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "유령 카드 뽑기에서 꽝 나와도 울지 않기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 19, 
+"Mission_Name" : "업그레이드 1회 시키기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "캐릭터 업그레이드 1회 시키기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 20, 
+"Mission_Name" : "유령의 집 1곳 구입하기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "유령의 집 1곳 구입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 21, 
+"Mission_Name" : "코스툼 1개 구입하기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "캐릭터에게 어울리는 옷 1개 구입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 22, 
+"Mission_Name" : "코스툼 세트 1개 구입하기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "소개팅에 곧 나가도 될 세트 옷 1개 구입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 23, 
+"Mission_Name" : "레벨업하기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "땀은 노력을 배신하지 않는다. 레벨업 1번 하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 24, 
+"Mission_Name" : "랭킹업하기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "유령님의 전성기는 언제였죠? 전 지금입니다!", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 25, 
+"Mission_Name" : "랭킹다운하기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "내가 물러서는 건 추진력을 얻기 위해서다!", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 26, 
+"Mission_Name" : "플레이 미션 성공하기", 
+"Mission_Type" : 0, 
+"Mission_Description" : "일망타진! 한 번에 3가지 플레이 미션 모두 성공하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 27, 
+"Mission_Name" : "보스 1마리 격파", 
+"Mission_Type" : 1, 
+"Mission_Description" : "보스 1마리 물리치기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 28, 
+"Mission_Name" : "보스 2마리 격파", 
+"Mission_Type" : 1, 
+"Mission_Description" : "보스 2마리 물리치기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 29, 
+"Mission_Name" : "보스 3마리 격파", 
+"Mission_Type" : 1, 
+"Mission_Description" : "보스 3마리 물리치기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 30, 
+"Mission_Name" : "유령 10마리 흡입하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "한 게임에서 적 10마리 흡입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 31, 
+"Mission_Name" : "유령 30마리 흡입하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "한 게임에서 적 30마리 흡입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 32, 
+"Mission_Name" : "유령 50마리 흡입하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "한 게임에서 적 50마리 흡입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 33, 
+"Mission_Name" : "유령 100마리 흡입하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "한 게임에서 적 100마리 흡입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 34, 
+"Mission_Name" : "유령 200마리 흡입하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "한 게임에서 적 200마리 흡입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 35, 
+"Mission_Name" : "피버 타임 1번 경험하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "피버 타임 1회 경험하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 36, 
+"Mission_Name" : "피버 타임 2회 경험하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "피버 타임 2회 경험하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 37, 
+"Mission_Name" : "피버 타임 3회 경험하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "피버 타임 3회 경험하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 38, 
+"Mission_Name" : "한 번에 5마리 흡입하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "한 번에 5마리 흡입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 39, 
+"Mission_Name" : "한 번에 10마리 흡입하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "한 번에 10마리 흡입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 40, 
+"Mission_Name" : "한 번에 20마리 흡입하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "한 번에 20마리 흡입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 41, 
+"Mission_Name" : "5 콤보 달성하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "5 콤보 달성하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 42, 
+"Mission_Name" : "10콤보 달성하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "10콤보 달성하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 43, 
+"Mission_Name" : "15콤보 달성하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "15콤보 달성하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 44, 
+"Mission_Name" : "20콤보 달성하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "20콤보 달성하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 45, 
+"Mission_Name" : "친구 혼 1번 먹기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "친구 혼 1번 먹기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 46, 
+"Mission_Name" : "친구 혼 3번 먹기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "친구 혼 3번 먹기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 47, 
+"Mission_Name" : "친구 혼 5번 먹기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "친구 혼 5번 먹기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 48, 
+"Mission_Name" : "5,000점 획득하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "5,000점 획득하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 49, 
+"Mission_Name" : "10,000점 획득하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "10,000점 획득하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 50, 
+"Mission_Name" : "20,000점 획득하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "20,000점 획득하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 51, 
+"Mission_Name" : "원혼 5개 먹기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "원혼 5개 먹기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 52, 
+"Mission_Name" : "원혼 10개 먹기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "원혼 10개 먹기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 53, 
+"Mission_Name" : "원혼 15개 먹기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "원혼 15개 먹기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 54, 
+"Mission_Name" : "원혼 20개 먹기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "원혼 20개 먹기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 55, 
+"Mission_Name" : "원혼 30개 먹기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "원혼 30개 먹기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 56, 
+"Mission_Name" : "1 스테이지 클리어", 
+"Mission_Type" : 1, 
+"Mission_Description" : "1 스테이지 클리어", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 57, 
+"Mission_Name" : "2 스테이지 클리어", 
+"Mission_Type" : 1, 
+"Mission_Description" : "2 스테이지 클리어", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 58, 
+"Mission_Name" : "3 스테이지 클리어", 
+"Mission_Type" : 1, 
+"Mission_Description" : "3 스테이지 클리어", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 59, 
+"Mission_Name" : "4 스테이지 클리어", 
+"Mission_Type" : 1, 
+"Mission_Description" : "4 스테이지 클리어", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 60, 
+"Mission_Name" : "5 스테이지 클리어", 
+"Mission_Type" : 1, 
+"Mission_Description" : "5 스테이지 클리어", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 61, 
+"Mission_Name" : "자석 상태에서 10개의 혼 획득 하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "자석 상태에서 10개의 혼 획득 하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 62, 
+"Mission_Name" : "자석 상태에서 20개의 혼 획득 하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "자석 상태에서 20개의 혼 획득 하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 63, 
+"Mission_Name" : "자석 상태에서 30개의 혼 획득 하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "자석 상태에서 30개의 혼 획득 하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 64, 
+"Mission_Name" : "에네르기파로 10마리 적 해치우기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "에네르기파로 10마리 적 해치우기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 65, 
+"Mission_Name" : "에네르기파로 20마리 적 해치우기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "에네르기파로 20마리 적 해치우기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 66, 
+"Mission_Name" : "에네르기파로 30마리 적 해치우기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "에네르기파로 30마리 적 해치우기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 67, 
+"Mission_Name" : "올 클리어로 5마리 적 흡입하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "올 클리어로 5마리 적 흡입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 68, 
+"Mission_Name" : "올 클리어로 10마리 적 흡입하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "올 클리어로 10마리 적 흡입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 69, 
+"Mission_Name" : "올 클리어로 15마리 적 흡입하기", 
+"Mission_Type" : 1, 
+"Mission_Description" : "올 클리어로 15마리 적 흡입하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 70, 
+"Mission_Name" : "유령카드 1장 모으기", 
+"Mission_Type" : 2, 
+"Mission_Description" : "유령카드 1장 모으기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 71, 
+"Mission_Name" : "유령카드 10장 모으기", 
+"Mission_Type" : 2, 
+"Mission_Description" : "유령카드 10장 모으기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 72, 
+"Mission_Name" : "유령카드 20장 모으기", 
+"Mission_Type" : 2, 
+"Mission_Description" : "유령카드 20장 모으기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 73, 
+"Mission_Name" : "유령카드 30장 모으기", 
+"Mission_Type" : 2, 
+"Mission_Description" : "유령카드 30장 모으기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 74, 
+"Mission_Name" : "유령카드 40장 모으기", 
+"Mission_Type" : 2, 
+"Mission_Description" : "유령카드 40장 모으기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 75, 
+"Mission_Name" : "첫째 만렙 만들기", 
+"Mission_Type" : 2, 
+"Mission_Description" : "첫째 만렙 만들기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 76, 
+"Mission_Name" : "둘째 만렙 만들기", 
+"Mission_Type" : 2, 
+"Mission_Description" : "둘째 만렙 만들기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 77, 
+"Mission_Name" : "셋째 만렙 만들기", 
+"Mission_Type" : 2, 
+"Mission_Description" : "셋째 만렙 만들기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 78, 
+"Mission_Name" : "넷째 만렙 만들기", 
+"Mission_Type" : 2, 
+"Mission_Description" : "넷째 만렙 만들기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 79, 
+"Mission_Name" : "총 게임 플레이 횟수 100번", 
+"Mission_Type" : 2, 
+"Mission_Description" : "총 게임 플레이 횟수 100번", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 80, 
+"Mission_Name" : "총 게임 플레이 횟수 200번", 
+"Mission_Type" : 2, 
+"Mission_Description" : "총 게임 플레이 횟수 200번", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 81, 
+"Mission_Name" : "총 게임 플레이 횟수 300번", 
+"Mission_Type" : 2, 
+"Mission_Description" : "총 게임 플레이 횟수 300번", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 82, 
+"Mission_Name" : "총 게임 플레이 횟수 400번", 
+"Mission_Type" : 2, 
+"Mission_Description" : "총 게임 플레이 횟수 400번", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 83, 
+"Mission_Name" : "총 게임 플레이 횟수 500번", 
+"Mission_Type" : 2, 
+"Mission_Description" : "총 게임 플레이 횟수 500번", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 84, 
+"Mission_Name" : "총 게임 플레이 횟수 1,000번", 
+"Mission_Type" : 2, 
+"Mission_Description" : "총 게임 플레이 횟수 1,000번", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 85, 
+"Mission_Name" : "총 획득 코인 10,000코인", 
+"Mission_Type" : 2, 
+"Mission_Description" : "총 획득 코인 10,000코인", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 86, 
+"Mission_Name" : "총 획득 코인 30,000코인", 
+"Mission_Type" : 2, 
+"Mission_Description" : "총 획득 코인 30,000코인", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 87, 
+"Mission_Name" : "총 획득 코인 50,000코인", 
+"Mission_Type" : 2, 
+"Mission_Description" : "총 획득 코인 50,000코인", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 88, 
+"Mission_Name" : "총 획득 코인 100,000코인", 
+"Mission_Type" : 2, 
+"Mission_Description" : "총 획득 코인 100,000코인", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 89, 
+"Mission_Name" : "총 획득 코인 150,000코인", 
+"Mission_Type" : 2, 
+"Mission_Description" : "총 획득 코인 150,000코인", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 90, 
+"Mission_Name" : "총 획득 코인 300,000코인", 
+"Mission_Type" : 2, 
+"Mission_Description" : "총 획득 코인 300,000코인", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 91, 
+"Mission_Name" : "총 획득 코인 500,000코인", 
+"Mission_Type" : 2, 
+"Mission_Description" : "총 획득 코인 500,000코인", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 92, 
+"Mission_Name" : "유령 뽑기에서 20번 꽝 뽑기", 
+"Mission_Type" : 2, 
+"Mission_Description" : "유령 뽑기에서 20번 꽝 뽑기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 93, 
+"Mission_Name" : "유령의 집 5개 보유", 
+"Mission_Type" : 2, 
+"Mission_Description" : "유령의 집 5개 보유", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 94, 
+"Mission_Name" : "유령의 집 10개 보유", 
+"Mission_Type" : 2, 
+"Mission_Description" : "유령의 집 10개 보유", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 95, 
+"Mission_Name" : "커스툼 세트 1개 구매", 
+"Mission_Type" : 2, 
+"Mission_Description" : "커스툼 세트 1개 구매", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 96, 
+"Mission_Name" : "커스툼 세트 3개 구매", 
+"Mission_Type" : 2, 
+"Mission_Description" : "커스툼 세트 3개 구매", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 97, 
+"Mission_Name" : "커스툼 세트 5개 구매", 
+"Mission_Type" : 2, 
+"Mission_Description" : "커스툼 세트 5개 구매", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 98, 
+"Mission_Name" : "커스툼 세트 10개 구매", 
+"Mission_Type" : 2, 
+"Mission_Description" : "커스툼 세트 10개 구매", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 99, 
+"Mission_Name" : "일일 미션 10번 성공하기", 
+"Mission_Type" : 2, 
+"Mission_Description" : "일일 미션 10번 성공하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 100, 
+"Mission_Name" : "일일 미션 30번 성공하기", 
+"Mission_Type" : 2, 
+"Mission_Description" : "일일 미션 30번 성공하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+,
+{
+"Mission_ID" : 101, 
+"Mission_Name" : "일일 미션 50번 성공하기", 
+"Mission_Type" : 2, 
+"Mission_Description" : "일일 미션 50번 성공하기", 
+"Mission_Reward_Type" : 0, 
+"Mission_Reward_Amount" : 100
+}
+]
+}

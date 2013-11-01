@@ -5,7 +5,7 @@ var weekday = Array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
 var E_Parts = [
 	'Head',
 	'Top',
-	'Pants',
+	'Bottoms',
 	'Back',
 ];
 

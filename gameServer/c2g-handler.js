@@ -1,30 +1,15 @@
 var build = require('./c2g-proto-build'),
-	assert = require('assert'),
 	toStream = require('../common/util').toStream,
 	convertMS2S = require('../common/util').convertMS2S,
 	request = require('./g2l-request').request,
 	session = require('./session'),
-	define = require('../common/define');
+	define = require('../common/define')
 	;
 
 function write(res, stream) {
 	res.writeHead(200, {'Content-Type': 'application/octet-stream', 'Content-Length':stream.length});
 	res.write(stream);
 	res.end();
-}
-
-function inspectField(response, msg) {
-	for (var val in msg) {
-		if (typeof msg[val + ''] === 'undefined') {
-			var server = require('./c2g-index').server;
-			var logMgr = server.logMgr;
-			var sysMsg = new build.SystemMessage();
-			sysMsg['res'] = build.SystemMessage.Result['UNDEFINED_FIELD'];
-			write(response, toStream(sysMsg));
-			return false;
-		}
-	}
-	return true;
 }
 
 function VersionInfoHandler(response, data, session_id){
@@ -35,14 +20,10 @@ function VersionInfoHandler(response, data, session_id){
 	var logMgr = server.logMgr;
 	var mysqlMgr = server.getMysqlMgr();
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [VersionInfoHandler]');
-		return ;
-	}
-
 	var version = new build.VersionInfoReply()['version'];
 
 	rMsg['version'] = version;
+
 	write(response, toStream(rMsg));	
 } // end VersionInfoHandler
 
@@ -53,11 +34,6 @@ function RegisterAccountHandler(response, data, session_id){
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 	var mysqlMgr = server.getMysqlMgr();
-
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [RegisterAccountHandler]');
-		return ;
-	} 
 
 	firstCall();
 
@@ -96,11 +72,6 @@ function UnregisterAccountHandler(response, data, session_id){
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [UnregisterAccountHandler]');
-		return ;
-	}
-	
 	var kId = '';
 	var id = 0;
 
@@ -163,11 +134,6 @@ function LoginHandler(response, data, session_id){
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [LoginHandler]');
-		return ;
-	}
-	
 	var id = 0;
 	var sessionId = '';
 
@@ -310,11 +276,6 @@ function LogoutHandler(response, data, session_id){
 	var rMsg = new build.LogoutReply();
 	var logMgr = server.logMgr;
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [LogoutHandler]');
-		return ;
-	}
-	
 	var kId = '';
 
 	firstCall();
@@ -365,11 +326,6 @@ function CheckInChargeHandler(response, data, session_id){
 	var sysMsg = new build.SystemMessage();
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
-
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [CheckInChargeHandler]');
-		return ;
-	} 
 
 	var kId = '';
 	var id = 0;
@@ -474,11 +430,6 @@ function SelectCharacterHandler(response, data, session_id){
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [SelectCharacterHandle]');
-		return ;
-	} 
-
 	var kId = '';
 	var id = 0;
 
@@ -560,11 +511,6 @@ function StartGameHandler(response, data, session_id){
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 	var dataMgr = server.dataMgr;
-
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [StartGameHandler]');
-		return ;
-	}
 
 	var doubleExp = false;
 	var kId = '';
@@ -728,11 +674,6 @@ function EndGameHandler(response, data, session_id){
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 	var dataMgr = server.dataMgr;
-
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [EndGameHandler]');
-		return ;
-	}
 
 	var kId = '';
 	var id = 0;
@@ -999,11 +940,6 @@ function LoadRankInfoHandler(response, data, session_id){
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [LoadRankInfoHandler]');
-		return ;
-	}
-
 	session.toAuthUpdateSession(session_id, function (res) {
 		var kId = res;
 
@@ -1099,13 +1035,10 @@ function LoadPostboxHandler(response, data, session_id){
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [LoadPostbox]');
-		return ;
-	}
-
 	var kId = '';
 	var id = 0;
+	var list = [];
+	var nextCallTrigger = 0;
 
 	firstCall();
 
@@ -1153,8 +1086,8 @@ function LoadPostboxHandler(response, data, session_id){
 				return;
 			}
 			
-			var list = res;
-			var nextCallTrigger = list.length;
+			list = res;
+			nextCallTrigger = list.length;
 
 			recursiveCall_1(0);
 		});
@@ -1182,7 +1115,7 @@ function LoadPostboxHandler(response, data, session_id){
 	};
 
 	// Calls loadEvolutionByReceiverId SP
-	function call_4(id) {
+	function call_4() {
 		mysqlMgr = server.getMysqlMgr();
 		mysqlMgr.loadEvolutionByReceiverId(id, function (res) {
 			var sender_id = res[0]['sender_id'];
@@ -1192,10 +1125,10 @@ function LoadPostboxHandler(response, data, session_id){
 				return;
 			}
 
-			var list = res;
-			var lastCallTrigger = list.length;
+			list = res;
+			nextCallTrigger = list.length;
 			
-			recursiveCall_2();
+			recursiveCall_2(0);
 		});
 	}
 
@@ -1204,7 +1137,7 @@ function LoadPostboxHandler(response, data, session_id){
 		var accepted = list[idx]['accepted'];
 
 		if (accepted === 1) {
-			lastCall(idx, lastCallTrigger);
+			lastCall(idx, nextCallTrigger);
 			return ;
 		}
 
@@ -1215,7 +1148,7 @@ function LoadPostboxHandler(response, data, session_id){
 
 			rMsg['evolution'].push({'sender_k_id': sender_k_id, 'character_id': item['character_id'], 'sended_time': item['sended_time']});
 
-			lastCall(idx, lastCallTrigger);
+			lastCall(idx, nextCallTrigger);
 		});
 	}
 
@@ -1239,11 +1172,6 @@ function BuyItemHandler(response, data, session_id){
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [BuyItemHandler]');
-		return ;
-	}
-
 	var kId = '';
 	var id = 0;
 
@@ -1266,7 +1194,7 @@ function BuyItemHandler(response, data, session_id){
 	}
 
 	// Calls loadUser SP then verifies id
-	function call_2(kId) {
+	function call_2() {
 		var mysqlMgr = server.getMysqlMgr();
 		mysqlMgr.loadUser(kId, function (res) {
 			id = res['res'];
@@ -1369,17 +1297,16 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 	var logMgr = server.logMgr;
 	var dataMgr = server.dataMgr;
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [BuyOrUpgradeCharacterHandler]');
-		return ;
-	} 
-
-	var characterData = null;
+	var nextCharacterData = null;
 	var character = 0;
 	var lv = 0;
 	var userBriefInfo = null;
 	var id = 0;
 	var kId = '';
+	var coin = 0;
+	var cash = 0;
+	var priceCoin = 0;
+	var priceCash = 0;
 
 	firstCall();
 
@@ -1420,17 +1347,17 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 	function call_3() {
 		mysqlMgr = server.getMysqlMgr();
 		mysqlMgr.selectCharacters(id, function (res) {
-			lv = res['_' + character];
 			character = msg['character'];
+			lv = res['_' + character];
 			
 			if (lv === 5 || lv === 10 || lv === 15) {
-				logMgr.addLog('SYSTEM', '[BuyOrUpgradeCharacter] wrong approach detected (' + k_id + ')');
+				logMgr.addLog('SYSTEM', '[BuyOrUpgradeCharacter] wrong approach detected (' + kId + ')');
 				sysMsg['res'] = build.SystemMessage.Result['WRONG_APPROACH'];
 				write(response, toStream(sysMsg));
 				return ;
 			}
 
-			characterData = dataMgr.getCharacterDataByIdAndLv(character, lv);
+			nextCharacterData = dataMgr.getCharacterDataByIdAndLv(character, lv + 1);
 
 			if (character <= 0  || dataMgr.characterData.length < character) {
 				logMgr.addLog('ERROR', '[BuyOrUpgradeCharacter] Invalid character (' + kId + ', ' + character + ')');
@@ -1456,10 +1383,10 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 		mysqlMgr = server.getMysqlMgr();
 		mysqlMgr.loadUserBriefInfo(id, function (res) {
 			userBriefInfo = res;
-			var priceCoin = characterData['Price_Coin'];
-			var priceCash = characterData['Price_Cash'];
-			var coin = userBriefInfo['coin'];
-			var cash = userBriefInfo['cash'];
+			priceCoin = nextCharacterData['Price_Coin'];
+			priceCash = nextCharacterData['Price_Cash'];
+			coin = userBriefInfo['coin'];
+			cash = userBriefInfo['cash'];
 
 			if (0 < priceCoin && coin < priceCoin) {
 				logMgr.addLog('SYSTEM', '[BuyOrUpgradeCharacter] Not enough coin (' + kId + ')');
@@ -1468,7 +1395,7 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 				return ;
 			}
 
-			if (0 < priceCash && cash < priceCahs) {
+			if (0 < priceCash && cash < priceCash) {
 				logMgr.addLog('SYSTEM', '[BuyOrUpgradeCharacter] Not enough cash (' + kId + ')');
 				sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_CASH'];
 				write(response, toStream(sysMsg));
@@ -1513,18 +1440,20 @@ function BuyOrUpgradeCharacterHandler(response, data, session_id){
 			rMsg['cash'] = cash - priceCash;
 
 			if (0 < priceCoin && 0 < priceCash) {
-				mysqlMgr.updateCoin(id, pay, function (res) { });
-				mysqlMgr.updateCash(id, pay, function (res) {
+				mysqlMgr.updateCoin(id, rMsg['coin'], function (res) { });
+				mysqlMgr.updateCash(id, rMsg['cash'], function (res) {
 					lastCall(); 
 				});
 			} else if (0 < priceCoin) {
-				mysqlMgr.updateCoin(id, pay, function (res) {
+				mysqlMgr.updateCoin(id, rMsg['coin'], function (res) {
 					lastCall();
 				});
 			} else if (0 < priceCash) {
-				mysqlMgr.updateCash(id, pay, function (res) {
+				mysqlMgr.updateCash(id, rMsg['cash'], function (res) {
 					lastCall();
 				});
+			} else {
+				lastCall();
 			}
 		});
 	}
@@ -1541,11 +1470,6 @@ function SendEnergyHandler(response, data, session_id){
 	var sysMsg = new build.SystemMessage();
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
-
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [SendEnergyHandle]');
-		return ;
-	}
 
 	var kId = '';
 	var senderId = 0;
@@ -1618,13 +1542,13 @@ function SendEnergyHandler(response, data, session_id){
 			if (mileage >= 100) {
 				++draw;
 				mileage -= 100;
-				mysqlMgr.updateDraw(id, draw, function (res) { });
+				mysqlMgr.updateDraw(senderId, draw, function (res) { });
 			}
 
 			rMsg['mileage'] = mileage;
 			rMsg['draw'] = draw;
 
-			mysqlMgr.updateMileage(id, mileage, function (res) { 
+			mysqlMgr.updateMileage(senderId, mileage, function (res) { 
 				lastCall(); 
 			});
 		});
@@ -1642,11 +1566,6 @@ function AcceptEnergyHandler(response, data, session_id){
 	var sysMsg = new build.SystemMessage();
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
-
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [AcceptEnergyHandler]');
-		return ;
-	}
 
 	var kId = '';
 	var id = 0;
@@ -1709,7 +1628,7 @@ function AcceptEnergyHandler(response, data, session_id){
 	function call_4() {
 		mysqlMgr = server.getMysqlMgr();
 		mysqlMgr.acceptEnergy(senderId, receiverId, msg['sended_time'], function (res) {
-			res = res['res'];
+			res = res['energy'];
 
 			if (res === -1) {
 				logMgr.addLog('ERROR', '[AcceptEnergy] Invalid energy (' + msg['receiver_k_id'] + ', ' + msg['sender_k_id'] + ')');
@@ -1720,7 +1639,6 @@ function AcceptEnergyHandler(response, data, session_id){
 
 			var energyMax = 100;
 			var energy = 0;
-			procedure = 'sea_UpdateEnergy';
 			
 			if (res + 1 > energyMax) {
 				energy = energyMax;		
@@ -1749,11 +1667,6 @@ function RequestBatonHandler(response, data, session_id){
 	var sysMsg = new build.SystemMessage();
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
-
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', '[RequestBaton] Undefined field is detected in RequestBatonHandler');
-		return ;
-	}
 
 	var kId = '';
 	var id = 0;
@@ -1890,11 +1803,6 @@ function InviteFriendHandler(response, data, session_id){
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [InviteFriendHandler]');
-		return ;
-	}
-
 	var kId = '';
 	var id = 0;
 
@@ -1993,11 +1901,6 @@ function BuyCostumeHandler(response, data, session_id) {
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 	var dataMgr = server.dataMgr;
-
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [BuyCostumeHandler]');
-		return ;
-	}
 
 	var kId = '';
 	var id = 0;
@@ -2113,6 +2016,8 @@ function BuyCostumeHandler(response, data, session_id) {
 				mysqlMgr.updateCash(id, rMsg['cash'], function (res) { 
 					lastCall(); 
 				});
+			} else {
+				lastCall();
 			}
 		});
 	}
@@ -2130,11 +2035,6 @@ function WearCostumeHandler(response, data, session_id) {
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 	var dataMgr = server.dataMgr;
-
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [WearCostumeHandler]');
-		return ;
-	}
 
 	var kId = '';
 	var id = 0;
@@ -2247,11 +2147,6 @@ function DrawFirstHandler(response, data, session_id) {
 	var sysMsg = new build.SystemMessage();
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
-
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [DrawFirstHandler]');
-		return ;
-	}
 
 	var kId = '';
 	var id = 0;
@@ -2393,11 +2288,6 @@ function DrawSecondHandler(response, data, session_id) {
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [DrawSecondHandler]');
-		return ;
-	}
-
 	var kId = '';
 	var id = 0;
 
@@ -2515,11 +2405,6 @@ function EquipGhostHandler(response, data, session_id) {
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [EquipGhostHandler]');
-		return ;
-	}
-	
 	var kId = '';
 	var id = 0;
 
@@ -2561,8 +2446,8 @@ function EquipGhostHandler(response, data, session_id) {
 				return ;
 			}
 
-			if (msg['house_id'] <= 0 || dataMgr.roomData.length < msg['house_id']) {
-				logMgr.addLog('ERROR', '[EquipGhost] Invalid room number from (' + kId + ')');
+			if (msg['house_id'] <= 0 || dataMgr.houseData.length < msg['house_id']) {
+				logMgr.addLog('ERROR', '[EquipGhost] Invalid house number from (' + kId + ')');
 				sysMsg['res'] = build.SystemMessage.Result['INVALID_HOUSE_ID'];
 				write(response, toStream(sysMsg));
 				return ;
@@ -2579,7 +2464,7 @@ function EquipGhostHandler(response, data, session_id) {
 			var house = res['_' + msg['house_id']];
 
 			if (house === -1) {
-				logMgr.addLog('ERROR', '[EquipGhost] This user(' + kId + ') trying to equip a ghost on closed room');
+				logMgr.addLog('ERROR', '[EquipGhost] This user(' + kId + ') trying to equip a ghost on invalid house');
 				sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 				write(response, toStream(sysMsg));
 				return ;
@@ -2625,11 +2510,6 @@ function UnequipGhostHandler(response, data, session_id) {
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [UnequipGhostHandler]');
-		return ;
-	}
-
 	var kId = '';
 	var id = 0;
 
@@ -2664,8 +2544,8 @@ function UnequipGhostHandler(response, data, session_id) {
 				return ;
 			}
 
-			if (msg['house_id'] <= 0 || dataMgr.roomData.length < msg['house_id']) {
-				logMgr.addLog('ERROR', '[UnequipGhost] Invalid room number from (' + kId + ')');
+			if (msg['house_id'] <= 0 || dataMgr.houseData.length < msg['house_id']) {
+				logMgr.addLog('ERROR', '[UnequipGhost] Invalid house number from (' + kId + ')');
 				sysMsg['res'] = build.SystemMessage.Result['INVALID_HOUSE_ID'];
 				write(response, toStream(sysMsg));
 				return ;
@@ -2682,7 +2562,7 @@ function UnequipGhostHandler(response, data, session_id) {
 			var house = res['_' + msg['house_id']];
 
 			if (house === -1) {
-				logMgr.addLog('ERROR', '[UnequipGhost] This user(' + kId + ') trying to unequip a ghost from closed room');
+				logMgr.addLog('ERROR', '[UnequipGhost] This user(' + kId + ') trying to unequip a ghost from invalid house');
 				sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 				write(response, toStream(sysMsg));
 				return ;
@@ -2711,13 +2591,10 @@ function PurchaseHouseHandler(response, data, session_id) {
 	var logMgr = server.logMgr;
 	var dataMgr = server.dataMgr;
 
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [PurchaseHouseHandler]');
-		return ;
-	}
-
 	var kId = '';
 	var id = 0;
+	var house = 0;
+	var houseData = null;
 
 	firstCall();
 
@@ -2750,13 +2627,14 @@ function PurchaseHouseHandler(response, data, session_id) {
 				return ;
 			}
 
-			var houseData = dataMgr.getHouseDataById(msg['house_id']);
+			houseData = dataMgr.getHouseDataById(msg['house_id']);
 
-			if (msg['house_id'] <= 0 || houseData.length <= msg['house_id']) {
-				logMgr.addLog('ERROR', '[PurchaseHouse] This user(' + kId + ') already has this house');
+			if (houseData === false) {
+				logMgr.addLog('ERROR', '[PurchaseHouse] Invalid house id');
 				sysMsg['res'] = build.SystemMessage.Result['INVALID_HOUSE_ID'];
 				write(response, toStream(sysMsg));
-				return ;				
+				done();
+				return ;
 			}
 
 			call_3();
@@ -2764,10 +2642,10 @@ function PurchaseHouseHandler(response, data, session_id) {
 	}
 
 	// Calls loadGhostHouse SP then verifies house
-	function call_3(id) {			
+	function call_3() {			
 		var mysqlMgr = server.getMysqlMgr();
 		mysqlMgr.loadGhostHouse(id, function (res) {
-			var house = res['_' + msg['house_id']];			
+			house = res['_' + msg['house_id']];			
 
 			if (house !== -1) {
 				logMgr.addLog('ERROR', '[PurchaseHouse] This user(' + kId + ') already has this house');
@@ -2781,15 +2659,15 @@ function PurchaseHouseHandler(response, data, session_id) {
 	}
 
 	// Calls loadUserBriefInfo then fulfills rMsg
-	function call_4(id) {
+	function call_4() {
 		mysqlMgr = server.getMysqlMgr();
-		mysq.loadUserBriefInfo(id, function (res) {
+		mysqlMgr.loadUserBriefInfo(id, function (res) {
 			var userBriefInfo = res;
 			var coin = userBriefInfo['coin'];
 			var cash = userBriefInfo['cash'];
 
-			var priceCoin = house['Price_Coin'];
-			var priceCash = house['Price_Cash'];
+			var priceCoin = houseData['Price_Coin'];
+			var priceCash = houseData['Price_Cash'];
 
 			if (0 < priceCoin && coin < priceCoin) {
 				logMgr.addLog('ERROR', '[PurchaseHouse] user(' + kId + ') not enough coin');
@@ -2837,11 +2715,6 @@ function RequestEvolutionHandler(response, data, session_id){
 	var sysMsg = new build.SystemMessage();
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
-
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', '[RequestEvolution] Undefined field is detected in RequestEvolutionHandler');
-		return ;
-	}
 
 	var kId = '';
 	var senderId = 0;
@@ -2896,7 +2769,7 @@ function RequestEvolutionHandler(response, data, session_id){
 			}
 			
 			if (!(character === 5 || character === 10 || character === 15)) {
-				logMgr.addLog('SYSTEM', '[RequestEvolution] wrong approach detected (' + k_id + ')');
+				logMgr.addLog('SYSTEM', '[RequestEvolution] wrong approach detected (' + kId + ')');
 				sysMsg['res'] = build.SystemMessage.Result['WRONG_APPROACH'];
 				write(response, toStream(sysMsg));
 				return ;
@@ -2932,7 +2805,7 @@ function RequestEvolutionHandler(response, data, session_id){
 			var evolveRequestCost = 1000;
 
 			if (coin < evolveRequestCost) {
-				logMgr.addLog('SYSTEM', '[RequestEvolution] Not enough coin (' + k_id + ')');
+				logMgr.addLog('SYSTEM', '[RequestEvolution] Not enough coin (' + kId + ')');
 				sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
 				write(response, toStream(sysMsg));
 				return ;
@@ -2962,11 +2835,6 @@ function AcceptEvolutionHandler(response, data, session_id){
 	var sysMsg = new build.SystemMessage();
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
-
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', 'Undefined field is detected in [AcceptEvolutionHandler]');
-		return ;
-	}
 
 	var kId = '';
 	var receiverId = 0;
@@ -3031,7 +2899,7 @@ function AcceptEvolutionHandler(response, data, session_id){
 			res = res['res'];
 
 			if (!res) {
-				logMgr.addLog('ERROR', '[AcceptEvolution] Invalid evolution (sed:' + senderId + ', rec:' + receiver_id + ')');
+				logMgr.addLog('ERROR', '[AcceptEvolution] Invalid evolution (sed:' + senderId + ', rec:' + receiverId + ')');
 				sysMsg['res'] = build.SystemMessage.Result['INVALID_EVOLUTION'];
 				write(response, toStream(sysMsg));
 				return ;
@@ -3056,11 +2924,6 @@ function LoadEvolutionProgressHandler(response, data, session_id){
 	var sysMsg = new build.SystemMessage();
 	var server = require('./c2g-index').server;
 	var logMgr = server.logMgr;
-
-	if (inspectField(response, msg) === false) {
-		logMgr.addLog('ERROR', '[LoadEvolutionProgress] Undefined field is detected in LoadEvolutionProgressHandler');
-		return ;
-	}
 
 	var kId = '';
 	var sender_id = 0;
@@ -3103,10 +2966,9 @@ function LoadEvolutionProgressHandler(response, data, session_id){
 	// Calls all of loadCharacter SP in order recursively
 	function recursiveCall(idx) {
 		var characterId = (idx + 1);
-		var procedure = 'sea_LoadCharacter_' + characterId;
 
 		mysqlMgr = server.getMysqlMgr();
-		mysqlMgr[procedure](sender_id, function(res) {
+		mysqlMgr.loadCharacter(sender_id, characterId, function(res) {
 			var lv = res;
 
 			mysqlMgr = server.getMysqlMgr();
@@ -3123,6 +2985,8 @@ function LoadEvolutionProgressHandler(response, data, session_id){
 						acceptedList.push(list[i]);
 					}
 				}					
+
+				var accepted = acceptedList.length;
 
 				var innerCall_2 = function () {
 					newLevel = lv + 1;

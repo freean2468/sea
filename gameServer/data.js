@@ -230,7 +230,7 @@ function DataMgr() {
 	this.getHouseDataById = function (id) {
 		var house = this.houseData[id - 1];
 
-		if (typeof item !== 'undefined') {
+		if (typeof house !== 'undefined') {
 			return house;
 		} else {
 			return false;

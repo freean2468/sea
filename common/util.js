@@ -1,30 +1,3 @@
-function encrypt(msg) {
-	var length = msg.length;
-	var encrypted = "";
-
-	for (i = 0; i < length/2; ++i) {
-		encrypted += msg[i*2];
-	}
-
-	for (i = 0; i < length/2; ++i) {
-		encrypted += msg[(i*2)+1];
-	}
-
-	return encrypted;
-}
-
-function decrypt(stream) {
-	var length = stream.length;
-	var msg = "";
-	
-	for (i = 0; i < length/2; ++i) {
-		msg += stream[i];
-		msg += stream[(length/2)+i];
-	}
-
-	return msg;
-}
-
 function fetchId(ab) {
 	var id = 0;
 	var arr = [];
@@ -49,16 +22,14 @@ function fetchId(ab) {
 	return id;
 }
 
-function toStream(msg) {
-	var ab = msg.toArrayBuffer();
-	var buf = new Buffer(ab.byteLength);
+function toArrBuf(buffer) {
+	var ab = new ArrayBuffer(buffer.length);
 
-	for (i = 0; i < buf.length; ++i) {
-		buf[i] = ab[i];
+	for (i = 0; i < buffer.length; ++i) {
+		ab[i] = buffer[i];
 	}
-	
-	//return buf.toString('hex');
-	return encrypt(buf.toString('hex'));
+
+	return ab;
 }
 
 function toBuf(ab) {
@@ -71,14 +42,15 @@ function toBuf(ab) {
 	return buf;
 }
 
-function toArrBuf(buffer) {
-	var ab = new ArrayBuffer(buffer.length);
-	
-	for (i = 0; i < buffer.length; ++i) {
-		ab[i] = buffer[i];
+function toStream(msg) {
+	var ab = msg.toArrayBuffer();
+	var buf = new Buffer(ab.byteLength);
+
+	for (i = 0; i < buf.length; ++i) {
+		buf[i] = ab[i];
 	}
 
-	return ab;
+	return buf;
 }
 
 function UUID() {
@@ -93,11 +65,11 @@ function convertMS2S(ms) {
 	return Math.floor(ms / 1000);
 }
 
-exports.encrypt = encrypt;
-exports.decrypt = decrypt;
-exports.fetchId = fetchId;
-exports.toStream = toStream;
-exports.toBuf = toBuf;
-exports.toArrBuf = toArrBuf;
-exports.UUID = UUID;
-exports.convertMS2S = convertMS2S;
+module.exports = {
+	'fetchId': fetchId,
+	'toArrBuf': toArrBuf,
+	'toBuf': toBuf,
+	'toStream': toStream,
+	'UUID': UUID,
+	'convertMS2S': convertMS2S,
+}

@@ -8,6 +8,7 @@
 "Price_Coin" : 0, 
 "Price_Cash" : 0, 
 "Match_Card_ID" : 1, 
+"Match_Card_Desc" : "추가 점수 20% 획득", 
 "Match_Card_Bonus_Effect_Type" : 2, 
 "Match_Card_Bonus_Effect_Value" : 0.20
 }
@@ -20,6 +21,7 @@
 "Price_Coin" : 3000, 
 "Price_Cash" : 0, 
 "Match_Card_ID" : 2, 
+"Match_Card_Desc" : "추가 경험치 20% 획득", 
 "Match_Card_Bonus_Effect_Type" : 3, 
 "Match_Card_Bonus_Effect_Value" : 0.20
 }
@@ -32,6 +34,7 @@
 "Price_Coin" : 0, 
 "Price_Cash" : 10, 
 "Match_Card_ID" : 3, 
+"Match_Card_Desc" : "추가 경험치 20% 획득", 
 "Match_Card_Bonus_Effect_Type" : 3, 
 "Match_Card_Bonus_Effect_Value" : 0.20
 }
@@ -44,6 +47,7 @@
 "Price_Coin" : 0, 
 "Price_Cash" : 20, 
 "Match_Card_ID" : 4, 
+"Match_Card_Desc" : "추가 경험치 20% 획득", 
 "Match_Card_Bonus_Effect_Type" : 3, 
 "Match_Card_Bonus_Effect_Value" : 0.20
 }
@@ -56,6 +60,7 @@
 "Price_Coin" : 0, 
 "Price_Cash" : 30, 
 "Match_Card_ID" : 5, 
+"Match_Card_Desc" : "추가 경험치 20% 획득", 
 "Match_Card_Bonus_Effect_Type" : 3, 
 "Match_Card_Bonus_Effect_Value" : 0.20
 }

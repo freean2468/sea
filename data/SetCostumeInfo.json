@@ -1,0 +1,129 @@
+{
+"root": [
+{
+"SetCostume_ID" : 1, 
+"SetCostume_Name" : "애나 활동복", 
+"SetCostume_Image" : "Image_00", 
+"SetCostume_Coin" : 0.00, 
+"SetCostume_Score" : 0.00, 
+"SetCostume_Exp" : 0.00, 
+"SetCostume_Drop_Prob" : 0.00, 
+"Set_Time_Reduce" : 0, 
+"Set_Price_Coin" : 0, 
+"Set_Price_Cash" : 0, 
+"SetCostume_Description" : "청소하기에 그만"
+}
+,
+{
+"SetCostume_ID" : 2, 
+"SetCostume_Name" : "바니 활동복", 
+"SetCostume_Image" : "Image_01", 
+"SetCostume_Coin" : 0.00, 
+"SetCostume_Score" : 0.00, 
+"SetCostume_Exp" : 0.00, 
+"SetCostume_Drop_Prob" : 0.00, 
+"Set_Time_Reduce" : 0, 
+"Set_Price_Coin" : 0, 
+"Set_Price_Cash" : 0, 
+"SetCostume_Description" : "청소하기에 그만"
+}
+,
+{
+"SetCostume_ID" : 3, 
+"SetCostume_Name" : "위트니 활동복", 
+"SetCostume_Image" : "Image_02", 
+"SetCostume_Coin" : 0.00, 
+"SetCostume_Score" : 0.00, 
+"SetCostume_Exp" : 0.00, 
+"SetCostume_Drop_Prob" : 0.00, 
+"Set_Time_Reduce" : 0, 
+"Set_Price_Coin" : 0, 
+"Set_Price_Cash" : 0, 
+"SetCostume_Description" : "청소하기에 그만"
+}
+,
+{
+"SetCostume_ID" : 4, 
+"SetCostume_Name" : "다나 활동복", 
+"SetCostume_Image" : "Image_03", 
+"SetCostume_Coin" : 0.00, 
+"SetCostume_Score" : 0.00, 
+"SetCostume_Exp" : 0.00, 
+"SetCostume_Drop_Prob" : 0.00, 
+"Set_Time_Reduce" : 0, 
+"Set_Price_Coin" : 0, 
+"Set_Price_Cash" : 0, 
+"SetCostume_Description" : "청소하기에 그만"
+}
+,
+{
+"SetCostume_ID" : 5, 
+"SetCostume_Name" : "호박 헬멧", 
+"SetCostume_Image" : "Image_04", 
+"SetCostume_Coin" : 0.00, 
+"SetCostume_Score" : 0.00, 
+"SetCostume_Exp" : 0.00, 
+"SetCostume_Drop_Prob" : 0.00, 
+"Set_Time_Reduce" : 0, 
+"Set_Price_Coin" : 0, 
+"Set_Price_Cash" : 0, 
+"SetCostume_Description" : "안전 제일 주의"
+}
+,
+{
+"SetCostume_ID" : 6, 
+"SetCostume_Name" : "할로윈 세트", 
+"SetCostume_Image" : "Image_05", 
+"SetCostume_Coin" : 0.00, 
+"SetCostume_Score" : 0.00, 
+"SetCostume_Exp" : 0.00, 
+"SetCostume_Drop_Prob" : 0.00, 
+"Set_Time_Reduce" : 0, 
+"Set_Price_Coin" : 0, 
+"Set_Price_Cash" : 0, 
+"SetCostume_Description" : "오늘은 파티다"
+}
+,
+{
+"SetCostume_ID" : 7, 
+"SetCostume_Name" : "카우걸 세트", 
+"SetCostume_Image" : "Image_06", 
+"SetCostume_Coin" : 0.00, 
+"SetCostume_Score" : 0.00, 
+"SetCostume_Exp" : 0.00, 
+"SetCostume_Drop_Prob" : 0.00, 
+"Set_Time_Reduce" : 0, 
+"Set_Price_Coin" : 0, 
+"Set_Price_Cash" : 0, 
+"SetCostume_Description" : "누구든지 잡아주겠어"
+}
+,
+{
+"SetCostume_ID" : 8, 
+"SetCostume_Name" : "빨간 망토 세트", 
+"SetCostume_Image" : "Image_07", 
+"SetCostume_Coin" : 0.00, 
+"SetCostume_Score" : 0.00, 
+"SetCostume_Exp" : 0.00, 
+"SetCostume_Drop_Prob" : 0.00, 
+"Set_Time_Reduce" : 0, 
+"Set_Price_Coin" : 0, 
+"Set_Price_Cash" : 0, 
+"SetCostume_Description" : "나 귀요미"
+}
+,
+{
+"SetCostume_ID" : 9, 
+"SetCostume_Name" : "상크미 교복 세트", 
+"SetCostume_Image" : "Image_08", 
+"SetCostume_Coin" : 0.00, 
+"SetCostume_Score" : 0.00, 
+"SetCostume_Exp" : 0.00, 
+"SetCostume_Drop_Prob" : 0.00, 
+"Set_Time_Reduce" : 0, 
+"Set_Price_Coin" : 0, 
+"Set_Price_Cash" : 0, 
+"SetCostume_Description" : "땡땡이 쳐야지"
+}
+]
+}

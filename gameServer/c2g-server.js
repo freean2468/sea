@@ -37,15 +37,20 @@ function Server() {
 
 		var that = this;
 		function onRequest(request, response) {
-			var postData = '';
+			var postData = new Buffer(0);
 			var pathname = url.parse(request.url).pathname;
 
 			//console.log('Request for ' + pathname + ' received.');
-
-			request.setEncoding('utf8');
+			//request.setEncoding('utf16le');
 
 			request.addListener('data', function (postDataChunk) {
-				postData += postDataChunk;
+				var buf = new Buffer(postDataChunk);
+				var newBuf = new Buffer(postData.length + buf.length);
+				
+				postData.copy(newBuf);
+				buf.copy(newBuf, postData.length);
+
+				postData = newBuf;
 				//console.log('Received POST data chunk \'' + postDataChunk + '\'.');
 			});
 

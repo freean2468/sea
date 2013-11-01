@@ -1,5 +1,5 @@
-var util = require('../common/util');
 var handle = require('./c2g-handle').handle;
+var util = require('../common/util');
 
 function Router() {
 	// property
@@ -27,10 +27,10 @@ function Router() {
 	};
 
 	this.route = function (request, pathname, response, postData) {
-		var stream = util.decrypt(postData);
-		var data = util.toArrBuf(new Buffer(stream, 'hex'));
+		var buf = new Buffer(postData);
+		var data = util.toArrBuf(buf);
 
-		id = util.fetchId(data);
+		var id = util.fetchId(data);
 
 		if (typeof handle[id] === 'function') {	
 			var sessionId = this.fetchSessionId(request);

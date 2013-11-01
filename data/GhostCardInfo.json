@@ -25,7 +25,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "흡입 공격력 +1"
+"Card_Able_Desc" : "흡입 공격력 +1", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 1, 
+"Match_House_Desc" : "추가 점수 20% 획득"
 }
 ,
 {
@@ -53,7 +57,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "발사 공격력 +1"
+"Card_Able_Desc" : "발사 공격력 +1", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 2, 
+"Match_House_Desc" : "추가 경험치 20% 획득"
 }
 ,
 {
@@ -81,7 +89,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "공격 사정거리 +1"
+"Card_Able_Desc" : "공격 사정거리 +1", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 3, 
+"Match_House_Desc" : "추가 경험치 20% 획득"
 }
 ,
 {
@@ -109,7 +121,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "지속시간 +1"
+"Card_Able_Desc" : "지속시간 +1", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 4, 
+"Match_House_Desc" : "추가 경험치 20% 획득"
 }
 ,
 {
@@ -137,7 +153,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "추가 코인 5% 획득"
+"Card_Able_Desc" : "추가 코인 5% 획득", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 5, 
+"Match_House_Desc" : "추가 경험치 20% 획득"
 }
 ,
 {
@@ -165,7 +185,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "추가 점수 5% 획득"
+"Card_Able_Desc" : "추가 점수 5% 획득", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -193,7 +217,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "추가 경험치 5% 획득"
+"Card_Able_Desc" : "추가 경험치 5% 획득", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -221,7 +249,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "아이템 드랍 확률 5% 증가"
+"Card_Able_Desc" : "아이템 드랍 확률 5% 증가", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -249,7 +281,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "3시간마다 500코인 생성"
+"Card_Able_Desc" : "3시간마다 500코인 생성", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -277,7 +313,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "12시간마다 1소울스톤 생성"
+"Card_Able_Desc" : "12시간마다 1소울스톤 생성", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -305,7 +345,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "5시간마다 1배터리 생성"
+"Card_Able_Desc" : "5시간마다 1배터리 생성", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -333,7 +377,11 @@
 "Make_Soul" : 5, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "5시간마다 혼 5개 생성"
+"Card_Able_Desc" : "5시간마다 혼 5개 생성", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -361,7 +409,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 6, 
 "Make_Item" : 0, 
-"Card_Description" : "6시간마다 랜덤 아이템 생성"
+"Card_Able_Desc" : "6시간마다 랜덤 아이템 생성", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -389,7 +441,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "흡입 공격력 +2"
+"Card_Able_Desc" : "흡입 공격력 +2", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -417,7 +473,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "발사 공격력 +2"
+"Card_Able_Desc" : "발사 공격력 +2", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -445,7 +505,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "공격 사정거리 +2"
+"Card_Able_Desc" : "공격 사정거리 +2", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -473,7 +537,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "지속시간 +2"
+"Card_Able_Desc" : "지속시간 +2", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -501,7 +569,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "추가 코인 10% 획득"
+"Card_Able_Desc" : "추가 코인 10% 획득", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -529,7 +601,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "추가 점수 10% 획득"
+"Card_Able_Desc" : "추가 점수 10% 획득", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -557,7 +633,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "추가 경험치 10% 획득"
+"Card_Able_Desc" : "추가 경험치 10% 획득", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -585,7 +665,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "아이템 드랍 확률 5% 증가"
+"Card_Able_Desc" : "아이템 드랍 확률 5% 증가", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -613,7 +697,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "3시간마다 1,000코인 생성"
+"Card_Able_Desc" : "3시간마다 1,000코인 생성", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -641,7 +729,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "6시간마다 1소울스톤 생성"
+"Card_Able_Desc" : "6시간마다 1소울스톤 생성", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -669,7 +761,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "5시간마다 3배터리 생성"
+"Card_Able_Desc" : "5시간마다 3배터리 생성", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -697,7 +793,11 @@
 "Make_Soul" : 10, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "5시간마다 혼 10개 생성"
+"Card_Able_Desc" : "5시간마다 혼 10개 생성", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -725,7 +825,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 3, 
 "Make_Item" : 0, 
-"Card_Description" : "3시간마다 랜덤 아이템 생성"
+"Card_Able_Desc" : "3시간마다 랜덤 아이템 생성", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -753,7 +857,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "엄청난 능력"
+"Card_Able_Desc" : "엄청난 능력", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -781,7 +889,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "엄청난 능력"
+"Card_Able_Desc" : "엄청난 능력", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -809,7 +921,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "엄청난 능력"
+"Card_Able_Desc" : "엄청난 능력", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ,
 {
@@ -837,7 +953,11 @@
 "Make_Soul" : 0, 
 "Item_Time" : 0, 
 "Make_Item" : 0, 
-"Card_Description" : "엄청난 능력"
+"Card_Able_Desc" : "엄청난 능력", 
+"Card_Detail_Desc" : "상세 설명", 
+"Card_Story" : "옛날 옛적에", 
+"Match_House_ID" : 0, 
+"Match_House_Desc" : "-"
 }
 ]
 }

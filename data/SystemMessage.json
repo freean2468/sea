@@ -1,0 +1,135 @@
+{
+"root": [
+{
+"ID" : 1, 
+"Name" : "INVALID_ACCOUNT", 
+"Description" : "존재하지 않는 계정이 접근했다."
+}
+,
+{
+"ID" : 2, 
+"Name" : "EXISTING_ACCOUNT", 
+"Description" : "이미 생성된 계정이다."
+}
+,
+{
+"ID" : 3, 
+"Name" : "BLOCKED_ACCOUNT", 
+"Description" : "Black_list에 등재된 계정이다. 접근을 허용하지 않는다."
+}
+,
+{
+"ID" : 20, 
+"Name" : "UNDEFINED_FIELD", 
+"Description" : "패킷 필드에 값이 완전히 채워지지 않은 채로 req가 들어왔다."
+}
+,
+{
+"ID" : 40, 
+"Name" : "NOT_ENOUGH_ENERGY", 
+"Description" : "활동력이 부족하다."
+}
+,
+{
+"ID" : 41, 
+"Name" : "NOT_ENOUGH_CASH", 
+"Description" : "유저의 현금이 부족하다."
+}
+,
+{
+"ID" : 42, 
+"Name" : "NOT_ENOUGH_COIN", 
+"Description" : "유저의 코인이 부족하다."
+}
+,
+{
+"ID" : 43, 
+"Name" : "NOT_ENOUGH_DRAW", 
+"Description" : "유저의 영옥이 부족하다."
+}
+,
+{
+"ID" : 60, 
+"Name" : "FAILED_DB_UPDATE", 
+"Description" : "DB Table에 변경된 필드를 업데이트가 실패했다."
+}
+,
+{
+"ID" : 80, 
+"Name" : "FULLY_UPGRADED", 
+"Description" : "Upgrade max에 도달해 있다."
+}
+,
+{
+"ID" : 100, 
+"Name" : "NOT_HAVING", 
+"Description" : "가지고 있지 않다."
+}
+,
+{
+"ID" : 101, 
+"Name" : "ALREADY_HAVING", 
+"Description" : "이미 가지고 있다."
+}
+,
+{
+"ID" : 120, 
+"Name" : "INVALID_BATON", 
+"Description" : "존재하지 않는 이어하기 요청이다."
+}
+,
+{
+"ID" : 121, 
+"Name" : "INVALID_BATON_RESULT", 
+"Description" : "존재하지 않는 이어하기 결과 요청이다."
+}
+,
+{
+"ID" : 122, 
+"Name" : "INVALID_CHARACTER", 
+"Description" : "존재하지 않는 캐릭터 id이다."
+}
+,
+{
+"ID" : 123, 
+"Name" : "INVALID_ITEM", 
+"Description" : "존재하지 않는 아이템 id이다."
+}
+,
+{
+"ID" : 124, 
+"Name" : "INVALID_SESSION", 
+"Description" : "존재하지 않는 session이다."
+}
+,
+{
+"ID" : 125, 
+"Name" : "INVALID_COSTUME_ID", 
+"Description" : "존재하지 않는  id이다."
+}
+,
+{
+"ID" : 126, 
+"Name" : "INVALID_GHOST", 
+"Description" : "존재하지 않는 ghost id이다."
+}
+,
+{
+"ID" : 127, 
+"Name" : "INVALID_HOUSE_ID", 
+"Description" : "존재하지 않는 house id이다."
+}
+,
+{
+"ID" : 128, 
+"Name" : "INVALID_EVOLUTION", 
+"Description" : "존재하지 않는 진화 요청이다."
+}
+,
+{
+"ID" : 140, 
+"Name" : "WRONG_APPROACH", 
+"Description" : "와서는 안 될, 잘못된 요청이다."
+}
+]
+}
