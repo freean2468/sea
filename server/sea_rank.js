@@ -1,5 +1,4 @@
-var mysqlMgr = require('../common/mysql').mysqlMgr;
-var mongodb = require('./mongodb');
+var mysqlMgr = require('./sea_mysql').mysqlMgr;
 
 var count = 0;
 

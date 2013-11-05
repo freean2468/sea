@@ -25,7 +25,7 @@ var versionInfo = new build.VersionInfo(),
 	;
 
 var http = require('http'),
-	util = require('../common/util');
+	util = require('../server/sea_util');
 
 var piece = "";
 var k_id = require('./kid-table').table[idx];
@@ -88,6 +88,7 @@ function request(data) {
 				request(login);
 			} else if (id === accountInfo['id']['low']) {
 				clearTimeout(timerId);
+				logout['k_id'] = k_id;
 				setTimer('logout');
 				request(logout);
 				var post = new Date().getTime();

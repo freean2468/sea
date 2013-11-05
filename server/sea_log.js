@@ -1,19 +1,28 @@
 var fs = require('fs');
 
-function LogMgr(path, currentDate) {
+(function () {
+	var _instance = null;
+	
+	global.LOG = function () {
+		if (!_instance) {
+			_instance = new Log();
+			console.log('A log instance is just created.');
+		}
+		return _instance;
+	};
+})();
+
+function Log() {
 	// property
-	this.currentDate = currentDate;
-	this.owner = '';
-	this.currentDate;
+	this.currentDate = new Date();
 	this.startTime;
 	this.fullPath;
-	this.path = path;
+	this.path = './LOG/';
 
 	// method
-	this.init = function (owner) {
-		this.owner = owner;
+	this.init = function () {
 		this.startTime = this.getDateTime();
-		this.fullPath = path + owner + '-' + this.startTime + '/';
+		this.fullPath = this.path + '-' + process.pid + '-' + this.startTime + '/';
 		this.mkdirLog();
 	};
 
@@ -26,6 +35,7 @@ function LogMgr(path, currentDate) {
 		}
 	};
 
+	// FIXME
 	this.addLog = function (type, line) {
 		fs.appendFileSync(this.fullPath + '[' + type + ']', this.getDateTime() + ' ' + line + '\n');
 		console.log(line);
@@ -49,5 +59,5 @@ function LogMgr(path, currentDate) {
 };
 
 module.exports = {
-	'LogMgr': LogMgr,
+	'LOG': LOG,
 };

@@ -9,6 +9,7 @@ message RegisterAccount {
 } // end
 
 message UnregisterAccount {
+	required string k_id = 2;
 } // end
 
 message Login {
@@ -16,32 +17,39 @@ message Login {
 } // end
 
 message Logout {
+	required string k_id = 2;
 } // end
 
 message CheckInCharge {
+	required string k_id = 2;
 } // end
 
 message SelectCharacter {
-	required int32 selected_character = 2;
+	required string k_id = 2;
+	required int32 selected_character = 3;
 } // end
 
 message StartGame {
+	required string k_id = 2;
 } // end
 
 message EndGame {
-	required int32 score = 2;
-	required int32 dist = 3;
-	required int32 enemy_kill = 4;
-	required int32 play_time = 5;
-	required int32 coin = 6;
-	required int32 mileage = 7;
+	required string k_id = 2;
+	required int32 score = 3;
+	required int32 dist = 4;
+	required int32 enemy_kill = 5;
+	required int32 play_time = 6;
+	required int32 coin = 7;
+	required int32 mileage = 8;
 } // end
 
 message LoadRankInfo {
+	required string k_id = 2;
 } // end
 
 message BuyItem {
-	required int32 item = 2;
+	required string k_id = 2;
+	required int32 item = 3;
 
 	enum Limit {
 		MIN = 1;
@@ -50,28 +58,34 @@ message BuyItem {
 } // end
 
 message BuyOrUpgradeCharacter {
-	required int32 character = 2;
+	required string k_id = 2;
+	required int32 character = 3;
 } // end
 
 message SendEnergy {
-	required string receiver_k_id = 2;
+	required string k_id = 2;
+	required string receiver_k_id = 3;
 } // end
 
 message AcceptEnergy {
-	required string sender_k_id = 2;
-	required int64 sended_time = 3;
+	required string k_id = 2;
+	required string sender_k_id = 3;
+	required int64 sended_time = 4;
 } // end
 
 message RequestBaton {
-	required int32 character_id = 2;
+	required string k_id = 2;
+	required int32 character_id = 3;
 } // end
 
 message InviteFriend {
-	required string friend_k_id = 2;
+	required string k_id = 2;
+	required string friend_k_id = 3;
 } // end
 
 message LoadReward {
-	required Reward reward = 2;
+	required string k_id = 2;
+	required Reward reward = 3;
 
 	enum Reward {
 		INVITE_10_REWARD = 1;
@@ -82,46 +96,57 @@ message LoadReward {
 } // end
 
 message BuyCostume {
-	required int32 costume_id = 2;
+	required string k_id = 2;
+	required int32 costume_id = 3;
 } // end
 
 message WearCostume {
-	required int32 costume_id = 2;
-	required int32 character_id = 3;
+	required string k_id = 2;
+	required int32 costume_id = 3;
+	required int32 character_id = 4;
 } // end
 
 message DrawFirst {
+	required string k_id = 2;
 } // end
 
 message DrawSecond {
-	required bool draw = 2;
+	required string k_id = 2;
+	required bool draw = 3;
 } // end
 
 message EquipGhost {
-	required int32 ghost_id = 2;
-	required int32 house_id = 3;
+	required string k_id = 2;
+	required int32 ghost_id = 3;
+	required int32 house_id = 4;
 } // end
 
 message UnequipGhost {
-	required int32 house_id = 2;
+	required string k_id = 2;
+	required int32 house_id = 3;
 } // end
 
 message PurchaseHouse {
-	required int32 house_id = 2;
+	required string k_id = 2;
+	required int32 house_id = 3;
 } // end
 
 message RequestEvolution {
-	required string receiver_k_id = 2;
-	required int32 character_id = 3;
+	required string k_id = 2;
+	required string receiver_k_id = 3;
+	required int32 character_id = 4;
 } // end
 
 message AcceptEvolution {
-	required string sender_k_id = 2;
-	required int32 character_id = 3;
+	required string k_id = 2;
+	required string sender_k_id = 3;
+	required int32 character_id = 4;
 } // end
 
 message LoadEvolutionProgress {
+	required string k_id = 2;
 } // end
 
 message LoadPostbox {
+	required string k_id = 2;
 } // end

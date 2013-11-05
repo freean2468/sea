@@ -12,6 +12,7 @@ message RegisterAccount {
 
 message UnregisterAccount {
 	optional uint64 id = 1 [default=2357184];
+	required string k_id = 2;
 } // end
 
 message Login {
@@ -21,38 +22,45 @@ message Login {
 
 message Logout {
 	optional uint64 id = 1 [default=391770];
+	required string k_id = 2;
 } // end
 
 message CheckInCharge {
 	optional uint64 id = 1 [default=3340343];
+	required string k_id = 2;
 } // end
 
 message SelectCharacter {
 	optional uint64 id = 1 [default=391313];
-	required int32 selected_character = 2;
+	required string k_id = 2;
+	required int32 selected_character = 3;
 } // end
 
 message StartGame {
 	optional uint64 id = 1 [default=1372651];
+	required string k_id = 2;
 } // end
 
 message EndGame {
 	optional uint64 id = 1 [default=6419430];
-	required int32 score = 2;
-	required int32 dist = 3;
-	required int32 enemy_kill = 4;
-	required int32 play_time = 5;
-	required int32 coin = 6;
-	required int32 mileage = 7;
+	required string k_id = 2;
+	required int32 score = 3;
+	required int32 dist = 4;
+	required int32 enemy_kill = 5;
+	required int32 play_time = 6;
+	required int32 coin = 7;
+	required int32 mileage = 8;
 } // end
 
 message LoadRankInfo {
 	optional uint64 id = 1 [default=9434386];
+	required string k_id = 2;
 } // end
 
 message BuyItem {
 	optional uint64 id = 1 [default=11402687];
-	required int32 item = 2;
+	required string k_id = 2;
+	required int32 item = 3;
 
 	enum Limit {
 		MIN = 1;
@@ -62,33 +70,39 @@ message BuyItem {
 
 message BuyOrUpgradeCharacter {
 	optional uint64 id = 1 [default=7404500];
-	required int32 character = 2;
+	required string k_id = 2;
+	required int32 character = 3;
 } // end
 
 message SendEnergy {
 	optional uint64 id = 1 [default=9434986];
-	required string receiver_k_id = 2;
+	required string k_id = 2;
+	required string receiver_k_id = 3;
 } // end
 
 message AcceptEnergy {
 	optional uint64 id = 1 [default=4453192];
-	required string sender_k_id = 2;
-	required int64 sended_time = 3;
+	required string k_id = 2;
+	required string sender_k_id = 3;
+	required int64 sended_time = 4;
 } // end
 
 message RequestBaton {
 	optional uint64 id = 1 [default=6487776];
-	required int32 character_id = 2;
+	required string k_id = 2;
+	required int32 character_id = 3;
 } // end
 
 message InviteFriend {
 	optional uint64 id = 1 [default=3473212];
-	required string friend_k_id = 2;
+	required string k_id = 2;
+	required string friend_k_id = 3;
 } // end
 
 message LoadReward {
 	optional uint64 id = 1 [default=3470935];
-	required Reward reward = 2;
+	required string k_id = 2;
+	required Reward reward = 3;
 
 	enum Reward {
 		INVITE_10_REWARD = 1;
@@ -100,56 +114,67 @@ message LoadReward {
 
 message BuyCostume {
 	optional uint64 id = 1 [default=7470654];
-	required int32 costume_id = 2;
+	required string k_id = 2;
+	required int32 costume_id = 3;
 } // end
 
 message WearCostume {
 	optional uint64 id = 1 [default=2486858];
-	required int32 costume_id = 2;
-	required int32 character_id = 3;
+	required string k_id = 2;
+	required int32 costume_id = 3;
+	required int32 character_id = 4;
 } // end
 
 message DrawFirst {
 	optional uint64 id = 1 [default=13496872];
+	required string k_id = 2;
 } // end
 
 message DrawSecond {
 	optional uint64 id = 1 [default=9499341];
-	required bool draw = 2;
+	required string k_id = 2;
+	required bool draw = 3;
 } // end
 
 message EquipGhost {
 	optional uint64 id = 1 [default=520980];
-	required int32 ghost_id = 2;
-	required int32 house_id = 3;
+	required string k_id = 2;
+	required int32 ghost_id = 3;
+	required int32 house_id = 4;
 } // end
 
 message UnequipGhost {
 	optional uint64 id = 1 [default=522803];
-	required int32 house_id = 2;
+	required string k_id = 2;
+	required int32 house_id = 3;
 } // end
 
 message PurchaseHouse {
 	optional uint64 id = 1 [default=3536908];
-	required int32 house_id = 2;
+	required string k_id = 2;
+	required int32 house_id = 3;
 } // end
 
 message RequestEvolution {
 	optional uint64 id = 1 [default=3538726];
-	required string receiver_k_id = 2;
-	required int32 character_id = 3;
+	required string k_id = 2;
+	required string receiver_k_id = 3;
+	required int32 character_id = 4;
 } // end
 
 message AcceptEvolution {
 	optional uint64 id = 1 [default=4585601];
-	required string sender_k_id = 2;
-	required int32 character_id = 3;
+	required string k_id = 2;
+	required string sender_k_id = 3;
+	required int32 character_id = 4;
 } // end
 
 message LoadEvolutionProgress {
 	optional uint64 id = 1 [default=7599702];
+	required string k_id = 2;
 } // end
 
 message LoadPostbox {
 	optional uint64 id = 1 [default=1572854];
+	required string k_id = 2;
 } // end

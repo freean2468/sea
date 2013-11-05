@@ -1,8 +1,21 @@
 var fs = require('fs');
-var path = "../data/";
 
-function DataMgr() {
+(function () {
+	var _instance = null;
+	var path = '../data/';
+
+	global.DATA = function () {
+		if (!_instance) {
+			_instance = new Data(path);
+			_instance.init();
+		}
+		return _instance;
+	};
+})();
+
+var Data = function (path) {
 	// property
+	this.path = path;
 	this.characterData = [];
 	this.costumeData = [];
 	this.itemData = [];
@@ -22,18 +35,21 @@ function DataMgr() {
 		this.loadHouseData();
 		this.loadLevelData();
 		this.createDrawList();
-
-		console.log('data loading is completed.');
 	};
 
+	this.loadJson = function (fileName) {
+		var json = fs.readFileSync(this.path + fileName, 'utf8');
+		return JSON.parse(json);
+	}
+
 	this.loadCharacterData = function () {
-		var data = fs.readFileSync(path + 'CharacterStatus.json', 'utf8');
-		data = JSON.parse(data);
+		var data = this.loadJson('CharacterStatus.json');
 
 		var root = data['root'];
 		var table = [];
+		var index = 0;
 
-		for (var index in root) {
+		for (index in root) {
 			var item = root[index];
 			var prev = root[index - 1];
 
@@ -57,8 +73,15 @@ function DataMgr() {
 				'Price_Cash': item['Upgrade_Cash'],
 			});
 		}
+
+		if (!index) {
+			console.log('Loading CharacterData failed!');
+		} else {
+			console.log('Loading CharacterData completed');
+		}
 	};
 
+	// FIXME
 	this.getCharacterDataByIdAndLv = function (id, lv) {
 		var character = this.characterData[id - 1][lv - 1];
 
@@ -70,13 +93,13 @@ function DataMgr() {
 	};
 
 	this.loadCostumeData = function () {
-		var data = fs.readFileSync(path + 'CharacterCostumeInfo.json', 'utf8');
-		data = JSON.parse(data);
+		var data = this.loadJson('CharacterCostumeInfo.json');
 
 		var root = data['root'];
 		var bunchOfData = [];
+		var index = 0;
 
-		for (var index in root) {
+		for (index in root) {
 			var item = root[index];
 			this.costumeData.push({
 				'ID': item['Costume_ID'],
@@ -89,6 +112,12 @@ function DataMgr() {
 				'Costume_Exp': item['Costume_Exp'],
 				'Time_Reduce': item['Time_Reduce'],
 			});
+		}
+
+		if (!index) {
+			console.log('Loading CostumeData failed!');
+		} else {
+			console.log('Loading CostumeData completed');
 		}
 	};
 
@@ -103,18 +132,24 @@ function DataMgr() {
 	};
 
 	this.loadItemData = function () {
-		var data = fs.readFileSync(path + 'BoostItemData.json', 'utf8');
-		data = JSON.parse(data);
+		var data = this.loadJson('BoostItemData.json');
 
 		var root = data['root'];
+		var index = 0;
 
-		for (var index in root) {
+		for (index in root) {
 			var item = root[index];
 			this.itemData.push({
 				'ID': item['ID'],
 				'Type': item['Boost_Item_Type'],
 				'Price_Coin': item['Price_Coin'],
 			});
+		}
+
+		if (!index) {
+			console.log('Loading ItemData failed!');
+		} else {
+			console.log('Loading ItemData completed');
 		}
 	};
 
@@ -129,8 +164,7 @@ function DataMgr() {
 	};
 
 	this.loadGhostData = function () {
-		var data = fs.readFileSync(path + 'GhostCardInfo.json', 'utf8');
-		data = JSON.parse(data);
+		var data = this.loadJson('GhostCardInfo.json');
 
 		var root = data['root'];
 
@@ -168,13 +202,19 @@ function DataMgr() {
 	};
 
 	this.loadDrawData = function () {
-		var data = fs.readFileSync(path + 'draw-data.json', 'utf8');
-		data = JSON.parse(data);
+		var data = this.loadJson('draw-data.json');
 
 		var root = data['root'];
+		var index = 0;
 
-		for (var index in root) {
+		for (index in root) {
 			this.drawData.push(root[index]);
+		}
+
+		if (!index) {
+			console.log('Loading DrawData failed!');
+		} else {
+			console.log('Loading DrawData completed');
 		}
 	};
 
@@ -209,12 +249,12 @@ function DataMgr() {
 	};
 
 	this.loadHouseData = function () {
-		var data = fs.readFileSync(path + 'GhostHouseData.json', 'utf8');
-		data = JSON.parse(data);
+		var data = this.loadJson('GhostHouseData.json');
 
 		var root = data['root'];
+		var idx = 0;
 
-		for (var idx in root) {
+		for (idx in root) {
 			var item = root[idx];
 			this.houseData.push({
 				'ID': item['House_ID'],
@@ -224,6 +264,12 @@ function DataMgr() {
 				'Match_Card_Bonus_Effect_Type': item['Match_Card_Bonus_Effect_Type'],
 				'Match_Card_Bonus_Effect_Value': item['Match_Card_Bonus_Effect_Value'],
 			});
+		}
+
+		if (!idx) {
+			console.log('Loading HouseData failed!');
+		} else {
+			console.log('Loading HouseData completed');
 		}
 	};
 
@@ -238,14 +284,20 @@ function DataMgr() {
 	};
 
 	this.loadLevelData = function () {
-		var data = fs.readFileSync(path + 'LevelData.json', 'utf8');
-		data = JSON.parse(data);
+		var data = this.loadJson('LevelData.json');
 
 		var root = data['root'];
+		var idx = 0;
 
-		for (var idx in root) {
+		for (idx in root) {
 			var item = root[idx];
 			this.levelData.push(item);
+		}
+
+		if (!idx) {
+			console.log('Loading LevelData failed!');
+		} else {
+			console.log('Loading LevelData completed');
 		}
 	};
 
@@ -261,5 +313,5 @@ function DataMgr() {
 }
 
 module.exports = {
-	'DataMgr': DataMgr,
-};
+	'DATA': DATA,
+}

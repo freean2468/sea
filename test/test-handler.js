@@ -1,11 +1,10 @@
 // TODO
 //	Adding additional test on each test case(suite)
 //
-var User = function(name, sessionId) {
+var User = function(name) {
 	// property
 	this.id = 0;
 	this.name = name;
-	this.sessionId = sessionId;
 	this.energyList = [];
 	this.evolutionList = [];
 
@@ -23,18 +22,19 @@ var User = function(name, sessionId) {
 	};
 };
 
-var test_1 = new User('unit_test_1', 1);
-var test_2 = new User('unit_test_2', 2);
+var test_1 = new User('unit_test_1');
+var test_2 = new User('unit_test_2');
 
 //
 // Dependencies
 // 
-var build = require('../gameServer/c2g-proto-build'),
-	util = require('../common/util'),
-	MysqlMgr = require('../common/mysql').MysqlMgr,
-	DataMgr = require('../gameServer/data').DataMgr,
+var build = require('../server/sea_build'),
+	util = require('../server/sea_util'),
+	LOG = require('../server/sea_log').LOG(),
+	MYSQL = require('../server/sea_mysql').MYSQL(1),
+	DATA = require('../server/sea_data').DATA(),
 	convertMS2S = util.convertMS2S,
-	define = require('../common/define'),
+	define = require('../server/sea_define'),
 	toStream = util.toStream
 	;
 
@@ -68,10 +68,6 @@ function write(res, stream) {
 	res.end();
 }
 
-function request(req) {
-	// fake
-}
-
 var FakeLogMgr = function () {
 	// property
 
@@ -79,53 +75,6 @@ var FakeLogMgr = function () {
 	this.addLog = function (code, description) {
 		// fake
 	}
-};
-
-var FakeSession = function () {
-	// property
-
-	// method	
-	this.toAuthRegisterSession = function (kId, callback) {
-		var sessionId = 0;
-
-		if (kId === test_1.name) {
-			sessionId = test_1.sessionId;
-		} else {
-			sessionId = test_2.sessionId;
-		}
-
-		callback(sessionId);
-	};
-
-	this.toAuthUnregisterSession = function (session_id, callback) {
-		var kId = '';
-
-		if (session_id === test_1.sessionId) {
-			kId = test_1.name;
-		} else {
-			kId = test_2.name;
-		}
-
-		callback(kId);
-	};
-
-	this.toAuthUpdateSession = this.toAuthUnregisterSession;
-
-	this.toAuthTraceStartGame = function (session_id, start_time, exp) {
-
-	};
-
-	this.toAuthUpdateEndGameSession = function (session_id, callback) {
-		var kId = '';
-
-		if (session_id === test_1.sessionId) {
-			kId = test_1.name;
-		} else {
-			kId = test_2.name;
-		}
-
-		callback(kId, 0, false);
-	};
 };
 
 //
@@ -140,7 +89,7 @@ suite.skip('# sample', function () {
 
 		response = new FakeResponse(new build.LogoutReply());
 
-		handlerMock = function (response, data, session_id, done) {
+		handlerMock = function (response, data, done) {
 
 		};
 
@@ -148,25 +97,17 @@ suite.skip('# sample', function () {
 	});
 
 	test('should be equal to ', function (done) {
-		handlerMock(response, data, test_1.sessionId, done);
+		handlerMock(response, data, done);
 	});
 });
 
 suite('# c2g-handler unit test.', function () {
-	var data = null;
 	var response = null;
-	var mysqlMgr = null;
 	var logMgr = null;
-	var session = null;
-	var dataMgr = null;
 	var handlerMock = null;
 
 	suiteSetup(function (done) {
-		mysqlMgr = new MysqlMgr('sea', 1);
 		logMgr = new FakeLogMgr();
-		session = new FakeSession();
-		dataMgr = new DataMgr();
-		dataMgr.init();
 		done();
 	});
 
@@ -177,7 +118,7 @@ suite('# c2g-handler unit test.', function () {
 
 			response = new FakeResponse(new build.VersionInfoReply());
 
-			handlerMock = function VersionInfoHandler(response, data, session_id, done){
+			handlerMock = function VersionInfoHandler(response, data, done){
 				var msg = build.VersionInfo.decode(data);
 				var rMsg = new build.VersionInfoReply();
 				var sysMsg = new build.SystemMessage();
@@ -186,7 +127,7 @@ suite('# c2g-handler unit test.', function () {
 
 				rMsg['version'] = version;
 
-				write(response, toStream(rMsg));
+				write(response, toStream(rMsg));	
 				done();
 			};
 
@@ -194,7 +135,7 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		test('# should be equal to id of VersionInfoReply', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
@@ -202,7 +143,7 @@ suite('# c2g-handler unit test.', function () {
 		setup(function (done) {
 			response = new FakeResponse(new build.RegisterAccountReply());
 
-			handlerMock = function RegisterAccountHandler(response, data, session_id, done){
+			handlerMock = function RegisterAccountHandler(response, data, done){
 				var msg = build.RegisterAccount.decode(data);
 				var rMsg = new build.RegisterAccountReply();
 				var sysMsg = new build.SystemMessage();
@@ -211,14 +152,14 @@ suite('# c2g-handler unit test.', function () {
 
 				// Creates user then verifies id;
 				function firstCall () {
-					mysqlMgr.createUser(msg['k_id'], function (res) {
+					MYSQL.createUser(msg['k_id'], function (res) {
 						var id = res['res'];
 
 						if (id === 0) {
-							logMgr.addLog('ERROR', 'Already exsisting account : ' + msg['k_id']);
+							LOG.addLog('ERROR', 'Already exsisting account : ' + msg['k_id']);
 							sysMsg['res'] = build.SystemMessage.Result['EXISTING_ACCOUNT'];
 							write(response, toStream(sysMsg));
-							done();
+							done()
 							return ;
 						}
 
@@ -229,12 +170,6 @@ suite('# c2g-handler unit test.', function () {
 				// Sends rMsg to client and UserRegister log to log server
 				function lastCall () {		
 					write(response, toStream(rMsg));
-
-					var UserRegister = build.UserRegister;
-					var req = new UserRegister();
-					req['k_id'] = msg['k_id'];
-
-					request(req);
 					done();
 				}
 			};
@@ -252,7 +187,7 @@ suite('# c2g-handler unit test.', function () {
 			});
 
 			test('should be equal to id of RegisterAccountReply', function (done) {
-				handlerMock(response, data, test_1.sessionId, done);
+				handlerMock(response, data, done);
 			});
 		});
 
@@ -266,7 +201,7 @@ suite('# c2g-handler unit test.', function () {
 			});
 
 			test('should be equal to id of RegisterAccountReply', function (done) {
-				handlerMock(response, data, test_2.sessionId, done);
+				handlerMock(response, data, done);
 			});
 		});
 	});
@@ -275,24 +210,22 @@ suite('# c2g-handler unit test.', function () {
 		setup(function (done) {
 			response = new FakeResponse(new build.AccountInfo());
 
-			handlerMock = function LoginHandler(response, data, session_id, done){
+			handlerMock = function LoginHandler(response, data, done){
 				var msg = build.Login.decode(data);
 				var rMsg = new build.AccountInfo();
 				var sysMsg = new build.SystemMessage();
 
 				var id = 0;
-				var sessionId = '';
 
 				firstCall();
 
 				// Caqlls loadUser SP then verifies id
 				function firstCall() {
-					mysqlMgr.loadUser(msg['k_id'], function (res) {
+					MYSQL.loadUser(msg['k_id'], function (res) {
 						id = res['res'];
-						test_1.id = id;
 
 						if (id <= 0) {
-							logMgr.addLog('SYSTEM', '[LoginHandler] Invalid account (res : ' + res + ')');
+							LOG.addLog('SYSTEM', '[LoginHandler] Invalid account (res : ' + res + ')');
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
@@ -305,9 +238,9 @@ suite('# c2g-handler unit test.', function () {
 
 				// Calls isBlack SP then verifies it
 				function call_2() {
-					mysqlMgr.isBlack(msg['k_id'], function (res) {
+					MYSQL.isBlack(msg['k_id'], function (res) {
 						if (res['res']) {
-							logMgr.addLog('SYSTEM', 'blocked account access : (' + msg['k_id'] + ')');
+							LOG.addLog('SYSTEM', 'blocked account access : (' + msg['k_id'] + ')');
 							sysMsg['res'] = build.SystemMessage.Result['BLOCKED_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
@@ -318,95 +251,78 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUserInfo SP then registers session
-				// after that fulfills rMsg
+				// Calls loadUserInfo SP then fulfills rMsg
 				function call_3() {
-					mysqlMgr.loadUserInfo(id, function (res) {
+					MYSQL.loadUserInfo(id, function (res) {
 						var info = res;
 
-						session.toAuthRegisterSession(msg['k_id'], function (session_id) {
-							sessionId = session_id;
+						// info
+						rMsg['lv'] = info['lv'];
+						rMsg['exp'] = info['exp'];
+						rMsg['coin'] = info['coin'];
+						rMsg['cash'] = info['cash'];
+						rMsg['energy'] = info['energy'];
+						rMsg['last_charged_time'] = info['last_charged_time'];
+						rMsg['selected_character'] = info['selected_character'];
+						rMsg['highest_score'] = info['highest_score'];
 
-							// info
-							rMsg['lv'] = info['lv'];
-							rMsg['exp'] = info['exp'];
-							rMsg['coin'] = info['coin'];
-							rMsg['cash'] = info['cash'];
-							rMsg['energy'] = info['energy'];
-							rMsg['last_charged_time'] = info['last_charged_time'];
-							rMsg['selected_character'] = info['selected_character'];
-							rMsg['highest_score'] = info['highest_score'];
+						// character
+						for (var i = 1; i <= DATA.characterData.length; ++i) {
+							var lv = info['_' + i];
 
-							// character
-							for (var i = 1; i <= dataMgr.characterData.length; ++i) {
-								var lv = info['_' + i];
-
-								if (lv > 0) {
-									rMsg['characters'].push({'id': i, 'level': lv});
-								}
+							if (lv > 0) {
+								rMsg['characters'].push({'id': i, 'level': lv});
 							}
+						}
 
-							// item
-							rMsg['item_1'] = info['item_1'];
-							rMsg['item_2'] = info['item_2'];
-							rMsg['item_3'] = info['item_3'];
-							rMsg['item_4'] = info['item_4'];
-							rMsg['item_5'] = info['item_5'];
-							rMsg['random'] = info['random'];
-							
-							var mileage = info['mileage'];
-							var draw = info['draw'];
+						// item
+						rMsg['item_1'] = info['item_1'];
+						rMsg['item_2'] = info['item_2'];
+						rMsg['item_3'] = info['item_3'];
+						rMsg['item_4'] = info['item_4'];
+						rMsg['item_5'] = info['item_5'];
+						rMsg['random'] = info['random'];
+						
+						var mileage = info['mileage'];
+						var draw = info['draw'];
 
-							// calls updateMileage SP
-							function innerCall_1 (mileage, draw, id, sessionId) {
-								mysqlMgr.updateMileage(id, mileage, function (res) {
-									rMsg['mileage'] = mileage;
-									rMsg['draw'] = draw;
-
-									lastCall();					
-								});
-							};
-
-							if (info['uv'] === 0) {
-								mysqlMgr.updateUvOn(id, function (res) {
-									mileage = info['mileage'] + 5;
-
-									if (mileage >= 100) {
-										mileage -= 100;
-										++draw;
-
-										mysqlMgr.updateDraw(id, draw, function (res) {
-											innerCall_1(mileage, draw, id, sessionId);
-										});
-									} else {
-										innerCall_1(mileage, draw, id, sessionId);
-									}
-								});
-							} else {
+						// calls updateMileage SP
+						function innerCall_1 (mileage, draw, id) {
+							MYSQL.updateMileage(id, mileage, function (res) {
 								rMsg['mileage'] = mileage;
 								rMsg['draw'] = draw;
 
-								lastCall();
-							}
-						});
+								lastCall();					
+							});
+						};
+
+						if (info['uv'] === 0) {
+							MYSQL.updateUvOn(id, function (res) {
+								mileage = info['mileage'] + 5;
+
+								if (mileage >= 100) {
+									mileage -= 100;
+									++draw;
+
+									MYSQL.updateDraw(id, draw, function (res) {
+										innerCall_1(mileage, draw, id);
+									});
+								} else {
+									innerCall_1(mileage, draw, id);
+								}
+							});
+						} else {
+							rMsg['mileage'] = mileage;
+							rMsg['draw'] = draw;
+
+							lastCall();
+						}
 					});
 				}
 
 				// Sends rMsg to client and AccountLogin log to log server
 				function lastCall() {
-					var stream = toStream(rMsg);
-
-					response.writeHead(200, {'Set-Cookie' : 'piece=' + sessionId,
-											'Content-Type': 'application/octet-stream',
-											'Content-Length': stream.length});
-					response.write(stream);
-					response.end();
-
-					var AccountLogin = build.AccountLogin;
-					var req = new AccountLogin();
-					req['k_id'] = msg['k_id'];
-
-					request(req);
+					write(response, toStream(rMsg));
 					done();
 				}
 			};
@@ -424,7 +340,7 @@ suite('# c2g-handler unit test.', function () {
 			});
 
 			test('should be equal to id of AccountInfo', function (done) {
-				handlerMock(response, data, test_1.sessionId, done);
+				handlerMock(response, data, done);
 			});
 		});
 
@@ -438,7 +354,7 @@ suite('# c2g-handler unit test.', function () {
 			});
 
 			test('should be equal to id of AccountInfo', function (done) {
-				handlerMock(response, data, test_2.sessionId, done);
+				handlerMock(response, data, done);
 			});
 		});
 	});
@@ -446,29 +362,30 @@ suite('# c2g-handler unit test.', function () {
 	suite('# SelectCharacterHandler', function () {
 		setup(function (done) {
 			data = new build.SelectCharacter();	
+			data['k_id'] = test_1.name;
 			data['selected_character'] = 3;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.SelectCharacterReply());
 
-			handlerMock = function SelectCharacterHandler(response, data, session_id, done){
+			handlerMock = function SelectCharacterHandler(response, data, done){
 				var msg = build.SelectCharacter.decode(data);
 				var rMsg = new build.SelectCharacterReply();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
 
 				firstCall();
 
-				// Updates session then verifies kId
+				// Ccalls loadUser SP then verifies id
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
+					MYSQL.loadUser(kId, function (res) {
+						id = res['res'];
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[SelectCharacter] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (id <= 0) {
+							LOG.addLog('ERROR', '[SelectCharacter] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -478,31 +395,14 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Ccalls loadUser SP then verifies id
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						id = res['res'];
-
-						if (id <= 0) {
-							logMgr.addLog('ERROR', '[SelectCharacter] Invalid account (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_3();
-					});
-				}
-
 				// Calls selectCharacters SP verifies selected character
 				// after that calls updateSelectedCharacter SP
-				function call_3() {
-					mysqlMgr.selectCharacters(id, function (res) {
+				function call_2() {
+					MYSQL.selectCharacters(id, function (res) {
 						var selected = msg['selected_character'];				
 
-						if (selected <= 0 || dataMgr.characterData.length < selected) {
-							logMgr.addLog('ERROR', 'Character Range Over (' + kId + ', ' + 'character : ' + msg['selected_character'] + ')');
+						if (selected <= 0 || DATA.characterData.length < selected) {
+							LOG.addLog('ERROR', 'Character Range Over (' + kId + ', ' + 'character : ' + msg['selected_character'] + ')');
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_CHARACTER'];
 							write(response, toStream(sysMsg));
 							done();
@@ -511,11 +411,11 @@ suite('# c2g-handler unit test.', function () {
 						
 						if (res['_' + selected])
 						{
-							mysqlMgr.updateSelectedCharacter(id, selected, function (res) {
+							MYSQL.updateSelectedCharacter(id, selected, function (res) {
 								lastCall();
 							});
 						} else {
-							logMgr.addLog('ERROR', '[SelectCharacter] This user (' + kId + ') does not have this character (' + selected + ')');
+							LOG.addLog('ERROR', '[SelectCharacter] This user (' + kId + ') does not have this character (' + selected + ')');
 							sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 							write(response, toStream(sysMsg));
 							done();
@@ -535,43 +435,45 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		test('should be equal to id of SelectCharacterReply', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# StartGameHandler', function () {
 		setup(function (done) {
-			data = new build.StartGame();	
+			data = new build.StartGame();
+			data['k_id'] = test_1.name;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.StartGameReply());
 		
-			handlerMock = function StartGameHandler(response, data, session_id, done){
+			handlerMock = function StartGameHandler(response, data, done){
 				var msg = build.StartGame.decode(data);
 				var rMsg = new build.StartGameReply();
 				var sysMsg = new build.SystemMessage();
 
 				var doubleExp = false;
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
 				var procedureCallList = [];
 
+				// FIXME
 				function startTrace() {
 					var now = new Date();
 
-					session.toAuthTraceStartGame(session_id, convertMS2S(now.getTime()), doubleExp);
+			//		session.toAuthTraceStartGame(session_id, convertMS2S(now.getTime()), doubleExp);
 				};
 
 				firstCall();
 
-				// Updates session then verifies kId
+				// Calls loadUser SP then verifies id
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
+					MYSQL.loadUser(kId, function (res) {
+						id = res['res'];
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[StartGame] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (id <= 0) {
+							LOG.addLog('ERROR', '[StartGame] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -581,27 +483,10 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies id
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						id = res['res'];
-
-						if (id <= 0) {
-							logMgr.addLog('ERROR', '[StartGame] Invalid account (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_3();
-					});
-				}
-
 				// Verifies id then calls startGame SP
 				// after that Starts to fullfill StartGameReply meanwhile calls updateLastChargeTime SP
-				function call_3() {
-					mysqlMgr.startGame(id, function (res) {
+				function call_2() {
+					MYSQL.startGame(id, function (res) {
 						var info = res;
 						var character = info['selected_character'];
 						var energy = info['energy'];
@@ -609,7 +494,7 @@ suite('# c2g-handler unit test.', function () {
 						var energyMax = 100;
 
 						if (energy < 1) {
-							logMgr.addLog('system', '[StartGame] Not enough energy : ' + kId);
+							LOG.addLog('system', '[StartGame] Not enough energy : ' + kId);
 							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_ENERGY'];
 							write(response, toStream(sysMsg));
 							done();
@@ -625,16 +510,16 @@ suite('# c2g-handler unit test.', function () {
 						rMsg['energy'] = energy;
 						rMsg['last_charged_time'] = last;
 					
-						mysqlMgr.updateLastChargeTime(id, last, function (res) {
-							call_4(energy, info);
+						MYSQL.updateLastChargeTime(id, last, function (res) {
+							call_3(energy, info);
 						});
 					});
 				}
 
 				// Calls updateEnergy SP then Keeps going to fulfill StartGameReply
-				function call_4(energy, info) {
-					mysqlMgr.updateEnergy(id, energy, function (res) {
-						var itemData = dataMgr.itemData;
+				function call_3(energy, info) {
+					MYSQL.updateEnergy(id, energy, function (res) {
+						var itemData = DATA.itemData;
 
 						for (var i = 0; i < 5; ++i) {
 							var item = itemData[i];
@@ -653,7 +538,7 @@ suite('# c2g-handler unit test.', function () {
 						}
 
 						if (info['random'] !== 0) {
-							var item = dataMgr.getItemDataById([info['random']]);
+							var item = DATA.getItemDataById([info['random']]);
 							var itemId = item['ID'];
 
 							procedureCallList.push(itemId);
@@ -673,11 +558,11 @@ suite('# c2g-handler unit test.', function () {
 
 				// Calls updateItem or updateRandom SP 
 				function recursiveCall_1(idx, trigger) {
-					var item = dataMgr.getItemDataById(procedureCallList[idx]);
+					var item = DATA.getItemDataById(procedureCallList[idx]);
 					var itemId = item['ID'];
 
 					if (5 < itemId) {
-						mysqlMgr.updateRandom(id, 0, function (res) { 
+						MYSQL.updateRandom(id, 0, function (res) { 
 							lastCall(idx, trigger);
 						});
 					} else {
@@ -685,7 +570,7 @@ suite('# c2g-handler unit test.', function () {
 							doubleExp = true;
 						}
 
-						mysqlMgr.updateItem(id, -1, itemId, function (res) { 
+						MYSQL.updateItem(id, -1, itemId, function (res) { 
 							lastCall(idx, trigger);
 						});
 					}
@@ -696,7 +581,8 @@ suite('# c2g-handler unit test.', function () {
 					++idx;
 
 					if (idx === trigger) {
-						startTrace();
+						// FIXME
+			//			startTrace();
 						write(response, toStream(rMsg));
 						done();
 					} else {
@@ -709,13 +595,14 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		test('should be equal to id of StartGameReply', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# EndGameHandler', function () {
 		setup(function (done) {
 			data = new build.EndGame();	
+			data['k_id'] = test_1.name;
 			data['score'] = 100;
 			data['dist'] = 230;
 			data['enemy_kill'] = 12;
@@ -726,15 +613,15 @@ suite('# c2g-handler unit test.', function () {
 
 			response = new FakeResponse(new build.GameResult());
 
-			handlerMock = function EndGameHandler(response, data, session_id, done){
+			handlerMock = function EndGameHandler(response, data, done){
 				var msg = build.EndGame.decode(data);
 				var rMsg = new build.GameResult();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
 				var startTime = 0;
-				var doubleExp = 0;
+				var doubleExp = false;
 				var info = null;
 
 				// Character bonus coefficient
@@ -759,17 +646,16 @@ suite('# c2g-handler unit test.', function () {
 
 				firstCall();
 
-				// Updates EndGame session then verifies kId
+				// Calls loadUser SP then verifies id
 				function firstCall() {
-					session.toAuthUpdateEndGameSession(session_id, function (k_id, start_time, double_exp) {
-						kId = k_id;
-						startTime = start_time;
-						doubleExp = double_exp;
+					MYSQL.loadUser(kId, function (res) {
+						id = res['res'];
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[EndGame] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (id <= 0) {
+							LOG.addLog('ERROR', '[EndGame] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
+							done();
 							return ;
 						}
 
@@ -777,31 +663,15 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies id
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						id = res['res'];
-
-						if (id <= 0) {
-							logMgr.addLog('ERROR', '[EndGame] Invalid account (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							return ;
-						}
-
-						call_3();
-					});
-				}
-
 				// Ccalls loadUserInfo SP then starts to fullfill GameResult meanwhile calls selectCharacterCostumes SP
-				function call_3() {
-					mysqlMgr.loadUserInfo(id, function (res) {
+				function call_2() {
+					MYSQL.loadUserInfo(id, function (res) {
 						info = res;
 						// TODO : Detecting Cheating
 						var selectedCharacter = info['selected_character'];
 
 						var characterLevel = info['_' + selectedCharacter];
-						var characterData = dataMgr.getCharacterDataByIdAndLv(selectedCharacter, characterLevel);
+						var characterData = DATA.getCharacterDataByIdAndLv(selectedCharacter, characterLevel);
 
 						characterScoreCoefficient = characterData['Char_Score'];
 						characterExpCoefficient = characterData['Char_Exp'];
@@ -809,7 +679,7 @@ suite('# c2g-handler unit test.', function () {
 
 						var ghostHouseInfo = [];
 
-						for (var i = 0; i < dataMgr.houseData.length; ++i) {
+						for (var i = 0; i < DATA.houseData.length; ++i) {
 							ghostHouseInfo.push(info['house_' + (i+1)]);
 						}
 
@@ -819,7 +689,7 @@ suite('# c2g-handler unit test.', function () {
 							var ghostCard = ghostHouseInfo['_' + i];
 							
 							if (ghostCard !== -1) {
-								var ghostHouseData = dataMgr.getHouseDataById(i);
+								var ghostHouseData = DATA.getHouseDataById(i);
 
 								if (ghostHouseData['Match_Card_ID'] === ghostCard) {
 									var type = ghostHouseData['Match_Card_Bonus_Effect_Type'];
@@ -834,7 +704,7 @@ suite('# c2g-handler unit test.', function () {
 									}
 								}
 
-								var ghostCardData = dataMgr.getGhostDataById(ghostCard);
+								var ghostCardData = DATA.getGhostDataById(ghostCard);
 
 								if (ghostCardData !== false) {
 									ghostCardScoreCoefficient += ghostCardData['Card_Score'];
@@ -844,41 +714,41 @@ suite('# c2g-handler unit test.', function () {
 							}
 						}
 
-						call_4();
+						call_3();
 					});
 				}
 
 				// Keeps going to fullfill GameResult meanwhile calls updateExp SP
-				function call_4() {
-					mysqlMgr.selectCharacterCostumes(id, info['selected_character'], function (res) {
+				function call_3() {
+					MYSQL.selectCharacterCostumes(id, info['selected_character'], function (res) {
 						var costumeHead = res['head'];
 						var costumeTop = res['top'];
 						var costumeBottoms = res['bottoms'];
 						var costumeBack = res['back'];
 
 						if (costumeHead !== 0) {
-							var data = dataMgr.getCostumeDataById(costumeHead);
+							var data = DATA.getCostumeDataById(costumeHead);
 							costumeScoreCoefficient += data['Costume_Score'];
 							costumeExpCoefficient += data['Costume_Exp'];
 							costumeCoinCoefficient += data['Costume_Coin'];
 						}
 
 						if (costumeTop !== 0) {
-							var data = dataMgr.getCostumeDataById(costumeTop);
+							var data = DATA.getCostumeDataById(costumeTop);
 							costumeScoreCoefficient += data['Costume_Score'];
 							costumeExpCoefficient += data['Costume_Exp'];
 							costumeCoinCoefficient += data['Costume_Coin'];
 						}
 
 						if (costumeBottoms !== 0) {
-							var data = dataMgr.getCostumeDataById(costumeBottoms);
+							var data = DATA.getCostumeDataById(costumeBottoms);
 							costumeScoreCoefficient += data['Costume_Score'];
 							costumeExpCoefficient += data['Costume_Exp'];
 							costumeCoinCoefficient += data['Costume_Coin'];
 						}
 
 						if (costumeBack !== 0) {
-							var data = dataMgr.getCostumeDataById(costumeBack);
+							var data = DATA.getCostumeDataById(costumeBack);
 							costumeScoreCoefficient += data['Costume_Score'];
 							costumeExpCoefficient += data['Costume_Exp'];
 							costumeCoinCoefficient += data['Costume_Coin'];
@@ -902,10 +772,10 @@ suite('# c2g-handler unit test.', function () {
 						if (100 <= mileage) {
 							++draw;
 							mileage -= 100;
-							mysqlMgr.updateDraw(id, draw, function (res) { });
+							MYSQL.updateDraw(id, draw, function (res) { });
 						}
 
-						mysqlMgr.updateMileage(id, mileage, function (res) { });
+						MYSQL.updateMileage(id, mileage, function (res) { });
 
 						rMsg['mileage'] = mileageReward;
 						rMsg['total_mileage'] = mileage;
@@ -927,7 +797,7 @@ suite('# c2g-handler unit test.', function () {
 						var exp = info['exp'];
 						var expReward = msg['dist'] * 0.1;
 						var bonusExp = expReward * (characterExpCoefficient + houseMatchCardExpCoefficient + ghostCardExpCoefficient + costumeExpCoefficient);
-						var levelTable = dataMgr.getLevelData(lv);
+						var levelTable = DATA.getLevelData(lv);
 
 						var itemBonusExp = 1;
 
@@ -941,7 +811,7 @@ suite('# c2g-handler unit test.', function () {
 							while (levelTable['Exp'] <= exp) {
 								exp -= levelTable['Exp'];
 								++lv;					
-								levelTable = dataMgr.getLevelData(lv);
+								levelTable = DATA.getLevelData(lv);
 							}
 						}
 
@@ -950,8 +820,8 @@ suite('# c2g-handler unit test.', function () {
 						rMsg['bonus_exp'] = bonusExp;
 						rMsg['total_exp'] = exp;
 
-						mysqlMgr.updateExp(id, exp, function (res) {
-							mysqlMgr.updateCoin(id, coin, function (res) { 
+						MYSQL.updateExp(id, exp, function (res) {
+							MYSQL.updateCoin(id, coin, function (res) { 
 								lastCall(); 
 							});
 						});
@@ -962,25 +832,7 @@ suite('# c2g-handler unit test.', function () {
 				function lastCall() {
 					write(response, toStream(rMsg));
 
-					mysqlMgr.updateUserLog(id, rMsg['total_score'], msg['dist'], msg['enemy_kill'], function (res) {});
-
-					var UserGamePlay = build.UserGamePlay;
-					var req = new UserGamePlay();
-
-					req['k_id'] = kId;
-					req['selected_character'] = info['selected_character'];
-					req['score'] = msg['score'];
-					req['enemy_kill'] = msg['enemy_kill'];
-					req['dist'] = msg['dist'];
-					req['play_time'] = msg['play_time'];
-					req['shield'] = info['item_1'];
-					req['item_last'] = info['item_2'];
-					req['ghostify'] = info['item_3'];
-					req['immortal'] = info['item_4'];
-					req['exp_boost'] = info['item_5'];
-					req['random'] = info['random'];
-
-					request(req);
+					MYSQL.updateUserLog(id, rMsg['total_score'], msg['dist'], msg['enemy_kill'], function (res) {});
 					done();
 				}
 			};
@@ -989,37 +841,38 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		test('should be equal to id of GameResult', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# SendEnergyHandler', function () {
 		setup(function (done) {
 			data = new build.SendEnergy();	
+			data['k_id'] = test_1.name;
 			data['receiver_k_id'] = test_2.name;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.SendEnergyReply());
 
-			handlerMock = function SendEnergyHandler(response, data, session_id, done){
+			handlerMock = function SendEnergyHandler(response, data, done){
 				var msg = build.SendEnergy.decode(data);
 				var rMsg = new build.SendEnergyReply();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var senderId = 0;
 				var receiverId = 0;
 
 				firstCall();
 
-				// Updates session then verifies kId
+				// Calls loadUser SP then verifies senderId
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
-
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[SendEnergy] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+					MYSQL.loadUser(kId, function (res) {
+						senderId = res['res'];
+					
+						if (senderId <= 0) {
+							LOG.addLog('ERROR', '[SendEnergy] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -1029,13 +882,13 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies senderId
+				// Calls loadUser SP then verifies receiverId
 				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						senderId = res['res'];
-					
-						if (senderId <= 0) {
-							logMgr.addLog('ERROR', '[SendEnergy] Invalid account (' + kId + ')');
+					MYSQL.loadUser(msg['receiver_k_id'], function(res) {
+						receiverId = res['res'];
+
+						if (receiverId <= 0) {
+							LOG.addLog('ERROR', '[SendEnergy] Invalid account (' + msg['receiver_k_id'] + ')');
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
@@ -1046,29 +899,12 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies receiverId
-				function call_3() {
-					mysqlMgr.loadUser(msg['receiver_k_id'], function(res) {
-						receiverId = res['res'];
-
-						if (receiverId <= 0) {
-							logMgr.addLog('ERROR', '[SendEnergy] Invalid account (' + msg['receiver_k_id'] + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_4();
-					});
-				}
-
 				// Calls loadMileageAndDraw SP then fulfills rMsg
-				function call_4() {
-					mysqlMgr.loadMileageAndDraw(senderId, function (res) {
+				function call_3() {
+					MYSQL.loadMileageAndDraw(senderId, function (res) {
 						var _res = res;
 
-						mysqlMgr.addEnergy(senderId, receiverId, 1, function(res) { });
+						MYSQL.addEnergy(senderId, receiverId, 1, function(res) { });
 							
 						var mileage = _res['mileage'] + 10;
 						var draw = _res['draw'];
@@ -1076,13 +912,13 @@ suite('# c2g-handler unit test.', function () {
 						if (mileage >= 100) {
 							++draw;
 							mileage -= 100;
-							mysqlMgr.updateDraw(senderId, draw, function (res) { });
+							MYSQL.updateDraw(senderId, draw, function (res) { });
 						}
 
 						rMsg['mileage'] = mileage;
 						rMsg['draw'] = draw;
 
-						mysqlMgr.updateMileage(senderId, mileage, function (res) { 
+						MYSQL.updateMileage(senderId, mileage, function (res) { 
 							lastCall(); 
 						});
 					});
@@ -1092,26 +928,27 @@ suite('# c2g-handler unit test.', function () {
 				function lastCall () {
 					write(response, toStream(rMsg));
 					done();
-				};
+				}
 			};
 
 			done();
 		});
 
 		test('should be equal to id of SendEnergyReply', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# BuyOrUpgradeCharacterHandler', function () {
 		setup(function (done) {
 			data = new build.BuyOrUpgradeCharacter();	
+			data['k_id'] = test_1.name;
 			data['character'] = 2;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.BuyOrUpgradeCharacterReply());
 
-			handlerMock = function BuyOrUpgradeCharacterHandler(response, data, session_id, done, idx){
+			handlerMock = function BuyOrUpgradeCharacterHandler(response, data, done, idx){
 				var msg = build.BuyOrUpgradeCharacter.decode(data);
 				var rMsg = new build.BuyOrUpgradeCharacterReply();
 				var sysMsg = new build.SystemMessage();
@@ -1121,7 +958,7 @@ suite('# c2g-handler unit test.', function () {
 				var lv = 0;
 				var userBriefInfo = null;
 				var id = 0;
-				var kId = '';
+				var kId = msg['k_id'];
 				var coin = 0;
 				var cash = 0;
 				var priceCoin = 0;
@@ -1129,16 +966,16 @@ suite('# c2g-handler unit test.', function () {
 
 				firstCall();
 
-				// Updates session then verifies kId
+				// Verifies kId then calls loadUser SP
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
+					MYSQL.loadUser(kId, function (res) {
+						id = res['res'];
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[BuyOrUpgradeCharacter] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (id <= 0) {
+							LOG.addLog('ERROR', '[BuyOrUpgradeCharacter] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
-							done();
+							done()
 							return ;
 						}
 
@@ -1146,62 +983,45 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Verifies kId then calls loadUser SP
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						id = res['res'];
-
-						if (id <= 0) {
-							logMgr.addLog('ERROR', '[BuyOrUpgradeCharacter] Invalid account (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_3();
-					});
-				}
-
 				// Calls selectCharacters SP then Verifies character 
-				function call_3() {
-					mysqlMgr.selectCharacters(id, function (res) {
+				function call_2() {
+					MYSQL.selectCharacters(id, function (res) {
 						character = msg['character'];
 						lv = res['_' + character];
 						
 						if (lv === 5 || lv === 10 || lv === 15) {
-							logMgr.addLog('SYSTEM', '[BuyOrUpgradeCharacter] wrong approach detected (' + kId + ')');
+							LOG.addLog('SYSTEM', '[BuyOrUpgradeCharacter] wrong approach detected (' + kId + ')');
 							sysMsg['res'] = build.SystemMessage.Result['WRONG_APPROACH'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
 						}
 
-						nextCharacterData = dataMgr.getCharacterDataByIdAndLv(character, lv + 1);
+						nextCharacterData = DATA.getCharacterDataByIdAndLv(character, lv + 1);
 
-						if (character <= 0  || dataMgr.characterData.length < character) {
-							logMgr.addLog('ERROR', '[BuyOrUpgradeCharacter] Invalid character (' + kId + ', ' + character + ')');
+						if (character <= 0  || DATA.characterData.length < character) {
+							LOG.addLog('ERROR', '[BuyOrUpgradeCharacter] Invalid character (' + kId + ', ' + character + ')');
 							sysMsg['res'] = build.SystemMessage.Result['NO_MATHCH_WITH_DB'];
 							write(response, toStream(sysMsg));
 							done();
 							return;
 						}
 
-						if (dataMgr.characterData[character].length <= lv) {
-							logMgr.addLog('ERROR', '[BuyOrUpgradeCharacter] The character is fully upgraded. (' + kId + ')');
+						if (DATA.characterData[character].length <= lv) {
+							LOG.addLog('ERROR', '[BuyOrUpgradeCharacter] The character is fully upgraded. (' + kId + ')');
 							sysMsg['res'] = build.SystemMessage.Result['FULLY_UPGRADED'];
 							write(response, toStream(sysMsg));
 							done();
 							return;
 						}
 
-						call_4();
+						call_3();
 					});
 				}
 
 				// Calls loadUserBriefInfo SP then computes cost
-				function call_4() {
-					mysqlMgr.loadUserBriefInfo(id, function (res) {
+				function call_3() {
+					MYSQL.loadUserBriefInfo(id, function (res) {
 						userBriefInfo = res;
 						priceCoin = nextCharacterData['Price_Coin'];
 						priceCash = nextCharacterData['Price_Cash'];
@@ -1209,7 +1029,7 @@ suite('# c2g-handler unit test.', function () {
 						cash = userBriefInfo['cash'];
 
 						if (0 < priceCoin && coin < priceCoin) {
-							logMgr.addLog('SYSTEM', '[BuyOrUpgradeCharacter] Not enough coin (' + kId + ')');
+							LOG.addLog('SYSTEM', '[BuyOrUpgradeCharacter] Not enough coin (' + kId + ')');
 							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
 							write(response, toStream(sysMsg));
 							done();
@@ -1217,28 +1037,28 @@ suite('# c2g-handler unit test.', function () {
 						}
 
 						if (0 < priceCash && cash < priceCash) {
-							logMgr.addLog('SYSTEM', '[BuyOrUpgradeCharacter] Not enough cash (' + kId + ')');
+							LOG.addLog('SYSTEM', '[BuyOrUpgradeCharacter] Not enough cash (' + kId + ')');
 							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_CASH'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
 						}
 
-						call_5();
+						call_4();
 					});
 				}
 
 				// Calls addCharacter SP then verifies lv 
 				// after that fullfills BuyOrUpgradeCharacterReply
-				function call_5() {
-					mysqlMgr.addCharacter(id, character, function (res) {
+				function call_4() {
+					MYSQL.addCharacter(id, character, function (res) {
 						var newLv = res['lv'];
 						var mileage = userBriefInfo['mileage'];
 						var draw = userBriefInfo['draw'];
 
 						if (newLv === 1) {
 							mileage += 30;
-							mysqlMgr.createCharacterBasicCostumes(id, character, function (res) {});
+							MYSQL.createCharacterBasicCostumes(id, character, function (res) {});
 						} else {
 							mileage += 10;
 						}
@@ -1246,10 +1066,10 @@ suite('# c2g-handler unit test.', function () {
 						if (mileage >= 100) {
 							++draw;
 							mileage -= 100;
-							mysqlMgr.updateDraw(id, draw, function (res) { });
+							MYSQL.updateDraw(id, draw, function (res) { });
 						}
 
-						mysqlMgr.updateMileage(id, mileage, function (res) { });
+						MYSQL.updateMileage(id, mileage, function (res) { });
 
 						rMsg['mileage'] = mileage;
 						rMsg['draw'] = draw;
@@ -1259,16 +1079,16 @@ suite('# c2g-handler unit test.', function () {
 						rMsg['cash'] = cash - priceCash;
 
 						if (0 < priceCoin && 0 < priceCash) {
-							mysqlMgr.updateCoin(id, rMsg['coin'], function (res) { });
-							mysqlMgr.updateCash(id, rMsg['cash'], function (res) {
+							MYSQL.updateCoin(id, rMsg['coin'], function (res) { });
+							MYSQL.updateCash(id, rMsg['cash'], function (res) {
 								lastCall(); 
 							});
 						} else if (0 < priceCoin) {
-							mysqlMgr.updateCoin(id, rMsg['coin'], function (res) {
+							MYSQL.updateCoin(id, rMsg['coin'], function (res) {
 								lastCall();
 							});
 						} else if (0 < priceCash) {
-							mysqlMgr.updateCash(id, rMsg['cash'], function (res) {
+							MYSQL.updateCash(id, rMsg['cash'], function (res) {
 								lastCall();
 							});
 						} else {
@@ -1283,7 +1103,7 @@ suite('# c2g-handler unit test.', function () {
 					if (++idx === 5) {
 						done();
 					}
-				};
+				}
 			};
 
 			done();
@@ -1291,7 +1111,7 @@ suite('# c2g-handler unit test.', function () {
 
 		test('should be equal to id of BuyOrUpgradeCharacterReply', function (done) {
 			for (var i = 0; i < 5; ++i) {
-				handlerMock(response, data, test_1.sessionId, done, i);
+				handlerMock(response, data, done, i);
 			}
 		});
 	});
@@ -1299,31 +1119,32 @@ suite('# c2g-handler unit test.', function () {
 	suite('# RequestEvolutionHandler', function () {
 		setup(function (done) {
 			data = new build.RequestEvolution();	
+			data['k_id'] = test_1.name;
 			data['receiver_k_id'] = test_2.name;
 			data['character_id'] = 2;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.RequestEvolutionReply());
 
-			handlerMock = function RequestEvolutionHandler(response, data, session_id, done){
+			handlerMock = function RequestEvolutionHandler(response, data, done){
 				var msg = build.RequestEvolution.decode(data);
 				var rMsg = new build.RequestEvolutionReply();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var senderId = 0;
 				var receiverId = 0;
 
 				firstCall();
 
-				// Updates session then verifies kId
+				// Calls loadUser SP then verifies senderId
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
+					MYSQL.loadUser(kId, function (res) {
+						senderId = res['res'];	
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[RequestEvolution] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (senderId <= 0) {
+							LOG.addLog('ERROR', '[RequestEvolution] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -1333,14 +1154,22 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies senderId
+				// Calls selectCharacters SP then verifies character
 				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						senderId = res['res'];	
+					MYSQL.selectCharacters(senderId, function(res) {
+						var character = res['_' + msg['character_id']];
 
-						if (senderId <= 0) {
-							logMgr.addLog('ERROR', '[RequestEvolution] Invalid account (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
+						if (msg['character_id'] <= 0 || DATA.characterData.length < msg['character_id']) {
+							LOG.addLog('ERROR', 'Character Range Over (' + kId + ', ' + 'character : ' + msg['character_id'] + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_CHARACTER'];
+							write(response, toStream(sysMsg));
+							done();
+							return ;
+						}
+						
+						if (!(character === 5 || character === 10 || character === 15)) {
+							LOG.addLog('SYSTEM', '[RequestEvolution] wrong approach detected (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['WRONG_APPROACH'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -1350,22 +1179,14 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls selectCharacters SP then verifies character
+				// Calls loadUser SP then verifies receiverId
 				function call_3() {
-					mysqlMgr.selectCharacters(senderId, function(res) {
-						var character = res['_' + msg['character_id']];
+					MYSQL.loadUser(msg['receiver_k_id'], function(res) {
+						receiverId = res['res'];
 
-						if (msg['character_id'] <= 0 || dataMgr.characterData.length < msg['character_id']) {
-							logMgr.addLog('ERROR', 'Character Range Over (' + kId + ', ' + 'character : ' + msg['character_id'] + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_CHARACTER'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-						
-						if (!(character === 5 || character === 10 || character === 15)) {
-							logMgr.addLog('SYSTEM', '[RequestEvolution] wrong approach detected (' + k_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['WRONG_APPROACH'];
+						if (receiverId <= 0) {
+							LOG.addLog('ERROR', '[RequestEvolution] Invalid account (' + msg['receiver_k_id'] + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -1375,32 +1196,15 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies receiverId
-				function call_4() {
-					mysqlMgr.loadUser(msg['receiver_k_id'], function(res) {
-						receiverId = res['res'];
-
-						if (receiverId <= 0) {
-							logMgr.addLog('ERROR', '[RequestEvolution] Invalid account (' + msg['receiver_k_id'] + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_5();
-					});
-				}
-
 				// Calls loadCoin SP then verifies coin
 				// after that fulfills rMsg
-				function call_5() {
-					mysqlMgr.loadCoin(senderId, function (res) {
+				function call_4() {
+					MYSQL.loadCoin(senderId, function (res) {
 						var coin = res['coin'];
 						var evolveRequestCost = 1000;
 
 						if (coin < evolveRequestCost) {
-							logMgr.addLog('SYSTEM', '[RequestEvolution] Not enough coin (' + k_id + ')');
+							LOG.addLog('SYSTEM', '[RequestEvolution] Not enough coin (' + kId + ')');
 							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
 							write(response, toStream(sysMsg));
 							done();
@@ -1411,8 +1215,8 @@ suite('# c2g-handler unit test.', function () {
 
 						rMsg['coin'] = restCoin;
 						
-						mysqlMgr.updateCoin(senderId, restCoin, function (res) { });
-						mysqlMgr.addEvolution(senderId, receiverId, msg['character_id'], function (res) { 
+						MYSQL.updateCoin(senderId, restCoin, function (res) { });
+						MYSQL.addEvolution(senderId, receiverId, msg['character_id'], function (res) { 
 							lastCall(); 
 						});
 					});
@@ -1429,38 +1233,49 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		test('should be equal to id of RequestEvolutionReply', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# PurchaseHouseHandler', function () {
 		setup(function (done) {
 			data = new build.PurchaseHouse();	
+			data['k_id'] = test_1.name;
 			data['house_id'] = 2;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.PurchaseHouseReply());
 
-			handlerMock = function PurchaseHouseHandler(response, data, session_id, done) {
+			handlerMock = function PurchaseHouseHandler(response, data, done) {
 				var msg = build.PurchaseHouse.decode(data);
 				var rMsg = new build.PurchaseHouseReply();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
 				var house = 0;
 				var houseData = null;
 
 				firstCall();
 
-				// Updates session then verifies kId
+				// Calls loadUser SP then verifies id, house_id
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
+					MYSQL.loadUser(kId, function (res) {
+						id = res['res'];
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[PurchaseHouse] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (id <= 0) {
+							LOG.addLog('ERROR', '[PurchaseHouse] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
+							write(response, toStream(sysMsg));
+							done();
+							return ;
+						}
+
+						houseData = DATA.getHouseDataById(msg['house_id']);
+
+						if (houseData === false) {
+							LOG.addLog('ERROR', '[PurchaseHouse] Invalid house id');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_HOUSE_ID'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -1470,53 +1285,26 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies id, house_id
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						id = res['res'];
-
-						if (id <= 0) {
-							logMgr.addLog('ERROR', '[PurchaseHouse] Invalid account (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						houseData = dataMgr.getHouseDataById(msg['house_id']);
-
-						if (houseData === false) {
-							logMgr.addLog('ERROR', '[PurchaseHouse] Invalid house id');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_HOUSE_ID'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_3();
-					});
-				}
-
 				// Calls loadGhostHouse SP then verifies house
-				function call_3() {			
-					mysqlMgr.loadGhostHouse(id, function (res) {
+				function call_2() {			
+					MYSQL.loadGhostHouse(id, function (res) {
 						house = res['_' + msg['house_id']];			
 
 						if (house !== -1) {
-							logMgr.addLog('ERROR', '[PurchaseHouse] This user(' + kId + ') already has this house');
+							LOG.addLog('ERROR', '[PurchaseHouse] This user(' + kId + ') already has this house');
 							sysMsg['res'] = build.SystemMessage.Result['ALREADY_HAVING'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
 						}
 					
-						call_4();
+						call_3();
 					});
 				}
 
 				// Calls loadUserBriefInfo then fulfills rMsg
-				function call_4() {
-					mysqlMgr.loadUserBriefInfo(id, function (res) {
+				function call_3() {
+					MYSQL.loadUserBriefInfo(id, function (res) {
 						var userBriefInfo = res;
 						var coin = userBriefInfo['coin'];
 						var cash = userBriefInfo['cash'];
@@ -1525,7 +1313,7 @@ suite('# c2g-handler unit test.', function () {
 						var priceCash = houseData['Price_Cash'];
 
 						if (0 < priceCoin && coin < priceCoin) {
-							logMgr.addLog('ERROR', '[PurchaseHouse] user(' + kId + ') not enough coin');
+							LOG.addLog('ERROR', '[PurchaseHouse] user(' + kId + ') not enough coin');
 							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
 							write(response, toStream(sysMsg));
 							done();
@@ -1533,7 +1321,7 @@ suite('# c2g-handler unit test.', function () {
 						} 
 						
 						if (0 < priceCash && cash < priceCash) {
-							logMgr.addLog('ERROR', '[PurchaseHouse] user(' + kId + ') not enough cash');
+							LOG.addLog('ERROR', '[PurchaseHouse] user(' + kId + ') not enough cash');
 							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_CASH'];
 							write(response, toStream(sysMsg));
 							done();
@@ -1545,14 +1333,14 @@ suite('# c2g-handler unit test.', function () {
 						rMsg['cash'] = cash - priceCash;
 						
 						if (0 < priceCoin) {
-							mysqlMgr.updateCoin(id, rMsg['coin'], function (res) { });
+							MYSQL.updateCoin(id, rMsg['coin'], function (res) { });
 						}
 
 						if (0 < priceCash) {
-							mysqlMgr.updateCash(id, rMsg['cash'], function (res) { });
+							MYSQL.updateCash(id, rMsg['cash'], function (res) { });
 						}
 						
-						mysqlMgr.purchaseHouse(id, msg['house_id'], function (res) { 
+						MYSQL.purchaseHouse(id, msg['house_id'], function (res) { 
 							lastCall(); 
 						});
 					});
@@ -1569,37 +1357,54 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		test('should be equal to id of PurchaseHouseReply', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite.skip('# EquipGhostHandler', function () {
 		setup(function (done) {
 			data = new build.EquipGhost();	
+			data['k_id'] = test_1.name;
 			data['ghost_id'] = 1;
 			data['house_id'] = 2;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.EquipGhostReply());
 
-			handleMock = function EquipGhostHandler(response, data, session_id, done) {
+			handleMock = function EquipGhostHandler(response, data, done) {
 				var msg = build.EquipGhost.decode(data);
 				var rMsg = new build.EquipGhostReply();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
 
 				firstCall();
 
-				// Updates session then verifies kId
+				// Calls loadUser SP then verifies id, ghost_id, house_id
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
+					MYSQL.loadUser(kId, function (res) {
+						id = res['res'];
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[EquipGhost] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (id <= 0) {
+							LOG.addLog('ERROR', '[EquipGhost] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
+							write(response, toStream(sysMsg));
+							done();
+							return ;
+						}
+
+						if (msg['ghost_id'] <= 0 || DATA.ghostData.length < msg['ghost_id']) {
+							LOG.addLog('ERROR', '[EquipGhost] Invalid ghost ID from (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_GHOST'];
+							write(response, toStream(sysMsg));
+							done();
+							return ;
+						}
+
+						if (msg['house_id'] <= 0 || DATA.houseData.length < msg['house_id']) {
+							LOG.addLog('ERROR', '[EquipGhost] Invalid house number from (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_HOUSE_ID'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -1609,30 +1414,14 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies id, ghost_id, house_id
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						id = res['res'];
+				// Calls loadGhostHouse SP then verifies house
+				function call_2() {			
+					MYSQL.loadGhostHouse(id, function (res) {
+						var house = res['_' + msg['house_id']];
 
-						if (id <= 0) {
-							logMgr.addLog('ERROR', '[EquipGhost] Invalid account (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						if (msg['ghost_id'] <= 0 || dataMgr.ghostData.length < msg['ghost_id']) {
-							logMgr.addLog('ERROR', '[EquipGhost] Invalid ghost ID from (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_GHOST'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						if (msg['house_id'] <= 0 || dataMgr.houseData.length < msg['house_id']) {
-							logMgr.addLog('ERROR', '[EquipGhost] Invalid house id from (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_HOUSE_ID'];
+						if (house === -1) {
+							LOG.addLog('ERROR', '[EquipGhost] This user(' + kId + ') trying to equip a ghost on invalid house');
+							sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -1642,30 +1431,13 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadGhostHouse SP then verifies house
-				function call_3() {			
-					mysqlMgr.loadGhostHouse(id, function (res) {
-						var house = res['_' + msg['house_id']];
-
-						if (house === -1) {
-							logMgr.addLog('ERROR', '[EquipGhost] This user(' + kId + ') trying to equip a ghost on closed house');
-							sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_4();
-					});
-				}
-
 				// Calls loadGhosts SP then verifies ghost
-				function call_4() {
-					mysqlMgr.loadGhosts(id, function (res) {
+				function call_3() {
+					MYSQL.loadGhosts(id, function (res) {
 						var ghost = res['_' + msg['ghost_id']];
 
 						if (ghost <= 0) {
-							logMgr.addLog('ERROR', '[EquipGhost] This user(' + kId + ') does not have this ghost');
+							LOG.addLog('ERROR', '[EquipGhost] This user(' + kId + ') does not have this ghost');
 							sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 							write(response, toStream(sysMsg));
 							done();
@@ -1681,7 +1453,7 @@ suite('# c2g-handler unit test.', function () {
 
 				// Sends rMsg to client
 				function lastCall() {
-					mysqlMgr.setGhostTo(id, msg['ghost_id'], msg['house_id'], function (res) {
+					MYSQL.setGhostTo(id, msg['ghost_id'], msg['house_id'], function (res) {
 						write(response, toStream(rMsg));
 						done();
 					});
@@ -1692,36 +1464,45 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		test('should be equal to id of EquipGhostReply', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite.skip('# UnequipGhostHandler', function () {
 		setup(function (done) {
 			data = new build.UnequipGhost();	
+			data['k_id'] = test_1.name;
 			data['house_id'] = 2;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.UnequipGhostReply());
 
-			handlerMock = function UnequipGhostHandler(response, data, session_id, done) {
+			handlerMock = function UnequipGhostHandler(response, data, done) {
 				var msg = build.UnequipGhost.decode(data);
 				var rMsg = new build.UnequipGhostReply();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
 
 				firstCall();
 
-				// Updates session then verifies kId
+				// Calls loadUser SP then verifies id, house_id
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
+					MYSQL.loadUser(kId, function (res) {
+						id = res['res'];
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[UnequipGhost] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (id <= 0) {
+							LOG.addLog('ERROR', '[UnequipGhost] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
+							write(response, toStream(sysMsg));
+							done();
+							return ;
+						}
+
+						if (msg['house_id'] <= 0 || DATA.houseData.length < msg['house_id']) {
+							LOG.addLog('ERROR', '[UnequipGhost] Invalid house number from (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_HOUSE_ID'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -1731,38 +1512,13 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies id, house_id
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						id = res['res'];
-
-						if (id <= 0) {
-							logMgr.addLog('ERROR', '[UnequipGhost] Invalid account (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						if (msg['house_id'] <= 0 || dataMgr.houseData.length < msg['house_id']) {
-							logMgr.addLog('ERROR', '[UnequipGhost] Invalid house number from (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_HOUSE_ID'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_3();
-					});
-				}
-
 				// Calls loadGhostHouse SP then verifies house
-				function call_3() {
-					mysqlMgr.loadGhostHouse(id, function (res) {
+				function call_2() {
+					MYSQL.loadGhostHouse(id, function (res) {
 						var house = res['_' + msg['house_id']];
 
 						if (house === -1) {
-							logMgr.addLog('ERROR', '[UnequipGhost] This user(' + kId + ') trying to unequip a ghost from closed house');
+							LOG.addLog('ERROR', '[UnequipGhost] This user(' + kId + ') trying to unequip a ghost from invalid house');
 							sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 							write(response, toStream(sysMsg));
 							done();
@@ -1777,7 +1533,7 @@ suite('# c2g-handler unit test.', function () {
 
 				// Sends rMsg to client
 				function lastCall() {
-					mysqlMgr.removeGhostFrom(id, msg['house_id'], function (res) {
+					MYSQL.removeGhostFrom(id, msg['house_id'], function (res) {
 						write(response, toStream(rMsg));
 						done();
 					});
@@ -1788,37 +1544,38 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		test('should be equal to id of UnequipGhostReply', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# BuyItemHandler', function () {
 		setup(function (done) {
 			data = new build.BuyItem();	
+			data['k_id'] = test_1.name;
 			data['item'] = 1;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.BuyItemReply());
 
-			handlerMock = function BuyItemHandler(response, data, session_id, done){
+			handlerMock = function BuyItemHandler(response, data, done){
 				var msg = build.BuyItem.decode(data);
 				var BuyItemReply = build.BuyItemReply;
 				var rMsg = new BuyItemReply();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
 
 				firstCall();
 				
-				// Updates session then verifies kId
+				// Calls loadUser SP then verifies id
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
+					MYSQL.loadUser(kId, function (res) {
+						id = res['res'];
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[BuyItem] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (id <= 0) {
+							LOG.addLog('ERROR', '[BuyItem] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -1828,32 +1585,15 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies id
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						id = res['res'];
-
-						if (id <= 0) {
-							logMgr.addLog('ERROR', '[BuyItem] Invalid account (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_3();
-					});
-				}
-
 				// Fulfills rMsg
-				function call_3() {
-					mysqlMgr.loadUserBriefInfo(id, function(res) {
+				function call_2() {
+					MYSQL.loadUserBriefInfo(id, function(res) {
 						var coin = res['coin'];
 						var itemId = msg['item'];
-						var itemData = dataMgr.getItemDataById(itemId);
+						var itemData = DATA.getItemDataById(itemId);
 
 						if (itemId < build.BuyItem.Limit['MIN']	|| build.BuyItem.Limit['MAX'] < itemId) {
-							logMgr.addLog('ERROR', '[BuyItem] Invalid item (' + kId + ', ' + itemId + ')');
+							LOG.addLog('ERROR', '[BuyItem] Invalid item (' + kId + ', ' + itemId + ')');
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_ITEM'];
 							write(response, toStream(sysMsg));
 							done();
@@ -1863,7 +1603,7 @@ suite('# c2g-handler unit test.', function () {
 						var priceCoin = itemData['Price_Coin'];
 
 						if (coin < priceCoin) {
-							logMgr.addLog('SYSTEM', '[BuyItem] Not enough coin (' + kId + ')');
+							LOG.addLog('SYSTEM', '[BuyItem] Not enough coin (' + kId + ')');
 							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
 							write(response, toStream(sysMsg));
 							done();
@@ -1876,10 +1616,10 @@ suite('# c2g-handler unit test.', function () {
 						if (mileage >= 100) {
 							++draw;
 							mileage -= 100;
-							mysqlMgr.updateDraw(id, draw, function (res) { });
+							MYSQL.updateDraw(id, draw, function (res) { });
 						}
 
-						mysqlMgr.updateMileage(id, mileage, function (res) { });
+						MYSQL.updateMileage(id, mileage, function (res) { });
 
 						rMsg['mileage'] = mileage;
 						rMsg['draw'] = draw;
@@ -1888,26 +1628,26 @@ suite('# c2g-handler unit test.', function () {
 						if (itemId < build.BuyItem.Limit['MAX']) {
 							rMsg['item'] = msg['item'];
 
-							mysqlMgr.updateItem(id, 1, itemData['ID'], function (res) { 
-								mysqlMgr.updateCoin(id, rMsg['coin'], function (res) {
+							MYSQL.updateItem(id, 1, itemData['ID'], function (res) { 
+								MYSQL.updateCoin(id, rMsg['coin'], function (res) {
 									lastCall();
 								}); 
 							});
 						} else {
-							var length = dataMgr.itemData.length;
+							var length = DATA.itemData.length;
 							var itemId = Math.floor(Math.random() * length) + 1;
-							var itemData = dataMgr.getItemDataById(itemId);
+							var itemData = DATA.getItemDataById(itemId);
 														
 							rMsg['item'] = itemData['ID'];
 							
-							mysqlMgr.updateRandom(id, itemData['ID'], function (res) {
+							MYSQL.updateRandom(id, itemData['ID'], function (res) {
 								if (res['_random'] !== 0) {
 									rMsg['coin'] -= (priceCoin/2);								
 								} else {
 									rMsg['coin'] -= priceCoin;
 								}
 
-								mysqlMgr.updateCoin(id, rMsg['coin'], function (res) {
+								MYSQL.updateCoin(id, rMsg['coin'], function (res) {
 									lastCall();
 								});
 							});
@@ -1919,31 +1659,32 @@ suite('# c2g-handler unit test.', function () {
 				function lastCall () {
 					write(response, toStream(rMsg));
 					done();
-				};
+				}
 			};
 
 			done();
 		});
 
 		test('should be equal to id of BuyItemReply', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# BuyCostumeHandler', function () {
 		setup(function (done) {
 			data = new build.BuyCostume();	
+			data['k_id'] = test_1.name;
 			data['costume_id'] = 15;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.BuyCostumeReply());
 
-			handlerMock = function BuyCostumeHandler(response, data, session_id, done) {
+			handlerMock = function BuyCostumeHandler(response, data, done) {
 				var msg = build.BuyCostume.decode(data);
 				var rMsg = new build.BuyCostumeReply();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
 				var userBriefInfo = null;
 				var costumeData = null;
@@ -1952,59 +1693,42 @@ suite('# c2g-handler unit test.', function () {
 
 				firstCall();
 
-				// Updates session then verifies kId
-				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
-
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[BuyCostume] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_2();
-					});
-				}
-
 				// Calls loadUser SP then verifies id, coin, priceCoin, cash, priceCash
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
+				function firstCall() {
+					MYSQL.loadUser(kId, function (res) {
 						id = res['res'];
 
 						if (id <= 0) {
-							logMgr.addLog('ERROR', '[BuyCostume] Invalid account (' + kId + ')');
+							LOG.addLog('ERROR', '[BuyCostume] Invalid account (' + kId + ')');
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
 						}
 
-						if (msg['costume_id'] <= 0 || dataMgr.costumeData.length <= msg['costume_id']) {
-							logMgr.addLog('ERROR', '[BuyCostume] Invalid costume id');
+						if (msg['costume_id'] <= 0 || DATA.costumeData.length <= msg['costume_id']) {
+							LOG.addLog('ERROR', '[BuyCostume] Invalid costume id');
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_COSTUME_ID'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
 						}
 
-						costumeData = dataMgr.getCostumeDataById(msg['costume_id']);
+						costumeData = DATA.getCostumeDataById(msg['costume_id']);
 						priceCash = costumeData['Price_Cash'];
 						priceCoin = costumeData['Price_Coin'];
 
-						call_3();
+						call_2();
 					});
 				}
 
 				// Calls loadUserBriefInfo
-				function call_3() {		
-					mysqlMgr.loadUserBriefInfo(id, function (res) {
+				function call_2() {		
+					MYSQL.loadUserBriefInfo(id, function (res) {
 						userBriefInfo = res;
 
 						if (0 < priceCoin && userBriefInfo['coin'] < priceCoin) {
-							logMgr.addLog('SYSTEM', '[BuyCostume] Not enough coin (' + kId + ')');
+							LOG.addLog('SYSTEM', '[BuyCostume] Not enough coin (' + kId + ')');
 							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
 							write(response, toStream(sysMsg));
 							done();
@@ -2012,20 +1736,20 @@ suite('# c2g-handler unit test.', function () {
 						}
 
 						if (0 < priceCash && userBriefInfo['cash'] < priceCash) {
-							logMgr.addLog('SYSTEM', '[BuyCostume] Not enough cash (' + kId + ')');
+							LOG.addLog('SYSTEM', '[BuyCostume] Not enough cash (' + kId + ')');
 							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_CASH'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
 						}
 
-						call_4();
+						call_3();
 					});		
 				}
 
 				// Calls onCostume SP then fulfills rMsg
-				function call_4() {
-					mysqlMgr.onCostume(id, msg['costume_id'], function (res) {
+				function call_3() {
+					MYSQL.onCostume(id, msg['costume_id'], function (res) {
 						rMsg['costume_id'] = msg['costume_id'];
 
 						rMsg['cash'] = userBriefInfo['cash'] - priceCash;
@@ -2037,25 +1761,25 @@ suite('# c2g-handler unit test.', function () {
 						if (mileage >= 100) {
 							++draw;
 							mileage -= 100;
-							mysqlMgr.updateDraw(id, draw, function (res) { });
+							MYSQL.updateDraw(id, draw, function (res) { });
 						}
 						
 						rMsg['mileage'] = mileage;
 						rMsg['draw'] = draw;
 
-						mysqlMgr.updateMileage(id, mileage, function (res) { });
+						MYSQL.updateMileage(id, mileage, function (res) { });
 
 						if (0 < priceCoin && 0 < priceCash) {
-							mysqlMgr.updateCoin(id, rMsg['coin'], function (res) {});
-							mysqlMgr.updateCash(id, rMsg['cash'], function (res) { 
+							MYSQL.updateCoin(id, rMsg['coin'], function (res) {});
+							MYSQL.updateCash(id, rMsg['cash'], function (res) { 
 								lastCall(); 
 							});
 						} else if (0 < priceCoin) {
-							mysqlMgr.updateCoin(id, rMsg['coin'], function (res) { 
+							MYSQL.updateCoin(id, rMsg['coin'], function (res) { 
 								lastCall(); 
 							});
 						} else if (0 < priceCash) {
-							mysqlMgr.updateCash(id, rMsg['cash'], function (res) { 
+							MYSQL.updateCash(id, rMsg['cash'], function (res) { 
 								lastCall(); 
 							});
 						} else {
@@ -2068,32 +1792,33 @@ suite('# c2g-handler unit test.', function () {
 				function lastCall() {
 					write(response, toStream(rMsg));
 					done();
-				};
+				}
 			};
 
 			done();
 		});
 
 		test('should be equal to id of BuyCostumeReply', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# WearCostumeHandler', function () {
 		setup(function (done) {
 			data = new build.WearCostume();	
+			data['k_id'] = test_1.name;
 			data['costume_id'] = 15;
 			data['character_id'] = 2;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.WearCostumeReply());
 
-			handlerMock = function WearCostumeHandler(response, data, session_id, done) {
+			handlerMock = function WearCostumeHandler(response, data, done) {
 				var msg = build.WearCostume.decode(data);
 				var rMsg = new build.WearCostumeReply();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
 				var costumeData = null;
 				var costumeColumn = '';
@@ -2101,14 +1826,31 @@ suite('# c2g-handler unit test.', function () {
 
 				firstCall();
 
-				// Updates session then verifies kId
+				// Calls loadUser SP then verifies id
+				// after that verifies id, costume_id, character_id
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
+					MYSQL.loadUser(kId, function (res) {
+						id = res['res'];	
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[WearCostume] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (id <= 0) {
+							LOG.addLog('ERROR', '[WearCostume] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
+							write(response, toStream(sysMsg));
+							done();
+							return ;
+						}
+
+						if (msg['costume_id'] <= 0 || DATA.costumeData.length <= msg['costume_id']) {
+							LOG.addLog('ERROR', '[WearCostume] Invalid costume id');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_COSTUME_ID'];
+							write(response, toStream(sysMsg));
+							done();
+							return ;
+						}
+
+						if (msg['character_id'] <= 0 || DATA.characterData.length < msg['character_id']) {
+							LOG.addLog('ERROR', '[WearCostume] Invalid character id');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_CHARACTER'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -2118,31 +1860,16 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies id
-				// after that verifies id, costume_id, character_id
+				// Calls selectCostume SP then verifies costume
 				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						id = res['res'];	
+					MYSQL.selectCostumes(id, function (res) {
+						costumeData = DATA.getCostumeDataById(msg['costume_id']);
+						costumeColumn = '_' + costumeData['ID'];
+						costume = res[costumeColumn];
 
-						if (id <= 0) {
-							logMgr.addLog('ERROR', '[WearCostume] Invalid account (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						if (msg['costume_id'] <= 0 || dataMgr.costumeData.length <= msg['costume_id']) {
-							logMgr.addLog('ERROR', '[WearCostume] Invalid costume id');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_COSTUME_ID'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						if (msg['character_id'] <= 0 || dataMgr.characterData.length < msg['character_id']) {
-							logMgr.addLog('ERROR', '[WearCostume] Invalid character id');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_CHARACTER'];
+						if (costume === null || typeof costume === 'undefined') {
+							LOG.addLog('ERROR', '[WearCostume] This user (' + kId + ') does not have this costume(' + costume + ')');
+							sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -2152,31 +1879,12 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls selectCostume SP then verifies costume
-				function call_3() {
-					mysqlMgr.selectCostumes(id, function (res) {
-						costumeData = dataMgr.getCostumeDataById(msg['costume_id']);
-						costumeColumn = '_' + costumeData['ID'];
-						costume = res[costumeColumn];
-
-						if (costume === null || typeof costume === 'undefined') {
-							logMgr.addLog('ERROR', '[WearCostume] This user (' + kId + ') does not have this costume(' + costume + ')');
-							sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_4();
-					});
-				}
-
 				// Calls selectCharacters SP then verifies character
 				// after that fulfills rMsg
-				function call_4() {
-					mysqlMgr.selectCharacters(id, function (res) {
+				function call_3() {
+					MYSQL.selectCharacters(id, function (res) {
 						if (res['_' + msg['character_id']] === 0) {
-							logMgr.addLog('ERROR', '[WearCostume] This user  (' + kId + ') does not have this character(' + msg['character_id'] + ')');
+							LOG.addLog('ERROR', '[WearCostume] This user  (' + kId + ') does not have this character(' + msg['character_id'] + ')');
 							sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 							write(response, toStream(sysMsg));
 							done();
@@ -2188,7 +1896,7 @@ suite('# c2g-handler unit test.', function () {
 						procedure = 'updateCharacter' + E_Parts[costumeData['Costume_Type']];
 						rMsg['costume_id'] = msg['costume_id'];
 
-						mysqlMgr[procedure](id, msg['costume_id'], msg['character_id'], function (res) {
+						MYSQL[procedure](id, msg['costume_id'], msg['character_id'], function (res) {
 							lastCall();
 						});
 					});
@@ -2205,24 +1913,25 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		test('should be equal to id of WearCostumeReply', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# RequestBatonHandler', function () {
 		setup(function (done) {
 			data = new build.RequestBaton();	
+			data['k_id'] = test_1.name;
 			data['character_id'] = 3;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.RequestBatonReply());
 
-			handlerMock = function RequestBatonHandler(response, data, session_id, done){
+			handlerMock = function RequestBatonHandler(response, data, done){
 				var msg = build.RequestBaton.decode(data);
 				var rMsg = new build.RequestBatonReply();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
 				var selected = 0;
 				var character = msg['character_id'];
@@ -2233,14 +1942,14 @@ suite('# c2g-handler unit test.', function () {
 
 				firstCall();
 
-				// Updates session then verifies kId
+				// Calls loadUser SP then verifies id
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
+					MYSQL.loadUser(kId, function (res) {
+						id = res['res'];
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[RequestBaton] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (id <= 0) {
+							LOG.addLog('ERROR', '[RequestBaton] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -2250,40 +1959,50 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies id
+				// Calls loadSelectedCharacter SP then verifies character_id
 				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						id = res['res'];
-
-						if (id <= 0) {
-							logMgr.addLog('ERROR', '[RequestBaton] Invalid account (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
+					MYSQL.loadSelectedCharacter(id, function (res) {
+						selected = res['selected_character'];
 
 						call_3();
 					});
 				}
 
-				// Calls loadSelectedCharacter SP then verifies character_id
+				// Calls loadCash SP then verifies cost
 				function call_3() {
-					mysqlMgr.loadSelectedCharacter(id, function (res) {
-						selected = res['selected_character'];
+					MYSQL.loadCash(id, function (res) {
+						cash = res['cash'];
+
+						if (selected === character && cash < cashCost) {
+							LOG.addLog('ERROR', '[RequestBaton] not enough cash(' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_CASH'];
+							write(response, toStream(sysMsg));
+							done();
+							return ;
+						}
 
 						call_4();
 					});
 				}
 
-				// Calls loadCash SP then verifies cost
+				// Calls loadCoin SP then verifies coin
 				function call_4() {
-					mysqlMgr.loadCash(id, function (res) {
-						cash = res['cash'];
+					MYSQL.loadCoin(id, function (res) {
+						coin = res['coin'];
 
-						if (selected === character && cash < cashCost) {
-							logMgr.addLog('ERROR', '[RequestBaton] not enough cash(' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_CASH'];
+						if (selected === character) {
+							rMsg['coin'] = coin;
+							rMsg['cash'] = cash - cashCost;
+
+							MYSQL.updateCash(id, rMsg['cash'], function (res) {
+								lastCall();
+							});
+							return;
+						}
+
+						if (coin < coinCost) {
+							LOG.addLog('ERROR', '[RequestBaton] not enough coin(' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -2293,40 +2012,13 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadCoin SP then verifies coin
-				function call_5() {
-					mysqlMgr.loadCoin(id, function (res) {
-						coin = res['coin'];
-
-						if (selected === character) {
-							rMsg['coin'] = coin;
-							rMsg['cash'] = cash - cashCost;
-
-							mysqlMgr.updateCash(id, rMsg['cash'], function (res) {
-								lastCall();
-							});
-							return;
-						}
-
-						if (coin < coinCost) {
-							logMgr.addLog('ERROR', '[RequestBaton] not enough coin(' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['NOT_ENOUGH_COIN'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_6();
-					});
-				}
-
 				// Calls loadCharacter then verifies lv
-				function call_6() {
-					mysqlMgr.loadCharacter(id, character, function (res) {
+				function call_5() {
+					MYSQL.loadCharacter(id, character, function (res) {
 						var lv = res['lv'];
 
 						if (lv <= 0) {
-							logMgr.addLog('ERROR', '[RequestBaton] This user(' + kId + ') does not having this character(' + character + ')');
+							LOG.addLog('ERROR', '[RequestBaton] This user(' + kId + ') does not having this character(' + character + ')');
 							sysMsg['res'] = build.SystemMessage.Result['NOT_HAVING'];
 							write(response, toStream(sysMsg));
 							done();
@@ -2336,7 +2028,7 @@ suite('# c2g-handler unit test.', function () {
 						rMsg['coin'] = coin - coinCost;
 						rMsg['cash'] = cash;
 
-						mysqlMgr.updateCoin(id, rMsg['coin'], function (res) {
+						MYSQL.updateCoin(id, rMsg['coin'], function (res) {
 							lastCall();
 						});
 					});
@@ -2346,77 +2038,62 @@ suite('# c2g-handler unit test.', function () {
 				function lastCall () {
 					write(response, toStream(rMsg));
 					done();
-				};
+				}
 			};
 
 			done();
 		});
 
 		test('should be equal to id of RequestBatonReply', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# LoadPostboxHandler', function () {
 		setup(function (done) {
 			data = new build.LoadPostbox();	
+			data['k_id'] = test_2.name;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.Postbox());
 
-			handlerMock = function LoadPostboxHandler(response, data, session_id, done){
+			handlerMock = function LoadPostboxHandler(response, data, done){
 				var msg = build.LoadPostbox.decode(data);
 				var rMsg = new build.Postbox();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
-				var list = 0;
+				var list = [];
 				var nextCallTrigger = 0;
 
 				firstCall();
 
-				// Updates session then verifies kId
-				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
-
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[LoadPostbox] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_2();
-					});
-				}
-
 				// Calls loadUser SP then verifies id
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
+				function firstCall() {
+					MYSQL.loadUser(kId, function (res) {
 						id = res['res'];
 
+
 						if (id <= 0) {
-							logMgr.addLog('ERROR', '[LoadPostbox] Invalid account (' + kId + ')');
+							LOG.addLog('ERROR', '[LoadPostbox] Invalid account (' + kId + ')');
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
 						}
-
-						call_3();
+						
+						call_2();
 					});
 				}
 
 				// Verifies id then calls loadEnergyByReceiver SP
-				function call_3() {
-					mysqlMgr.loadEnergyByReceiver(id, function (res) {
+				function call_2() {
+					MYSQL.loadEnergyByReceiver(id, function (res) {
 						var sender_id = res[0]['sender_id'];
 
 						if (sender_id === 0) {
-							call_4(id);			
+							call_3(id);
 							return;
 						}
 						
@@ -2430,7 +2107,7 @@ suite('# c2g-handler unit test.', function () {
 
 				// Fulfills rMsg['energy'] field.
 				function recursiveCall_1(idx) {
-					mysqlMgr.loadUserKId(list[idx]['sender_id'], function (res) {
+					MYSQL.loadUserKId(list[idx]['sender_id'], function (res) {
 						var res = res['res'];
 						
 						rMsg['energy'].push({
@@ -2441,7 +2118,7 @@ suite('# c2g-handler unit test.', function () {
 						
 						++idx;
 						if (idx === nextCallTrigger) {
-							call_4();
+							call_3();
 						} else {
 							recursiveCall_1(idx);
 						}
@@ -2449,8 +2126,8 @@ suite('# c2g-handler unit test.', function () {
 				};
 
 				// Calls loadEvolutionByReceiverId SP
-				function call_4() {
-					mysqlMgr.loadEvolutionByReceiverId(id, function (res) {
+				function call_3() {
+					MYSQL.loadEvolutionByReceiverId(id, function (res) {
 						var sender_id = res[0]['sender_id'];
 						
 						if (sender_id === 0) {
@@ -2460,7 +2137,7 @@ suite('# c2g-handler unit test.', function () {
 
 						list = res;
 						test_2.setEvolutionList(list);
-						mextCallTrigger = list.length;
+						nextCallTrigger = list.length;
 						
 						recursiveCall_2(0);
 					});
@@ -2475,7 +2152,7 @@ suite('# c2g-handler unit test.', function () {
 						return ;
 					}
 
-					mysqlMgr.loadUserKId(list[idx]['sender_id'], function (res) {
+					MYSQL.loadUserKId(list[idx]['sender_id'], function (res) {
 						var sender_k_id = res['res'];
 						var item = list[idx];
 
@@ -2495,45 +2172,46 @@ suite('# c2g-handler unit test.', function () {
 					} else {
 						recursiveCall_2(idx);
 					}
-				};
+				}
 			};
 
 			done();
 		});
 
 		test('should be equal to id of Postbox', function (done) {
-			handlerMock(response, data, test_2.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# AcceptEvolutionHandler', function () {
 		setup(function (done) {
 			data = new build.AcceptEvolution();	
+			data['k_id'] = test_2.name;
 			data['sender_k_id'] = test_1.name;
 			data['character_id'] = 2;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.AcceptEvolutionReply());
 
-			handlerMock = function AcceptEvolutionHandler(response, data, session_id, done){
+			handlerMock = function AcceptEvolutionHandler(response, data, done){
 				var msg = build.AcceptEvolution.decode(data);
 				var rMsg = new build.AcceptEvolutionReply();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var receiverId = 0;
 				var senderId = 0;
 
 				firstCall();
 
-				// Update session then verifies kId
+				// Calls loadUser SP then verifies receiverId
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
+					MYSQL.loadUser(kId, function (res) {
+						receiverId = res['res'];
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[AcceptEvolution] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (receiverId <= 0) {
+							LOG.addLog('ERROR', '[AcceptEvolution] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -2543,13 +2221,13 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies receiverId
+				// Ccalls loadUser SP then verifies senderId
 				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						receiverId = res['res'];
+					MYSQL.loadUser(msg['sender_k_id'], function (res) {
+						senderId = res['res'];
 
-						if (receiverId <= 0) {
-							logMgr.addLog('ERROR', '[AcceptEvolution] Invalid account (' + kId + ')');
+						if (senderId <= 0) {
+							LOG.addLog('ERROR', '[AcceptEvolution] Invalid account (' + msg['sender_k_id'] + ')');
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
@@ -2560,37 +2238,20 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Ccalls loadUser SP then verifies senderId
-				function call_3() {		
-					mysqlMgr.loadUser(msg['sender_k_id'], function (res) {
-						senderId = res['res'];
-
-						if (senderId <= 0) {
-							logMgr.addLog('ERROR', '[AcceptEvolution] Invalid account (' + msg['sender_k_id'] + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_4();
-					});
-				}
-
 				// Calls existEvolution SP then verifies evolution
-				function call_4() {
-					mysqlMgr.existEvolution(senderId, receiverId, msg['character_id'], function (res) {
+				function call_3() {
+					MYSQL.existEvolution(senderId, receiverId, msg['character_id'], function (res) {
 						res = res['res'];
 
 						if (!res) {
-							logMgr.addLog('ERROR', '[AcceptEvolution] Invalid evolution (sed:' + senderId + ', rec:' + receiverId + ')');
+							LOG.addLog('ERROR', '[AcceptEvolution] Invalid evolution (sed:' + senderId + ', rec:' + receiverId + ')');
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_EVOLUTION'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
 						}
 
-						mysqlMgr.acceptEvolution(senderId, receiverId, msg['character_id'], function (res) {
+						MYSQL.acceptEvolution(senderId, receiverId, msg['character_id'], function (res) {
 							lastCall();
 						});
 					});
@@ -2607,51 +2268,35 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		test('should be equal to id of AcceptEvolutionReply', function (done) {
-			handlerMock(response, data, test_2.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# LoadEvolutionProgressHandler', function () {
 		setup(function (done) {
 			data = new build.LoadEvolutionProgress();	
+			data['k_id'] = test_1.name;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.EvolutionProgress());
 
-			handlerMock = function LoadEvolutionProgressHandler(response, data, session_id, done){
+			handlerMock = function LoadEvolutionProgressHandler(response, data, done){
 				var msg = build.LoadEvolutionProgress.decode(data);
 				var rMsg = new build.EvolutionProgress();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var sender_id = 0;
 
 				firstCall();
 
-				// Updates session then verifies kId
-				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
-
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[LoadEvolutionProgress] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						};
-
-						call_2();
-					});
-				}
-
 				// Calls loadUser then verifies sender_id
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
+				function firstCall() {
+					MYSQL.loadUser(kId, function (res) {
 						sender_id = res['res'];	
 
 						if (sender_id <= 0) {
-							logMgr.addLog('ERROR', '[LoadEvolutionProgress] Invalid account (' + kId + ')');
+							LOG.addLog('ERROR', '[LoadEvolutionProgress] Invalid account (' + kId + ')');
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
@@ -2666,15 +2311,15 @@ suite('# c2g-handler unit test.', function () {
 				function recursiveCall(idx) {
 					var characterId = (idx + 1);
 
-					mysqlMgr.loadCharacter(sender_id, characterId, function(res) {
+					MYSQL.loadCharacter(sender_id, characterId, function(res) {
 						var lv = res;
 
-						mysqlMgr.loadEvolutionProgress(sender_id, characterId, function(res) {
+						MYSQL.loadEvolutionProgress(sender_id, characterId, function(res) {
 							var list = res;
 							var acceptedList = [];
 							var newLevel = lv;
 							var i = 0;
-							var lastCallTrigger = dataMgr.characterData.length;
+							var lastCallTrigger = DATA.characterData.length;
 
 							for (; i < list.length; ++i) {
 								if (list[i]['accepted'] === 1) {
@@ -2686,8 +2331,8 @@ suite('# c2g-handler unit test.', function () {
 
 							var innerCall_2 = function () {
 								newLevel = lv + 1;
-								mysqlMgr.addCharacter(sender_id, characterId, function (res) { });
-								mysqlMgr.deleteEvolution(sender_id, characterId, function (res) { 
+								MYSQL.addCharacter(sender_id, characterId, function (res) { });
+								MYSQL.deleteEvolution(sender_id, characterId, function (res) { 
 									lastCall(idx, lastCallTrigger); 
 								});
 							};
@@ -2715,42 +2360,43 @@ suite('# c2g-handler unit test.', function () {
 					} else {
 						recursiveCall(idx);
 					}
-				};
+				}
 			};
 
 			done();
 		});
 
 		test('should be equal to id of LoadEvolutionProgressReply', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# CheckInChargeHandler', function () {
 		setup(function (done) {
 			data = new build.CheckInCharge();	
+			data['k_id'] = test_1.name;
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.ChargeInfo());
 
-			handlerMock = function CheckInChargeHandler(response, data, session_id, done){
+			handlerMock = function CheckInChargeHandler(response, data, done){
 				var msg = build.CheckInCharge.decode(data);
 				var rMsg = new build.ChargeInfo();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
 
 				firstCall();
 
-				// Updates session then verifies kId
+				// Calls loadUser SP then verifies id
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
+					MYSQL.loadUser(kId, function (res) {
+						id = res['res'];
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[CheckInCharge] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (id <= 0) {
+							LOG.addLog('ERROR', '[CheckInCharge] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -2760,26 +2406,9 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies id
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						id = res['res'];
-
-						if (id <= 0) {
-							logMgr.addLog('ERROR', '[CheckInCharge] Invalid account (' + kId + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_3();
-					});
-				}
-
 				// Calls checkInCharge SP then fulfills rMsg
-				function call_3() {
-					mysqlMgr.checkInCharge(id, function (res) {
+				function call_2() {
+					MYSQL.checkInCharge(id, function (res) {
 						var last = res['last_charged_time'];
 						var energy = res['energy'];
 						var energyMax = 100;
@@ -2790,7 +2419,7 @@ suite('# c2g-handler unit test.', function () {
 							rMsg['energy'] = energyMax;
 							rMsg['last_charged_time'] = now;
 
-							mysqlMgr.updateLastChargeTime(id, now, function (res) {
+							MYSQL.updateLastChargeTime(id, now, function (res) {
 								lastCall();
 							});
 						} else {
@@ -2806,8 +2435,8 @@ suite('# c2g-handler unit test.', function () {
 								rMsg['energy'] = energy;
 								rMsg['last_charged_time'] = uptodate;
 
-								mysqlMgr.updateLastChargeTime(id, uptodate, function (res) {
-									mysqlMgr.updateEnergy(id, energy, function (res) {
+								MYSQL.updateLastChargeTime(id, uptodate, function (res) {
+									MYSQL.updateEnergy(id, energy, function (res) {
 										lastCall();
 									});
 								});
@@ -2836,40 +2465,42 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		test('should be equal to id of ChargeInfo', function (done) {
-			handlerMock(response, data, test_1.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# AcceptEnergyHandler', function () {
 		setup(function (done) {
 			data = new build.AcceptEnergy();	
+			data['k_id'] = test_2.name;
 			data['sender_k_id'] = test_1.name;
 			data['sended_time'] = test_2.energyList[0]['sended_time'];
 			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.AcceptEnergyReply());
 
-			handlerMock = function AcceptEnergyHandler(response, data, session_id, done){
+			handlerMock = function AcceptEnergyHandler(response, data, done){
 				var msg = build.AcceptEnergy.decode(data);
 				var rMsg = new build.AcceptEnergyReply();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
 				var receiverId = 0;
 				var senderId = 0;
 
 				firstCall();
 
-				// Updates session then verifies kId
+				// Calls loadUser SP then verifies receiverId
 				function firstCall() {
-					session.toAuthUpdateSession(session_id, function (k_id) {
-						kId = k_id;
+					MYSQL.loadUser(kId, function (res) {
+						receiverId = res['res'];
 
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[AcceptEnergy] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
+						if (receiverId <= 0) {
+							LOG.addLog('ERROR', '[AcceptEnergy] Invalid account (' + kId + ')');
+							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
+							done();
 							return ;
 						}
 
@@ -2877,15 +2508,16 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies receiverId
+				// Calls loadUser SP then verifies senderId
 				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
-						receiverId = res['res'];
+					MYSQL.loadUser(msg['sender_k_id'], function(res) {
+						senderId = res['res'];
 
-						if (receiverId <= 0) {
-							logMgr.addLog('ERROR', '[AcceptEnergy] Invalid account (' + kId + ')');
+						if (senderId <= 0) {
+							LOG.addLog('ERROR', '[AcceptEnergy] Invalid account (' + msg['sender_k_id'] + ')');
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
 							write(response, toStream(sysMsg));
+							done();
 							return ;
 						}
 
@@ -2893,31 +2525,16 @@ suite('# c2g-handler unit test.', function () {
 					});
 				}
 
-				// Calls loadUser SP then verifies senderId
-				function call_3() {
-					mysqlMgr.loadUser(msg['sender_k_id'], function(res) {
-						senderId = res['res'];
-
-						if (senderId <= 0) {
-							logMgr.addLog('ERROR', '[AcceptEnergy] Invalid account (' + msg['sender_k_id'] + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							write(response, toStream(sysMsg));
-							return ;
-						}
-
-						call_4();
-					});
-				}
-
 				// Calls acceptEnergy SP then fulfills rMsg
-				function call_4() {
-					mysqlMgr.acceptEnergy(senderId, receiverId, msg['sended_time'], function (res) {
+				function call_3() {
+					MYSQL.acceptEnergy(senderId, receiverId, msg['sended_time'], function (res) {
 						res = res['energy'];
 
 						if (res === -1) {
-							logMgr.addLog('ERROR', '[AcceptEnergy] Invalid energy (' + msg['receiver_k_id'] + ', ' + msg['sender_k_id'] + ')');
+							LOG.addLog('ERROR', '[AcceptEnergy] Invalid energy (' + msg['receiver_k_id'] + ', ' + msg['sender_k_id'] + ')');
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_HONEY'];
 							write(response, toStream(sysMsg));
+							done();
 							return;
 						} 
 
@@ -2932,7 +2549,7 @@ suite('# c2g-handler unit test.', function () {
 						
 						rMsg['energy'] = energy;
 
-						mysqlMgr.updateEnergy(receiverId, energy, function(res) {
+						MYSQL.updateEnergy(receiverId, energy, function(res) {
 							lastCall();
 						});
 					});
@@ -2949,51 +2566,31 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		test('should be equal to id of AcceptEnergyReply', function (done) {
-			handlerMock(response, data, test_2.sessionId, done);
+			handlerMock(response, data, done);
 		});
 	});
 
 	suite('# LogoutHandler', function () {
 		setup(function (done) {
-			data = new build.Logout();	
-			data = data.toArrayBuffer();
-
 			response = new FakeResponse(new build.LogoutReply());
 
-			handlerMock = function LogoutHandler(response, data, session_id, done){
+			handlerMock = function LogoutHandler(response, data, done){
 				var msg = build.Logout.decode(data);
 				var sysMsg = new build.SystemMessage();
 				var rMsg = new build.LogoutReply();
 
-				var kId = '';
+				var kId = msg['k_id'];
 
 				firstCall();
 
-				// Unregisters session then verifies kId
-				function firstCall() {
-					session.toAuthUnregisterSession(session_id, function (k_id) {
-						kId = k_id;
-
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[Logout] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_2();
-					});
-				}
-
 				// Calls loadUser SP then verifies id
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
+				function firstCall() {
+					MYSQL.loadUser(kId, function (res) {
 						var id = res['res'];
 
 						if (id <= 0) {
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							logMgr.addLog('ERROR', 'logoutHandle failed : ' + kId + ', ' + id);
+							LOG.addLog('ERROR', 'logoutHandle failed : ' + kId + ', ' + id);
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -3005,7 +2602,7 @@ suite('# c2g-handler unit test.', function () {
 
 				// Sends rMsg to client
 				function lastCall() {
-					logMgr.addLog('SYSTEM', 'logout : ' + kId);
+					LOG.addLog('SYSTEM', 'logout : ' + kId);
 					write(response, toStream(rMsg));
 					done();
 				}
@@ -3015,60 +2612,55 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		suite('# Logout test_1', function () {
+			setup(function (done) {
+				data = new build.Logout();	
+				data['k_id'] = test_1.name;
+				data = data.toArrayBuffer();
+				done();
+			});
+
 			test('should be equal to id of LogoutReply', function (done) {
-				handlerMock(response, data, test_1.sessionId, done);
+				handlerMock(response, data, done);
 			});
 		});
 
 		suite('# Logout test_2', function () {
+			setup(function (done) {
+				data = new build.Logout();	
+				data['k_id'] = test_2.name;
+				data = data.toArrayBuffer();
+				done();
+			});
+
 			test('should be equal to id of LogoutReply', function (done) {
-				handlerMock(response, data, test_2.sessionId, done);
+				handlerMock(response, data, done);
 			});
 		});
 	});
 
 	suite('# UnregisterAccountHandler', function () {
 		setup(function (done) {
-			data = new build.UnregisterAccount();	
-			data = data.toArrayBuffer();
 
 			response = new FakeResponse(new build.UnregisterAccountReply());
 
-			handlerMock = function UnregisterAccountHandler(response, data, session_id, done) {
+			handlerMock = function UnregisterAccountHandler(response, data, done) {
 				var msg = build.UnregisterAccount.decode(data);
 				var rMsg = new build.UnregisterAccountReply();
 				var sysMsg = new build.SystemMessage();
 
-				var kId = '';
+				var kId = msg['k_id'];
 				var id = 0;
 
 				firstCall();
 
-				// Unregisters session then verifies kId
-				function firstCall() {
-					session.toAuthUnregisterSession(session_id, function (k_id) {
-						kId = k_id;
-
-						if (kId === false) {
-							logMgr.addLog('ERROR', '[UnregisterAccount] Unauthenticated client accessed : (' + session_id + ')');
-							sysMsg['res'] = build.SystemMessage.Result['INVALID_SESSION'];
-							write(response, toStream(sysMsg));
-							done();
-							return ;
-						}
-
-						call_2();
-					});
-				}
-
 				// Calls loadUser SP then Verifies id
-				function call_2() {
-					mysqlMgr.loadUser(kId, function (res) {
+				function firstCall() {
+					MYSQL.loadUser(kId, function (res) {
 						id = res['res'];
-						
+
 						if (id <= 0) {
 							sysMsg['res'] = build.SystemMessage.Result['INVALID_ACCOUNT'];
-							logMgr.addLog('ERROR', '[UnregisterAccount] Invalid Account : ' + kId + ', ' + res);
+							LOG.addLog('ERROR', '[UnregisterAccount] Invalid Account : ' + kId + ', ' + res);
 							write(response, toStream(sysMsg));
 							done();
 							return ;
@@ -3080,16 +2672,8 @@ suite('# c2g-handler unit test.', function () {
 
 				// Deletes user then Sends rMsg to client and UserUnregister log to log server
 				function lastCall() {
-					mysqlMgr.deleteUser(id, function (res) {
+					MYSQL.deleteUser(id, function (res) {
 						write(response, toStream(rMsg));
-
-						logMgr.addLog('SYSTEM', 'UnregisterAccount : ' + kId);
-						
-						var UserUnregister = build.UserUnregister;
-						var req = new UserUnregister();
-						req['k_id'] = kId;
-
-						request(req);
 						done();
 					});
 				}
@@ -3099,14 +2683,28 @@ suite('# c2g-handler unit test.', function () {
 		});
 
 		suite('# Unregister test_1', function () {
+			setup(function (done) {
+				data = new build.UnregisterAccount();
+				data['k_id'] = test_1.name;
+				data = data.toArrayBuffer();
+				done();
+			});
+
 			test('should be equal to id of UnregisterAccountReply', function (done) {
-				handlerMock(response, data, test_1.sessionId, done);
+				handlerMock(response, data, done);
 			});
 		});
 
 		suite('# Unregister test_2', function () {
+			setup(function (done) {
+				data = new build.UnregisterAccount();
+				data['k_id'] = test_2.name;
+				data = data.toArrayBuffer();
+				done();
+			});
+
 			test('should be equal to id of UnregisterAccountReply', function (done) {
-				handlerMock(response, data, test_2.sessionId, done);
+				handlerMock(response, data, done);
 			});
 		});
 	});

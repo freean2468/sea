@@ -1,26 +1,98 @@
 var mysql = require('mysql');
 var DELAY = 5;
 
-function MysqlMgr(db, cluster) {
+(function () {
+	var _instance = null;
+
+	global.MYSQL = function (workers) {
+		if (!_instance) {
+			_instance = new Mysql(workers);
+			console.log('a mysql instance is just created');
+		}
+		return _instance;
+	};
+})();
+
+function Mysql(numCPUs) {
 	// Property
 	this.config = {
 					host: '127.0.0.1',
 					port: 3306,
-					database: db,
+					database: 'sea',
 					charset: 'UTF8_GENERAL_CI',
 					supportBigNumbers: true,
 					user: 'root',
 					password: 'xmongames',
 					waitForConnections: true,
-					connectionLimit: 350,
+					connectionLimit: 350 / numCPUs,
 				};
 	this.pool = mysql.createPool(this.config);
-	this.limit = this.pool['config']['connectionLimit'] / cluster;
+	this.limit = this.pool['config']['connectionLimit'];
 	this.connectionCount = 0;
 	this.queue = [];
 	this.queuing = false;
 
+	//
 	// Method
+	//
+	this.query = function (sql, escaped, callback) {
+		var info = {
+			'way': 'query',
+			'sql': sql,
+			'escaped': escaped,
+			'callback': callback,
+		};
+
+		if (this.checkHealth(info) === false) {
+			return;
+		}
+
+		this.increaseConnectionCount();
+		var that = this;
+		this.pool.getConnection(function(err, connection) {
+			var query = connection.query(sql, escaped, function(err, results, fields) {
+				if (err) throw err;
+		
+				connection.release();
+				that.decreaseConnectionCount();
+				callback(results);
+			});
+		});
+	};
+
+	this.call = function (procedure, params, callback) {
+		var info = {
+			'way': 'call',
+			'procedure': procedure,
+			'params': params,
+			'callback': callback,
+		};
+
+		if (this.checkHealth(info) === false) {
+			return;
+		}
+
+		this.increaseConnectionCount();
+		var that = this;
+		this.pool.getConnection(function(err, connection) {
+			var call = 'CALL ' + procedure + '(' + params + ')';
+
+			if (err){ 
+				console.log(call);
+				throw err;
+			}
+			connection.query(call, function(err, results, fields) {
+				if (err) {
+					console.log(call);
+					throw err;
+				}
+				connection.release();
+				that.decreaseConnectionCount();
+				callback(results);
+			});
+		});
+	};
+
 	this.increaseConnectionCount = function () {
 		++this.connectionCount;
 	};
@@ -29,6 +101,7 @@ function MysqlMgr(db, cluster) {
 		--this.connectionCount;
 	};
 
+	// Check health of connections
 	this.checkHealth = function (info) {
 		if (0 < this.queue.length) {
 			this.queue.push(info);
@@ -49,6 +122,7 @@ function MysqlMgr(db, cluster) {
 		return true;
 	};
 
+	// Execute queued queries to empty queue
 	this.execute = function () {
 		for (var i = this.limit - 1 - this.connectionCount; 0 < i && 0 < this.queue.length; --i) {
 			var info = this.queue.shift();
@@ -94,75 +168,6 @@ function MysqlMgr(db, cluster) {
 		}
 
 		this.queuing = false;
-	};
-
-	this.query = function (sql, escaped, callback) {
-		var info = {
-			'way': 'query',
-			'sql': sql,
-			'escaped': escaped,
-			'callback': callback,
-		};
-
-		if (this.checkHealth(info) === false) {
-			return;
-		}
-
-		this.increaseConnectionCount();
-		var that = this;
-		this.pool.getConnection(function(err, connection) {
-			var query = connection.query(sql, escaped, function(err, results, fields) {
-				if (err) throw err;
-		
-				connection.release();
-				that.decreaseConnectionCount();
-				callback(results);
-			});
-			/*
-			var sql = 'SELECT * FROM ?? WHERE id = ?';
-			
-			var query = connection.query(sql, ['user', userId], function(err, results) {
-			
-			sql = 'INSERT INTO ?? SET ?';
-
-			var post = {k_ID: 8812, score: 100};
-			query = connection.query(sql, ['user', post], function(err, result) {
-				console.log(result.insertId);
-			*/
-		});
-	};
-
-	this.call = function (procedure, params, callback) {
-		var info = {
-			'way': 'call',
-			'procedure': procedure,
-			'params': params,
-			'callback': callback,
-		};
-
-		if (this.checkHealth(info) === false) {
-			return;
-		}
-
-		this.increaseConnectionCount();
-		var that = this;
-		this.pool.getConnection(function(err, connection) {
-			var call = 'CALL ' + procedure + '(' + params + ')';
-
-			if (err){ 
-				console.log(call);
-				throw err;
-			}
-			connection.query(call, function(err, results, fields) {
-				if (err) {
-					console.log(call);
-					throw err;
-				}
-				connection.release();
-				that.decreaseConnectionCount();
-				callback(results);
-			});
-		});
 	};
 	
 	//
@@ -720,5 +725,5 @@ function MysqlMgr(db, cluster) {
 }
 
 module.exports = {
-	'MysqlMgr': MysqlMgr,
+	'MYSQL': MYSQL,
 };
